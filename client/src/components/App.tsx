@@ -4,6 +4,8 @@ import history from "../history";
 
 import { VifLogoMark } from './iconComponents';
 
+import Redirector from './Redirector';
+
 import '../sass/main.scss';
 
 class App extends React.Component {
@@ -17,7 +19,11 @@ class App extends React.Component {
               <VifLogoMark className="logo-mark" />
             </Route>
             <Route path="*" status={404}>
-              404
+              <Redirector
+                message={"404 Page Not Found"}
+                buttonText={"Return Home"}
+                route={"/"}
+              />
             </Route>
           </Switch>
         </Router>
