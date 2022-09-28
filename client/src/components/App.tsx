@@ -4,7 +4,7 @@ import history from "../history";
 
 import { VifLogoMark } from './iconComponents';
 
-import '../styles/main.scss';
+import '../sass/main.scss';
 
 class App extends React.Component {
   render() {
