@@ -15,6 +15,7 @@
     display: inline-block;
     width: min-content;
     padding: 0.6rem 2.8rem;
+    transition: color 0.2s, background-color 0.2s;
     // transform: matrix(0.97, 0, -0.26, 1, 0, 0);
     
     display: flex;
@@ -24,5 +25,10 @@
     &__text {
       // transform: matrix(1.03, 0, 0.21, 1, 0, 0);
     }
+  }
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-blue-darkest;
   }
 }
