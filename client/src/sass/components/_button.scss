@@ -15,7 +15,7 @@
     display: inline-block;
     width: min-content;
     padding: 0.6rem 2.8rem;
-    transition: color 0.2s, background-color 0.2s;
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
     // transform: matrix(0.97, 0, -0.26, 1, 0, 0);
     
     display: flex;
@@ -30,5 +30,10 @@
   &:hover {
     background-color: $color-white;
     color: $color-blue-darkest;
+  }
+
+  &:active {
+    background-color: $color-gray-light;
+    border-color: $color-gray-light;
   }
 }
