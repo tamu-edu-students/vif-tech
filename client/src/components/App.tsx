@@ -4,7 +4,7 @@ import history from "../history";
 
 import { VifLogoMark } from './iconComponents';
 
-import Redirector from './Redirector';
+import RedirectPrompt from './RedirectPrompt';
 
 import '../sass/main.scss';
 
@@ -20,7 +20,7 @@ class App extends React.Component {
 
             <Route path="/under-construction" status={404}>
               <section className="section section--redirector">
-                <Redirector
+                <RedirectPrompt
                   message={"is under construction"}
                   buttonText={"Portfolio Review Signup"}
                   href={"https://linktr.ee/vizindustryfair"}
@@ -30,7 +30,7 @@ class App extends React.Component {
             
             <Route path="*" status={404}>
               <section className="section section--redirector">
-                <Redirector
+                <RedirectPrompt
                   message={"404 Page Not Found"}
                   buttonText={"Return Home"}
                   pathName={"/"}
