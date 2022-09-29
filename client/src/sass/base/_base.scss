@@ -11,6 +11,7 @@ html {
 }
 
 body {
-  background-color: $color-blue--darkest;
-  font-family: 'Montserrat', sans-serif;
+  background-color: $color-blue-darkest;
+  font-family: $font-body;
+  color: $color-white;
 }

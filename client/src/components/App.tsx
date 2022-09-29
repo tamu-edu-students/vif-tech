@@ -19,11 +19,13 @@ class App extends React.Component {
               <VifLogoMark className="logo-mark" />
             </Route>
             <Route path="*" status={404}>
-              <Redirector
-                message={"404 Page Not Found"}
-                buttonText={"Return Home"}
-                route={"/"}
-              />
+              <section className="section section--redirector">
+                <Redirector
+                  message={"404 Page Not Found"}
+                  buttonText={"Return Home"}
+                  route={"/"}
+                />
+              </section>
             </Route>
           </Switch>
         </Router>

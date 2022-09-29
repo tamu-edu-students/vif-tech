@@ -15,7 +15,9 @@ class Redirector extends React.Component<IRedirectorProps, {}> {
       <div className="redirector">
         <VifLogoMark className="redirector__logo-mark" />
         <p className="redirector__message">{this.props.message}</p>
-        <Link to={this.props.route} className="redirector__link">{this.props.buttonText}</Link>
+        <Link to={this.props.route} className="btn redirector__link">
+          <span className="btn__text">{this.props.buttonText}</span>
+        </Link>
       </div>
     );
   }
