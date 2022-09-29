@@ -8,6 +8,11 @@
 
 html {
   font-size: 62.5%;
+  transition: 0.05s;
+
+  @media only screen and (max-width: 525px) {
+    font-size: 55%;
+  }
 }
 
 body {
