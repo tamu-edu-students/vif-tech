@@ -18,7 +18,7 @@ class App extends React.Component {
               <Redirect to="/under-construction" />
             </Route>
 
-            <Route path="/under-construction" status={404}>
+            <Route exact path="/under-construction">
               <section className="section section--redirector">
                 <RedirectPrompt
                   message={"is under construction"}
