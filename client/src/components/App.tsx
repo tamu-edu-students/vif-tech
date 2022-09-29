@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import history from "../history";
 
 import { VifLogoMark } from './iconComponents';
@@ -15,9 +15,19 @@ class App extends React.Component {
         <Router history={history}>
           <Switch>
             <Route exact path="/">
-              <div>App</div>
-              <VifLogoMark className="logo-mark" />
+              <Redirect to="/under-construction" />
             </Route>
+
+            <Route path="/under-construction" status={404}>
+              <section className="section section--redirector">
+                <Redirector
+                  message={"is under construction"}
+                  buttonText={"Portfolio Review Signup"}
+                  href={"https://linktr.ee/vizindustryfair"}
+                />
+              </section>
+            </Route>
+            
             <Route path="*" status={404}>
               <section className="section section--redirector">
                 <Redirector
