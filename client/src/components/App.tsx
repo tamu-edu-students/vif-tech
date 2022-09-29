@@ -23,7 +23,7 @@ class App extends React.Component {
                 <Redirector
                   message={"404 Page Not Found"}
                   buttonText={"Return Home"}
-                  route={"/"}
+                  pathName={"/"}
                 />
               </section>
             </Route>
