@@ -20,3 +20,8 @@ body {
   font-family: $font-body;
   color: $color-white;
 }
+
+::selection {
+  background-color: $color-brand-green;
+  color: $color-black;
+}
