@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
 import history from "../history";
 
@@ -6,9 +7,25 @@ import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
 import UserCreate from './UserCreate';
 
+import { logIn, checkLoginStatus } from '../actions'
+
 import '../sass/main.scss';
 
-class App extends React.Component {
+interface IAppProps {
+  logIn?: any;
+  checkLoginStatus?: any;
+}
+
+class App extends React.Component<IAppProps, {}> {
+  public componentDidMount(): void {
+    this.props.logIn({
+      username: "aaaa",
+      password: "aaaa"
+    }).then(() => {
+      this.props.checkLoginStatus();
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -63,4 +80,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(null, {logIn, checkLoginStatus})(App);
