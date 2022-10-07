@@ -5,6 +5,7 @@ import history from "../history";
 import { VifLogoMark } from './iconComponents';
 
 import RedirectPrompt from './RedirectPrompt';
+import Users from './Users';
 
 import '../sass/main.scss';
 
@@ -26,6 +27,10 @@ class App extends React.Component {
                   href={"https://linktr.ee/vizindustryfair"}
                 />
               </section>
+            </Route>
+
+            <Route exact path="/users">
+              <Users />
             </Route>
             
             <Route path="*" status={404}>
