@@ -2,6 +2,7 @@ import {
   FETCH_USERS,
   CREATE_USER,
 } from "./types";
+import history from "../history";
 import vifTech from "../apis/vifTech";
 
 export const fetchUsers = () => async (dispatch: any) => {
@@ -33,4 +34,5 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   const user: any = response.data.user;
 
   dispatch({ type: CREATE_USER, payload: user });
+  history.push('/users/new/success')
 }

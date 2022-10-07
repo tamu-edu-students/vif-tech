@@ -38,6 +38,16 @@ class App extends React.Component {
             <Route exact path="/users/new">
               <UserCreate />
             </Route>
+
+            <Route exact path="/users/new/success">
+              <section className="section section--redirector">
+                <RedirectPrompt
+                  message={"Almost done. Click the verification link sent to your email to complete your registration."}
+                  buttonText={"Return Home"}
+                  pathName={"/"}
+                />
+              </section>
+            </Route>
             
             <Route path="*" status={404}>
               <section className="section section--redirector">
