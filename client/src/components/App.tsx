@@ -2,12 +2,9 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import history from "../history";
 
-import { VifLogoMark } from './iconComponents';
-
 import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
 import UserCreate from './UserCreate';
-import UserForm from './UserForm';
 
 import '../sass/main.scss';
 

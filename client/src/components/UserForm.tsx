@@ -1,6 +1,5 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps } from "redux-form";
-import { createUser } from '../actions';
 
 interface IUserFormProps {
   onSubmit?: any;

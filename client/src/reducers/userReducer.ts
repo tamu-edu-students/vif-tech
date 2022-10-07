@@ -3,7 +3,7 @@ import {
   CREATE_USER,
 } from "../actions/types";
 
-export default (state = [], action: any) => {
+const userReducer = (state = [], action: any) => {
   switch(action.type) {
     case FETCH_USERS:
       return action.payload;
@@ -13,3 +13,5 @@ export default (state = [], action: any) => {
       return state;
   }
 };
+
+export default userReducer;
