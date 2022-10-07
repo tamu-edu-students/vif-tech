@@ -1,6 +1,8 @@
 import {
   FETCH_USERS,
   CREATE_USER,
+  CHECK_LOGIN_STATUS,
+  LOG_IN,
 } from "./types";
 import history from "../history";
 import vifTech from "../apis/vifTech";
@@ -35,4 +37,36 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
 
   dispatch({ type: CREATE_USER, payload: user });
   history.push('/users/new/success')
+}
+
+export const logIn = (formValues: any) => async (dispatch: any) => {
+  const response: any = await vifTech.post('/login', {
+    user: {
+      username: formValues.username,
+      password: formValues.password,
+    }
+  },
+  {
+    headers: {'Content-Type': 'application/json; charset=utf-8'}
+  });
+
+  console.log('logIn response:', response);
+
+  dispatch({ type: LOG_IN, payload: null })
+}
+
+export const checkLoginStatus = () => async (dispatch: any) => {
+  const response: any = await vifTech.get('/logged_in');
+  // .then(response => {
+  //     if (response.data.logged_in) {
+  //       this.handleLogin(response)
+  //     } else {
+  //       this.handleLogout()
+  //     }
+  //   })
+  console.log('checkLoginStatus response:', response);
+
+  // .catch(error => console.log('api errors:', error));
+
+  dispatch({ type: CHECK_LOGIN_STATUS, payload: { isLoggedIn: null, user: null } })
 }
