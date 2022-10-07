@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
 import history from "../history";
 
 import RedirectPrompt from './RedirectPrompt';
@@ -13,6 +13,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router history={history}>
+          <Link to="/users/new" className="register-button">Register!</Link>
           <Switch>
             <Route exact path="/">
               <Redirect to="/under-construction" />

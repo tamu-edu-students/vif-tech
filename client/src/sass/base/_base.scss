@@ -42,3 +42,14 @@ form {
   }
 }
 
+.register-button {
+  &:link,
+  &:visited {
+    color: white;
+  }
+
+  &:hover {
+    color: #ddd;
+  }
+}
+
