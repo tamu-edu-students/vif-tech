@@ -25,6 +25,10 @@ Feature: Student signup
         And that an user signs up as a valid student
         Then there should be 5 students found in the user DB
     
+    Scenario: Find student when who's NOT there.
+        Given that an user signs up as a valid student
+        Then the user with id 2 should NOT be in the user DB
+    
     Scenario: Query students
         Given that an user signs up as a valid student
         And that an user signs up as a valid student

@@ -37,3 +37,9 @@ Then('I should be able to query {int} students by id in the user DB') do |int|
     expect(ret_body['user']['id']).to eq(id)
   end
 end
+
+Then('the user with id {int} should NOT be in the user DB') do |int|
+  ret = page.driver.get("/users/#{int.to_i}")
+  ret_body = ActiveSupport::JSON.decode(ret.body)
+  expect(ret_body['status']).to eq(500)
+end

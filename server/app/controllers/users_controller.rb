@@ -14,11 +14,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    if !params[:id]
-      show_by_username()
-      return
-    end
-    @user = User.find(params[:id])
+    @user = User.find_by_id(params[:id])
     if @user
       render json: {
                user: @user,
