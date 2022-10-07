@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema[7.0].define(version: 2022_10_06_043825) do
   create_table "users", force: :cascade do |t|
     t.string "username"
@@ -18,6 +19,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_06_043825) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "usertype"
+    t.boolean "email_confirmed", default: false
+    t.string "confirm_token"
   end
 
 end
