@@ -25,7 +25,7 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
     }
   );
   console.log(`createUser response: `, response);
-  if (response.data.status !== 200) {
+  if (response.data.status === 500) {
     console.error(response.data.errors);
     return;
   }
