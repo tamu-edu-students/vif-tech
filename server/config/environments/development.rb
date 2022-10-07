@@ -37,23 +37,29 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Do care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
-
-  config.action_mailer.perform_caching = false
-
   # Settings for signup email
-  config.action_mailer.smtp_settings = {
-    :user_name => 'apikey', # This is the string literal 'apikey', NOT the ID of your API key
-    :password => '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', # This is the secret sendgrid API key which was issued during API key creation
-    :domain => 'yourdomain.com',
-    :address => 'smtp.sendgrid.net',
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true} 
-  config.action_mailer.delivery_method = :smtp
+
+  # EMAIL - Test sending actual emails
+  # config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.perform_caching = false
+  # config.action_mailer.smtp_settings = {
+  #   :user_name => 'apikey', # This is the string literal 'apikey', NOT the ID of your API key
+  #   :password => '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', # This is the secret sendgrid API key which was issued during API key creation
+  #   :domain => 'yourdomain.com',
+  #   :address => 'smtp.sendgrid.net',
+  #   :port => 587,
+  #   :authentication => :plain,
+  #   :enable_starttls_auto => true} 
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.default_url_options = { host: 'localhost:3001' } # This is used for generating the link to confirm email
+  # config.signup_email_address = "vizfairdummyemail@gmail.com" # This is the sender - must match email used for sendgrid
+
+  # EMAIL - Ignore emails
+  config.action_mailer.perform_caching = false
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :test
+  config.signup_email_address = "dne@dne.com" # This is the sender - must match email used for sendgrid
   config.action_mailer.default_url_options = { host: 'localhost:3001' } # This is used for generating the link to confirm email
-  config.signup_email_address = "vizfairdummyemail@gmail.com" # This is the sender - must match email used for sendgrid
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
