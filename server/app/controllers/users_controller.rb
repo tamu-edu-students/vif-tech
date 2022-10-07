@@ -45,13 +45,40 @@ class UsersController < ApplicationController
   end
 
   def create
+
+    # Check for email uniqueness
+    existing_user = User.find_by_email(params['user']['email']) # TODO 'and usertype == params[usertype]'
+    if existing_user!=nil # TODO once multiple users, allow email reuse for different account types (eg. I can have an admin and a student account)
+      return render json: {
+               status: 500,
+               errors: "Email already in use",
+             }
+    end
+
     @user = User.new(user_params)
     if @user.save
       login!
+      resp = UserMailer.registration_confirmation(@user).deliver_now
+      logger.debug {resp}
       render json: {
                status: :created,
                user: @user,
              }
+    else
+      render json: {
+               status: 500,
+               errors: @user.errors.full_messages,
+             }
+    end
+  end
+
+  def confirm_email
+    user = User.find_by_confirm_token(params[:id])
+    if user
+      user.email_activate
+      render json: {
+        status: 200,
+      }
     else
       render json: {
                status: 500,
@@ -65,4 +92,7 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:username, :email, :password, :password_confirmation)
   end
+
+
+
 end

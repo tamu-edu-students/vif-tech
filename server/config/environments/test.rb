@@ -46,6 +46,9 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+  config.signup_email_address = "dne@dne.com" # This is the sender - must match email used for sendgrid
+  config.action_mailer.default_url_options = { host: 'localhost:3001' } # This is used for generating the link to confirm email
+
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr

@@ -8,13 +8,17 @@ Feature: Student signup
             | username | test_student |
             | password | password1! |
             | password_confirmation | password1! |
+            | email | test@dne.com |
         Then the user with username test_student should be found in the user DB
+        And the user with email test@dne.com should be marked as not verified
+        And there should be 1 sent emails
             
     Scenario: Signup as student with wrong password confirmation
         Given that I sign up with the following
             | username | test_student |
             | password | password1! |
             | password_confirmation | wrong |
+            | email | test@dne.com |
         Then the user with username test_student should NOT be found in the user DB
     
     Scenario: Show students
@@ -38,3 +42,43 @@ Feature: Student signup
         And that an user signs up as a valid student
         And that an user signs up as a valid student
         Then I should be able to query 7 students by id in the user DB
+        And there should be 7 sent emails
+
+
+    Scenario: Signup as student and verify email
+        Given that I sign up with the following
+            | username | test_student |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@dne.com |
+        And that the user verified their email test@dne.com
+        Then the user with username test_student should be found in the user DB
+        And the user with email test@dne.com should be marked as verified
+
+    Scenario: Signup as student and verify email
+        Given that I sign up with the following
+            | username | test_student |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@dne.com |
+        And that the first user clicked the link in their email
+        Then the user with username test_student should be found in the user DB
+        And the user with email test@dne.com should be marked as verified
+
+    Scenario: A user tries to reuse an email
+        Given that I sign up with the following
+            | username | test_student |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@dne.com |
+        Given that I sign up with the following
+            | username | test_student2 |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@dne.com |   
+        And that the user verified their email test@dne.com
+        Then the user with username test_student should be found in the user DB
+        And the user with username test_student2 should NOT be found in the user DB
+        And the user with email test@dne.com should be marked as verified
+        And there should be 1 sent emails
+        And I should be able to query 1 students by id in the user DB

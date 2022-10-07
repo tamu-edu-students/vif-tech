@@ -9,7 +9,35 @@ end
 Given('that an user signs up as a valid student') do
   username = SecureRandom.alphanumeric(8)
   password = SecureRandom.alphanumeric(16)
-  ret = page.driver.post('/users', {'user': {'username': username, 'password': password, 'password_confirmation': password}})
+  email = SecureRandom.alphanumeric(16)
+  ret = page.driver.post('/users', {'user': {'username': username, 'password': password, 'password_confirmation': password, 'email':email}})
+end
+
+Given /^that the user verified their email ([^\']*)$/ do |email|
+  @user = User.find_by_email(email)
+  ret = page.driver.get('/users/' + @user.confirm_token + '/confirm_email')
+end
+
+Given /^that the first user clicked the link in their email$/ do
+  path_regex = /https?\:\/\/.*?\/users\/\S*\/confirm_email/   
+
+  email = UserMailer.deliveries[0]
+  path = email.body.raw_source.match(path_regex)[0]
+  visit(path)
+end
+
+Then /^the user with email ([^\']*) should be marked as verified$/ do |email|
+  @user = User.find_by_email(email)
+  expect(@user.email_confirmed).to be true
+end
+
+Then /^the user with email ([^\']*) should be marked as not verified$/ do |email|
+  @user = User.find_by_email(email)
+  expect(@user.email_confirmed).to be false
+end
+
+Then('there should be {int} sent emails') do |int|
+  expect(UserMailer.deliveries.length()).to be(int)
 end
 
 Then /^the user with username ([^\']*) should be found in the user DB$/ do |username|
