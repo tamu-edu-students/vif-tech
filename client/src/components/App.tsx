@@ -6,6 +6,8 @@ import { VifLogoMark } from './iconComponents';
 
 import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
+import UserCreate from './UserCreate';
+import UserForm from './UserForm';
 
 import '../sass/main.scss';
 
@@ -31,6 +33,10 @@ class App extends React.Component {
 
             <Route exact path="/users">
               <Users />
+            </Route>
+
+            <Route exact path="/users/new">
+              <UserCreate />
             </Route>
             
             <Route path="*" status={404}>
