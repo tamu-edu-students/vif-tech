@@ -17,7 +17,7 @@ export const createUser = () => async (dispatch: any) => {
     "/users",
     {
       user: {
-        username: "betty3",
+        username: "betty4",
         password: "lmnopqrs",
         password_confirmation: "lmnopqrs",
         email: "bettygirl@hotmail.com"
@@ -30,6 +30,11 @@ export const createUser = () => async (dispatch: any) => {
     }
   );
   console.log(`createUser response: `, response);
+  if (response.data.status !== 200) {
+    console.error(response.data.errors);
+    return;
+  }
+
   const user: any = response.data.user;
 
   dispatch({ type: CREATE_USER, payload: user });
