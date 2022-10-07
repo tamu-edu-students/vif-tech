@@ -71,3 +71,9 @@ Then('the user with id {int} should NOT be in the user DB') do |int|
   ret_body = ActiveSupport::JSON.decode(ret.body)
   expect(ret_body['status']).to eq(500)
 end
+
+Then('the user should get a 500 error when trying to verify with an incorrect token') do
+  ret = page.driver.get('/users/random_token/confirm_email')
+  ret_body = ActiveSupport::JSON.decode(ret.body) 
+  expect(ret_body['status']).to eq(500)
+end

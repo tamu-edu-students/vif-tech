@@ -54,8 +54,16 @@ Feature: Student signup
         And that the user verified their email test@dne.com
         Then the user with username test_student should be found in the user DB
         And the user with email test@dne.com should be marked as verified
+    
+    Scenario: Signup as student and verify email with incorrect token
+        Given that I sign up with the following
+            | username | test_student |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@dne.com |
+        Then the user should get a 500 error when trying to verify with an incorrect token
 
-    Scenario: Signup as student and verify email
+    Scenario: Signup as student and verify email with link
         Given that I sign up with the following
             | username | test_student |
             | password | password1! |
