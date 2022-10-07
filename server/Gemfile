@@ -44,6 +44,8 @@ group :development, :test do
   gem "cucumber-rails", :require => false
   gem "database_cleaner"
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "rspec-rails"
+  gem "bye-bug", platform: :mri
 end
 
 group :development do

@@ -259,6 +259,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
+  bye-bug
   cucumber-rails
   database_cleaner
   debug
