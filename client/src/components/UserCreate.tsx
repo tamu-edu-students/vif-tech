@@ -5,12 +5,12 @@ import { createUser } from "../actions";
 import UserForm from "./UserForm";
 
 interface IUserCreateProps {
-  
+  createUser?: any;
 }
 
 class UserCreate extends React.Component<IUserCreateProps, {}> {
-  private _onSubmit = (formProps: any) => {
-    console.log('UserCreate formProps:', formProps);
+  private _onSubmit = (formValues: any) => {
+    this.props.createUser(formValues)
   }
 
   public render(): React.ReactElement<IUserCreateProps> {

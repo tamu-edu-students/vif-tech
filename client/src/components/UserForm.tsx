@@ -19,7 +19,6 @@ class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
   }
 
   private _onSubmit = (formValues: any) => {
-    console.log('_onSubmit formValues:', formValues);
     this.props.onSubmit(formValues);
   }
  

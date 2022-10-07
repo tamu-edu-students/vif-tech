@@ -12,16 +12,11 @@ export const fetchUsers = () => async (dispatch: any) => {
   dispatch({ type: FETCH_USERS, payload: users });
 }
 
-export const createUser = () => async (dispatch: any) => {
+export const createUser = (formValues: any) => async (dispatch: any) => {
   const response: any = await vifTech.post(
     "/users",
     {
-      user: {
-        username: "betty4",
-        password: "lmnopqrs",
-        password_confirmation: "lmnopqrs",
-        email: "bettygirl@hotmail.com"
-      }
+      user: { ...formValues }
     },
     {
       headers: {
