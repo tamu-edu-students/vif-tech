@@ -2,10 +2,12 @@ import React from 'react';
 import { connect } from "react-redux";
 
 import { fetchUsers } from "../actions";
+import { createUser } from "../actions"
 
 interface IUsersProps {
   users: any[];
   fetchUsers?: any;
+  createUser?: any;
 }
 
 class Users extends React.Component<IUsersProps, {}> {
@@ -30,6 +32,7 @@ class Users extends React.Component<IUsersProps, {}> {
             </div>
           );
         })}
+        <button onClick={() => this.props.createUser()}>create user</button>
       </div>
     )
   }
@@ -41,4 +44,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps, { fetchUsers })(Users);
+export default connect(mapStateToProps, { fetchUsers, createUser })(Users);
