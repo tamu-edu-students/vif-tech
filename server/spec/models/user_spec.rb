@@ -1,44 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject{
-    User.new(
-      usertype: 'company representative',
-      username: 'user1',
-      email: 'user1@tamu.edu',
-      password: 'password',
-      password_confirmation: 'password'
-    )
-  }
-
-  it 'is valid with valid attributes' do
-    expect(subject).to be_valid
+  it "is valid with valid attributes" do
+    expect(User.create(username: "hello", email: "hello@hello.com", password: "something")).to be_valid
+  end
+  it "is invalid without a username" do
+    expect(User.create(email: "hello@hello.com", password: "something")).to_not be_valid
+  end
+  
+  it "is invalid without password" do
+    expect(User.create(username: "hello", email: "hello@hello.com")).to_not be_valid
   end
 
-  it 'is not valid if not a valid usertype' do
-    usertypes = ['company representative', 'student', 'faculty', 'admin', 'volunteer']
-    if usertypes.include?(subject.usertype) == false
-      expect(subject).to_not be_valid
-    end
+  it "has confirm token enabled when email activation is executed" do
+    user = User.create(username: "hello", email: "hello@hello.com", password: "something")
+    expect(user.email_confirmed).to be(false)
+    user.email_activate
+    expect(user.email_confirmed).to be(true)
+    expect(user.confirm_token).to be(nil)
   end
 
-  it 'is not valid if the username is not 8 chars long or contains chars other than numbers|letters|-|_|.' do
-    if subject.username.match?(/[\w\.-]+/) == false && subject.username.length < 8
-      expect(subject).to_not be_valid
-    end
+  it "has confirm token enabled when email activation is executed" do
+    user = User.create(username: "hello", email: "hello@hello.com", password: "something")
+    expect(user.confirm_token).to_not be(nil)
   end
 
-  it 'is not valid if the email contains chars other than numbers|letters|@|.|-|_' do
-    if subject.email.match?(/[\w\.-]+@[\w\.-]+\.[a-zA-Z]+/) == false
-      expect(subject).to_not be_valid
-    end
-  end
-
-  it 'is not valid if password not equal to password_confirmation' do
-    if subject.password != subject.password_confirmation
-      expect(subject).to_not be_valid
-    end
-  end
 end
 
 '''

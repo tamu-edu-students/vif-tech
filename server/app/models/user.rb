@@ -1,7 +1,6 @@
 class User < ApplicationRecord
-  before_create :confirmation_token
+  before_create :set_confirm_token
   has_secure_password
-  validates :password, length: {minimum: 8}
   validates :username, presence: true
   validates :username, uniqueness: true
   validates :username, length: {minimum: 4}
@@ -16,9 +15,10 @@ class User < ApplicationRecord
   end
 
   private
-  def confirmation_token
+  def set_confirm_token
     if self.confirm_token.blank?
       self.confirm_token = SecureRandom.urlsafe_base64.to_s
     end
   end
+
 end
