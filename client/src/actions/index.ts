@@ -3,6 +3,7 @@ import {
   CREATE_USER,
   CHECK_LOGIN_STATUS,
   LOG_IN,
+  LOG_OUT,
 } from "./types";
 import history from "../history";
 import vifTech from "../apis/vifTech";
@@ -16,17 +17,7 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post(
-    "/users",
-    {
-      user: { ...formValues }
-    },
-    {
-      headers: {
-      'Content-Type': 'application/json'
-      }
-    }
-  );
+  const response: any = await vifTech.post("/users", { user: { ...formValues } });
   console.log(`createUser response: `, response);
   if (response.data.status === 500) {
     console.error(response.data.errors);
@@ -34,39 +25,48 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   }
 
   const user: any = response.data.user;
-
   dispatch({ type: CREATE_USER, payload: user });
+  
   history.push('/users/new/success')
 }
 
 export const logIn = (formValues: any) => async (dispatch: any) => {
   const response: any = await vifTech.post('/login', {
-    user: {
-      username: formValues.username,
-      password: formValues.password,
-    }
-  },
-  {
-    headers: {'Content-Type': 'application/json; charset=utf-8'}
+    user: { ...formValues }
   });
 
   console.log('logIn response:', response);
 
-  dispatch({ type: LOG_IN, payload: null })
+  if (response.data.status === 500) {
+    console.error(response.data.errors);
+    return;
+  }
+
+  const { logged_in, user = null } = response.data;
+  dispatch({ type: LOG_IN, payload: user });
+}
+
+export const logOut = () => async (dispatch: any) => {
+  const response: any = await vifTech.post('/logout');
+  console.log('logOut response:', response);
+
+  if (response.data.status === 500) {
+    console.error(response.data.errors);
+    return;
+  }
+
+  dispatch({ type: LOG_OUT })
 }
 
 export const checkLoginStatus = () => async (dispatch: any) => {
   const response: any = await vifTech.get('/logged_in');
-  // .then(response => {
-  //     if (response.data.logged_in) {
-  //       this.handleLogin(response)
-  //     } else {
-  //       this.handleLogout()
-  //     }
-  //   })
   console.log('checkLoginStatus response:', response);
 
-  // .catch(error => console.log('api errors:', error));
+  if (response.data.status === 500) {
+    console.error(response.data.errors);
+    return;
+  }
 
-  dispatch({ type: CHECK_LOGIN_STATUS, payload: { isLoggedIn: null, user: null } })
+  const { logged_in, user = null } = response.data;
+  dispatch({ type: CHECK_LOGIN_STATUS, payload: { isLoggedIn: logged_in, user } });
 }

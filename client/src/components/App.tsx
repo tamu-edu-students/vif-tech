@@ -7,25 +7,17 @@ import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
 import UserCreate from './UserCreate';
 
-import { logIn, checkLoginStatus } from '../actions'
+import { logIn, logOut, checkLoginStatus } from '../actions'
 
 import '../sass/main.scss';
 
 interface IAppProps {
   logIn?: any;
+  logOut?: any;
   checkLoginStatus?: any;
 }
 
 class App extends React.Component<IAppProps, {}> {
-  public componentDidMount(): void {
-    this.props.logIn({
-      username: "aaaa",
-      password: "aaaa"
-    }).then(() => {
-      this.props.checkLoginStatus();
-    });
-  }
-
   render() {
     return (
       <div className="App">
@@ -80,4 +72,4 @@ class App extends React.Component<IAppProps, {}> {
   }
 }
 
-export default connect(null, {logIn, checkLoginStatus})(App);
+export default connect(null, {logIn, logOut, checkLoginStatus})(App);
