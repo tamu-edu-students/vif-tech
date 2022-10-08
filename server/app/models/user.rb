@@ -4,7 +4,7 @@ class User < ApplicationRecord
   validates :password, length: {minimum: 8}
   validates :username, presence: true
   validates :username, uniqueness: true
-  validates :username, length: { minimum: 4 }
+  validates :username, length: {minimum: 4}
   validates :usertype,
     :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
     :message    => "%{value} is not a valid usertype" }
