@@ -7,14 +7,12 @@ import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
 import UserCreate from './UserCreate';
 
-import { logIn, logOut, checkLoginStatus } from '../actions'
+import { fetchLoginStatus } from '../actions'
 
 import '../sass/main.scss';
 
 interface IAppProps {
-  logIn?: any;
-  logOut?: any;
-  checkLoginStatus?: any;
+  fetchLoginStatus?: any;
 }
 
 class App extends React.Component<IAppProps, {}> {
@@ -72,4 +70,4 @@ class App extends React.Component<IAppProps, {}> {
   }
 }
 
-export default connect(null, {logIn, logOut, checkLoginStatus})(App);
+export default connect(null, {fetchLoginStatus})(App);

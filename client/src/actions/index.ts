@@ -1,7 +1,7 @@
 import {
   FETCH_USERS,
   CREATE_USER,
-  CHECK_LOGIN_STATUS,
+  FETCH_LOGIN_STATUS,
   LOG_IN,
   LOG_OUT,
 } from "./types";
@@ -26,7 +26,7 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
 
   const user: any = response.data.user;
   dispatch({ type: CREATE_USER, payload: user });
-  
+
   history.push('/users/new/success')
 }
 
@@ -58,9 +58,9 @@ export const logOut = () => async (dispatch: any) => {
   dispatch({ type: LOG_OUT })
 }
 
-export const checkLoginStatus = () => async (dispatch: any) => {
+export const fetchLoginStatus = () => async (dispatch: any) => {
   const response: any = await vifTech.get('/logged_in');
-  console.log('checkLoginStatus response:', response);
+  console.log('fetchLoginStatus response:', response);
 
   if (response.data.status === 500) {
     console.error(response.data.errors);
@@ -68,5 +68,5 @@ export const checkLoginStatus = () => async (dispatch: any) => {
   }
 
   const { logged_in, user = null } = response.data;
-  dispatch({ type: CHECK_LOGIN_STATUS, payload: { isLoggedIn: logged_in, user } });
+  dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn: logged_in, user } });
 }
