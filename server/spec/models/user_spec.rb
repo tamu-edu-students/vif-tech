@@ -24,7 +24,12 @@ RSpec.describe User, type: :model do
     user = User.create(username: "hello", email: "hello@hello.com", password: "something")
     expect(user.confirm_token).to_not be(nil)
   end
-
+  
+  it { should validate_presence_of(:username) }
+  it { should validate_presence_of(:password) }
+  it {
+    should validate_length_of(:username)
+      .is_at_least(4)   }
 end
 
 '''
