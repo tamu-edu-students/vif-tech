@@ -3,7 +3,10 @@ class User < ApplicationRecord
   has_secure_password
   validates :username, presence: true
   validates :username, uniqueness: true
-  validates :username, length: { minimum: 4 }
+  validates :username, length: {minimum: 4}
+  validates :usertype,
+    :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
+    :message    => "%{value} is not a valid usertype" }
 
   def email_activate
     self.email_confirmed = true

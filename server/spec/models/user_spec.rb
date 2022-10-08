@@ -8,10 +8,6 @@ RSpec.describe User, type: :model do
     expect(User.create(email: "hello@hello.com", password: "something")).to_not be_valid
   end
   
-  # it "is invalid without an email" do
-  #   expect(User.create(username: "hello", password: "something")).to_not be_valid
-  # end
-  
   it "is invalid without password" do
     expect(User.create(username: "hello", email: "hello@hello.com")).to_not be_valid
   end
@@ -30,3 +26,15 @@ RSpec.describe User, type: :model do
   end
 
 end
+
+'''
+before_create :confirmation_token
+  has_secure_password
+  validates :password, length: {minimum: 8}
+  validates :username, presence: true
+  validates :username, uniqueness: true
+  validates :username, length: {minimum: 4}
+  validates :usertype,
+    :inclusion  => { :in => [ company representative, student, faculty, admin, volunteer],
+    :message    => "%{value} is not a valid usertype" }
+'''
