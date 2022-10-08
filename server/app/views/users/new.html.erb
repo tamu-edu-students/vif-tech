@@ -1,0 +1,29 @@
+<h1>Sign up</h1>
+<br>
+<h2>
+  Hi xxx, welcome to VIF 2023! Your company is in the domain allowlist, so please sign up below.
+</h2>
+
+	<div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <%= form_with(model: @user, local:  true) do |f|  %>
+
+              <%= f.label   :usertype %>
+              <%= f.text_field  :usertype, class: 'form-control'  %>
+              
+              <%= f.label   :username %>
+              <%= f.text_field  :username, class: 'form-control'  %>
+
+              <%= f.label    :email %>
+              <%= f.email_field  :email, class: 'form-control' %>
+
+              <%= f.label    :password %>
+              <%= f.password_field  :password, class: 'form-control' %>
+
+              <%= f.label    :password_confirmation, "Confirmation" %>
+              <%= f.password_field   :password_confirmation, class: 'form-control'  %>
+
+              <%= f.submit "Create my account", class: "btn btn-primary" %>
+            <% end %>
+  	    </div>
+	</div>
