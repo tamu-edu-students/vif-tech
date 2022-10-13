@@ -42,7 +42,7 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
     return;
   }
 
-  const { logged_in, user = null } = response.data;
+  const { user = null } = response.data;
   dispatch({ type: LOG_IN, payload: user });
 }
 

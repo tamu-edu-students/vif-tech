@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   user: null,
 };
 
-export default (state = INITIAL_STATE, action: any) => {
+const authReducer = (state = INITIAL_STATE, action: any) => {
   switch (action.type) {
     case LOG_IN:
       return { ...state, isLoggedIn: true, user: action.payload };
@@ -17,3 +17,5 @@ export default (state = INITIAL_STATE, action: any) => {
       return state;
   }
 };
+
+export default authReducer;
