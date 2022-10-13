@@ -16,6 +16,10 @@ interface IAppProps {
 }
 
 class App extends React.Component<IAppProps, {}> {
+  componentDidMount(): void {
+    this.props.fetchLoginStatus();
+  }
+
   render() {
     return (
       <div className="App">
