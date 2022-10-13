@@ -5,8 +5,18 @@ Rails.application.routes.draw do
   get '/logged_in', to: 'sessions#is_logged_in?'
   
   get '/users/find', to: 'users#show_by_find'
-  resources :users, only: [:create, :show, :index] do
-    resources :items, only: [:create, :show, :index, :destroy]
+  
+  get '/company-representative-signup', to: 'users#new'
+  post '/company-representative-signup', to: 'users#create'
+
+
+  resources :users, only: [:create, :show, :index] 
+
+  # English: For each user, make a route to get user/:id/confirm_email
+  resources :users do
+    member do
+      get :confirm_email
+    end
   end
 
 end
