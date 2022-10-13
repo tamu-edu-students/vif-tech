@@ -14,11 +14,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    if !params[:id]
-      show_by_username()
-      return
-    end
-    @user = User.find(params[:id])
+    @user = User.find_by_id(params[:id])
     if @user
       render json: {
                user: @user,
@@ -48,6 +44,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def new
+    @user = User.new
+  end
+
   def create
 
     # Check for email uniqueness
@@ -71,7 +71,7 @@ class UsersController < ApplicationController
     else
       render json: {
                status: 500,
-               errors: @user.errors.full_messages,
+               errors: ["Something went wrong when saving the user"],
              }
     end
   end
@@ -86,7 +86,7 @@ class UsersController < ApplicationController
     else
       render json: {
                status: 500,
-               errors: @user.errors.full_messages,
+               errors: ["User with the provided confirmation token does not exist."],
              }
     end
   end
@@ -94,7 +94,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    params.require(:user).permit(:usertype, :username, :email, :password, :password_confirmation)
   end
 
 
