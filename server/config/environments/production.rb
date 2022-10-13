@@ -55,24 +55,11 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "server_production"
 
-  # Do care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
-
   config.action_mailer.perform_caching = false
 
-  # TODO get prod email
-  # Settings for signup email
-  config.action_mailer.smtp_settings = {
-    :user_name => 'apikey', # This is the string literal 'apikey', NOT the ID of your API key
-    :password => ENV["EMAIL_APIKEY"], # This is the secret sendgrid API key which was issued during API key creation
-    :domain => 'vif-tech.herokuapp.com',
-    :address => 'smtp.sendgrid.net',
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true} 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: 'https://vif-tech.herokuapp.com/' } # This is used for generating the link to confirm email
-  config.signup_email_address = "vizfairdummyemail@gmail.com" # This is the sender - must match email used for sendgrid
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # config.action_mailer.raise_delivery_errors = false
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
