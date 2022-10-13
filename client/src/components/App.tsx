@@ -1,18 +1,30 @@
 import React from 'react';
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
+import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
 import history from "../history";
 
-import { VifLogoMark } from './iconComponents';
-
 import RedirectPrompt from './RedirectPrompt';
+import Users from './Users';
+import UserCreate from './UserCreate';
+
+import { fetchLoginStatus } from '../actions'
 
 import '../sass/main.scss';
 
-class App extends React.Component {
+interface IAppProps {
+  fetchLoginStatus?: any;
+}
+
+class App extends React.Component<IAppProps, {}> {
+  componentDidMount(): void {
+    this.props.fetchLoginStatus();
+  }
+
   render() {
     return (
       <div className="App">
         <Router history={history}>
+          <Link to="/users/new" className="register-button">Register!</Link>
           <Switch>
             <Route exact path="/">
               <Redirect to="/under-construction" />
@@ -24,6 +36,24 @@ class App extends React.Component {
                   message={"is under construction"}
                   buttonText={"Portfolio Review Signup"}
                   href={"https://linktr.ee/vizindustryfair"}
+                />
+              </section>
+            </Route>
+
+            <Route exact path="/users">
+              <Users />
+            </Route>
+
+            <Route exact path="/users/new">
+              <UserCreate />
+            </Route>
+
+            <Route exact path="/users/new/success">
+              <section className="section section--redirector">
+                <RedirectPrompt
+                  message={"Almost done. Click the verification link sent to your email to complete your registration."}
+                  buttonText={"Return Home"}
+                  pathName={"/"}
                 />
               </section>
             </Route>
@@ -44,4 +74,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(null, {fetchLoginStatus})(App);

@@ -30,7 +30,7 @@ class RedirectPrompt extends React.Component<IInternalRedirectPromptProps | IExt
 
     if (this.props.href) {
       return (
-        <a href={this.props.href} target="_blank" className="btn redirector__link">
+        <a href={this.props.href} target="_blank" rel="noreferrer" className="btn redirector__link">
           <span className="btn__text">{this.props.buttonText}</span>
         </a>
       )
