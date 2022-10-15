@@ -32,5 +32,10 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-
 coverage
+
+# ignore local environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

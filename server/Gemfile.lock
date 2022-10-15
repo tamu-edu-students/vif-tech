@@ -267,7 +267,6 @@ DEPENDENCIES
   database_cleaner
   debug
   factory_bot_rails (~> 6.1)
-  faker
   pg
   puma (~> 5.0)
   rack-cors
