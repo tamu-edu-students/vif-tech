@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 
-import { fetchUsers } from "../actions";
+import { fetchUsers } from "../store/actions";
 
 interface IUsersProps {
   users: any[];

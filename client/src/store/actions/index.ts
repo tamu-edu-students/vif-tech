@@ -5,8 +5,8 @@ import {
   LOG_IN,
   LOG_OUT,
 } from "./types";
-import history from "../history";
-import vifTech from "../apis/vifTech";
+import history from "../../history";
+import vifTech from "../../apis/vifTech";
 
 export const fetchUsers = () => async (dispatch: any) => {
   const response: any = await vifTech.get("/users");

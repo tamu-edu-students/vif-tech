@@ -7,7 +7,7 @@ import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
 import UserCreate from './UserCreate';
 
-import { fetchLoginStatus } from '../actions'
+import { fetchLoginStatus } from '../store/actions'
 
 import '../sass/main.scss';
 

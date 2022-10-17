@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 
-import { createUser } from "../actions";
+import { createUser } from "../store/actions";
 import UserForm from "./UserForm";
 
 interface IUserCreateProps {
