@@ -11,6 +11,10 @@ class User < ApplicationRecord
     :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
                      :message    => "%{value} is not a valid usertype" }
 
+    def as_json(options={})
+      options[:except] ||= [:password_digest]
+      super(options)
+    end
 
   def email_activate
     self.email_confirmed = true
