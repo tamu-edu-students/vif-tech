@@ -8,8 +8,8 @@ class User < ApplicationRecord
             :inclusion => { :in => ["company representative", "student", "faculty", "admin", "volunteer"],
                             :message => "%{value} is not a valid usertype" }
 
-  has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting"
-  has_many :user_meetings
+  has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting", dependent: :destroy
+  has_many :user_meetings, dependent: :destroy
   has_many :invited_meetings, through: :user_meetings, source: :meeting
 
   def email_activate

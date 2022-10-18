@@ -27,63 +27,110 @@ RSpec.describe Meeting, type: :model do
   end
 
   it "should display correct relationships" do
-    user1 = User.create(username: "user1", email: "user1@hello.com", password: "something")
-    user2 = User.create(username: "user2", email: "user2@hello.com", password: "something")
-    user3 = User.create(username: "user3", email: "user3@hello.com", password: "something")
-    user4 = User.create(username: "user4", email: "user4@hello.com", password: "something")
-    user5 = User.create(username: "user5", email: "user5@hello.com", password: "something")
-    user6 = User.create(username: "user6", email: "user6@hello.com", password: "something")
+    User.create(username: "user1", email: "user1@hello.com", password: "something", usertype: "admin")
+    User.create(username: "user2", email: "user2@hello.com", password: "something", usertype: "admin")
+    User.create(username: "user3", email: "user3@hello.com", password: "something")
+    User.create(username: "user4", email: "user4@hello.com", password: "something")
+    User.create(username: "user5", email: "user5@hello.com", password: "something")
+    User.create(username: "user6", email: "user6@hello.com", password: "something")
 
-    meeting1 = Meeting.create(owner_id: user1.id, title: "meeting1", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")
-    meeting2 = Meeting.create(owner_id: user2.id, title: "meeting2", start_time: "2022-10-18 14:30:00", end_time: "2022-10-18 14:50:00")
+    Meeting.create(owner_id: 1, title: "meeting1", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")
+    Meeting.create(owner_id: 2, title: "meeting2", start_time: "2022-10-18 14:30:00", end_time: "2022-10-18 14:50:00")
 
-    expect(meeting1).to be_valid
-    expect(meeting2).to be_valid
+    expect(Meeting.find(1)).to be_valid
+    expect(Meeting.find(2)).to be_valid
 
-    UserMeeting.create(meeting: meeting1, user: user2, accepted: true)
-    UserMeeting.create(meeting: meeting1, user: user3, accepted: true)
-    UserMeeting.create(meeting: meeting1, user: user5, accepted: true)
-    UserMeeting.create(meeting: meeting1, user: user4, accepted: false)
-    UserMeeting.create(meeting: meeting1, user: user6, accepted: false)
+    UserMeeting.create(meeting_id: 1, user_id: 2, accepted: true)
+    UserMeeting.create(meeting_id: 1, user_id: 3, accepted: true)
+    UserMeeting.create(meeting_id: 1, user_id: 5, accepted: true)
+    UserMeeting.create(meeting_id: 1, user_id: 4, accepted: false)
+    UserMeeting.create(meeting_id: 1, user_id: 6, accepted: false)
 
-    UserMeeting.create(meeting: meeting2, user: user1, accepted: true)
-    UserMeeting.create(meeting: meeting2, user: user5, accepted: true)
-    UserMeeting.create(meeting: meeting2, user: user6, accepted: true)
-    UserMeeting.create(meeting: meeting2, user: user3, accepted: false)
-    UserMeeting.create(meeting: meeting2, user: user4, accepted: false)
+    UserMeeting.create(meeting_id: 2, user_id: 1, accepted: true)
+    UserMeeting.create(meeting_id: 2, user_id: 5, accepted: true)
+    UserMeeting.create(meeting_id: 2, user_id: 6, accepted: true)
+    UserMeeting.create(meeting_id: 2, user_id: 3, accepted: false)
+    UserMeeting.create(meeting_id: 2, user_id: 4, accepted: false)
 
-    expect(user1.owned_meetings).to eq([meeting1])
-    expect(user1.attending_meetings).to eq([meeting2])
-    expect(user1.pending_meetings).to eq([])
-    expect(user1.invited_meetings).to eq([meeting2])
+    expect(User.find(1).owned_meetings).to match_array([Meeting.find(1)])
+    expect(User.find(1).attending_meetings).to match_array([Meeting.find(2)])
+    expect(User.find(1).pending_meetings).to match_array([])
+    expect(User.find(1).invited_meetings).to match_array([Meeting.find(2)])
 
-    expect(user2.owned_meetings).to eq([meeting2])
-    expect(user2.attending_meetings).to eq([meeting1])
-    expect(user2.pending_meetings).to eq([])
-    expect(user2.invited_meetings).to eq([meeting1])
+    expect(User.find(2).owned_meetings).to match_array([Meeting.find(2)])
+    expect(User.find(2).attending_meetings).to match_array([Meeting.find(1)])
+    expect(User.find(2).pending_meetings).to match_array([])
+    expect(User.find(2).invited_meetings).to match_array([Meeting.find(1)])
 
-    expect(user3.owned_meetings).to eq([])
-    expect(user3.attending_meetings).to eq([meeting1])
-    expect(user3.pending_meetings).to eq([meeting2])
+    expect(User.find(3).owned_meetings).to match_array([])
+    expect(User.find(3).attending_meetings).to match_array([Meeting.find(1)])
+    expect(User.find(3).pending_meetings).to match_array([Meeting.find(2)])
 
-    expect(user4.owned_meetings).to eq([])
-    expect(user4.attending_meetings).to eq([])
-    expect(user4.pending_meetings).to eq([meeting1, meeting2])
+    expect(User.find(4).owned_meetings).to match_array([])
+    expect(User.find(4).attending_meetings).to match_array([])
+    expect(User.find(4).pending_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
 
-    expect(user5.owned_meetings).to eq([])
-    expect(user5.attending_meetings).to eq([meeting1, meeting2])
-    expect(user5.pending_meetings).to eq([])
+    expect(User.find(5).owned_meetings).to match_array([])
+    expect(User.find(5).attending_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
+    expect(User.find(5).pending_meetings).to match_array([])
 
-    for user in [user3, user4, user5, user6]
-      user.invited_meetings = [meeting1, meeting2]
+    for user in [User.find(3), User.find(4), User.find(5), User.find(6)]
+      expect(user.invited_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
     end
 
-    expect(meeting1.owner).to eq(user1)
-    expect(meeting1.attendees).to eq([user2, user3, user5])
-    expect(meeting1.pending_invitees).to eq([user4, user6])
+    expect(Meeting.find(1).owner).to eq(User.find(1))
+    expect(Meeting.find(1).attendees).to match_array([User.find(2), User.find(3), User.find(5)])
+    expect(Meeting.find(1).pending_invitees).to match_array([User.find(4), User.find(6)])
 
-    expect(meeting2.owner).to eq(user2)
-    expect(meeting2.attendees).to eq([user1, user5, user6])
-    expect(meeting2.pending_invitees).to eq([user3, user4])
+    expect(Meeting.find(2).owner).to eq(User.find(2))
+    expect(Meeting.find(2).attendees).to match_array([User.find(1), User.find(5), User.find(6)])
+    expect(Meeting.find(2).pending_invitees).to match_array([User.find(3), User.find(4)])
+  end
+
+  it "should display correct relationships after some things are destroyed" do
+    User.create(username: "user1", email: "user1@hello.com", password: "something", usertype: "admin")
+    User.create(username: "user2", email: "user2@hello.com", password: "something", usertype: "admin")
+    User.create(username: "user3", email: "user3@hello.com", password: "something")
+    User.create(username: "user4", email: "user4@hello.com", password: "something")
+    User.create(username: "user5", email: "user5@hello.com", password: "something")
+    User.create(username: "user6", email: "user6@hello.com", password: "something")
+
+    Meeting.create(owner_id: 1, title: "meeting1", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")
+    Meeting.create(owner_id: 2, title: "meeting2", start_time: "2022-10-18 14:30:00", end_time: "2022-10-18 14:50:00")
+
+    expect(Meeting.find(1)).to be_valid
+    expect(Meeting.find(2)).to be_valid
+
+    UserMeeting.create(meeting_id: 1, user_id: 2, accepted: true)
+    UserMeeting.create(meeting_id: 1, user_id: 3, accepted: true)
+    UserMeeting.create(meeting_id: 1, user_id: 4, accepted: false)
+    UserMeeting.create(meeting_id: 1, user_id: 5, accepted: true)
+    UserMeeting.create(meeting_id: 1, user_id: 6, accepted: false)
+
+    UserMeeting.create(meeting_id: 2, user_id: 1, accepted: true)
+    UserMeeting.create(meeting_id: 2, user_id: 5, accepted: true)
+    UserMeeting.create(meeting_id: 2, user_id: 6, accepted: true)
+    UserMeeting.create(meeting_id: 2, user_id: 3, accepted: false)
+    UserMeeting.create(meeting_id: 2, user_id: 4, accepted: false)
+
+    expect(Meeting.find(1).invitees).to match_array([User.find(2), User.find(3), User.find(4), User.find(5), User.find(6)])
+    expect(Meeting.find(2).invitees).to match_array([User.find(1), User.find(3), User.find(4), User.find(5), User.find(6)])
+    expect(User.find(1).invited_meetings).to match_array([Meeting.find(2)])
+    for user in [User.find(3), User.find(4), User.find(5), User.find(6)]
+      expect(user.invited_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
+    end
+
+    User.find(2).destroy # This should destroy relevant UserMeeting associations and Meeting.find(2)
+
+    expect(Meeting.find(1).invitees).to match_array([User.find(3), User.find(4), User.find(5), User.find(6)])
+    expect(User.find(1).invited_meetings).to match_array([])
+    for user in [User.find(3), User.find(4), User.find(5), User.find(6)]
+      expect(user.invited_meetings).to match_array([Meeting.find(1)])
+    end
+
+    Meeting.find(1).destroy
+    for user in [User.find(1), User.find(3), User.find(4), User.find(5), User.find(6)]
+      expect(user.invited_meetings).to match_array([])
+    end
   end
 end

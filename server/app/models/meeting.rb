@@ -1,6 +1,6 @@
 class Meeting < ApplicationRecord
   belongs_to :owner, class_name: "User"
-  has_many :user_meetings
+  has_many :user_meetings, dependent: :destroy
   has_many :invitees, through: :user_meetings, source: :user
   validates :start_time, comparison: { less_than: :end_time }
 
