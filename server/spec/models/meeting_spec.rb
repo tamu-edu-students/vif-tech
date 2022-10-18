@@ -2,37 +2,37 @@ require "rails_helper"
 
 RSpec.describe Meeting, type: :model do
   it "is valid with valid attributes" do
-    user = User.create(username: "someone", email: "hello@hello.com", password: "something")
+    user = User.create(firstname: "someone", lastname: "doe", email: "hello@hello.com", password: "something")
     expect(Meeting.create(owner_id: user.id, title: "some title", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")).to be_valid
   end
 
   it "is invalid with end time earlier than start time" do
-    user = User.create(username: "someone", email: "hello@hello.com", password: "something")
+    user = User.create(firstname: "someone", lastname: "doe", email: "hello@hello.com", password: "something")
     expect(Meeting.create(owner_id: user.id, title: "some title", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 11:20:00")).to_not be_valid
   end
 
   it "is invalid without start time" do
-    user = User.create(username: "someone", email: "hello@hello.com", password: "something")
+    user = User.create(firstname: "someone", lastname: "doe", email: "hello@hello.com", password: "something")
     expect(Meeting.create(owner_id: user.id, title: "some title", end_time: "2022-10-18 14:20:00")).to_not be_valid
   end
 
   it "is invalid without endtime" do
-    user = User.create(username: "someone", email: "hello@hello.com", password: "something")
+    user = User.create(firstname: "someone", lastname: "doe", email: "hello@hello.com", password: "something")
     expect(Meeting.create(owner_id: user.id, title: "some title", start_time: "2022-10-18 14:20:00")).to_not be_valid
   end
 
   it "is invalid without owner" do
-    user = User.create(username: "someone", email: "hello@hello.com", password: "something")
+    user = User.create(firstname: "someone", lastname: "doe", email: "hello@hello.com", password: "something")
     expect(Meeting.create(title: "some title", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")).to_not be_valid
   end
 
   it "should display correct relationships" do
-    User.create(username: "user1", email: "user1@hello.com", password: "something", usertype: "admin")
-    User.create(username: "user2", email: "user2@hello.com", password: "something", usertype: "admin")
-    User.create(username: "user3", email: "user3@hello.com", password: "something")
-    User.create(username: "user4", email: "user4@hello.com", password: "something")
-    User.create(username: "user5", email: "user5@hello.com", password: "something")
-    User.create(username: "user6", email: "user6@hello.com", password: "something")
+    User.create(firstname: "user1", lastname: "doe", email: "user1@hello.com", password: "something", usertype: "admin")
+    User.create(firstname: "user2", lastname: "doe", email: "user2@hello.com", password: "something", usertype: "admin")
+    User.create(firstname: "user3", lastname: "doe", email: "user3@hello.com", password: "something")
+    User.create(firstname: "user4", lastname: "doe", email: "user4@hello.com", password: "something")
+    User.create(firstname: "user5", lastname: "doe", email: "user5@hello.com", password: "something")
+    User.create(firstname: "user6", lastname: "doe", email: "user6@hello.com", password: "something")
 
     Meeting.create(owner_id: 1, title: "meeting1", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")
     Meeting.create(owner_id: 2, title: "meeting2", start_time: "2022-10-18 14:30:00", end_time: "2022-10-18 14:50:00")
@@ -88,12 +88,12 @@ RSpec.describe Meeting, type: :model do
   end
 
   it "should display correct relationships after some things are destroyed" do
-    User.create(username: "user1", email: "user1@hello.com", password: "something", usertype: "admin")
-    User.create(username: "user2", email: "user2@hello.com", password: "something", usertype: "admin")
-    User.create(username: "user3", email: "user3@hello.com", password: "something")
-    User.create(username: "user4", email: "user4@hello.com", password: "something")
-    User.create(username: "user5", email: "user5@hello.com", password: "something")
-    User.create(username: "user6", email: "user6@hello.com", password: "something")
+    User.create(firstname: "user1", lastname: "doe", email: "user1@hello.com", password: "something", usertype: "admin")
+    User.create(firstname: "user2", lastname: "doe", email: "user2@hello.com", password: "something", usertype: "admin")
+    User.create(firstname: "user3", lastname: "doe", email: "user3@hello.com", password: "something")
+    User.create(firstname: "user4", lastname: "doe", email: "user4@hello.com", password: "something")
+    User.create(firstname: "user5", lastname: "doe", email: "user5@hello.com", password: "something")
+    User.create(firstname: "user6", lastname: "doe", email: "user6@hello.com", password: "something")
 
     Meeting.create(owner_id: 1, title: "meeting1", start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:20:00")
     Meeting.create(owner_id: 2, title: "meeting2", start_time: "2022-10-18 14:30:00", end_time: "2022-10-18 14:50:00")

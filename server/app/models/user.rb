@@ -1,9 +1,12 @@
 class User < ApplicationRecord
   before_create :set_confirm_token
   has_secure_password
-  validates :username, presence: true
-  validates :username, uniqueness: true
-  validates :username, length: { minimum: 4 }
+  validates :email, presence: true
+  validates :email, uniqueness: true
+  validates :firstname, presence: true
+  validates :firstname, length: { minimum: 1 }
+  validates :lastname, presence: true
+  validates :lastname, length: { minimum: 1 }
   validates :usertype,
             :inclusion => { :in => ["company representative", "student", "faculty", "admin", "volunteer"],
                             :message => "%{value} is not a valid usertype" }
@@ -11,6 +14,11 @@ class User < ApplicationRecord
   has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting", dependent: :destroy
   has_many :user_meetings, dependent: :destroy
   has_many :invited_meetings, through: :user_meetings, source: :meeting
+
+  def as_json(options = {})
+    options[:except] ||= [:password_digest]
+    super(options)
+  end
 
   def email_activate
     self.email_confirmed = true
