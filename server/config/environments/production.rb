@@ -72,7 +72,7 @@ Rails.application.configure do
     :enable_starttls_auto => true} 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: 'https://vif-tech.herokuapp.com/' } # This is used for generating the link to confirm email
-  config.signup_email_address = "vizfairdummyemail@gmail.com" # This is the sender - must match email used for sendgrid
+  config.signup_email_address = "vizfaircommunications@gmail.com" # This is the sender - must match email used for sendgrid
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
