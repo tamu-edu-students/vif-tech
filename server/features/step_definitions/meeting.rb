@@ -55,3 +55,13 @@ end
 Given("that I update a meeting with id {int} with the following") do |id, table|
   ret = page.driver.put("/meetings/" + id.to_s, { 'meeting': table.rows_hash })
 end
+
+Given("delete the meeting with id {int}") do |id|
+  ret = page.driver.delete("/meetings/" + id.to_s)
+end
+
+Then("the meeting with id {int} will not be found") do |id|
+  ret = page.driver.get("/meetings/" + id.to_s)
+  ret_body = JSON.parse ret.body
+  expect(ret_body["status"]).to eq(500)
+end

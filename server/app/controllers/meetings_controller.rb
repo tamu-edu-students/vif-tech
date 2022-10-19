@@ -43,7 +43,7 @@ class MeetingsController < ApplicationController
   # POST /meetings/
   def create
     params = meeting_params.to_h
-    # If owner key is not provided, use the owner key provided by me
+    # If owner key is not provided, use the owner key provided by the requester
     if !params.key?("owner_id")
       params["owner_id"] = current_user.id
     end
@@ -74,6 +74,22 @@ class MeetingsController < ApplicationController
       render json: {
                status: 500,
                errors: ["Something went wrong when saving the meeting"],
+             }
+    end
+  end
+
+  # DELETE /meetings/1/
+  def destroy
+    @meeting = Meeting.find(params[:id])
+    if @meeting.destroy
+      render json: {
+               status: :destroyed,
+               meeting: @meeting,
+             }
+    else
+      render json: {
+               status: 500,
+               errors: ["Something went wrong when destroying the meeting"],
              }
     end
   end

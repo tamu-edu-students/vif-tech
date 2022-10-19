@@ -43,9 +43,9 @@ Feature: Meeting
             | end_time | '2022-10-18 18:30:00' |
             | owner_id | 1 |
         Then the meeting with id 1 will have 'title': 'A meeting'
-        Then the meeting with id 1 will have 'owner_id': 2
-        Then the meeting with id 2 will have 'title': 'Another meeting'
-        Then the meeting with id 2 will have 'owner_id': 1
+        And the meeting with id 1 will have 'owner_id': 2
+        And the meeting with id 2 will have 'title': 'Another meeting'
+        And the meeting with id 2 will have 'owner_id': 1
     
     Scenario: Edit meeting
         # User created with id 1
@@ -62,4 +62,23 @@ Feature: Meeting
             | end_time | '2022-10-18 18:30:00' |
             | owner_id | 1 |
         Then the meeting with id 1 will have 'title': 'Another meeting'
-        Then the meeting with id 1 will have 'owner_id': 1
+        And the meeting with id 1 will have 'owner_id': 1
+    
+    Scenario: Create meeting with owner id
+        # User created with id 1
+        Given that I sign up and log in as a valid student
+        # User created with id 2
+        And that I sign up and log in as a valid student
+        And that I create a meeting with the following
+            | title | A meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+        And that I create a meeting with the following
+            | title | Another meeting |
+            | start_time | '2022-10-18 18:00:00' |
+            | end_time | '2022-10-18 18:30:00' |
+            | owner_id | 1 |
+        And delete the meeting with id 1
+        Then the meeting with id 2 will have 'title': 'Another meeting'
+        And the meeting with id 2 will have 'owner_id': 1
+        And the meeting with id 1 will not be found
