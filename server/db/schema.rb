@@ -24,7 +24,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_053651) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "username"
     t.string "email"
     t.string "password_digest"
     t.datetime "created_at", null: false
@@ -32,6 +31,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_053651) do
     t.string "usertype"
     t.boolean "email_confirmed", default: false
     t.string "confirm_token"
+    t.string "usertype", default: "student"
+    t.string "firstname"
+    t.string "lastname"
   end
 
 end
