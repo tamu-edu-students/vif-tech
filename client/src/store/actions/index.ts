@@ -20,14 +20,15 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   const response: any = await vifTech.post("/users", { user: { ...formValues } });
   console.log(`createUser response: `, response);
   if (response.data.status === 500) {
-    console.error(response.data.errors);
-    return;
+    throw new Error(response.data.errors);
+    // console.error(response.data.errors);
+    // return;
   }
 
   const user: any = response.data.user;
   dispatch({ type: CREATE_USER, payload: user });
 
-  history.push('/users/new/success')
+  history.push('/users/new/success');
 }
 
 export const logIn = (formValues: any) => async (dispatch: any) => {
