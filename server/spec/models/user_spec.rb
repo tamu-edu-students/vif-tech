@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe User, type: :model do
   it "is valid with valid attributes" do
@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
   it "is invalid without a username" do
     expect(User.create(email: "hello@hello.com", password: "something")).to_not be_valid
   end
-  
+
   it "is invalid without password" do
     expect(User.create(username: "hello", email: "hello@hello.com")).to_not be_valid
   end
@@ -25,9 +25,15 @@ RSpec.describe User, type: :model do
     expect(user.confirm_token).to_not be(nil)
   end
 
+  it { should validate_presence_of(:username) }
+  it { should validate_presence_of(:password) }
+  it {
+    should validate_length_of(:username)
+        .is_at_least(4)
+  }
 end
 
-'''
+"" '
 before_create :confirmation_token
   has_secure_password
   validates :password, length: {minimum: 8}
@@ -37,4 +43,4 @@ before_create :confirmation_token
   validates :usertype,
     :inclusion  => { :in => [ company representative, student, faculty, admin, volunteer],
     :message    => "%{value} is not a valid usertype" }
-'''
+' ""
