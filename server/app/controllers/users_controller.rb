@@ -65,15 +65,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    # Since we are logging in with the email according to the lofi design, I guess we can scrap this?
-    # FYI, email's uniqueness is checked within the User model's validation
-    # # Check for email uniqueness
-    # existing_user = User.find_by_email(params["user"]["email"]) # TODO 'and usertype == params[usertype]'
-    # if existing_user != nil # TODO once multiple users, allow email reuse for different account types (eg. I can have an admin and a student account)
-    #   return render json: {
-    #            errors: "Email already in use",
-    #          }, status: :internal_server_error
-    # end
     @user = User.new(user_params)
     if @user.save
       login!
@@ -85,7 +76,7 @@ class UsersController < ApplicationController
     else
       render json: {
                errors: @user.errors.full_messages,
-             }, status: :internal_server_error
+             }, status: :bad_request
     end
   end
 
@@ -162,7 +153,7 @@ class UsersController < ApplicationController
     else
       render json: {
         errors: @user_meeting.errors.full_messages,
-      }, status: :internal_server_error
+      }, status: :bad_request
     end
   end
 
@@ -177,7 +168,7 @@ class UsersController < ApplicationController
     else
       render json: {
         errors: @user_meeting.errors.full_messages,
-      }, status: :internal_server_error
+      }, status: :bad_request
     end
   end
 
@@ -189,7 +180,7 @@ class UsersController < ApplicationController
     else
       render json: {
         errors: @user_meeting.errors.full_messages,
-      }, status: :internal_server_error
+      }, status: :bad_request
     end
   end
 

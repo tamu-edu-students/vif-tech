@@ -80,7 +80,7 @@ class MeetingsController < ApplicationController
     else
       render json: {
                errors: @meeting.errors.full_messages,
-             }, status: :internal_server_error
+             }, status: :bad_request
     end
   end
 
@@ -97,7 +97,7 @@ class MeetingsController < ApplicationController
     else
       render json: {
                errors: @meeting.errors.full_messages,
-             }, status: :internal_server_error
+             }, status: :bad_request
     end
   end
 
@@ -114,7 +114,7 @@ class MeetingsController < ApplicationController
     else
       render json: {
                errors: @meeting.errors.full_messages,
-             }, status: :internal_server_error
+             }, status: :bad_request
     end
   end
 

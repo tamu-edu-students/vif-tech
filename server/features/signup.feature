@@ -15,7 +15,7 @@ Feature: Student signup
         And there should be 1 sent emails
             
     Scenario: Signup as student with wrong password confirmation
-        Given that I sign up with the following and fail with code 500
+        Given that I sign up with the following and fail with code 400
             | firstname | john |
             | lastname | doe |
             | password | password1! |
@@ -86,7 +86,7 @@ Feature: Student signup
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@dne.com |
-        Given that I sign up with the following and fail with code 500
+        Given that I sign up with the following and fail with code 400
             | firstname | jane |
             | lastname | bond |
             | password | password1! |
