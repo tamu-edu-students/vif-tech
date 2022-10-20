@@ -81,7 +81,7 @@ Feature: Meeting
         And delete the meeting with id 1
         Then the meeting with id 2 will have 'title': 'Another meeting'
         And the meeting with id 2 will have 'owner_id': 1
-        And the meeting with id 1 will not be found
+        And the meeting with id 1 will not be found due to 404 error
 
     Scenario: Trying to remove other people's meetings as non-admin
         Given that I sign up and log in as a valid admin
@@ -90,7 +90,7 @@ Feature: Meeting
             | start_time | '2022-10-18 18:10:00' |
             | end_time | '2022-10-18 18:20:00' |
         And that I sign up and log in as a valid student
-        Then deleting the meeting with id 1 should fail
+        Then deleting the meeting with id 1 should fail due to 403 error
 
     Scenario: Trying to remove other people's meetings as admin
         Given that I sign up and log in as a valid admin
@@ -103,7 +103,7 @@ Feature: Meeting
 
     Scenario: Trying to query meetings as non-admin
         Given that I sign up and log in as a valid student
-        Then I should NOT be able to fetch meetings
+        Then I should NOT be able to fetch meetings due to 403 error
     
     Scenario: Trying to create a meeting as non-admin
         Given that I sign up and log in as a valid student
