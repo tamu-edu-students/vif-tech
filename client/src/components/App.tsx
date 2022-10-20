@@ -7,7 +7,7 @@ import RedirectPrompt from './RedirectPrompt';
 import Users from './Users';
 import UserCreate from './UserCreate';
 
-import { fetchLoginStatus } from '../actions'
+import { fetchLoginStatus } from '../store/actions'
 
 import '../sass/main.scss';
 
@@ -16,9 +16,9 @@ interface IAppProps {
 }
 
 class App extends React.Component<IAppProps, {}> {
-  componentDidMount(): void {
-    this.props.fetchLoginStatus();
-  }
+  // componentDidMount(): void {
+  //   this.props.fetchLoginStatus();
+  // }
 
   render() {
     return (
