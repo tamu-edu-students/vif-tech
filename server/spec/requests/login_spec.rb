@@ -4,7 +4,7 @@ RSpec.describe "Login", type: :request do
   let!(:test_user) { FactoryBot.create(:user) }
   #  POST /category
   describe "POST /login" do
-    let(:login_payload) { { user: { username: test_user.username, password: test_user.password } } }
+    let(:login_payload) { { user: { email: test_user.email, password: test_user.password } } }
     context "Valid Login Payload" do
       before { post "/login", params: login_payload }
       it "User can login successfuly" do
@@ -20,7 +20,7 @@ RSpec.describe "Login", type: :request do
 
     context "Invalid Login Payload Returns Error" do
       it "User cannot login with wrong username" do
-        login_payload[:user][:username] = "wrongusername"
+        login_payload[:user][:email] = "wrongusername@email.com"
         post "/login", params: login_payload
         json = JSON.parse(response.body)
         expect(json["status"]).to eq(401)
