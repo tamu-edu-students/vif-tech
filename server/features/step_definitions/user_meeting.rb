@@ -28,8 +28,7 @@ end
 
 Then("I should NOT be able to fetch user-meetings") do
   ret = page.driver.get("/user_meetings")
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  expect(ret.status).to eq(401)
 end
 
 Then("I should be able to fetch {int} user-meetings") do |num_meetings|
