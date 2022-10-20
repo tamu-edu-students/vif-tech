@@ -133,13 +133,6 @@ GEM
     email_validator (2.2.3)
       activemodel
     erubi (1.11.0)
-    factory_bot (6.2.1)
-      activesupport (>= 5.0.0)
-    factory_bot_rails (6.2.0)
-      factory_bot (~> 6.2.0)
-      railties (>= 5.0.0)
-    faker (2.23.0)
-      i18n (>= 1.8.11, < 2)
     ffi (1.15.5)
     ffi (1.15.5-x64-mingw-ucrt)
     globalid (1.0.0)
@@ -236,8 +229,6 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.11.1)
-    shoulda-matchers (5.2.0)
-      activesupport (>= 5.2.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -274,14 +265,11 @@ DEPENDENCIES
   debug
   dotenv-rails
   email_validator
-  factory_bot_rails (~> 6.1)
-  faker
   pg
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.4)
   rspec-rails
-  shoulda-matchers
   simplecov
   sqlite3 (~> 1.4)
   tzinfo-data
