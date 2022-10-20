@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 
 import { createUser } from "../store/actions";
-import UserForm from "./UserForm";
+import UserForm from "./UserForm/UserForm";
 
 interface IUserCreateProps {
   createUser?: any;
@@ -11,6 +11,9 @@ interface IUserCreateProps {
 class UserCreate extends React.Component<IUserCreateProps, {}> {
   private _onSubmit = (formValues: any) => {
     this.props.createUser(formValues)
+    .catch((err: Error) => {
+      console.error(err.message);
+    });
   }
 
   public render(): React.ReactElement<IUserCreateProps> {

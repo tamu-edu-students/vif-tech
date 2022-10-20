@@ -1,17 +1,18 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps } from "redux-form";
+import { connect } from 'react-redux';
 
 interface IUserFormProps {
   onSubmit?: any;
 }
 
 class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
-  private _renderInput = ({ input, label, meta }: any) => {
+  private _renderInput = ({ input, label, meta, id }: any) => {
     const className = `field ${meta.error && meta.touched ? "error" : ""}`;
     return (
       <div className={className}>
-        <label>{label}</label>
-        <input {...input} autoComplete="off" />
+        <label htmlFor={id}>{label}</label>
+        <input {...input} id={id} autoComplete="off" />
         {this._renderError(meta)}
       </div>
     );
@@ -20,7 +21,7 @@ class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
   private _renderError({ error, touched }: any) {
     if (touched && error) {
       return (
-        <div className="error">
+        <div className="error-text">
           <div>{error}</div>
         </div>
       );
@@ -33,12 +34,13 @@ class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
  
   public render() {
     return (
-      <form onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name="username" component={this._renderInput} label="Username" />
-        <Field name="email" component={this._renderInput} label="Email" />
-        <Field name="password" component={this._renderInput} label="Password" />
-        <Field name="password_confirmation" component={this._renderInput} label="Confirm password" />
-        <button type='submit'>Add User</button>
+      <form data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
+        <Field name="email" id="email" component={this._renderInput} label="Email" />
+        <Field name="first_name" id="first_name" component={this._renderInput} label="First name" />
+        <Field name="last_name" id="last_name" component={this._renderInput} label="Last name" />
+        <Field name="password" id="password" component={this._renderInput} label="Password" />
+        <Field name="password_confirmation" id="password_confirmation" component={this._renderInput} label="Confirm password" />
+        <button type='submit'>Sign Up</button>
       </form>
     );
   }
@@ -48,7 +50,7 @@ const validate = ({username, email, password, password_confirmation}: any) => {
   const errors: any = {};
 
   if (!username) {
-    errors.username = "You must enter a description";
+    errors.username = "You must enter a username";
   }
 
   if (!email) {
@@ -66,7 +68,9 @@ const validate = ({username, email, password, password_confirmation}: any) => {
   return errors;
 };
 
-export default reduxForm({
+const formWrapped = reduxForm({
   form: "userCreate",
   validate: validate,
 })(UserForm);
+
+export default connect()(formWrapped);

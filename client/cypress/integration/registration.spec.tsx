@@ -24,7 +24,6 @@ describe('Registration', () => {
   });
     
   it('should show success when registration details are valid', () => {
-
     cy.visit('/users/new');
     cy.findByLabelText(/email/i).type('unusedEmail@gmail.com');
     cy.findByLabelText(/first name/i).type('Newboy');
@@ -35,7 +34,8 @@ describe('Registration', () => {
     cy.findByRole('button', { name: /sign up/i }).click();
 
     cy.wait('@Sign Up');
-    cy.findByText(/almost done/i).should('be.visible');
+    // cy.findByText(/almost done/i).should('be.visible');
+    cy.url().should('contain', '/success');
   });
 
   it('should not show success when email is already in use', () => {
@@ -49,6 +49,7 @@ describe('Registration', () => {
     cy.findByRole('button', { name: /sign up/i }).click();
 
     cy.wait('@Sign Up');
-    cy.findByText(/almost done/i).should('not.exist');
+    // cy.findByText(/almost done/i).should('not.exist');
+    cy.url().should('not.contain', '/success');
   });
 });
