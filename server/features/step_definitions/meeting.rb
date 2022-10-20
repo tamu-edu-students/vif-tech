@@ -48,7 +48,6 @@ end
 
 Then("I should NOT be able to fetch meetings due to {int} error") do |code|
   ret = page.driver.get("/meetings")
-  ret_body = JSON.parse ret.body
   expect(ret.status).to eq(code)
 end
 
@@ -85,13 +84,11 @@ end
 
 Then("the meeting with id {int} will not be found due to {int} error") do |id, code|
   ret = page.driver.get("/meetings/" + id.to_s)
-  ret_body = JSON.parse ret.body
   expect(ret.status).to eq(code)
 end
 
 Then("deleting the meeting with id {int} should fail due to {int} error") do |id, code|
   ret = page.driver.delete("/meetings/" + id.to_s)
-  ret_body = JSON.parse ret.body
   expect(ret.status).to eq(code)
 end
 

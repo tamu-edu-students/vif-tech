@@ -15,7 +15,7 @@ Feature: Student signup
         And there should be 1 sent emails
             
     Scenario: Signup as student with wrong password confirmation
-        Given that I sign up with the following
+        Given that I sign up with the following and fail with code 500
             | firstname | john |
             | lastname | doe |
             | password | password1! |
@@ -66,7 +66,7 @@ Feature: Student signup
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@dne.com |
-        Then the user should get a 500 error when trying to verify with an incorrect token
+        Then the user should get a 404 error when trying to verify with an incorrect token
 
     Scenario: Signup as student and verify email with link
         Given that I sign up with the following
@@ -86,7 +86,7 @@ Feature: Student signup
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@dne.com |
-        Given that I sign up with the following
+        Given that I sign up with the following and fail with code 500
             | firstname | jane |
             | lastname | bond |
             | password | password1! |
