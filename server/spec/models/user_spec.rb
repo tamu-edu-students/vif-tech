@@ -8,6 +8,14 @@ RSpec.describe User, type: :model do
     expect(User.create(lastname: "Doe", email: "hello@hello.com", password: "something")).to_not be_valid
   end
 
+  it "is invalid without a lastname" do
+    expect(User.create(firstname: "John", email: "hello@hello.com", password: "something")).to_not be_valid
+  end
+
+  it "is invalid without a email" do
+    expect(User.create(firstname: "John", lastname: "Doe", password: "something")).to_not be_valid
+  end
+
   it "is invalid without password" do
     expect(User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com")).to_not be_valid
   end
