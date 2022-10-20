@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_06_043825) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_18_151259) do
   create_table "users", force: :cascade do |t|
-    t.string "username"
     t.string "email"
     t.string "password_digest"
     t.datetime "created_at", null: false
@@ -20,6 +19,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_06_043825) do
     t.boolean "email_confirmed", default: false
     t.string "confirm_token"
     t.string "usertype", default: "student"
+    t.string "firstname"
+    t.string "lastname"
   end
 
 end
