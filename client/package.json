@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -51,7 +52,15 @@
     "@redux-devtools/extension": "^3.2.3",
     "@svgr/cli": "^6.3.1",
     "@svgr/webpack": "^6.3.1",
+    "@testing-library/cypress": "^8.0.3",
     "@types/redux-form": "^8.3.5",
+    "cypress": "^7.7.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "jest-cucumber": "^3.0.1",
+    "msw": "^0.47.4",
     "sass": "^1.55.0"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
   }
 }

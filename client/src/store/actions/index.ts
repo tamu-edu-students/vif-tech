@@ -5,8 +5,8 @@ import {
   LOG_IN,
   LOG_OUT,
 } from "./types";
-import history from "../history";
-import vifTech from "../apis/vifTech";
+import history from "../../history";
+import vifTech from "../../apis/vifTech";
 
 export const fetchUsers = () => async (dispatch: any) => {
   const response: any = await vifTech.get("/users");
@@ -17,17 +17,18 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues } });
+  const response: any = await vifTech.post("/users", { user: { ...formValues, usertype: 'student' } });
   console.log(`createUser response: `, response);
   if (response.data.status === 500) {
-    console.error(response.data.errors);
-    return;
+    throw new Error(response.data.errors);
+    // console.error(response.data.errors);
+    // return;
   }
 
   const user: any = response.data.user;
   dispatch({ type: CREATE_USER, payload: user });
 
-  history.push('/users/new/success')
+  history.push('/users/new/success');
 }
 
 export const logIn = (formValues: any) => async (dispatch: any) => {
