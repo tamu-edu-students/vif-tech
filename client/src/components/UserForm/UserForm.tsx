@@ -36,10 +36,10 @@ class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
     return (
       <form data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
         <Field name="email" id="email" component={this._renderInput} label="Email" />
-        <Field name="first_name" id="first_name" component={this._renderInput} label="First name" />
-        <Field name="last_name" id="last_name" component={this._renderInput} label="Last name" />
+        <Field name="firstname" id="firstname" component={this._renderInput} label="First name" />
+        <Field name="lastname" id="lastname" component={this._renderInput} label="Last name" />
         <Field name="password" id="password" component={this._renderInput} label="Password" />
-        <Field name="password_confirmation" id="password_confirmation" component={this._renderInput} label="Confirm password" />
+        <Field name="password_confirmation" id="password-confirmation" component={this._renderInput} label="Confirm password" />
         <button type='submit'>Sign Up</button>
       </form>
     );
