@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   post "/logout", to: "sessions#destroy"
   get "/logged_in", to: "sessions#is_logged_in?"
 
-  get "/users/find", to: "users#show_by_find"
+  get "/users/find", to: "users#find"
   resources :users, only: [:create, :show, :index, :new]
 
   # English: For each user, make a route to get user/:id/confirm_email
@@ -13,5 +13,15 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/users/:id/meetings", to: "users#get_meetings"
+  get "/users/:id/meetings/attending", to: "users#get_attending_meetings"
+  get "/users/:id/meetings/pending", to: "users#get_pending_meetings"
+  get "/users/:id/meetings/owned", to: "users#get_owned_meetings"
+  get "/users/:id/meetings/:meeting_id", to: "users#invited_to_meeting?"
+  post "/users/:id/meetings/:meeting_id", to: "users#add_to_meeting"
+  put "/users/:id/meetings/:meeting_id", to: "users#update_meeting"
+  delete "/users/:id/meetings/:meeting_id", to: "users#delete_from_meeting"
+
   resources :meetings, only: [:create, :show, :index, :update, :destroy]
+  resources :user_meetings, only: [:show, :index]
 end
