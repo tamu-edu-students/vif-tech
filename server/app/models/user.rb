@@ -8,6 +8,8 @@ class User < ApplicationRecord
     :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
     :message    => "%{value} is not a valid usertype" }
 
+  has_and_belongs_to_many :companies
+
   def email_activate
     self.email_confirmed = true
     self.confirm_token = nil
