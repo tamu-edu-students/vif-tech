@@ -43,9 +43,9 @@ And(`I click the sign up button`, () => {
 });
 
 Then(`the registration should be successful`, () => {
-  cy.url().should('contain', '/success');
+  cy.location('pathname').should('eq', '/users/new/success');
 });
 
 Then(`the registration should not be successful`, () => {
-  cy.url().should('not.contain', '/success');
+  cy.location('pathname').should('not.eq', '/users/new/success');
 });
