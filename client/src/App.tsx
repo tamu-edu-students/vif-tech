@@ -11,24 +11,44 @@ import RedirectPrompt from './components/RedirectPrompt';
 import Users from './components/Users';
 import UserCreate from './components/UserCreate';
 
-import { fetchLoginStatus } from './store/actions'
+import { fetchLoginStatus, logOut } from './store/actions'
+import { userInfo } from 'os';
 
 interface IAppProps {
   fetchLoginStatus?: any;
+  logOut?: any;
   user: any;
 }
 
 class App extends React.Component<IAppProps, {}> {
-  // componentDidMount(): void {
-  //   this.props.fetchLoginStatus();
-  // }
+  componentDidMount(): void {
+    if (!(window as any).Cypress) {
+      this.props.fetchLoginStatus();
+    }
+  }
 
   render() {
-    // console.log(this.props.user)
     return (
       <div className="App">
         <Router history={history}>
+          {
+            this.props.user &&
+            (
+              <nav className="nav">
+                <ul>
+                  <li>{this.props.user.firstname}</li>
+                  <li>{this.props.user.lastname}</li>
+                </ul>
+              </nav>
+            )
+          }
+
+          {
+            (window as any).Cypress && <button onClick={() => this.props.fetchLoginStatus()} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
+          }
+
           <Link to="/users/new" className="register-button">Register!</Link>
+
           <Switch>
             <Route exact path="/">
               <HomePage />
@@ -91,4 +111,4 @@ const mapStateToProps = (state: any) => {
   };
 }
 
-export default connect(mapStateToProps, {fetchLoginStatus})(App);
+export default connect(mapStateToProps, {fetchLoginStatus, logOut})(App);
