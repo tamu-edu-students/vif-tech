@@ -34,9 +34,19 @@ When('I provide the following:', table => {
   cy.findByLabelText(/password/i).type(password);
 });
 
-And(`I click the sign up button`, () => {
+And(`I click the log in button`, () => {
   cy.findByRole('button', { name: /log in/i }).click();
   cy.wait(`@Log In`)
+});
+
+And(`I should remain on the login page`, () => {
+  cy.location('pathname').should('eq', '/login');
+});
+
+And(`I should see my first name and last name on the screen:`, (table) => {
+  const { firstname, lastname } = table.hashes()[0];
+  cy.findByText(firstname).should('be.visible');
+  cy.findByText(lastname).should('be.visible');
 });
 
 Then(`I should be redirected to the home page`, () => {
@@ -45,8 +55,4 @@ Then(`I should be redirected to the home page`, () => {
 
 Then(`I should see an error`, () => {
   cy.get('.error').should('be.visible');
-});
-
-And(`I should remain on the login page`, () => {
-  cy.location('pathname').should('eq', '/login');
 });
