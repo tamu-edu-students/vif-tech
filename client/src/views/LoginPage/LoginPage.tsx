@@ -30,7 +30,6 @@ class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
       this.setState({
         errors: [err.message]
       });
-      console.log('sfgbva')
     });
   }
 
@@ -40,7 +39,7 @@ class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
         <LoginForm onSubmit={this._onSubmit} />
         {
           this.state.errors?.map((error: string) => (
-            <div className="error">{error}</div>
+            <div className="error" key={error}>{error}</div>
           ))
         }
       </section>
