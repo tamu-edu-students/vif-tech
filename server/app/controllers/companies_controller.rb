@@ -52,7 +52,7 @@ class CompaniesController < ApplicationController
     def update
         # Updates a specific company
         @company = Company.find(params[:id])
-        if Company.update(params)
+        if @company.update(params)
             render json: {
                 status: 201,
                 company: @company,
