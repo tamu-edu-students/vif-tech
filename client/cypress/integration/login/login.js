@@ -26,6 +26,13 @@ Before(function() {
       });
     }
   }).as('Log In');
+
+  cy.intercept('POST', "http://localhost:3001/logout", req => {
+    req.reply({
+      status: 200,
+      logged_out: true,
+    });
+  }).as('Log Out');
 });
 
 Given(`I am on the home page`, () => {
@@ -46,6 +53,15 @@ When(`I visit the login page`, function() {
 
 When(`I reload`, () => {
   cy.reload();
+});
+
+When(`I click the log in page button`, () => {
+  cy.get('[data-testid="log-in-page-button"]').click();
+});
+
+When(`I click the log out button`, () => {
+  cy.get('[data-testid="log-out-button"]').click();
+  cy.setCookie('mock_logged-in', JSON.stringify({ logged_in: false, email: null }));
 });
 
 And(`login status is checked`, () => {
@@ -74,8 +90,8 @@ And('I provide the following:', table => {
   cy.findByLabelText(/password/i).type(password);
 });
 
-And(`I click the log in button`, () => {
-  cy.findByRole('button', { name: /log in/i }).click().wait('@Log In');
+And(`I click the log in form button`, () => {
+  cy.get('[data-testid="log-in-form-button"]').click().wait('@Log In');
 });
 
 And(`I should no longer be on the login page`, () => {
@@ -92,6 +108,27 @@ And(`I should see my first name and last name in the nav bar`, (table) => {
 
 And(`I should remain on the login page`, () => {
   cy.location('pathname').should('eq', '/login');
+});
+
+And(`the log out button should not be visible`, () => {
+  cy.get('[data-testid="log-out-button"]').should('not.exist');
+});
+
+And(`the log in button should not be visible`, () => {
+  cy.get('[data-testid="log-in-button"]').should('not.exist');
+});
+
+Then(`the sign up page button should not be visible`, () => {
+  cy.get('[data-testid="sign-up-page-button"]').should('not.exist');
+});
+
+
+Then(`I should not see my first name and last name in the nav bar`, (table) => {
+  const { firstname, lastname } = table.hashes()[0];
+  cy.findByRole('navigation')
+    .findByText(firstname).should('not.exist');
+  cy.findByRole('navigation')
+    .findByText(lastname).should('not.exist');
 });
 
 Then(`a session should start with the following email:`, (table) => {
@@ -111,4 +148,24 @@ Then(`a session should be active for the same email`, (table) => {
 
 Then(`I should see an error`, () => {
   cy.get('.error').should('be.visible');
+});
+
+Then(`I should be redirected to the login page`, () => {
+  cy.location('pathname').should('eq', '/login');
+});
+
+Then(`I should be redirected to the home page`, () => {
+  cy.location('pathname').should('eq', '/');
+});
+
+Then(`the log in page button should be visible`, () => {
+  cy.get('[data-testid="log-in-page-button"]').should('be.visible');
+});
+
+Then(`the log out button should be visible`, () => {
+  cy.get('[data-testid="log-out-button"]').should('be.visible');
+});
+
+Then(`the sign up page button should be visible`, () => {
+  cy.get('[data-testid="sign-up-page-button"]').should('be.visible');
 });
