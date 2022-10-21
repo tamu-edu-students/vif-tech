@@ -17,7 +17,7 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues, usertype: 'student' } });
+  const response: any = await vifTech.post("/users", { user: { ...formValues } });
   console.log(`createUser response: `, response);
   if (response.data.status === 500) {
     throw new Error(response.data.errors);

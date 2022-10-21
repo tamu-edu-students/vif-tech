@@ -1,4 +1,8 @@
+/// <reference types="cypress" />
+
 import { Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
+
+let registeredUser;
 
 beforeEach(function() {
   cy.fixture('example').then(data => {
@@ -16,6 +20,7 @@ Given(`I visit the registration page`, function() {
       });
     }
     else {
+      registeredUser = { ...newUser};
       req.reply({
         status: 201,
         user: newUser
@@ -28,18 +33,27 @@ Given(`I visit the registration page`, function() {
 
 When(`I provide the following:`, (table) => {
   console.log(table.hashes());
-  const { email, firstName, lastName, password, confirmPassword } = table.hashes()[0];
+  const { email, firstname, lastname, password, password_confirmation, usertype } = table.hashes()[0];
 
   cy.findByLabelText(/email/i).type(email);
-  cy.findByLabelText(/first name/i).type(firstName);
-  cy.findByLabelText(/last name/i).type(lastName);
+  cy.findByLabelText(/first name/i).type(firstname);
+  cy.findByLabelText(/last name/i).type(lastname);
   cy.findByLabelText(/^password$/i).type(password);
-  cy.findByLabelText(/confirm password/i).type(confirmPassword);
+  cy.findByLabelText(/confirm password/i).type(password_confirmation);
+
+  cy.findByLabelText(new RegExp(`${usertype}`, 'i')).check();
 });
 
 And(`I click the sign up button`, () => {
-  cy.findByRole('button', { name: /sign up/i }).click();
-  cy.wait(`@Sign Up`)
+  cy.findByRole('button', { name: /sign up/i })
+    .click()
+    .wait(`@Sign Up`);
+});
+
+And(`the provided credentials should match the resulting user`, table => {
+  const fields = table.hashes()[0];
+  // compare each value in the table to each corresponding field in the user object
+    Object.entries(fields).forEach(([key, value]) => expect(registeredUser[key]).to.eq(value));
 });
 
 Then(`the registration should be successful`, () => {
