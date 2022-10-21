@@ -9,9 +9,10 @@ Feature: Student signup
             | lastname | doe |
             | password | password1! |
             | password_confirmation | password1! |
-            | email | test@dne.com |
-        Then the user with email test@dne.com should be found in the user DB
-        And the user with email test@dne.com should be marked as not verified
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should be found in the user DB
+        And the user with email test@tamu.edu should be marked as not verified
         And there should be 1 sent emails
             
     Scenario: Signup as student with wrong password confirmation
@@ -20,8 +21,9 @@ Feature: Student signup
             | lastname | doe |
             | password | password1! |
             | password_confirmation | wrong |
-            | email | test@dne.com |
-        Then the user with email test@dne.com should NOT be found in the user DB
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should NOT be found in the user DB
     
     Scenario: Show students
         Given that an user signs up as a valid student
@@ -29,11 +31,11 @@ Feature: Student signup
         And that an user signs up as a valid student
         And that an user signs up as a valid student
         And that an user signs up as a valid student
-        Then there should be 5 students found in the user DB
+        Then there should be 6 users found in the user DB
     
     Scenario: Show student who's NOT there.
         Given that an user signs up as a valid student
-        Then the user with id 2 should NOT be in the user DB
+        Then the user with id 3 should NOT be in the user DB
     
     Scenario: Query students
         Given that an user signs up as a valid student
@@ -43,7 +45,7 @@ Feature: Student signup
         And that an user signs up as a valid student
         And that an user signs up as a valid student
         And that an user signs up as a valid student
-        Then I should be able to query 7 students by id in the user DB
+        Then I should be able to query 7 users by id in the user DB
         And there should be 7 sent emails
 
 
@@ -53,10 +55,11 @@ Feature: Student signup
             | lastname | doe |
             | password | password1! |
             | password_confirmation | password1! |
-            | email | test@dne.com |
-        And that the user verified their email test@dne.com
-        Then the user with email test@dne.com should be found in the user DB
-        And the user with email test@dne.com should be marked as verified
+            | email | test@tamu.edu |
+            | usertype | student |
+        And that the user verified their email test@tamu.edu
+        Then the user with email test@tamu.edu should be found in the user DB
+        And the user with email test@tamu.edu should be marked as verified
     
     Scenario: Signup as student and verify email with incorrect token
         Given that I sign up with the following
@@ -64,7 +67,8 @@ Feature: Student signup
             | lastname | doe |
             | password | password1! |
             | password_confirmation | password1! |
-            | email | test@dne.com |
+            | email | test@tamu.edu |
+            | usertype | student |
         Then the user should get a 500 error when trying to verify with an incorrect token
 
     Scenario: Signup as student and verify email with link
@@ -73,10 +77,11 @@ Feature: Student signup
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
-            | email | test@dne.com |
+            | email | test@tamu.edu |
+            | usertype | student |
         And that the first user clicked the link in their email
-        Then the user with email test@dne.com should be found in the user DB
-        And the user with email test@dne.com should be marked as verified
+        Then the user with email test@tamu.edu should be found in the user DB
+        And the user with email test@tamu.edu should be marked as verified
 
     Scenario: A user tries to reuse an email
         Given that I sign up with the following
@@ -84,16 +89,22 @@ Feature: Student signup
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
-            | email | test@dne.com |
+            | email | test@tamu.edu |
+            | usertype | student |
         Given that I sign up with the following
             | firstname | jane |
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
-            | email | test@dne.com |   
-        And that the user verified their email test@dne.com
+            | email | test@tamu.edu |
+            | usertype | student |   
+        And that the user verified their email test@tamu.edu
         Then the user with firstname james and lastname bond should be found in the user DB
         And the user with firstname jane and lastname bond should NOT be found in the user DB
-        And the user with email test@dne.com should be marked as verified
+        And the user with email test@tamu.edu should be marked as verified
         And there should be 1 sent emails
-        And I should be able to query 1 students by id in the user DB
+        And I should be able to query 2 users by id in the user DB
+
+    Scenario: Log in as admin
+        Given that I log in as admin
+        Then I should be logged in

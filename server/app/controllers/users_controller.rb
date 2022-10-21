@@ -54,6 +54,10 @@ class UsersController < ApplicationController
   end
 
   def create
+    if params['user']['usertype'] == nil
+      params['user']['usertype'] = 'student'
+    end
+
     # Check for email uniqueness
     existing_user = User.find_by_email(params['user']['email']) # TODO 'and usertype == params[usertype]'
     if existing_user!=nil # TODO once multiple users, allow email reuse for different account types (eg. I can have an admin and a student account)
@@ -62,6 +66,21 @@ class UsersController < ApplicationController
                errors: "Email already in use",
              }
     end
+
+    # Check that the email is allowed
+    exact_match = AllowlistEmail.find_by(email: params['user']['email'].downcase, usertype: params['user']['usertype'])
+    domain_match = AllowlistDomain.find_by(email_domain: params['user']['email'].downcase.split("@").last, usertype: params['user']['usertype'])
+    if exact_match == nil && domain_match == nil
+      return render json: {
+               status: 500,
+               errors: "Email not allowed",
+             }
+    end
+
+    # TODO
+    # if company rep, verify that email is on company's allowlist
+    # else, set company -> none
+
     @user = User.new(user_params)
     if @user.save
       login!

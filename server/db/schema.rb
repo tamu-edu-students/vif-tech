@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_151259) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_210319) do
+  create_table "allowlist_domains", force: :cascade do |t|
+    t.string "email_domain"
+    t.string "usertype"
+    t.index ["email_domain", "usertype"], name: "index_allowlist_domains_on_email_domain_and_usertype", unique: true
+  end
+
+  create_table "allowlist_emails", force: :cascade do |t|
+    t.string "email"
+    t.string "usertype"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email", "usertype"], name: "index_allowlist_emails_on_email_and_usertype", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"

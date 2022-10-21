@@ -10,8 +10,8 @@ Given('that an user signs up as a valid student') do
   firstname = SecureRandom.alphanumeric(8)
   lastname = SecureRandom.alphanumeric(8)
   password = SecureRandom.alphanumeric(16)
-  email = SecureRandom.alphanumeric(8) + "@" + SecureRandom.alphanumeric(8) + "." + SecureRandom.alphanumeric(3)
-  ret = page.driver.post('/users', {'user': {'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email':email}})
+  email = SecureRandom.alphanumeric(8) + "@tamu.edu"
+  ret = page.driver.post('/users', {'user': {'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email':email, 'usertype':'student'}})
 end
 
 Given /^that the user verified their email ([^\']*)$/ do |email|
@@ -66,13 +66,13 @@ Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) and ([^\'^\ ]*) ([^\'^\ ]*) should 
   expect(ret_body['status']).to eq(500)
 end
 
-Then('there should be {int} students found in the user DB') do |int|
+Then('there should be {int} users found in the user DB') do |int|
   ret = page.driver.get('/users')
   ret_body = JSON.parse ret.body
   expect(ret_body['users'].size).to eq(int)
 end
 
-Then('I should be able to query {int} students by id in the user DB') do |int|
+Then('I should be able to query {int} users by id in the user DB') do |int|
   for id in 1..int do 
     ret = page.driver.get("/users/#{id.to_i}")
     ret_body = JSON.parse ret.body
@@ -90,4 +90,14 @@ Then('the user should get a 500 error when trying to verify with an incorrect to
   ret = page.driver.get('/users/random_token/confirm_email')
   ret_body = JSON.parse ret.body 
   expect(ret_body['status']).to eq(500)
+end
+
+Given('that I log in as admin') do
+  ret = page.driver.post('/login', {"user":{"email":"admin@admin.com","password":"pw"}})
+end
+
+Then('I should be logged in') do
+  ret = page.driver.get('/logged_in')
+  ret_body = JSON.parse ret.body 
+  expect(ret_body['logged_in']).to be true
 end

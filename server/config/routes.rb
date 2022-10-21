@@ -18,4 +18,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Allowlist routes
+  resources :allowlist_domains, only: [:create, :show, :index, :destroy] 
+  resources :allowlist_emails, only: [:create, :show, :index, :destroy] 
+
+
 end
