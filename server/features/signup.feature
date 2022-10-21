@@ -23,6 +23,7 @@ Feature: Student signup
             | password_confirmation | wrong |
             | email | test@tamu.edu |
             | usertype | student |
+        Given that an user signs up as a valid student
         Then the user with email test@tamu.edu should NOT be found in the user DB
     
     Scenario: Show students
@@ -31,6 +32,7 @@ Feature: Student signup
         And that an user signs up as a valid student
         And that an user signs up as a valid student
         And that an user signs up as a valid student
+        And that I log in as admin
         Then there should be 6 users found in the user DB
     
     Scenario: Show student who's NOT there.

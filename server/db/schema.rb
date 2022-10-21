@@ -25,6 +25,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_210319) do
     t.index ["email", "usertype"], name: "index_allowlist_emails_on_email_and_usertype", unique: true
   end
 
+  create_table "meetings", force: :cascade do |t|
+    t.datetime "start_time", precision: nil, null: false
+    t.datetime "end_time", precision: nil, null: false
+    t.string "title"
+    t.integer "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_meetings_on_owner_id"
+  end
+
+  create_table "user_meetings", force: :cascade do |t|
+    t.integer "meeting_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "accepted", default: false
+    t.index ["meeting_id"], name: "index_user_meetings_on_meeting_id"
+    t.index ["user_id"], name: "index_user_meetings_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
@@ -37,4 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_210319) do
     t.string "lastname"
   end
 
+  add_foreign_key "meetings", "users", column: "owner_id"
+  add_foreign_key "user_meetings", "meetings"
+  add_foreign_key "user_meetings", "users"
 end

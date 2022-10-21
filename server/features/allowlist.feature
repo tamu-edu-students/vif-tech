@@ -21,6 +21,7 @@ Feature: Allowlist Management
         Then the user with firstname james and lastname bond should be found in the user DB
             
     Scenario: A student signs up to a disallowed domain
+        Given that I log in as admin
         Given that I sign up with the following
             | firstname | james |
             | lastname | bond |

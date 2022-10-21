@@ -1,12 +1,11 @@
-require 'uri'
-require 'net/http'
+require "uri"
+require "net/http"
 
-Given('that I sign up with the following') do |table|
-  # table is a Cucumber::MultilineArgument::DataTable
-  ret = page.driver.post('/users', {'user': table.rows_hash})
+Given("that I sign up with the following") do |table|
+  ret = page.driver.post("/users", { 'user': table.rows_hash })
 end
 
-Given('that an user signs up as a valid student') do
+Given("that an user signs up as a valid student") do
   firstname = SecureRandom.alphanumeric(8)
   lastname = SecureRandom.alphanumeric(8)
   password = SecureRandom.alphanumeric(16)
@@ -16,11 +15,11 @@ end
 
 Given /^that the user verified their email ([^\']*)$/ do |email|
   @user = User.find_by_email(email)
-  ret = page.driver.get('/users/' + @user.confirm_token + '/confirm_email')
+  ret = page.driver.get("/users/" + @user.confirm_token + "/confirm_email")
 end
 
 Given /^that the first user clicked the link in their email$/ do
-  path_regex = /https?\:\/\/.*?\/users\/\S*\/confirm_email/   
+  path_regex = /https?\:\/\/.*?\/users\/\S*\/confirm_email/
 
   email = UserMailer.deliveries[0]
   path = email.body.raw_source.match(path_regex)[0]
@@ -37,27 +36,27 @@ Then /^the user with email ([^\']*) should be marked as not verified$/ do |email
   expect(@user.email_confirmed).to be false
 end
 
-Then('there should be {int} sent emails') do |int|
+Then("there should be {int} sent emails") do |int|
   expect(UserMailer.deliveries.length()).to be(int)
 end
 
 Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) should be found in the user DB$/ do |key, value|
-  ret = page.driver.get('/users/find/?' + key + '=' + value)
+  ret = page.driver.get("/users/find/?" + key + "=" + value)
   ret_body = JSON.parse ret.body
-  expect(ret_body['user'][key]).to eq(value)
+  expect(ret_body["user"][key]).to eq(value)
 end
 
 Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) should NOT be found in the user DB$/ do |key, value|
-  ret = page.driver.get('/users/find/?' + key + '=' + value)
-  ret_body = JSON.parse ret.body 
-  expect(ret_body['status']).to eq(500)
+  ret = page.driver.get("/users/find/?" + key + "=" + value)
+  ret_body = JSON.parse ret.body
+  expect(ret_body["status"]).to eq(500)
 end
 
 Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) and ([^\'^\ ]*) ([^\'^\ ]*) should be found in the user DB$/ do |key1, value1, key2, value2|
-  ret = page.driver.get('/users/find/?' + key1 + '=' + value1 + '&' + key2 + '=' + value2)
+  ret = page.driver.get("/users/find/?" + key1 + "=" + value1 + "&" + key2 + "=" + value2)
   ret_body = JSON.parse ret.body
-  expect(ret_body['user'][key1]).to eq(value1)
-  expect(ret_body['user'][key2]).to eq(value2)
+  expect(ret_body["user"][key1]).to eq(value1)
+  expect(ret_body["user"][key2]).to eq(value2)
 end
 
 Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) and ([^\'^\ ]*) ([^\'^\ ]*) should NOT be found in the user DB$/ do |key1, value1, key2, value2|
@@ -76,14 +75,14 @@ Then('I should be able to query {int} users by id in the user DB') do |int|
   for id in 1..int do 
     ret = page.driver.get("/users/#{id.to_i}")
     ret_body = JSON.parse ret.body
-    expect(ret_body['user']['id']).to eq(id)
+    expect(ret_body["user"]["id"]).to eq(id)
   end
 end
 
-Then('the user with id {int} should NOT be in the user DB') do |int|
+Then("the user with id {int} should NOT be in the user DB") do |int|
   ret = page.driver.get("/users/#{int.to_i}")
   ret_body = JSON.parse ret.body
-  expect(ret_body['status']).to eq(500)
+  expect(ret_body["status"]).to eq(500)
 end
 
 Then('the user should get a 500 error when trying to verify with an incorrect token') do
@@ -101,3 +100,4 @@ Then('I should be logged in') do
   ret_body = JSON.parse ret.body 
   expect(ret_body['logged_in']).to be true
 end
+
