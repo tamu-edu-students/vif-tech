@@ -248,6 +248,21 @@ class UsersController < ApplicationController
     end
   end
 
+  def add_to_company
+    # only usertype of company rep can be added
+    # write this in users_controller or companies_controller?
+    # should i use foreign key instead of :id?
+    @user = User.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:id])
+    @company.users << @user
+  end
+
+  def delete_from_company
+    @user = User.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:id])
+    @company.users.delete(@user)
+  end
+
   private
 
   def user_params
