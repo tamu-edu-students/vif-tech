@@ -66,11 +66,6 @@ export const fetchLoginStatus = () => async (dispatch: any) => {
   const response: any = await vifTech.get('/logged_in');
   console.log('fetchLoginStatus response:', response);
 
-  if (response.data.status === 500) {
-    console.error(response.data.errors);
-    return;
-  }
-
   const { logged_in, user = null } = response.data;
   dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn: logged_in, user } });
 }
