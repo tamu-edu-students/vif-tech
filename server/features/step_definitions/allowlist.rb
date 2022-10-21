@@ -36,10 +36,10 @@ Given /^I delete the allowed domain with index 4$/ do
     expect(ret_body['status']).to eq(200)
 end
 
-Then('I should see {int} new domain in the database') do |int|
+Then('I should see {int} domain in the database') do |int|
   ret = page.driver.get('/allowlist_domains')
   ret_body = JSON.parse ret.body
-  expect(ret_body['domains'].size).to eq(int+3)
+  expect(ret_body['domains'].size).to eq(int)
 end
 
 Then('I should see a domain with index {int} in the database') do |int|

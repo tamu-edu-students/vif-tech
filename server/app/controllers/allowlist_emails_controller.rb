@@ -24,7 +24,7 @@ class AllowlistEmailsController < ApplicationController
     
     def show
        @email = AllowlistEmail.find(params[:id])
-       if current_user.usertype == "company representative" and @email.company_id != current_user.compay_id
+       if current_user.usertype == "company representative" and @email.company_id != current_user.company_id
             @email=nil
        end
 

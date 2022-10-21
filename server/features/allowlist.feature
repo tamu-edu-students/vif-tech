@@ -6,14 +6,14 @@ Feature: Allowlist Management
     Scenario: Log in as admin and create a new domain allowed
         Given that I log in as admin
         And I allow a new domain test.com for usertype student
-        Then I should see 1 new domain in the database
+        Then I should see 4 domain in the database
         And I should see a domain with index 4 in the database
 
     Scenario: Log in as admin and create a new domain allowed and then delete it
         Given that I log in as admin
         And I allow a new domain test.com for usertype student
         And I delete the allowed domain with index 4
-        Then I should see 0 new domain in the database
+        Then I should see 3 domain in the database
             
     Scenario: A student signs up to a newly allowed domain
         Given that I log in as admin
@@ -64,7 +64,7 @@ Feature: Allowlist Management
         And that I log in with email test@test.com and password password1!
         And I allow a new domain test2.com for usertype company representative
         And that I log in as admin
-        Then I should see 2 new domain in the database
+        Then I should see 5 domain in the database
         And the company with id 1 should have 1 reps
         
     Scenario: Log in as admin and create a new email allowed
@@ -163,3 +163,34 @@ Feature: Allowlist Management
             | usertype | company representative |
         And that I log in with email test2@test2.com and password password1!
         Then I should see 2 new email in the database
+        And I should see an email with index 2 in the database
+        And I should see an email with index 3 in the database
+
+        
+    Scenario: Multiple company emails are added and only appropriate users can see them
+        Given that I log in as admin
+        And there is a company with id 1
+        And there is a company with id 2
+        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test2.com for usertype company representative for company id 2
+        And I allow a new company domain test3.com for usertype company representative for company id 2
+        And that I sign up with the following to company id 1
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+        And that I log in with email test@test.com and password password1!
+        Then I should see 1 domain in the database
+        And that I sign up with the following to company id 2
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test2@test2.com |
+            | usertype | company representative |
+        And that I log in with email test2@test2.com and password password1!
+        Then I should see 2 domain in the database
+        And I should see a domain with index 2 in the database
+        And I should see a domain with index 3 in the database

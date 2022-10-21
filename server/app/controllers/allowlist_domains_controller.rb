@@ -3,12 +3,12 @@ class AllowlistDomainsController < ApplicationController
     before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show]
 
     def index
+        @domains = AllowlistDomain.all
 
         if current_user.usertype == "company representative"
             @domains = @domains.filter {|e| e.company == current_user.company}
         end
 
-        @domains = AllowlistDomain.all
            if @domains
               render json: {
                 status: 200,
@@ -24,7 +24,7 @@ class AllowlistDomainsController < ApplicationController
     
     def show
         @domain = AllowlistDomain.find(params[:id])
-        if current_user.usertype == "company representative" and @domain.company_id != current_user.compay_id
+        if current_user.usertype == "company representative" and @domain.company_id != current_user.company_id
             @email=nil
         end
            if @domain
