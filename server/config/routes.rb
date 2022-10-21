@@ -32,4 +32,6 @@ Rails.application.routes.draw do
   get "/companies/:id/edit", to: "companies#edit"
   put "/companies/:id", to: "companies#update"
   delete "/companies/:id", to: "companies#destroy"
+  post "/users/:id/companies/:id", to: "users#add_to_company"
+  delete "users/:id/companies/:id", to: "users#delete_from_company"
 end
