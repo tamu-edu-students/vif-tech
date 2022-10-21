@@ -9,7 +9,7 @@ class User < ApplicationRecord
   validates :lastname, presence: true
   validates :lastname, length: { minimum: 1 }
   validates :usertype,
-    :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
+            :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
                      :message    => "%{value} is not a valid usertype" }
   belongs_to :company, optional: true
 

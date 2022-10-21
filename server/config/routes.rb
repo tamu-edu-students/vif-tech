@@ -24,4 +24,9 @@ Rails.application.routes.draw do
 
   resources :meetings, only: [:create, :show, :index, :update, :destroy]
   resources :user_meetings, only: [:show, :index]
+
+  get "/companies", to: "companies#index"
+  # get "/companies/new", to: "companies#new"
+  # post "/companies", to: "companies#create"
+  get "/companies/:id", to: "companies#show"
 end
