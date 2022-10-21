@@ -25,4 +25,10 @@ class ApplicationController < ActionController::Base
   def set_user
     @user = User.find_by(id: session[:user_id])
   end
+
+  def is_admin
+    unless ( logged_in? && current_user && current_user.usertype == 'admin' ) render json: {
+      status: 403,
+      errors: ["UnAuthenticated or UnAuthorized  User"],
+  end
 end

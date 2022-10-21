@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get "/users/find", to: "users#find"
   resources :users, only: [:create, :show, :index, :new]
 
+  resources :faqs, only: [:create, :show, :index, :update, :destroy] 
+
   # English: For each user, make a route to get user/:id/confirm_email
   resources :users do
     member do
