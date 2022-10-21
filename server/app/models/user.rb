@@ -10,13 +10,12 @@ class User < ApplicationRecord
   validates :usertype,
     :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
                      :message    => "%{value} is not a valid usertype" }
+  belongs_to :company, optional: true
 
     def as_json(options={})
       options[:except] ||= [:password_digest]
       super(options)
     end
-
-  has_and_belongs_to_many :companies
 
   def email_activate
     self.email_confirmed = true
