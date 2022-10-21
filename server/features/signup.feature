@@ -21,6 +21,7 @@ Feature: Student signup
             | password | password1! |
             | password_confirmation | wrong |
             | email | test@dne.com |
+        Given that an user signs up as a valid student
         Then the user with email test@dne.com should NOT be found in the user DB
     
     Scenario: Show students
