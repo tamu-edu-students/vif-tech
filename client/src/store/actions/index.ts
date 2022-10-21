@@ -47,7 +47,7 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
   const { user = null } = response.data;
   dispatch({ type: LOG_IN, payload: user });
 
-  history.push('/login/success');
+  history.push('/');
 }
 
 export const logOut = () => async (dispatch: any) => {
