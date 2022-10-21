@@ -30,23 +30,30 @@ class App extends React.Component<IAppProps, {}> {
     return (
       <div className="App">
         <Router history={history}>
-          {
-            this.props.user &&
-            (
-              <nav className="nav">
-                <ul>
-                  <li>{this.props.user.firstname}</li>
-                  <li>{this.props.user.lastname}</li>
-                </ul>
-              </nav>
-            )
-          }
+          <nav className="nav">
+            <ul>
+              {
+                this.props.user
+                ? (
+                  <>
+                    <li>{this.props.user.firstname}</li>
+                    <li>{this.props.user.lastname}</li>
+                    <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
+                  </>
+                )
+                : (
+                  <>
+                    <li><Link to="/login" data-testid="log-in-page-button">Log In</Link></li>
+                    <li><Link to="/users/new" className="register-button" data-testid="sign-up-page-button">Register!</Link></li>
+                  </>
+                )
+              }
+            </ul>
+          </nav>
 
           {
-            (window as any).Cypress && <button onClick={() => this.props.fetchLoginStatus()} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
+            (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "4", width: "4", height: "4"}}>fetchLoginStatus</button>
           }
-
-          <Link to="/users/new" className="register-button">Register!</Link>
 
           <Switch>
             <Route exact path="/">

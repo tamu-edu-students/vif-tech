@@ -37,7 +37,7 @@ class LoginForm extends React.Component<InjectedFormProps & ILoginFormProps, {}>
       <form data-testid="login-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
         <Field name="email" id="email" type="text" component={this._renderInput} label="Email" />
         <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
-        <button type='submit'>Log In</button>
+        <button type='submit' data-testid="log-in-form-button">Log In</button>
       </form>
     );
   }
