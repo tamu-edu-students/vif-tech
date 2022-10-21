@@ -13,6 +13,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # Allowlist routes
+  resources :allowlist_domains, only: [:create, :show, :index, :destroy] 
+  resources :allowlist_emails, only: [:create, :show, :index, :destroy] 
+
+
   get "/users/:id/meetings", to: "users#get_meetings"
   get "/users/:id/meetings/attending", to: "users#get_attending_meetings"
   get "/users/:id/meetings/pending", to: "users#get_pending_meetings"
