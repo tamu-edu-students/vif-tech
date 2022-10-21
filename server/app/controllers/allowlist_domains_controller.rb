@@ -1,9 +1,17 @@
 class AllowlistDomainsController < ApplicationController
-    
+    before_action :confirm_user_logged_in
+    before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show]
+
     def index
+
+        if current_user.usertype == "company representative"
+            @domains = @domains.filter {|e| e.company == current_user.company}
+        end
+
         @domains = AllowlistDomain.all
            if @domains
               render json: {
+                status: 200,
               domains: @domains
            }
           else
@@ -13,10 +21,15 @@ class AllowlistDomainsController < ApplicationController
           }
          end
     end
+    
     def show
-       @domain = AllowlistDomain.find(params[:id])
+        @domain = AllowlistDomain.find(params[:id])
+        if current_user.usertype == "company representative" and @domain.company_id != current_user.compay_id
+            @email=nil
+        end
            if @domain
               render json: {
+              status: 200,
               domain: @domain
            }
            else
@@ -28,33 +41,41 @@ class AllowlistDomainsController < ApplicationController
       end
       
       def create
-        if current_user == nil
-            render json: {
-                status: 400,
-                errors: "Not logged in"
-            }
-        elsif ! ( current_user.usertype == "admin" || (current_user.usertype == "company representative") ) # TODO And company == company
-            render json: {
-                status: 400,
-                errors: "Permission denied"
-            }
+
+        if current_user.usertype == "company representative"
+            company = current_user.company
+        elsif params[:domain][:company_id] != nil and current_user.usertype == "admin"
+            company = Company.find_by_id(params[:domain][:company_id])
         else
-         @domain = AllowlistDomain.new(domain_params)
-             if @domain.save
-                 render json: {
-                 status: 201,
-                 domain: @domain
-             }
-            else 
-                render json: {
-                status: 500,
-                errors: @domain.errors.full_messages
-            }
+            company = nil
+        end
+
+        @domain = AllowlistDomain.new(domain_params)
+        if @domain.save
+            if company != nil
+                company.allowlist_domains << @domain
             end
+            render json: {
+            status: 201,
+            domain: @domain
+        }
+        else 
+            render json: {
+            status: 500,
+            errors: @domain.errors.full_messages
+        }
         end
       end
 
       def destroy
+
+        if current_user.usertype == "company representative" && current_user.company.id != params[:id]
+            render json: {
+                status: 400,
+                errors: ['forbidden']
+                 }
+        end
+
         @domain = AllowlistDomain.find(params[:id])
         if @domain 
             @domain.destroy
@@ -72,11 +93,30 @@ class AllowlistDomainsController < ApplicationController
       end
 
 private
+    def confirm_user_logged_in
+        if !(logged_in? && current_user)
+        render json: {
+            status: 500,
+            errors: ["User not logged in"],
+        }
+        end
+    end
+
+    def confirm_requester_is_rep_or_admin()
+        if !(current_user.usertype == "admin" || (current_user.usertype == "company representative" && current_user.company != nil))
+          render json: {
+            status: 400,
+            errors: ["User does not have previleges for requested action"],
+          }
+          return false
+        end
+        return true
+    end
       
      def domain_params
         if params[:domain] != nil && params[:domain][:email_domain] != nil
            params[:domain][:email_domain] = params[:domain][:email_domain].downcase
         end
-         params.require(:domain).permit(:email_domain, :usertype)
+        params.require(:domain).permit(:email_domain, :usertype)
      end
 end

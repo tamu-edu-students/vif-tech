@@ -95,6 +95,10 @@ Given('that I log in as admin') do
   ret = page.driver.post('/login', {"user":{"email":"admin@admin.com","password":"pw"}})
 end
 
+Given /^that I log in with email ([^\'^\ ]*) and password ([^\'^\ ]*)$/ do |email, password|
+  ret = page.driver.post('/login', {"user":{"email":email,"password":password}})
+end
+
 Then('I should be logged in') do
   ret = page.driver.get('/logged_in')
   ret_body = JSON.parse ret.body 

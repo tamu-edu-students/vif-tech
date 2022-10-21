@@ -5,4 +5,5 @@ class AllowlistEmail < ApplicationRecord
     validates :usertype,
     :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
                      :message    => "%{value} is not a valid usertype" }
+    belongs_to :company, optional: true
 end

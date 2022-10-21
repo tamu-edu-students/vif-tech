@@ -100,14 +100,17 @@ class UsersController < ApplicationController
              }
     end
 
-    # TODO
-    # if company rep, verify that email is on company's allowlist
-    # else, set company -> none
-
     @user = User.new(user_params)
     if @user.save
       login!
       resp = UserMailer.registration_confirmation(@user).deliver_now
+      if params['user']['usertype'] == "company representative"
+        if exact_match != nil
+          exact_match.company.users << @user
+        else
+          domain_match.company.users << @user
+        end
+      end
       logger.debug { resp }
       render json: {
                status: 201,
