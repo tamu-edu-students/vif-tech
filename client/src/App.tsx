@@ -12,7 +12,6 @@ import Users from './components/Users';
 import UserCreate from './components/UserCreate';
 
 import { fetchLoginStatus, logOut } from './store/actions'
-import { userInfo } from 'os';
 
 interface IAppProps {
   fetchLoginStatus?: any;

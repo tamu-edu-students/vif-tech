@@ -41,7 +41,6 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
   if (response.data.status === 401) {
     // console.error(response.data.errors);
     throw new Error(response.data.errors);
-    return;
   }
 
   const { user = null } = response.data;

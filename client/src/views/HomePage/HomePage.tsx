@@ -7,7 +7,7 @@ interface IHomePageProps {
 
 class HomePage extends React.Component<IHomePageProps, {}> {
   public render(): React.ReactElement<IHomePageProps> {
-    const { user } = this.props;
+    // const { user } = this.props;
       return (
         <div>Home Page</div>
       );
