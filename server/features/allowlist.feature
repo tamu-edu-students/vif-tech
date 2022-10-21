@@ -192,5 +192,5 @@ Feature: Allowlist Management
             | usertype | company representative |
         And that I log in with email test2@test2.com and password password1!
         Then I should see 2 domain in the database
-        And I should see a domain with index 2 in the database
-        And I should see a domain with index 3 in the database
+        And I should see a domain with index 5 in the database
+        And I should see a domain with index 6 in the database

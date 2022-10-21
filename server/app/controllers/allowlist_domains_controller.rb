@@ -25,7 +25,7 @@ class AllowlistDomainsController < ApplicationController
     def show
         @domain = AllowlistDomain.find(params[:id])
         if current_user.usertype == "company representative" and @domain.company_id != current_user.company_id
-            @email=nil
+            @domain=nil
         end
            if @domain
               render json: {
@@ -69,14 +69,10 @@ class AllowlistDomainsController < ApplicationController
 
       def destroy
 
-        if current_user.usertype == "company representative" && current_user.company.id != params[:id]
-            render json: {
-                status: 400,
-                errors: ['forbidden']
-                 }
-        end
-
         @domain = AllowlistDomain.find(params[:id])
+        if current_user.usertype == "company representative" and @domain.company_id != current_user.company_id
+            @domain=nil
+        end
         if @domain 
             @domain.destroy
            render json: {

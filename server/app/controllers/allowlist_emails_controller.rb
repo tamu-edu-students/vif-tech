@@ -71,14 +71,10 @@ class AllowlistEmailsController < ApplicationController
 
       def destroy
 
-        if current_user.usertype == "company representative" && current_user.company.id != params[:id]
-            render json: {
-                status: 400,
-                errors: ['forbidden']
-                 }
-        end
-
         @email = AllowlistEmail.find(params[:id])
+        if current_user.usertype == "company representative" and @email.company_id != current_user.company_id
+            @email=nil
+        end
         if @email 
            @email.destroy
            render json: {
