@@ -38,13 +38,16 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
 
   console.log('logIn response:', response);
 
-  if (response.data.status === 500) {
-    console.error(response.data.errors);
+  if (response.data.status === 401) {
+    // console.error(response.data.errors);
+    throw new Error(response.data.errors);
     return;
   }
 
   const { user = null } = response.data;
   dispatch({ type: LOG_IN, payload: user });
+
+  history.push('/login/success');
 }
 
 export const logOut = () => async (dispatch: any) => {

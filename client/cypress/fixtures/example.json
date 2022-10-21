@@ -2,9 +2,9 @@
   "users": [
     {
       "email": "usedEmail@gmail.com",
-      "first_name": "Oldboy",
-      "last_name": "Senior",
-      "password": "fghij"
+      "firstname": "Oldboy",
+      "lastname": "Senior",
+      "password": "abcdefg"
     }
   ]
 }
