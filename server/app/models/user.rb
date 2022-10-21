@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  belongs_to :company, optional: true
   before_create :set_confirm_token
   has_secure_password
   validates :email, presence: true
@@ -11,7 +12,6 @@ class User < ApplicationRecord
   validates :usertype,
             :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
                      :message    => "%{value} is not a valid usertype" }
-  belongs_to :company, optional: true
 
   has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting", dependent: :destroy
   has_many :user_meetings, dependent: :destroy

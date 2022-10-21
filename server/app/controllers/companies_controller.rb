@@ -3,6 +3,7 @@ class CompaniesController < ApplicationController
         # Displays all companies
         @companies = Company.all
         render json: {
+            # status: 201,
             companies: @companies,
         }
     end
@@ -23,7 +24,7 @@ class CompaniesController < ApplicationController
         else
             render json: {
                 status: 500,
-                errors: ["Something went wrong when saving the company"],
+                errors: ["Something went wrong when saving this company"],
             }
         end
     end
@@ -50,10 +51,34 @@ class CompaniesController < ApplicationController
 
     def update
         # Updates a specific company
+        @company = Company.find(params[:id])
+        if Company.update(params)
+            render json: {
+                status: 201,
+                company: @company,
+            }
+        else
+            render json: {
+                status: 500,
+                errors: ["something went wrong when updating this company"],
+            }
+        end
     end
 
     def destroy
         # Deletes a specific company
+        @company = Company.find(params[:id])
+        if @company.destroy
+            render json: {
+                status: 201,
+                company: @company,
+            }
+        else
+            render json: {
+                status: 500,
+                errors: ["something went wrong when deleting this company"],
+            }
+        end
     end
 
     private

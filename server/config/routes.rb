@@ -29,4 +29,7 @@ Rails.application.routes.draw do
   # get "/companies/new", to: "companies#new"
   # post "/companies", to: "companies#create"
   get "/companies/:id", to: "companies#show"
+  get "/companies/:id/edit", to: "companies#edit"
+  put "/companies/:id", to: "companies#update"
+  delete "/companies/:id", to: "companies#destroy"
 end
