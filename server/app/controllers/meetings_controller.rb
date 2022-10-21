@@ -76,7 +76,7 @@ class MeetingsController < ApplicationController
     @meeting = Meeting.new(params)
     if @meeting.save
       render json: {
-               status: :created,
+               status: 201,
                meeting: @meeting,
              }
     else
@@ -95,7 +95,7 @@ class MeetingsController < ApplicationController
     end
     if @meeting.update(meeting_params)
       render json: {
-               status: :created,
+               status: 201,
                meeting: @meeting,
              }
     else

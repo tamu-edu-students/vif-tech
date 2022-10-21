@@ -91,7 +91,7 @@ class UsersController < ApplicationController
       resp = UserMailer.registration_confirmation(@user).deliver_now
       logger.debug { resp }
       render json: {
-               status: :created,
+               status: 201,
                user: @user,
              }
     else
