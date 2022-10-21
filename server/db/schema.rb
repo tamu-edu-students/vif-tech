@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_19_162136) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_21_154040) do
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -48,9 +48,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_162136) do
     t.string "firstname"
     t.string "lastname"
     t.string "usertype", default: "student"
+    t.integer "company_id"
+    t.index ["company_id"], name: "index_users_on_company_id"
   end
 
   add_foreign_key "meetings", "users", column: "owner_id"
   add_foreign_key "user_meetings", "meetings"
   add_foreign_key "user_meetings", "users"
+  add_foreign_key "users", "companies"
 end
