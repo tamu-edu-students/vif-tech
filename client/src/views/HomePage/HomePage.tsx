@@ -8,17 +8,9 @@ interface IHomePageProps {
 class HomePage extends React.Component<IHomePageProps, {}> {
   public render(): React.ReactElement<IHomePageProps> {
     const { user } = this.props;
-    if (!user) {
       return (
-        <div>Baba booey</div>
-      )
-    }
-
-    return (
-      <>
-      <div>{user.firstname}</div>
-      <div>{user.lastname}</div></>
-    )
+        <div>Home Page</div>
+      );
   }
 }
 
