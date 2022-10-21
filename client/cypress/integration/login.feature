@@ -1,15 +1,21 @@
 Feature: Login
 
-  Background: visit login page
-  Given I visit the login page
+  Background: starting from home page
+    Given I am on the home page
 
   Scenario Outline: valid login credentials
-    When I provide the following:
+    Given login session is inactive
+    And login status is checked
+    When I visit the login page
+    And I provide the following:
       | email   | password  | 
       | <email> |<password> |
     And I click the log in button
-    Then I should be redirected to the home page
-    And I should see my first name and last name on the screen:
+    Then a session should start with the following email:
+      | email   |
+      | <email> |
+    And I should no longer be on the login page
+    And I should see my first name and last name in the nav bar
       | firstname   | lastname   | 
       | <firstname> | <lastname> |
 
@@ -17,7 +23,27 @@ Feature: Login
       | email               | password | firstname | lastname |
       | usedEmail@gmail.com | abcdefg  | Oldboy    | Senior   |
 
+  Scenario Outline: remain logged in after reloading
+    Given login session is active with the following email:
+      | email   |
+      | <email> |
+    And login status is checked
+    When I reload
+    Then a session should be active for the same email
+      | email   |
+      | <email> |
+    And I should see my first name and last name in the nav bar
+      | firstname   | lastname   | 
+      | <firstname> | <lastname> |
+
+    Examples:
+    | email               | password | firstname | lastname |
+    | usedEmail@gmail.com | abcdefg  | Oldboy    | Senior   |
+
   Scenario Outline: invalid login credentials
+    Given login session is inactive
+    And login status is checked
+    When I visit the login page
     When I provide the following:
       | email   | password   |
       | <email> | <password> |
