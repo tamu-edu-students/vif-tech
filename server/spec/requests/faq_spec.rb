@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Faqs", type: :request do
-  describe "GET /index" do
-    # pending "add some examples (or delete) #{__FILE__}"
-  end
+  # describe "GET /faqs" do
+  #   it "renders the succesful response" do
+  #     get 
+  #     expect(response).to have_http_status(200)
+  #   end
+    
+  # end
 end
