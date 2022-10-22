@@ -36,27 +36,3 @@ Then("an error page is shown") do
   expect(ret_body["status"]).to eq(500)
   expect(ret_body["errors"]).to eq(["Something went wrong when saving this company"])
 end
-
-Given("admin") do
-end
-
-Then("a list of all companies in the database is displayed") do
-end
-
-Given("admin and a specific company id") do
-end
-
-Then("all details or fields of this specific company is displayed") do
-end
-
-Given("id and params") do
-end
-
-Then("the company will be updated and displayed") do
-end
-
-Given("id") do
-end
-
-Then("the specified company deleted will be displayed") do
-end

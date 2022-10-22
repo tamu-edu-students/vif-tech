@@ -4,13 +4,13 @@ Feature: Meeting
     I want to add meetings
 
     Scenario: Create meeting all valid
-        Given that I sign up and log in as a valid admin
+        Given that I log in as admin
         And that I create a meeting with title 'Great meeting!' and start time from '2022-10-18 17:30:00' to '2022-10-18 17:45:00' 
         And that I create a meeting with title 'Another great meeting!' and start time from '2022-10-18 17:45:00' to '2022-10-18 17:50:00' 
         Then 2 meetings should be in meeting DB
 
     Scenario: Create meeting, one invalid and one valid
-        Given that I sign up and log in as a valid admin
+        Given that I log in as admin
         # Only the first one is invalid
         And that I create a meeting with title 'Invalid great meeting!' and start time from '2999-10-18 17:30:00' to '2022-10-18 17:45:00'  
         And that I create a meeting with title 'Another great meeting!' and start time from '2022-10-18 17:45:00' to '2022-10-18 17:50:00' 
@@ -25,14 +25,14 @@ Feature: Meeting
         Given that I log out
         And that I create a meeting with title 'Valid great meeting!' and start time from '2022-10-18 17:45:00' to '2022-10-18 17:50:00' 
         And that I create a meeting with title 'Another valid great meeting!' and start time from '2022-10-18 18:45:00' to '2022-10-18 19:50:00' 
-        And that I sign up and log in as a valid admin
+        And that I log in as admin
         Then 0 meetings should be in meeting DB
 
     Scenario: Create meeting with owner id
-        # User created with id 1
-        Given that I sign up and log in as a valid student
         # User created with id 2
-        And that I sign up and log in as a valid admin
+        Given that I sign up and log in as a valid student
+        # User created with id 1
+        And that I log in as admin
         And that I create a meeting with the following
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
@@ -41,17 +41,17 @@ Feature: Meeting
             | title | Another meeting |
             | start_time | '2022-10-18 18:00:00' |
             | end_time | '2022-10-18 18:30:00' |
-            | owner_id | 1 |
+            | owner_id | 2 |
         Then the meeting with id 1 will have 'title': 'A meeting'
-        And the meeting with id 1 will have 'owner_id': 2
+        And the meeting with id 1 will have 'owner_id': 1
         And the meeting with id 2 will have 'title': 'Another meeting'
-        And the meeting with id 2 will have 'owner_id': 1
+        And the meeting with id 2 will have 'owner_id': 2
     
     Scenario: Edit meeting
         # User created with id 1
         Given that I sign up and log in as a valid student
         # User created with id 2
-        And that I sign up and log in as a valid admin
+        And that I log in as admin
         And that I create a meeting with the following
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
@@ -68,7 +68,7 @@ Feature: Meeting
         # User created with id 1
         Given that I sign up and log in as a valid student
         # User created with id 2
-        And that I sign up and log in as a valid admin
+        And that I log in as admin
         And that I create a meeting with the following
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
@@ -84,7 +84,7 @@ Feature: Meeting
         And the meeting with id 1 will not be found
 
     Scenario: Trying to remove other people's meetings as non-admin
-        Given that I sign up and log in as a valid admin
+        Given that I log in as admin
         And that I create a meeting with the following
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
@@ -93,12 +93,12 @@ Feature: Meeting
         Then deleting the meeting with id 1 should fail
 
     Scenario: Trying to remove other people's meetings as admin
-        Given that I sign up and log in as a valid admin
+        Given that I log in as admin
         And that I create a meeting with the following
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
             | end_time | '2022-10-18 18:20:00' |
-        And that I sign up and log in as a valid admin
+        And that I log in as admin
         Then deleting the meeting with id 1 should succeed
 
     Scenario: Trying to query meetings as non-admin
@@ -111,5 +111,5 @@ Feature: Meeting
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
             | end_time | '2022-10-18 18:20:00' |
-        And that I sign up and log in as a valid admin
+        And that I log in as admin
         Then 0 meetings should be in meeting DB

@@ -5,23 +5,23 @@ Given("that I sign up and log in as a valid student") do
   firstname = SecureRandom.alphanumeric(8)
   lastname = SecureRandom.alphanumeric(8)
   password = SecureRandom.alphanumeric(16)
-  email = SecureRandom.alphanumeric(8) + "@" + SecureRandom.alphanumeric(8) + "." + SecureRandom.alphanumeric(3)
+  email = SecureRandom.alphanumeric(8) + "@tamu.edu"
   page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email } })
   ret = page.driver.post("/login", { 'user': { 'password': password, 'email': email } })
   ret_body = JSON.parse ret.body
   expect(ret_body["logged_in"]).to eq(true)
 end
 
-Given("that I sign up and log in as a valid admin") do
-  firstname = SecureRandom.alphanumeric(8)
-  lastname = SecureRandom.alphanumeric(8)
-  password = SecureRandom.alphanumeric(16)
-  email = SecureRandom.alphanumeric(8) + "@" + SecureRandom.alphanumeric(8) + "." + SecureRandom.alphanumeric(3)
-  page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email, 'usertype': "admin" } })
-  ret = page.driver.post("/login", { 'user': { 'password': password, 'email': email } })
-  ret_body = JSON.parse ret.body
-  expect(ret_body["logged_in"]).to eq(true)
-end
+# Given("that I sign up and log in as a valid admin") do
+#   firstname = SecureRandom.alphanumeric(8)
+#   lastname = SecureRandom.alphanumeric(8)
+#   password = SecureRandom.alphanumeric(16)
+#   email = SecureRandom.alphanumeric(8) + "@" + SecureRandom.alphanumeric(8) + "." + SecureRandom.alphanumeric(3)
+#   page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email, 'usertype': "admin" } })
+#   ret = page.driver.post("/login", { 'user': { 'password': password, 'email': email } })
+#   ret_body = JSON.parse ret.body
+#   expect(ret_body["logged_in"]).to eq(true)
+# end
 
 Given("that I create a valid meeting") do
   title = SecureRandom.alphanumeric(8)

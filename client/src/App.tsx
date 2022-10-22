@@ -1,33 +1,56 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
-import history from "../history";
+import history from "./history";
 
-import RedirectPrompt from './RedirectPrompt';
-import Users from './Users';
-import UserCreate from './UserCreate';
+import './sass/main.scss';
 
-import { fetchLoginStatus } from '../store/actions'
+import HomePage from './views/HomePage/HomePage';
+import LoginPage from './views/LoginPage/LoginPage';
+import RedirectPrompt from './components/RedirectPrompt';
+import Users from './components/Users';
+import UserCreate from './components/UserCreate';
 
-import '../sass/main.scss';
+import { fetchLoginStatus, logOut } from './store/actions'
 
 interface IAppProps {
   fetchLoginStatus?: any;
+  logOut?: any;
+  user: any;
 }
 
 class App extends React.Component<IAppProps, {}> {
-  // componentDidMount(): void {
-  //   this.props.fetchLoginStatus();
-  // }
+  componentDidMount(): void {
+    if (!(window as any).Cypress) {
+      this.props.fetchLoginStatus();
+    }
+  }
 
   render() {
     return (
       <div className="App">
         <Router history={history}>
+          {
+            this.props.user &&
+            (
+              <nav className="nav">
+                <ul>
+                  <li>{this.props.user.firstname}</li>
+                  <li>{this.props.user.lastname}</li>
+                </ul>
+              </nav>
+            )
+          }
+
+          {
+            (window as any).Cypress && <button onClick={() => this.props.fetchLoginStatus()} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
+          }
+
           <Link to="/users/new" className="register-button">Register!</Link>
+
           <Switch>
             <Route exact path="/">
-              <Redirect to="/under-construction" />
+              <HomePage />
             </Route>
 
             <Route exact path="/under-construction">
@@ -57,6 +80,13 @@ class App extends React.Component<IAppProps, {}> {
                 />
               </section>
             </Route>
+
+            <Route exact path={["/login", "/login/success"]}>
+              { this.props.user
+                ? <Redirect to="/" />
+                : <LoginPage />
+              }
+            </Route>
             
             <Route path="*" status={404}>
               <section className="section section--redirector">
@@ -74,4 +104,10 @@ class App extends React.Component<IAppProps, {}> {
   }
 }
 
-export default connect(null, {fetchLoginStatus})(App);
+const mapStateToProps = (state: any) => {
+  return {
+    user: state.auth.user
+  };
+}
+
+export default connect(mapStateToProps, {fetchLoginStatus, logOut})(App);
