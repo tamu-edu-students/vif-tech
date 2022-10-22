@@ -2,7 +2,7 @@ require 'uri'
 require 'net/http'
 
 Given ('there is a company with id {int}') do |int|
-    ret = Company.new(id:int,name:"test",description:"blah")
+    ret = Company.new(id:int,name:SecureRandom.alphanumeric(8),description:"blah")
     ret.save!
 end
 
