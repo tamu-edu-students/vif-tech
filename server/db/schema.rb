@@ -36,6 +36,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "faqs", force: :cascade do |t|
+    t.string "question"
+    t.text "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "meetings", force: :cascade do |t|
     t.datetime "start_time", precision: nil, null: false
     t.datetime "end_time", precision: nil, null: false
