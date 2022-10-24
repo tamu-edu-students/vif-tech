@@ -37,7 +37,7 @@ end
 Given("that I log out") do
   ret = page.driver.post("/logout")
   ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(200)
+  expect(ret.status).to eq(200)
 end
 
 Then("{int} meetings should be in meeting DB") do |int|
@@ -46,16 +46,15 @@ Then("{int} meetings should be in meeting DB") do |int|
   expect(ret_body["meetings"].size).to eq(int)
 end
 
-Then("I should NOT be able to fetch meetings") do
+Then("I should NOT be able to fetch meetings due to {int} error") do |code|
   ret = page.driver.get("/meetings")
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  expect(ret.status).to eq(code)
 end
 
 Then("creating meetings should result in not authenticated error") do
   ret = page.driver.post("/meetings", { 'meeting': { 'title': SecureRandom.alphanumeric(8), 'start_time': Time.now.getutc, 'end_time': Time.now.getutc + 15 * 60 } })
   ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  expect(ret.status).to eq(401)
   expect(ret_body["errors"]).to eq(["User not logged in"])
 end
 
@@ -83,20 +82,18 @@ Given("delete the meeting with id {int}") do |id|
   ret = page.driver.delete("/meetings/" + id.to_s)
 end
 
-Then("the meeting with id {int} will not be found") do |id|
+Then("the meeting with id {int} will not be found due to {int} error") do |id, code|
   ret = page.driver.get("/meetings/" + id.to_s)
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  expect(ret.status).to eq(code)
 end
 
-Then("deleting the meeting with id {int} should fail") do |id|
+Then("deleting the meeting with id {int} should fail due to {int} error") do |id, code|
   ret = page.driver.delete("/meetings/" + id.to_s)
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  expect(ret.status).to eq(code)
 end
 
 Then("deleting the meeting with id {int} should succeed") do |id|
   ret = page.driver.delete("/meetings/" + id.to_s)
   ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(200)
+  expect(ret.status).to eq(200)
 end

@@ -29,7 +29,7 @@ Feature: Allowlist Management
             
     Scenario: A student signs up to a disallowed domain
         Given that I log in as admin
-        Given that I sign up with the following
+        Given that I sign up with the following and fail with code 400
             | firstname | james |
             | lastname | bond |
             | password | password1! |
@@ -41,7 +41,7 @@ Feature: Allowlist Management
     Scenario: A student signs up to a newly allowed domain, but with the wrong usertype
         Given that I log in as admin
         And I allow a new domain test.com for usertype student
-        And that I sign up with the following
+        And that I sign up with the following and fail with code 400
             | firstname | james |
             | lastname | bond |
             | password | password1! |
@@ -93,7 +93,7 @@ Feature: Allowlist Management
             
     Scenario: A student signs up to a disallowed email
         Given that I log in as admin
-        Given that I sign up with the following
+        Given that I sign up with the following and fail with code 400
             | firstname | james |
             | lastname | bond |
             | password | password1! |
@@ -105,7 +105,7 @@ Feature: Allowlist Management
     Scenario: A student signs up to a newly allowed email, but with the wrong usertype
         Given that I log in as admin
         And I allow a new email test@test.com for usertype student
-        And that I sign up with the following
+        And that I sign up with the following and fail with code 400
             | firstname | james |
             | lastname | bond |
             | password | password1! |
