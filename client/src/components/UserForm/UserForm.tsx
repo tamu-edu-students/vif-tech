@@ -7,13 +7,15 @@ interface IUserFormProps {
 }
 
 class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
-  private _renderInput = ({ input, label, meta, id }: any) => {
+  private _renderInput = ({ input, label, meta, id, type }: any) => {
     const className = `field ${meta.error && meta.touched ? "error" : ""}`;
     return (
       <div className={className}>
-        <label htmlFor={id}>{label}</label>
-        <input {...input} id={id} autoComplete="off" />
-        {this._renderError(meta)}
+        <label htmlFor={id}>
+          {label}
+          <input {...input} type={type} id={id} autoComplete="off" />
+          {this._renderError(meta)}
+        </label>
       </div>
     );
   }
@@ -35,12 +37,16 @@ class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
   public render() {
     return (
       <form data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name="email" id="email" component={this._renderInput} label="Email" />
-        <Field name="firstname" id="firstname" component={this._renderInput} label="First name" />
-        <Field name="lastname" id="lastname" component={this._renderInput} label="Last name" />
-        <Field name="password" id="password" component={this._renderInput} label="Password" />
-        <Field name="password_confirmation" id="password-confirmation" component={this._renderInput} label="Confirm password" />
-        <button type='submit'>Sign Up</button>
+        <Field name="email" id="email" type="email" component={this._renderInput} label="Email" />
+        <Field name="firstname" id="firstname" type="text" component={this._renderInput} label="First name" />
+        <Field name="lastname" id="lastname" type="text" component={this._renderInput} label="Last name" />
+        <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
+        <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
+        <fieldset>
+          <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value="student" />
+          <Field name="usertype" id="usertype--faculty" type="radio" component={this._renderInput} label="Faculty" value="faculty" />
+        </fieldset>
+        <button type='submit' data-testid="sign-up-form-button">Sign Up</button>
       </form>
     );
   }

@@ -17,7 +17,7 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues, usertype: 'student' } });
+  const response: any = await vifTech.post("/users", { user: { ...formValues } });
   console.log(`createUser response: `, response);
   if (response.data.status === 500) {
     throw new Error(response.data.errors);
@@ -38,13 +38,15 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
 
   console.log('logIn response:', response);
 
-  if (response.data.status === 500) {
-    console.error(response.data.errors);
-    return;
+  if (response.data.status === 401) {
+    // console.error(response.data.errors);
+    throw new Error(response.data.errors);
   }
 
   const { user = null } = response.data;
   dispatch({ type: LOG_IN, payload: user });
+
+  history.push('/');
 }
 
 export const logOut = () => async (dispatch: any) => {
@@ -62,11 +64,6 @@ export const logOut = () => async (dispatch: any) => {
 export const fetchLoginStatus = () => async (dispatch: any) => {
   const response: any = await vifTech.get('/logged_in');
   console.log('fetchLoginStatus response:', response);
-
-  if (response.data.status === 500) {
-    console.error(response.data.errors);
-    return;
-  }
 
   const { logged_in, user = null } = response.data;
   dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn: logged_in, user } });

@@ -21,11 +21,13 @@ class Users extends React.Component<IUsersProps, {}> {
         {this.props.users.map((user: any) => {
           return (
             <div key={user.id}>
-              <h1>{user.username}</h1>
+              <h1>{user.email}</h1>
               <ul>
                 <li>id: {user.id}</li>
-                <li>Username: {user.username}</li>
-                <li>email: {user.email}</li>
+                <li>Email: {user.email}</li>
+                <li>First name: {user.firstname}</li>
+                <li>Last name: {user.lastname}</li>
+                <li>User type: {user.usertype}</li>
               </ul>
             </div>
           );

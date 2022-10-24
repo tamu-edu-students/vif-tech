@@ -65,10 +65,38 @@ class UsersController < ApplicationController
   end
 
   def create
+    if params["user"]["usertype"] == nil
+      params["user"]["usertype"] = "student"
+    end
+
+    # Check for email uniqueness
+    existing_user = User.find_by_email(params["user"]["email"]) # TODO 'and usertype == params[usertype]'
+    if existing_user != nil # TODO once multiple users, allow email reuse for different account types (eg. I can have an admin and a student account)
+      return render json: {
+               errors: ["Email already in use"],
+             }, status: :bad_request
+    end
+
+    # Check that the email is allowed
+    exact_match = AllowlistEmail.find_by(email: params["user"]["email"].downcase, usertype: params["user"]["usertype"])
+    domain_match = AllowlistDomain.find_by(email_domain: params["user"]["email"].downcase.split("@").last, usertype: params["user"]["usertype"])
+    if exact_match == nil && domain_match == nil
+      return render json: {
+               errors: ["Email not allowed"],
+             }, status: :bad_request
+    end
+
     @user = User.new(user_params)
     if @user.save
       login!
       resp = UserMailer.registration_confirmation(@user).deliver_now
+      if params["user"]["usertype"] == "company representative"
+        if exact_match != nil
+          exact_match.company.users << @user
+        else
+          domain_match.company.users << @user
+        end
+      end
       logger.debug { resp }
       render json: {
                user: @user,
@@ -182,6 +210,21 @@ class UsersController < ApplicationController
         errors: @user_meeting.errors.full_messages,
       }, status: :bad_request
     end
+  end
+
+  def add_to_company
+    # only usertype of company rep can be added
+    # write this in users_controller or companies_controller?
+    # should i use foreign key instead of :id?
+    @user = User.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:id])
+    @company.users << @user
+  end
+
+  def delete_from_company
+    @user = User.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:id])
+    @company.users.delete(@user)
   end
 
   private

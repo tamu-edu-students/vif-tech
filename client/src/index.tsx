@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 
 
 import createPreconfiguredStore from './store/createPresetStore';
-import App from "./components/App";
+import App from "./App";
  
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
