@@ -1,7 +1,8 @@
 Feature: Registration
 
   Background: visit registration page
-  Given I visit the registration page
+  Given I am not logged in
+  And I visit the registration page
 
   Scenario Outline: valid registration
     When I provide the following:

@@ -3,6 +3,13 @@
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
 
 let users;
+function fetchLoginStatus() {
+  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
+}
+
+// before(() => {
+//   cy.on('window:load', () => {console.log('FETCHING'); fetchLoginStatus();});
+// });
 
 Before(function() {
   cy.fixture('example').then(data => {
@@ -16,43 +23,83 @@ Before(function() {
       req.reply({
         status: 401,
         errors: 'Invalid credentials'
+      },
+      {
+        'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email: inputEmail })}`
       });
     }
     else {
-      req.reply({
+      req.reply(
+      {
         status: 200,
         logged_in: true,
         user: matchingUser
+      },
+      {
+        'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email: inputEmail })}`
       });
     }
   }).as('Log In');
 
   cy.intercept('POST', "http://localhost:3001/logout", req => {
-    req.reply({
+    req.reply(
+    {
       status: 200,
       logged_out: true,
+    },
+    {
+      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
     });
-  }).as('Log Out');
+  }).as('Log Out');;
 });
 
-Given(`I am on the home page`, () => {
+Given(`I visit the home page`, () => {
   cy.visit('/');
+  fetchLoginStatus();
 });
 
 Given(`login session is inactive`, () => {
   cy.setCookie('mock_logged-in', JSON.stringify({ logged_in: false, email: null }));
 });
 
-Given(`login session is active with the following email:`, (table) => {
-  cy.setCookie('mock_logged-in', JSON.stringify({ logged_in: true, email: table.hashes()[0].email }));
+Given(`I am not logged in`, () => {
+  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
+    req.reply({
+      status: 200,
+      logged_in: false,
+      user: null
+    },
+    {
+      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
+    });
+  }).as('Logged In');
+});
+
+Given(`I am logged in with the following email:`, (table) => {
+ const { email } = table.hashes()[0];
+  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
+      const matchingUser = users.find(({ email: targetEmail }) => targetEmail === email);
+      if (matchingUser) {
+        req.reply({
+          status: 200,
+          logged_in: true,
+          user: matchingUser
+        },
+        {
+          'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email })}`
+        });
+      }
+  }).as('Logged In');
 });
 
 When(`I visit the login page`, function() {
   cy.visit('/login');
+  fetchLoginStatus();
 });
 
 When(`I reload`, () => {
   cy.reload();
+  fetchLoginStatus();
 });
 
 When(`I click the log in page button`, () => {
@@ -61,27 +108,6 @@ When(`I click the log in page button`, () => {
 
 When(`I click the log out button`, () => {
   cy.get('[data-testid="log-out-button"]').click();
-  cy.setCookie('mock_logged-in', JSON.stringify({ logged_in: false, email: null }));
-});
-
-And(`login status is checked`, () => {
-  cy.getCookie('mock_logged-in')
-  .then((cookie) => {
-    const { logged_in, email } = JSON.parse(cookie.value);
-
-    cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-      let matchingUser = null;
-      if (logged_in) {
-        matchingUser = users.find(({ email: targetEmail }) => targetEmail === email);
-      }
-      req.reply({
-        status: 200,
-        logged_in,
-        user: matchingUser
-      });
-    }).as('Logged In');
-    cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
-  });
 });
 
 And('I provide the following:', table => {
@@ -131,19 +157,12 @@ Then(`I should not see my first name and last name in the nav bar`, (table) => {
     .findByText(lastname).should('not.exist');
 });
 
-Then(`a session should start with the following email:`, (table) => {
-  const { email } = table.hashes()[0];
-  cy.setCookie('mock_logged-in', JSON.stringify({ logged_in: true, email }));
-});
-
 Then(`a session should be active for the same email`, (table) => {
   const { email } = table.hashes()[0];
   cy.getCookie('mock_logged-in').should('have.property', 'value', JSON.stringify({
     logged_in: true,
     email
   }));
-
-  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
 });
 
 Then(`I should see an error`, () => {
