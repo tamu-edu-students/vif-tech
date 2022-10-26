@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root to: "application#cookie"
   post "/login", to: "sessions#create"
   post "/logout", to: "sessions#destroy"
   get "/logged_in", to: "sessions#is_logged_in?"
