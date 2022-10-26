@@ -10,7 +10,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     if !ENV["ORIGINS_URL"]
       raise "ORIGINS_URL environment variable not found. HTTP requests to server cannot be made unless set."
     else
-      origins ENV["ORIGINS_URL"]
+      origins ENV["ORIGINS_URL"].split(',')
     end
 
     resource "*",
