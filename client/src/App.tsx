@@ -17,6 +17,7 @@ interface IAppProps {
   fetchLoginStatus?: any;
   logOut?: any;
   user: any;
+  isLoggedIn: boolean;
 }
 
 class App extends React.Component<IAppProps, {}> {
@@ -27,6 +28,17 @@ class App extends React.Component<IAppProps, {}> {
   }
 
   render() {
+    if (this.props.isLoggedIn === null) {
+      return (
+        <>
+        <div>Checking login status...</div>
+        {
+          (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
+        }
+        </>
+      );
+    }
+
     return (
       <div className="App">
         <Router history={history}>
@@ -52,7 +64,7 @@ class App extends React.Component<IAppProps, {}> {
           </nav>
 
           {
-            (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "4", width: "4", height: "4"}}>fetchLoginStatus</button>
+            (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
           }
 
           <Switch>
@@ -113,7 +125,8 @@ class App extends React.Component<IAppProps, {}> {
 
 const mapStateToProps = (state: any) => {
   return {
-    user: state.auth.user
+    user: state.auth.user,
+    isLoggedIn: state.auth.isLoggedIn
   };
 }
 
