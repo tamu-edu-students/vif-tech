@@ -3,9 +3,6 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Allow cross-site cookies
-  config.action_dispatch.cookies_same_site_protection = :None
-
   # Code is not reloaded between requests.
   config.cache_classes = true
 
