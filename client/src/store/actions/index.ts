@@ -17,9 +17,7 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues } }, {headers: {
-    'X-CSRF-Token': unescape(document.cookie.split('=')[1]),
-    }});
+  const response: any = await vifTech.post("/users", { user: { ...formValues } });
   console.log(`createUser response: `, response);
   if (response.data.status === 500) {
     throw new Error(response.data.errors);
@@ -36,10 +34,7 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
 export const logIn = (formValues: any) => async (dispatch: any) => {
   const response: any = await vifTech.post('/login', {
     user: { ...formValues }
-  },
-  {headers: {
-    'X-CSRF-Token': unescape(document.cookie.split('=')[1]),
-    }});
+  });
 
   console.log('logIn response:', response);
 
@@ -55,9 +50,7 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
 }
 
 export const logOut = () => async (dispatch: any) => {
-  const response: any = await vifTech.post('/logout', {headers: {
-    'X-CSRF-Token': unescape(document.cookie.split('=')[1]),
-    }});
+  const response: any = await vifTech.post('/logout');
   console.log('logOut response:', response);
 
   if (response.data.status === 500) {
