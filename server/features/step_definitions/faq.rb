@@ -47,8 +47,6 @@ end
 Then('I should NOT see the answer {string} for FAQ with id {int} in my DB again') do |string, int|
   @faq = Faq.find_by_id(int)
   expect(@faq.answer).not_to eq(string)
-end
-
-  
+end 
 
 
