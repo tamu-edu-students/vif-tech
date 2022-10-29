@@ -3,24 +3,63 @@ class FaqController < ApplicationController
 
     def index
         @faqs = Faq.all
-        render json: { faqs: faqs }
+        render json: { faqs: @faqs }
     end
 
     def show
-        @faq = Faq.find(params[:id])
-        render json: { faq: faq }
+        @faq = Faq.find_by_id(params[:id])
+        if @faq
+          render json: {
+                   faq: @faq,
+                 }
+        else
+          render json: {
+                   status: 500,
+                   errors: ["Faq not found"],
+                 }
+        end
+      end
+
+    def find
+        uri = URI.parse(request.url)
+        params = CGI.parse(uri.query)
+        @faq = nil
+        puts params
+        if params.key?("question")
+            @faq = Faq.find_by_question(params["question"])
+        elsif params.key?("answer")
+            # Use this only for testing purposes as firstname-lastname pair is not guarenteed to be unique.
+            @faq = Faq.find_by answer: params["answer"]
+        end
+        if @faq
+            render json: {
+            faq: @faq,
+            }
+        else
+            render json: {
+                    status: 500,
+                    errors: ["faq not found"],
+                    }
+        end
     end
+
+    def new
+        @faq = Faq.new
+    end
+        
 
     def create
             faq = Faq.create(faq_params)
-            render json: { faq: faq }
+            render json: { faq: faq,
+                message: "Faq created successfully"
+            }
     end
 
     def destroy
             @faq = Faq.find(params[:id])
             @faq.destroy
             render json: { status: 200, 
-                message: 'Faq deleted successfuly'
+                message: 'Faq deleted successfully'
             }
 
     end
@@ -30,7 +69,7 @@ class FaqController < ApplicationController
     
         if @faq.update(faq_params)
             render json: { status: 200, 
-                message: 'Faq updated successfuly'
+                message: 'Faq updated successfully'
             }
         else
           render json: {
