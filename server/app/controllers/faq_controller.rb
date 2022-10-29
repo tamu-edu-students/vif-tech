@@ -1,10 +1,11 @@
 class FaqController < ApplicationController
-    before_action :is_admin, except: [:show, :index]
+  before_action :is_admin, except: [:show, :index]
 
     def index
         @faqs = Faq.all
         render json: { faqs: @faqs }
     end
+  
 
     def show
         @faq = Faq.find_by_id(params[:id])
@@ -83,4 +84,3 @@ class FaqController < ApplicationController
         params.require(:faq).permit(:question, :answer)
     end
 end
-

@@ -27,11 +27,10 @@ class ApplicationController < ActionController::Base
   end
 
   def is_admin
-    unless ( logged_in? && current_user && current_user.usertype == 'admin' ) 
+    unless (logged_in? && current_user && current_user.usertype == "admin")
       render json: {
-        status: 403,
         errors: ["UnAuthenticated or UnAuthorized  User"],
-      }
+      }, status: :unauthorized
     end
   end
 end

@@ -1,21 +1,28 @@
 class MeetingsController < ApplicationController
   before_action :confirm_user_logged_in
+  before_action :confirm_meeting_exists, only: [:show, :update, :delete]
 
   def confirm_user_logged_in
     if !(logged_in? && current_user)
       render json: {
-        status: 500,
-        errors: ["User not logged in"],
-      }
+               errors: ["User not logged in"],
+             }, status: :unauthorized
+    end
+  end
+
+  def confirm_meeting_exists
+    if !Meeting.find_by_id(params[:id])
+      render json: {
+        errors: ["Meeting with id #{params[:id]} not found"],
+      }, status: :not_found
     end
   end
 
   def confirm_requester_is_owner_or_admin(owner_id)
     if !(current_user.id == owner_id or current_user.usertype == "admin")
       render json: {
-        status: 500,
-        errors: ["User does not have previleges for requested action"],
-      }
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
       return false
     end
     return true
@@ -24,9 +31,8 @@ class MeetingsController < ApplicationController
   def confirm_requester_is_admin
     if current_user.usertype != "admin"
       render json: {
-        status: 500,
-        errors: ["User does not have previleges for requested action"],
-      }
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
       return false
     end
     return true
@@ -40,25 +46,18 @@ class MeetingsController < ApplicationController
 
     render json: {
              meetings: Meeting.all,
-           }
+           }, status: :ok
   end
 
   # GET /meetings/1
   def show
-    @meeting = Meeting.find_by_id(params[:id])
-    if @meeting and !confirm_requester_is_owner_or_admin(@meeting.owner.id)
+    @meeting = Meeting.find(params[:id])
+    if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
     end
-    if @meeting
-      render json: {
-               meeting: @meeting,
-             }
-    else
-      render json: {
-               status: 500,
-               errors: ["Meeting not found"],
-             }
-    end
+    render json: {
+             meeting: @meeting,
+           }, status: :ok
   end
 
   # POST /meetings/
@@ -76,52 +75,46 @@ class MeetingsController < ApplicationController
     @meeting = Meeting.new(params)
     if @meeting.save
       render json: {
-               status: 201,
                meeting: @meeting,
-             }
+             }, status: :created
     else
       render json: {
-               status: 500,
-               errors: ["Something went wrong when saving the meeting"],
-             }
+               errors: @meeting.errors.full_messages,
+             }, status: :internal_server_error
     end
   end
 
   # PUT /meetings/1/
   def update
     @meeting = Meeting.find(params[:id])
-    if @meeting and !confirm_requester_is_owner_or_admin(@meeting.owner_id)
+    if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
     end
     if @meeting.update(meeting_params)
       render json: {
-               status: 201,
                meeting: @meeting,
-             }
+             }, status: :ok
     else
       render json: {
-               status: 500,
-               errors: ["Something went wrong when saving the meeting"],
-             }
+               errors: @meeting.errors.full_messages,
+             }, status: :internal_server_error
     end
   end
 
   # DELETE /meetings/1/
   def destroy
     @meeting = Meeting.find(params[:id])
-    if @meeting and !confirm_requester_is_owner_or_admin(@meeting.owner_id)
+    if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
     end
     if @meeting.destroy
       render json: {
-               status: 200,
                meeting: @meeting,
-             }
+             }, status: :ok
     else
       render json: {
-               status: 500,
-               errors: ["Something went wrong when destroying the meeting"],
-             }
+               errors: @meeting.errors.full_messages,
+             }, status: :internal_server_error
     end
   end
 

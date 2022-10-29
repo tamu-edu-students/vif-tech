@@ -3,24 +3,32 @@ require "net/http"
 
 Given("that I assign user {int} to meeting {int} with acceptance {int}") do |user_id, meeting_id, accepted|
   ret = page.driver.post("users/#{user_id}/meetings/#{meeting_id}", { "user_meeting": { "accepted": accepted } })
+  expect(ret.status).to eq(200)
+end
+
+Given("that I assign user {int} to meeting {int} with acceptance {int} and fail with code {int}") do |user_id, meeting_id, accepted, code|
+  ret = page.driver.post("users/#{user_id}/meetings/#{meeting_id}", { "user_meeting": { "accepted": accepted } })
+  expect(ret.status).to eq(code)
 end
 
 Given("that user {int} accepts meeting {int} invite") do |user_id, meeting_id|
   ret = page.driver.put("users/#{user_id}/meetings/#{meeting_id}", { "user_meeting": { "accepted": true } })
+  expect(ret.status).to eq(200)
 end
 
 Given("that user {int} sets status as pending to meeting {int} invite") do |user_id, meeting_id|
   ret = page.driver.put("users/#{user_id}/meetings/#{meeting_id}", { "user_meeting": { "accepted": false } })
+  expect(ret.status).to eq(200)
 end
 
 Given("that user {int} declines meeting {int} invite") do |user_id, meeting_id|
   ret = page.driver.delete("users/#{user_id}/meetings/#{meeting_id}")
+  expect(ret.status).to eq(200)
 end
 
 Then("I should NOT be able to fetch user-meetings") do
   ret = page.driver.get("/user_meetings")
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  expect(ret.status).to eq(401)
 end
 
 Then("I should be able to fetch {int} user-meetings") do |num_meetings|

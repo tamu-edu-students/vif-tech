@@ -19,8 +19,8 @@ Feature: User-meeting interaction
         And that I assign user 6 to meeting 1 with acceptance 0
         And that I assign user 2 to meeting 2 with acceptance 0
         And that I assign user 3 to meeting 1 with acceptance 0
-        And that I assign user 4 to meeting 3 with acceptance 0
-        And that I assign user 4 to meeting 4 with acceptance 0
+        And that I assign user 4 to meeting 3 with acceptance 0 and fail with code 404
+        And that I assign user 4 to meeting 4 with acceptance 0 and fail with code 404
         And that I assign user 5 to meeting 2 with acceptance 0
         # Meeting 3
         And that I create a valid meeting

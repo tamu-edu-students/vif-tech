@@ -7,6 +7,9 @@
 
 # testing
 /coverage
+/reports
+/cypress/cucumber-json
+/.nyc_output
 
 # production
 /build
