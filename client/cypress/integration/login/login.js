@@ -12,7 +12,7 @@ function fetchLoginStatus() {
 // });
 
 Before(function() {
-  cy.fixture('example').then(data => {
+  cy.fixture('users').then(data => {
     users = data.users;
   });
 
