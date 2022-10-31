@@ -17,13 +17,11 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues } });
+  const response: any = await vifTech.post("/users", { user: { ...formValues } })
+  .catch(({response: { data: { errors } }}) => {
+    throw(new Error(errors.join('///')));
+  });
   console.log(`createUser response: `, response);
-  if (response.data.status === 500) {
-    throw new Error(response.data.errors);
-    // console.error(response.data.errors);
-    // return;
-  }
 
   const user: any = response.data.user;
   dispatch({ type: CREATE_USER, payload: user });
@@ -38,8 +36,8 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
 
   console.log('logIn response:', response);
 
+  // TODO: Replace with catch()
   if (response.data.status === 401) {
-    // console.error(response.data.errors);
     throw new Error(response.data.errors);
   }
 
@@ -53,8 +51,9 @@ export const logOut = () => async (dispatch: any) => {
   const response: any = await vifTech.post('/logout');
   console.log('logOut response:', response);
 
+  // TODO: Replace with catch
   if (response.data.status === 500) {
-    console.error(response.data.errors);
+    console.error('logOut error: ', response.data.errors);
     return;
   }
 
@@ -63,6 +62,7 @@ export const logOut = () => async (dispatch: any) => {
 
 export const fetchLoginStatus = () => async (dispatch: any) => {
   const response: any = await vifTech.get('/logged_in');
+  // TODO: Add catch()
   console.log('fetchLoginStatus response:', response);
 
   const { logged_in, user = null } = response.data;

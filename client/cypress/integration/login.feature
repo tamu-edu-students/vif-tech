@@ -1,29 +1,25 @@
 Feature: Login
 
-  Background: starting from home page
-    Given I am on the home page
-
   Scenario: log in button visible and log out button invisible when not logged in
-    Given login session is inactive
-    And login status is checked
+    Given I am not logged in
+    And I visit the home page
     Then the log in page button should be visible
     And the sign up page button should be visible
     And the log out button should not be visible
 
   Scenario: login button redirects to login page
-    Given login session is inactive
-    And login status is checked
+    Given I am not logged in
+    And I visit the home page
     When I click the log in page button
     Then I should be redirected to the login page
 
   Scenario Outline: logout button redirects to home page
-    Given login session is active with the following email:
+    Given I am logged in with the following email:
       | email   |
       | <email> |
-    And login status is checked
+    And I visit the home page
     When I click the log out button
     Then I should be redirected to the home page
-    Then login status is checked
     Then I should not see my first name and last name in the nav bar
       | firstname   | lastname   | 
       | <firstname> | <lastname> |
@@ -33,14 +29,13 @@ Feature: Login
     | usedEmail@gmail.com | abcdefg  | Oldboy    | Senior   |
 
   Scenario Outline: valid login credentials
-    Given login session is inactive
-    And login status is checked
-    When I visit the login page
-    And I provide the following:
+    Given I am not logged in
+    And I visit the login page
+    When I provide the following:
       | email   | password  | 
       | <email> |<password> |
     And I click the log in form button
-    Then a session should start with the following email:
+    Then a session should be active for the same email
       | email   |
       | <email> |
     And I should no longer be on the login page
@@ -53,10 +48,10 @@ Feature: Login
       | usedEmail@gmail.com | abcdefg  | Oldboy    | Senior   |
 
   Scenario Outline: remain logged in after reloading
-    Given login session is active with the following email:
+    Given I am logged in with the following email:
       | email   |
       | <email> |
-    And login status is checked
+    And I visit the home page
     When I reload
     Then a session should be active for the same email
       | email   |
@@ -70,10 +65,10 @@ Feature: Login
     | usedEmail@gmail.com | abcdefg  | Oldboy    | Senior   |
 
   Scenario Outline: log out button should be visible and log in button should not be visible when logged in
-    Given login session is active with the following email:
+    Given I am logged in with the following email:
       | email   |
       | <email> |
-    And login status is checked
+    And I visit the home page
     Then the log out button should be visible
     And the log in button should not be visible
     And the sign up page button should not be visible
@@ -83,9 +78,8 @@ Feature: Login
     | usedEmail@gmail.com | abcdefg  | Oldboy    | Senior   |
 
   Scenario Outline: invalid login credentials
-    Given login session is inactive
-    And login status is checked
-    When I visit the login page
+    Given I am not logged in
+    And I visit the login page
     When I provide the following:
       | email   | password   |
       | <email> | <password> |

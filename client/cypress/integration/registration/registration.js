@@ -1,38 +1,55 @@
 /// <reference types="cypress" />
 
-import { Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
+import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
 
 let registeredUser;
+let users;
+function fetchLoginStatus() {
+  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
+}
 
-beforeEach(function() {
+Before(function() {
   cy.fixture('example').then(data => {
-    this.users = data.users;
+    users = data.users;
   });
+});
+
+Given(`I am not logged in`, () => {
+  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
+    req.reply({
+      status: 200,
+      logged_in: false,
+      user: null
+    },
+    {
+      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
+    });
+  }).as('Logged In');
 });
 
 Given(`I visit the registration page`, function() {
   cy.intercept('POST', "http://localhost:3001/users", req => {
     const { user: newUser } = req.body;
-    if (this.users.find(user => user.email === newUser.email)) {
-      req.reply({
-        status: 500,
-        errors: 'Email already in use'
-      });
+    if (users.find(user => user.email === newUser.email)) {
+      req.reply(
+        400,
+        { errors: ['Email already in use'] }
+      );
     }
     else {
       registeredUser = { ...newUser};
-      req.reply({
-        status: 201,
-        user: newUser
-      });
+      req.reply(
+        201,
+        { user: newUser }
+      );
     }
   }).as('Sign Up');
 
-  cy.visit('/users/new')
+  cy.visit('/users/new');
+  fetchLoginStatus();
 });
 
 When(`I provide the following:`, (table) => {
-  console.log(table.hashes());
   const { email, firstname, lastname, password, password_confirmation, usertype } = table.hashes()[0];
 
   cy.findByLabelText(/email/i).type(email);
