@@ -7,6 +7,14 @@
       "lastname": "Senior",
       "password": "abcdefg",
       "usertype": "student"
+    },
+    {
+      "id": 2,
+      "email": "admin@admin.com",
+      "firstname": "admin",
+      "lastname": "admin",
+      "password": "pw",
+      "usertype": "admin"
     }
   ]
 }
