@@ -107,3 +107,9 @@ Then("I should be logged in") do
   ret_body = JSON.parse ret.body
   expect(ret_body["logged_in"]).to be true
 end
+
+Then("the company with id {int} should have user with email {string}") do |company_id, email|
+  user = User.find_by_email(email)
+  company = Company.find(company_id)
+  expect(company.users.include? user).to be true
+end
