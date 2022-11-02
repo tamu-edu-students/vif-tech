@@ -15,8 +15,8 @@ end
 
 Then('the faq question {string} with answer {string} and id {int} should NOT be found in my DB') do |string, string2, int|
   ret = page.driver.get('/faq/' + int.to_s)
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(500)
+  # ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(404)
 end
 
 
@@ -29,8 +29,8 @@ end
 
 When('I delete FAQ with question {string} and answer {string} and id {int}') do |string, string2, int|
   ret = page.driver.delete('/faq/' + int.to_s)
-  ret_body = JSON.parse ret.body
-  expect(ret_body["status"]).to eq(200)
+  # ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
 end
 
 When('I edit the same FAQ id {int} with {string} and {string}') do |int, string, string2|

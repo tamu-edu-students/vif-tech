@@ -2,8 +2,9 @@ class FaqController < ApplicationController
   before_action :is_admin, except: [:show, :index]
 
     def index
-        @faqs = Faq.all
-        render json: { faqs: @faqs }
+        render json: { 
+            faqs: Faq.all
+        }, status: :ok
     end
   
 
@@ -12,12 +13,11 @@ class FaqController < ApplicationController
         if @faq
           render json: {
                    faq: @faq,
-                 }
+                 }, status: :ok
         else
           render json: {
-                   status: 500,
                    errors: ["Faq not found"],
-                 }
+                 }, status: :not_found
         end
       end
 
@@ -34,13 +34,12 @@ class FaqController < ApplicationController
         end
         if @faq
             render json: {
-            faq: @faq,
-            }
+                faq: @faq,
+            }, status: :ok
         else
             render json: {
-                    status: 500,
                     errors: ["faq not found"],
-                    }
+                    }, status: :not_found
         end
     end
 
@@ -50,33 +49,43 @@ class FaqController < ApplicationController
         
 
     def create
-            faq = Faq.create(faq_params)
-            render json: { faq: faq,
+            @faq = Faq.create(faq_params)
+            render json: { 
+                faq: @faq,
                 message: "Faq created successfully"
-            }
+            }, status: :ok
     end
 
     def destroy
-            @faq = Faq.find(params[:id])
-            @faq.destroy
-            render json: { status: 200, 
+        @faq = Faq.find(params[:id])
+        if @faq.destroy
+            render json: { 
                 message: 'Faq deleted successfully'
-            }
+            }, status: 200
+        else
+            render json: {
+                errors: ["Something went wrong when deleting this FAQ"]
+            }, status: :bad_request
+        end
 
+    end
+
+    def edit
+        # Returns an HTML form for editing a company
+        @faq = Faq.find(params[:id])
     end
 
     def update
         @faq = Faq.find(params[:id])
     
         if @faq.update(faq_params)
-            render json: { status: 200, 
-                message: 'Faq updated successfully'
-            }
+            render json: { 
+                faq: @faq
+            }, status: :ok
         else
           render json: {
-            status: 400,
             errors: ["Could not edit faq"],
-            }
+            }, status: :bad_request
         end
     end
 
