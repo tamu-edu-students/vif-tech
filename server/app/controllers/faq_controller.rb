@@ -11,6 +11,10 @@ class FaqController < ApplicationController
     render json: { faq: faq }
   end
 
+  def new
+    @faq = Faq.new
+  end
+
   def create
     faq = Faq.create(faq_params)
     render json: { faq: faq }
