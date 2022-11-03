@@ -99,7 +99,11 @@ private
     end
 
     def confirm_requester_is_rep_or_admin()
-        if !(current_user.usertype == "admin" || (current_user.usertype == "company representative" && current_user.company != nil))
+        if !(current_user.usertype == "admin" || 
+            (current_user.usertype == "company representative" && 
+            current_user.company != nil && 
+            current_user.allowlist_email != nil &&
+            current_user.allowlist_email.isPrimaryContact > 0))
           render json: {
             status: 400,
             errors: ["User does not have previleges for requested action"],

@@ -1,6 +1,6 @@
 class AllowlistEmailsController < ApplicationController
     before_action :confirm_user_logged_in
-    before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show]
+    before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show, :transferPrimaryContact]
 
     def index
         @emails = AllowlistEmail.all
@@ -67,7 +67,7 @@ class AllowlistEmailsController < ApplicationController
         }
         end
 
-        end
+      end
 
       def destroy
 
@@ -89,6 +89,44 @@ class AllowlistEmailsController < ApplicationController
             }
         end
       end
+
+      def transferPrimaryContact
+        if current_user.usertype == "admin"
+            info = admin_transfer_params
+            to_user = User.find(info[:to])
+            from_user = User.find(info[:from])
+        else
+            info = rep_transfer_params
+            to_user = User.find(info[:to])
+            from_user = current_user
+        end
+
+        if  (
+            to_user == nil ||
+            from_user == nil ||
+            to_user.allowlist_email == nil || 
+            from_user.allowlist_email == nil || 
+            from_user.allowlist_email.isPrimaryContact <= 0 ||
+            to_user.company_id != from_user.company_id ||
+            to_user.usertype != "company representative" ||
+            from_user.usertype != "company representative")
+           
+            render json: {
+                status: 400,
+                errors: ["User does not have previleges for requested action"],
+            }
+            
+        else
+            to_user.allowlist_email.update(isPrimaryContact: 1)
+            from_user.allowlist_email.update(isPrimaryContact: 0)
+
+            render json: {
+                status: 200
+            }
+        end
+
+      end
+
 private
     def confirm_user_logged_in
         if !(logged_in? && current_user)
@@ -100,7 +138,11 @@ private
     end
 
     def confirm_requester_is_rep_or_admin()
-        if !(current_user.usertype == "admin" || (current_user.usertype == "company representative" && current_user.company != nil))
+        if !(current_user.usertype == "admin" || 
+            (current_user.usertype == "company representative" && 
+            current_user.company != nil && 
+            current_user.allowlist_email != nil &&
+            current_user.allowlist_email.isPrimaryContact > 0))
         render json: {
             status: 400,
             errors: ["User does not have previleges for requested action"],
@@ -115,6 +157,17 @@ private
         if params[:email] != nil && params[:email][:email] != nil
            params[:email][:email] = params[:email][:email].downcase
         end
-         params.require(:email).permit(:email, :usertype)
+        if @current_user.usertype != "admin"
+            params[:email][:isPrimaryContact] = false
+        end
+        params.require(:email).permit(:email, :usertype, :isPrimaryContact)
+     end
+
+     def admin_transfer_params
+        params.permit(:to, :from)
+     end
+
+     def rep_transfer_params
+        params.permit(:to)
      end
 end

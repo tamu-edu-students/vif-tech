@@ -112,6 +112,11 @@ class UsersController < ApplicationController
       if params["user"]["usertype"] == "company representative"
         company.users << @user
       end
+      if exact_match != nil
+        exact_match.users << @user
+      else
+        domain_match.users << @user
+      end
       logger.debug { resp }
       render json: {
                user: @user,
