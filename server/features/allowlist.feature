@@ -26,6 +26,21 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | student |
         Then the user with firstname james and lastname bond should be found in the user DB
+
+    Scenario: A student signs up to a newly allowed domain, which is then deleted
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Given that I log in as admin
+        And I delete the allowed domain with index 4
+        Then the user with firstname james and lastname bond should NOT be found in the user DB
             
     Scenario: A student signs up to a disallowed domain
         Given that I log in as admin
@@ -105,6 +120,21 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | student |
         Then the user with firstname james and lastname bond should be found in the user DB
+
+    Scenario: A student signs up to a newly allowed email, which is then deleted
+        Given that I log in as admin
+        And I allow a new email test@test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Given that I log in as admin
+        And I delete the allowed email with index 1
+        Then the user with firstname james and lastname bond should NOT be found in the user DB
             
     Scenario: A student signs up to a disallowed email
         Given that I log in as admin
