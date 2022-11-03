@@ -86,16 +86,31 @@ class UsersController < ApplicationController
              }, status: :bad_request
     end
 
+    if params["user"]["company_id"] != nil and params["user"]["usertype"] != "company representative"
+      return render json: {
+                      errors: ["Company ID cannot be provided to user of type  #{params[:user][:usertype]}"],
+                    }, status: :bad_request
+    end
+
+    if exact_match != nil
+      company = exact_match.company
+    else
+      company = domain_match.company
+    end
+
+    # If company found with allowlist doesn't match the company found with the provided company_id
+    if params["user"]["company_id"] and company != Company.find(params["user"]["company_id"])
+      return render json: {
+                      errors: ["Email not allowed for provided company of id #{params[:user][:company_id]}"],
+                    }, status: :bad_request
+    end
+
     @user = User.new(user_params)
     if @user.save
       login!
       resp = UserMailer.registration_confirmation(@user).deliver_now
       if params["user"]["usertype"] == "company representative"
-        if exact_match != nil
-          exact_match.company.users << @user
-        else
-          domain_match.company.users << @user
-        end
+        company.users << @user
       end
       logger.debug { resp }
       render json: {
