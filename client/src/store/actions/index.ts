@@ -6,6 +6,7 @@ import {
   LOG_OUT,
   FETCH_COMPANIES,
   CREATE_COMPANY,
+  FETCH_ALLOW_LIST
 } from "./types";
 import history from "../../history";
 import vifTech from "../../apis/vifTech";
@@ -88,19 +89,45 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
   });
 
   console.log('fetchCompanies response:', response);
-  dispatch({ type: FETCH_COMPANIES, payload: response.data.companies });
+  dispatch({ type: CREATE_COMPANY, payload: response.data.company });
 }
 
-// export const fetchAllowList = () => async (dispatch: any) => {
-//   const response: any = await vifTech.get('/allowlist_domains')
+// export const fetchCompanyAllowlists = () => async (dispatch: any, getState: any) => {
+//   // FETCH COMPANIES AND THEN ALLOWLISTS
+//   await fetchCompanies();
+//   const response_domains: any = await vifTech.get('/allowlist_domains')
 //   .catch(({response: { data: { errors } }}) => {
 //     throw(new Error(errors.join('///')));
 //   });
-//   const response2: any = await vifTech.get('/allowlist_emails')
+//   const response_emails: any = await vifTech.get('/allowlist_emails')
 //   .catch(({response: { data: { errors } }}) => {
 //     throw(new Error(errors.join('///')));
 //   });
+//   const companies = getState().companies;
 
-//   console.log('fetchAllowList response1:', response);
-//   console.log('fetchAllowList response2:', response2);
+//   const obj = {
+//     companyAllowLists: {
+
+//     },
+//     studentAllowList: {
+
+//     }
+//     volunteerAllowList: {
+
+//     }
+//     adminAllowList: {
+
+//     }
+//   };
+
+//   // response.forEach(({ usertype }) => {
+//   //   switch(usertype) {
+//   //     case 'company representative':
+//   //       companyAllowLists
+//   //   }
+//   // })
+
+//   console.log('fetchAllowList response_domains:', response_domains);
+//   console.log('fetchAllowList response_emails:', response_emails);
+//   // dispatch({ type: FETCH_ALLOW_LIST, payload:  })
 // }
