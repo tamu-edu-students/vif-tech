@@ -10,7 +10,7 @@ class User < ApplicationRecord
   validates :lastname, presence: true
   validates :lastname, length: { minimum: 1 }
   validates :usertype,
-            :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
+            :inclusion  => { :in => [ 'representative', 'student', 'admin', 'volunteer'],
                              :message    => "%{value} is not a valid usertype" }
 
   has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting", dependent: :destroy

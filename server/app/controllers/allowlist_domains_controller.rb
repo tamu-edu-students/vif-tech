@@ -5,7 +5,7 @@ class AllowlistDomainsController < ApplicationController
     def index
         @domains = AllowlistDomain.all
 
-        if current_user.usertype == "company representative"
+        if current_user.usertype == "representative"
             @domains = @domains.filter {|e| e.company == current_user.company}
         end
 
@@ -24,7 +24,7 @@ class AllowlistDomainsController < ApplicationController
     
     def show
         @domain = AllowlistDomain.find(params[:id])
-        if current_user.usertype == "company representative" and @domain.company_id != current_user.company_id
+        if current_user.usertype == "representative" and @domain.company_id != current_user.company_id
             @domain=nil
         end
            if @domain
@@ -42,7 +42,7 @@ class AllowlistDomainsController < ApplicationController
       
       def create
 
-        if current_user.usertype == "company representative"
+        if current_user.usertype == "representative"
             company = current_user.company
         elsif params[:domain][:company_id] != nil and current_user.usertype == "admin"
             company = Company.find_by_id(params[:domain][:company_id])
@@ -70,7 +70,7 @@ class AllowlistDomainsController < ApplicationController
       def destroy
 
         @domain = AllowlistDomain.find(params[:id])
-        if current_user.usertype == "company representative" and @domain.company_id != current_user.company_id
+        if current_user.usertype == "representative" and @domain.company_id != current_user.company_id
             @domain=nil
         end
         if @domain 
@@ -99,7 +99,7 @@ private
     end
 
     def confirm_requester_is_rep_or_admin()
-        if !(current_user.usertype == "admin" || (current_user.usertype == "company representative" && current_user.company != nil))
+        if !(current_user.usertype == "admin" || (current_user.usertype == "representative" && current_user.company != nil))
           render json: {
             status: 400,
             errors: ["User does not have previleges for requested action"],

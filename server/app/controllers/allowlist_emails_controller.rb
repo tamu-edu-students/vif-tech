@@ -5,7 +5,7 @@ class AllowlistEmailsController < ApplicationController
     def index
         @emails = AllowlistEmail.all
 
-        if current_user.usertype == "company representative"
+        if current_user.usertype == "representative"
             @emails = @emails.filter {|e| e.company == current_user.company}
         end
 
@@ -24,7 +24,7 @@ class AllowlistEmailsController < ApplicationController
     
     def show
        @email = AllowlistEmail.find(params[:id])
-       if current_user.usertype == "company representative" and @email.company_id != current_user.company_id
+       if current_user.usertype == "representative" and @email.company_id != current_user.company_id
             @email=nil
        end
 
@@ -43,7 +43,7 @@ class AllowlistEmailsController < ApplicationController
       
       def create
 
-        if current_user.usertype == "company representative"
+        if current_user.usertype == "representative"
             company = current_user.company
         elsif params[:email][:company_id] != nil and current_user.usertype == "admin"
             company = Company.find_by_id(params[:email][:company_id])
@@ -72,7 +72,7 @@ class AllowlistEmailsController < ApplicationController
       def destroy
 
         @email = AllowlistEmail.find(params[:id])
-        if current_user.usertype == "company representative" and @email.company_id != current_user.company_id
+        if current_user.usertype == "representative" and @email.company_id != current_user.company_id
             @email=nil
         end
         if @email 
@@ -100,7 +100,7 @@ private
     end
 
     def confirm_requester_is_rep_or_admin()
-        if !(current_user.usertype == "admin" || (current_user.usertype == "company representative" && current_user.company != nil))
+        if !(current_user.usertype == "admin" || (current_user.usertype == "representative" && current_user.company != nil))
         render json: {
             status: 400,
             errors: ["User does not have previleges for requested action"],

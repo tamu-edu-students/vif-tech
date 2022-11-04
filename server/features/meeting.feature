@@ -113,3 +113,24 @@ Feature: Meeting
             | end_time | '2022-10-18 18:20:00' |
         And that I log in as admin
         Then 0 meetings should be in meeting DB
+
+    Scenario: create a meeting as a representative
+        Given that I log in as admin
+        And there is a company with id 10
+        And I allow a new company domain disney.com for usertype representative for company id 10
+        And I allow a new company email a@disney.com for usertype representative for company id 10
+        And that I sign up with the following
+            | firstname | Jane |
+            | lastname | Frost |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | a@disney.com |
+            | usertype | representative |
+            | company_id | 10 |
+        And that I log in with email a@disney.com and password password1!
+        Then I should be logged in
+        And that I create a meeting with the following
+            | title | A meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+        Then 1 meetings should be in meeting DB

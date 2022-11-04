@@ -1,4 +1,4 @@
-Feature: admin can CRUD a company object/account
+Feature: CRUD a company object/account
 
 # create
 Scenario: admin can create a new company by providing its name, description
@@ -10,3 +10,7 @@ Scenario: admin can create a new company by just providing its name
 Scenario: admin cannot create a new company without providing its name
       Given name not provided
       Then an error page is shown
+
+# ------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------
+

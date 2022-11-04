@@ -111,17 +111,17 @@ Feature: Student signup
         Given that I log in as admin
         Then I should be logged in
     
-    Scenario: Signup as company representative
+    Scenario: Signup as representative
         Given that I log in as admin
         And there is a company with id 1
-        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test.com for usertype representative for company id 1
         And that I sign up with the following
             | firstname | james |
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@test.com |
-            | usertype | company representative |
+            | usertype | representative |
             | company_id | 1 |
         Then the user with firstname james and lastname bond should be found in the user DB
         And the company with id 1 should have user with email "test@test.com"
@@ -129,7 +129,7 @@ Feature: Student signup
     Scenario: Signup as student with company ID
         Given that I log in as admin
         And there is a company with id 1
-        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test.com for usertype representative for company id 1
         And that I sign up with the following and fail with code 400
             | firstname | james |
             | lastname | bond |

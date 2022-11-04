@@ -86,7 +86,7 @@ class UsersController < ApplicationController
              }, status: :bad_request
     end
 
-    if params["user"]["company_id"] != nil and params["user"]["usertype"] != "company representative"
+    if params["user"]["company_id"] != nil and params["user"]["usertype"] != "representative"
       return render json: {
                       errors: ["Company ID cannot be provided to user of type  #{params[:user][:usertype]}"],
                     }, status: :bad_request
@@ -109,7 +109,7 @@ class UsersController < ApplicationController
     if @user.save
       login!
       resp = UserMailer.registration_confirmation(@user).deliver_now
-      if params["user"]["usertype"] == "company representative"
+      if params["user"]["usertype"] == "representative"
         company.users << @user
       end
       logger.debug { resp }
@@ -227,20 +227,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def add_to_company
-    # only usertype of company rep can be added
-    # write this in users_controller or companies_controller?
-    # should i use foreign key instead of :id?
-    @user = User.find_by_id(params[:id])
-    @company = Company.find_by_id(params[:id])
-    @company.users << @user
-  end
 
-  def delete_from_company
-    @user = User.find_by_id(params[:id])
-    @company = Company.find_by_id(params[:id])
-    @company.users.delete(@user)
-  end
 
   private
 

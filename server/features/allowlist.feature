@@ -53,16 +53,16 @@ Feature: Allowlist Management
     Scenario: A company rep adds an allowed domain
         Given that I log in as admin
         And there is a company with id 1
-        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test.com for usertype representative for company id 1
         And that I sign up with the following to company id 1
             | firstname | james |
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@test.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in with email test@test.com and password password1!
-        And I allow a new domain test2.com for usertype company representative
+        And I allow a new domain test2.com for usertype representative
         And that I log in as admin
         Then I should see 5 domain in the database
         And the company with id 1 should have 1 reps
@@ -117,23 +117,23 @@ Feature: Allowlist Management
     Scenario: A company rep adds an allowed email
         Given that I log in as admin
         And there is a company with id 1
-        And I allow a new company email test@test.com for usertype company representative for company id 1
+        And I allow a new company email test@test.com for usertype representative for company id 1
         And that I sign up with the following to company id 1
             | firstname | james |
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@test.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in with email test@test.com and password password1!
-        And I allow a new email test2@test2.com for usertype company representative
+        And I allow a new email test2@test2.com for usertype representative
         And that I sign up with the following to company id 1
             | firstname | james2 |
             | lastname | bond2 |
             | password | password1! |
             | password_confirmation | password1! |
             | email | test2@test2.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in as admin
         Then I should see 2 new email in the database
         And the company with id 1 should have 2 reps
@@ -142,16 +142,16 @@ Feature: Allowlist Management
         Given that I log in as admin
         And there is a company with id 1
         And there is a company with id 2
-        And I allow a new company email test@test.com for usertype company representative for company id 1
-        And I allow a new company email test2@test2.com for usertype company representative for company id 2
-        And I allow a new company email test3@test3.com for usertype company representative for company id 2
+        And I allow a new company email test@test.com for usertype representative for company id 1
+        And I allow a new company email test2@test2.com for usertype representative for company id 2
+        And I allow a new company email test3@test3.com for usertype representative for company id 2
         And that I sign up with the following to company id 1
             | firstname | james |
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@test.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in with email test@test.com and password password1!
         Then I should see 1 new email in the database
         And that I sign up with the following to company id 2
@@ -160,7 +160,7 @@ Feature: Allowlist Management
             | password | password1! |
             | password_confirmation | password1! |
             | email | test2@test2.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in with email test2@test2.com and password password1!
         Then I should see 2 new email in the database
         And I should see an email with index 2 in the database
@@ -171,16 +171,16 @@ Feature: Allowlist Management
         Given that I log in as admin
         And there is a company with id 1
         And there is a company with id 2
-        And I allow a new company domain test.com for usertype company representative for company id 1
-        And I allow a new company domain test2.com for usertype company representative for company id 2
-        And I allow a new company domain test3.com for usertype company representative for company id 2
+        And I allow a new company domain test.com for usertype representative for company id 1
+        And I allow a new company domain test2.com for usertype representative for company id 2
+        And I allow a new company domain test3.com for usertype representative for company id 2
         And that I sign up with the following to company id 1
             | firstname | james |
             | lastname | bond |
             | password | password1! |
             | password_confirmation | password1! |
             | email | test@test.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in with email test@test.com and password password1!
         Then I should see 1 domain in the database
         And that I sign up with the following to company id 2
@@ -189,7 +189,7 @@ Feature: Allowlist Management
             | password | password1! |
             | password_confirmation | password1! |
             | email | test2@test2.com |
-            | usertype | company representative |
+            | usertype | representative |
         And that I log in with email test2@test2.com and password password1!
         Then I should see 2 domain in the database
         And I should see a domain with index 5 in the database
