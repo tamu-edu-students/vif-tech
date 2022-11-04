@@ -39,7 +39,7 @@ class AllowlistEntryForm extends React.Component<InjectedFormProps<any, IAllowli
  
   public render() {
     return (
-      <form data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
+      <form className="allowlist__entry-form" data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
         <Field name={this.props.name} id={this.props.id} type="text" component={this._renderInput} label="Email" />
         <button type='submit' data-testid="create-allowlist-email-form-button">{this.props.buttonLabel}</button>
       </form>

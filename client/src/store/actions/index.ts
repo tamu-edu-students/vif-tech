@@ -11,6 +11,8 @@ import {
 
   CREATE_ALLOWLIST_EMAIL,
   CREATE_ALLOWLIST_DOMAIN,
+  DELETE_ALLOWLIST_EMAIL,
+  DELETE_ALLOWLIST_DOMAIN,
 } from "./types";
 import history from "../../history";
 import vifTech from "../../apis/vifTech";
@@ -25,7 +27,7 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues, company_id: 1 } })
+  const response: any = await vifTech.post("/users", { user: { ...formValues } })
   .catch(({response: { data: { errors } }}) => {
     throw(new Error(errors.join('///')));
   });
@@ -121,6 +123,22 @@ export const createAllowlistDomain = (formValues: any) => async (dispatch: any, 
   console.log('createAllowlistDomain response_create:', response_create);
 
   dispatch({ type: CREATE_ALLOWLIST_DOMAIN, payload: response_create.data.domain });
+}
+
+export const deleteAllowlistEmail = (id: number) => async (dispatch: any, getState: any) => {
+  const response_delete = await vifTech.delete(`/allowlist_emails/${id}`);
+
+  console.log('deleteAllowlistEmail response_delete:', response_delete);
+
+  dispatch({ type: DELETE_ALLOWLIST_EMAIL });
+}
+
+export const deleteAllowlistDomain = (id: number) => async (dispatch: any, getState: any) => {
+  const response_delete = await vifTech.delete(`/allowlist_domains/${id}`);
+
+  console.log('deleteAllowlistDomain response_delete:', response_delete);
+
+  dispatch({ type: DELETE_ALLOWLIST_DOMAIN });
 }
 
 // export const fetchCompanyAllowlists = () => async (dispatch: any, getState: any) => {

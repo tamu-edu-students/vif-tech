@@ -5,7 +5,7 @@ import { Usertype } from '../../../shared/enums';
 
 import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
 
-import { createAllowlistEmail, createAllowlistDomain, fetchCompanies } from "../../../store/actions";
+import { createAllowlistEmail, createAllowlistDomain, deleteAllowlistEmail, deleteAllowlistDomain, fetchCompanies } from "../../../store/actions";
 
 interface IAllowlistProps {
   title: string;
@@ -20,19 +20,49 @@ interface IAllowlistProps {
 
   createAllowlistEmail?: any;
   createAllowlistDomain?: any;
+  deleteAllowlistEmail?: any;
+  deleteAllowlistDomain?: any;
   fetchCompanies?: any;
 }
 
 class Allowlist extends React.Component<IAllowlistProps, {}> {
   private _renderEmails(allowlist_emails: AllowlistEmail[]): JSX.Element[] {
     return allowlist_emails.map(({email, id}: AllowlistEmail) => (
-      <li key={id}>{email}</li>
+      <li className="allowlist__entry" key={id}>
+        <p>{email}</p>
+        <button
+          onClick={() => {
+            this.props.deleteAllowlistEmail(id)
+            .then(() => {
+              if (this.props.usertype === Usertype.REPRESENTATIVE) {
+                this.props.fetchCompanies();
+              }
+            });
+          }}
+        >
+          Delete
+        </button>
+      </li>
     ));
   }
 
   private _renderDomains(allowlist_domains: AllowlistDomain[]): JSX.Element[] {
     return allowlist_domains.map(({email_domain, id}: AllowlistDomain) => (
-      <li key={id}>@{email_domain}</li>
+      <li className="allowlist__entry" key={id}>
+        @{email_domain}
+        <button
+          onClick={() => {
+            this.props.deleteAllowlistDomain(id)
+            .then(() => {
+              if (this.props.usertype === Usertype.REPRESENTATIVE) {
+                this.props.fetchCompanies();
+              }
+            });
+          }}
+        >
+          Delete
+        </button>
+      </li>
     ));
   }
 
@@ -91,7 +121,7 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
       <div className="allowlist">
         <h2 className="heading-secondary">Title: {title}</h2>
         { showsPrimaryContacts && (
-        <div className="allowlist_group allowlist_group--primary-contacts">
+        <div className="allowlist__group allowlist__group--primary-contacts">
           <h3 className="heading-tertiary">primary contacts</h3>
           <ul>
             {this._renderEmails(primaryContacts)}
@@ -105,7 +135,7 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
         </div>
         )}
         { showsEmails && (
-        <div className="allowlist_group allowlist_group--emails">
+        <div className="allowlist__group allowlist__group--emails">
           <h3 className="heading-tertiary">personal emails</h3>
           <ul>
             {this._renderEmails(allowlist_emails)}
@@ -120,7 +150,7 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
         )}
         
         { showsDomains && (
-        <div className="allowlist_group allowlist_group--domains">
+        <div className="allowlist__group allowlist__group--domains">
           <h3 className="heading-tertiary">domains</h3>
           <ul>
             {this._renderDomains(allowlist_domains)}
@@ -139,4 +169,4 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
   }
 }
 
-export default connect(null, { createAllowlistEmail, createAllowlistDomain, fetchCompanies })(Allowlist);
+export default connect(null, { createAllowlistEmail, createAllowlistDomain, deleteAllowlistEmail, deleteAllowlistDomain, fetchCompanies })(Allowlist);
