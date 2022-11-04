@@ -20,7 +20,7 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
 
   private _renderDomains(allowlist_domains: AllowlistDomain[]): JSX.Element[] {
     return allowlist_domains.map(({email_domain, id}: AllowlistDomain) => (
-      <li key={id}>{email_domain}</li>
+      <li key={id}>@{email_domain}</li>
     ));
   }
 
@@ -40,15 +40,17 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
         <h2 className="heading-secondary">Title: {title}</h2>
         { showsPrimaryContact && (
           <div className="allowlist_group allowlist__group--primary-contact">
-            <h3 className="heading-tertiary">primary contact:</h3>
+            <h3 className="heading-tertiary">primary contact</h3>
             <ul>
-              <li>{primaryContact?.email}</li>
+              {
+                primaryContact && (<li>{primaryContact?.email}</li>)
+              }
             </ul>
           </div>
         )}
         { showsEmails && (
         <div className="allowlist_group allowlist_group--emails">
-          <h3 className="heading-tertiary">personal emails:</h3>
+          <h3 className="heading-tertiary">personal emails</h3>
           <ul>
             {this._renderEmails(allowlist_emails)}
           </ul>
@@ -57,7 +59,7 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
         
         { showsDomains && (
         <div className="allowlist_group allowlist_group--domains">
-          <h3 className="heading-tertiary">domains:</h3>
+          <h3 className="heading-tertiary">domains</h3>
           <ul>
             {this._renderDomains(allowlist_domains)}
           </ul>

@@ -33,7 +33,6 @@ body {
 }
 
 form {
-  margin-top: 10rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -71,9 +70,12 @@ a {
 }
 
 .allowlists {
+  border: 1px solid $color-white;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  margin-bottom: 2rem;
 }
 
 .allowlist {
@@ -84,8 +86,27 @@ a {
   .heading-secondary {
     color: $color-brand-yellow;
   }
-
+  
   li {
-    margin-left: 2rem;
+    text-align: right;
+  }
+
+  .heading-tertiary {
+    margin-bottom: 0.2rem;
+  }
+
+  ul {
+    list-style: none;
+
+    li {
+      text-align: right;
+      margin-left: 2rem;
+
+      &:last-of-type {
+        margin-bottom: 1rem;
+        border-bottom: 1px solid $color-white;
+        padding-bottom: 0.5rem;
+      }
+    }
   }
 }

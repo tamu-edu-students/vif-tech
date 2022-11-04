@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import Allowlist from '../Allowlist/Allowlist';
+import CompanyForm from './CompanyForm/CompanyForm';
 
 import {
   fetchCompanies,
+  createCompany,
 } from '../../../store/actions';
 
 interface ICompanyAllowlistsProps {
   fetchCompanies?: any;
+  createCompany?: any;
   companies: Company[];
 }
 
@@ -44,12 +47,23 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
     ));
   }
 
+  private _onCompanySubmit = (formValues: any) => {
+    this.props.createCompany(formValues)
+    .catch((err: Error) => {
+      console.error(err.message);
+    });
+  }
+
   public render(): React.ReactElement<ICompanyAllowlistsProps> {
     if (!this.state.isLoaded) {
       return (
         <div>Loading CompanyAllowlists...</div>
-      )
+      );
     }
+
+    const {
+      companies
+    } = this.props;
 
     if (this.props.companies.length === 0) {
       return (
@@ -62,8 +76,13 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
         <h2>CompanyAllowlists</h2>
         <br />
         <div className="allowlists">
-          { this._renderAllowlists() }
+          {
+            companies.length > 0
+            ? (<>{ this._renderAllowlists() }</>)
+            : (<p>No companies yet!</p>)
+          }
         </div>
+        <CompanyForm onSubmit={this._onCompanySubmit} />
       </div>
     )
   }
@@ -75,4 +94,4 @@ const mapStateToProps = (state: any) => {
   };
 }
 
-export default connect(mapStateToProps, { fetchCompanies })(CompanyAllowlists);
+export default connect(mapStateToProps, { fetchCompanies, createCompany })(CompanyAllowlists);
