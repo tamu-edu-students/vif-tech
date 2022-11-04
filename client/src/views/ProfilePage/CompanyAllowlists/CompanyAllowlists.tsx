@@ -10,7 +10,7 @@ import {
 
 interface ICompanyAllowlistsProps {
   fetchCompanies?: any;
-  companies: any;
+  companies: Company[];
 }
 
 interface ICompanyAllowlistsState {
@@ -28,7 +28,7 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
     this.props.fetchCompanies().then(() => this.setState({ isLoaded: true }));
   }
 
-  private _renderAllowlists(): JSX.Element {
+  private _renderAllowlists(): JSX.Element[] {
     return this.props.companies.map(({ allowlist_emails=[], allowlist_domains=[], id: company_id, name }: any) => (
       <React.Fragment key={company_id}>
         <Allowlist
@@ -36,9 +36,9 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
           showsPrimaryContact
           showsEmails
           showsDomains
-          primaryContact={ allowlist_emails.find((email: any) => email.is_primary_contact === true) }
-          emails={allowlist_emails}
-          domains={allowlist_domains}
+          primaryContact={ allowlist_emails.find((email: AllowlistEmail) => email.isPrimaryContact) }
+          allowlist_emails={allowlist_emails.filter((email: AllowlistEmail) => !email.isPrimaryContact)}
+          allowlist_domains={allowlist_domains}
         />
       </React.Fragment>
     ));
