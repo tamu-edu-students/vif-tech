@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import { Usertype } from '../../../shared/enums';
+
+import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
+
+import { createAllowlistEmail, createAllowlistDomain, fetchCompanies } from "../../../store/actions";
 
 interface IAllowlistProps {
   title: string;
@@ -12,6 +17,10 @@ interface IAllowlistProps {
   primaryContact?: AllowlistEmail | null;
   allowlist_emails?: AllowlistEmail[];
   allowlist_domains?: AllowlistDomain[];
+
+  createAllowlistEmail?: any;
+  createAllowlistDomain?: any;
+  fetchCompanies?: any;
 }
 
 class Allowlist extends React.Component<IAllowlistProps, {}> {
@@ -25,6 +34,32 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
     return allowlist_domains.map(({email_domain, id}: AllowlistDomain) => (
       <li key={id}>@{email_domain}</li>
     ));
+  }
+
+  _onSubmitEmail = (formValues: any) => {
+    this.props.createAllowlistEmail({
+      email: formValues[`email-${this.props.company_id}`],
+      usertype: this.props.usertype,
+      company_id: this.props.company_id,
+    })
+    .then(() => {
+      if (this.props.usertype === Usertype.REPRESENTATIVE) {
+        this.props.fetchCompanies();
+      }
+    });
+  }
+
+  _onSubmitDomain = (formValues: any) => {
+    this.props.createAllowlistDomain({
+      email_domain: formValues[`email_domain-${this.props.company_id}`],
+      usertype: this.props.usertype,
+      company_id: this.props.company_id,
+    })
+    .then(() => {
+      if (this.props.usertype === Usertype.REPRESENTATIVE) {
+        this.props.fetchCompanies();
+      }
+    });
   }
 
   public render(): React.ReactElement<IAllowlistProps> {
@@ -57,6 +92,12 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
           <ul>
             {this._renderEmails(allowlist_emails)}
           </ul>
+          <AllowlistEntryForm
+            onSubmit={this._onSubmitEmail}
+            name={`email-${this.props.company_id}`}
+            id={`email-${this.props.company_id}`}
+            buttonLabel="Add Email"
+          />
         </div>
         )}
         
@@ -66,6 +107,13 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
           <ul>
             {this._renderDomains(allowlist_domains)}
           </ul>
+          
+          <AllowlistEntryForm
+            onSubmit={this._onSubmitDomain}
+            name={`email_domain-${this.props.company_id}`}
+            id={`email_domain-${this.props.company_id}`}
+            buttonLabel="Add Domain"
+          />
         </div>
         )}
       </div>
@@ -73,4 +121,4 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
   }
 }
 
-export default connect()(Allowlist);
+export default connect(null, { createAllowlistEmail, createAllowlistDomain, fetchCompanies })(Allowlist);

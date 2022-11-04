@@ -1,12 +1,16 @@
 import {
   FETCH_USERS,
   CREATE_USER,
+
   FETCH_LOGIN_STATUS,
   LOG_IN,
   LOG_OUT,
+
   FETCH_COMPANIES,
   CREATE_COMPANY,
-  FETCH_ALLOW_LIST
+
+  CREATE_ALLOWLIST_EMAIL,
+  CREATE_ALLOWLIST_DOMAIN,
 } from "./types";
 import history from "../../history";
 import vifTech from "../../apis/vifTech";
@@ -21,7 +25,7 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues } })
+  const response: any = await vifTech.post("/users", { user: { ...formValues, company_id: 1 } })
   .catch(({response: { data: { errors } }}) => {
     throw(new Error(errors.join('///')));
   });
@@ -93,6 +97,30 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
 
   console.log('fetchCompanies response:', response);
   dispatch({ type: CREATE_COMPANY, payload: response.data.company });
+}
+
+export const createAllowlistEmail = (formValues: any) => async (dispatch: any, getState: any) => {
+  const allowlist_email: AllowlistEmail = {...formValues};
+  
+  const response_create = await vifTech.post('/allowlist_emails', {
+    email: { ...allowlist_email, isPrimaryContact: allowlist_email.isPrimaryContact ? 1 : 0 }
+  });
+
+  console.log('createAllowlistEmail response_create:', response_create);
+
+  dispatch({ type: CREATE_ALLOWLIST_EMAIL, payload: response_create.data.email });
+}
+
+export const createAllowlistDomain = (formValues: any) => async (dispatch: any, getState: any) => {
+  const allowlist_domain: AllowlistDomain = {...formValues};
+  
+  const response_create = await vifTech.post('/allowlist_domains', {
+    domain: { ...allowlist_domain }
+  });
+
+  console.log('createAllowlistDomain response_create:', response_create);
+
+  dispatch({ type: CREATE_ALLOWLIST_DOMAIN, payload: response_create.data.domain });
 }
 
 // export const fetchCompanyAllowlists = () => async (dispatch: any, getState: any) => {
