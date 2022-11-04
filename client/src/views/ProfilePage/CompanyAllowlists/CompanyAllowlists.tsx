@@ -40,10 +40,10 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
           title={name}
           usertype={Usertype.REPRESENTATIVE}
           company_id={company_id}
-          showsPrimaryContact
+          showsPrimaryContacts
           showsEmails
           showsDomains
-          primaryContact={ allowlist_emails.find((email: AllowlistEmail) => email.isPrimaryContact) }
+          primaryContacts={ allowlist_emails.filter((email: AllowlistEmail) => email.isPrimaryContact) }
           allowlist_emails={allowlist_emails.filter((email: AllowlistEmail) => !email.isPrimaryContact)}
           allowlist_domains={allowlist_domains}
         />

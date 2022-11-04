@@ -11,10 +11,10 @@ interface IAllowlistProps {
   title: string;
   usertype: Usertype;
   company_id?: number;
-  showsPrimaryContact?: boolean;
+  showsPrimaryContacts?: boolean;
   showsEmails?: boolean;
   showsDomains?: boolean;
-  primaryContact?: AllowlistEmail | null;
+  primaryContacts?: AllowlistEmail[];
   allowlist_emails?: AllowlistEmail[];
   allowlist_domains?: AllowlistDomain[];
 
@@ -62,13 +62,27 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
     });
   }
 
+  _onSubmitPrimaryContact = (formValues: any) => {
+    this.props.createAllowlistEmail({
+      email: formValues[`email-primary-${this.props.company_id}`],
+      usertype: this.props.usertype,
+      company_id: this.props.company_id,
+      isPrimaryContact: true,
+    })
+    .then(() => {
+      if (this.props.usertype === Usertype.REPRESENTATIVE) {
+        this.props.fetchCompanies();
+      }
+    });
+  }
+
   public render(): React.ReactElement<IAllowlistProps> {
     const {
       title,
-      showsPrimaryContact,
+      showsPrimaryContacts,
       showsEmails,
       showsDomains,
-      primaryContact,
+      primaryContacts=[],
       allowlist_emails = [],
       allowlist_domains = [],
     } = this.props;
@@ -76,15 +90,19 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
     return (
       <div className="allowlist">
         <h2 className="heading-secondary">Title: {title}</h2>
-        { showsPrimaryContact && (
-          <div className="allowlist_group allowlist__group--primary-contact">
-            <h3 className="heading-tertiary">primary contact</h3>
-            <ul>
-              {
-                primaryContact && (<li>{primaryContact?.email}</li>)
-              }
-            </ul>
-          </div>
+        { showsPrimaryContacts && (
+        <div className="allowlist_group allowlist_group--primary-contacts">
+          <h3 className="heading-tertiary">primary contacts</h3>
+          <ul>
+            {this._renderEmails(primaryContacts)}
+          </ul>
+          <AllowlistEntryForm
+            onSubmit={this._onSubmitPrimaryContact}
+            name={`email-primary-${this.props.company_id}`}
+            id={`email-primary-${this.props.company_id}`}
+            buttonLabel="Add Primary Contact"
+          />
+        </div>
         )}
         { showsEmails && (
         <div className="allowlist_group allowlist_group--emails">
