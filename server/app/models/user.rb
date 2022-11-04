@@ -17,6 +17,9 @@ class User < ApplicationRecord
   has_many :user_meetings, dependent: :destroy
   has_many :invited_meetings, through: :user_meetings, source: :meeting
 
+  belongs_to :allowlist_domain, optional: true
+  belongs_to :allowlist_email, optional: true
+
   def as_json(options = {})
     options[:except] ||= [:password_digest]
     super(options)

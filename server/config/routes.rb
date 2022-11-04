@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   # Allowlist routes
   resources :allowlist_domains, only: [:create, :show, :index, :destroy] 
   resources :allowlist_emails, only: [:create, :show, :index, :destroy] 
+  post "/allowlist_emails/transfer_primary_contact", to: "allowlist_emails#transferPrimaryContact"
 
 
   get "/users/:id/meetings", to: "users#get_meetings"
