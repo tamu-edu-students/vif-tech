@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_02_202335) do
+  create_table "abouts", force: :cascade do |t|
+    t.string "firstname"
+    t.string "lastname"
+    t.text "imgSrc"
+    t.string "role"
+    t.text "description"
+    t.string "rank", default: "normal"
+    t.text "social_links", default: "---\n:facebook:\n:github:\n:linkedin:\n:portfolio:\n:twitter:\n:youtube:\n"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "email_domain"
     t.string "usertype"

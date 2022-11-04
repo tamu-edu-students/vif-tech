@@ -10,3 +10,5 @@ User.create(firstname: "admin", lastname: "admin", email:"admin@admin.com", pass
 AllowlistDomain.create(email_domain: "tamu.edu", usertype: "student")
 AllowlistDomain.create(email_domain: "arch.tamu.edu", usertype: "student")
 AllowlistDomain.create(email_domain: "exchange.tamu.edu", usertype: "student")
+
+About.create(:firstname=>'Neyo', :lastname=>'Brainy', :imgSrc=>'https://www.gannan.com', :description=>'A CS major interested in rails development')

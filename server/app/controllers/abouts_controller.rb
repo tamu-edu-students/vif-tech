@@ -73,6 +73,6 @@ class AboutsController < ApplicationController
 
 
     def about_params
-        params.require(:faq).permit(:firstname, :lastname, :imgSrc, :role, :description, :rank, :social_links)
+        params.require(:about).permit(:firstname, :lastname, :imgSrc, :role, :description, :rank, :social_links)
     end
 end
