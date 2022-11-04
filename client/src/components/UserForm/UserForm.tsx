@@ -45,6 +45,7 @@ class UserForm extends React.Component<InjectedFormProps & IUserFormProps, {}> {
         <fieldset>
           <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value="student" />
           <Field name="usertype" id="usertype--faculty" type="radio" component={this._renderInput} label="Faculty" value="faculty" />
+          <Field name="usertype" id="usertype--representative" type="radio" component={this._renderInput} label="Company Representative" value="company representative" />
         </fieldset>
         <button type='submit' data-testid="sign-up-form-button">Sign Up</button>
       </form>
