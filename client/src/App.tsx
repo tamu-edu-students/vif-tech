@@ -49,8 +49,8 @@ class App extends React.Component<IAppProps, {}> {
                 this.props.user
                 ? (
                   <>
-                    <li>{this.props.user.firstname}</li>
-                    <li>{this.props.user.lastname}</li>
+                    <li>firstname: {this.props.user.firstname}</li>
+                    <li>lastname: {this.props.user.lastname}</li>
                     <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
                   </>
                 )

@@ -51,10 +51,19 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
       )
     }
 
+    if (this.props.companies.length === 0) {
+      return (
+        <div>No companies yet!</div>
+      )
+    }
+
     return (
       <div>
         <h2>CompanyAllowlists</h2>
-        { this._renderAllowlists() }
+        <br />
+        <div className="allowlists">
+          { this._renderAllowlists() }
+        </div>
       </div>
     )
   }

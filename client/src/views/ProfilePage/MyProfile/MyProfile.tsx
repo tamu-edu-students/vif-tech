@@ -8,7 +8,7 @@ interface IMyProfileProps {
 class MyProfile extends React.Component<IMyProfileProps, {}> {
   public render(): React.ReactElement<IMyProfileProps> {
     return (
-      <div>MyProfile</div>
+      <h2 className="heading-secondary">MyProfile</h2>
     );
   }
 }

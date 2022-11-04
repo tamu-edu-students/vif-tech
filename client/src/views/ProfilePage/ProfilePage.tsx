@@ -17,43 +17,45 @@ class ProfilePage extends React.Component<IProfilePageProps, {}> {
     const { user } = this.props;
     const parentPath = this.props.match.path;
     return (
-      <div>
-        <h1>ProfilePage</h1>
+      <div className="profile-page">
+        <h1 className="heading-primary">ProfilePage</h1>
 
-        <ul>
-          <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
-          {
-            user.usertype === "admin" &&
-            <li><Link to={`${parentPath}/company-allow-lists`}>Company Allow List</Link></li>
-          }
-        </ul>
+        <div className="split">
+          <ul>
+            <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
+            {
+              user.usertype === "admin" &&
+              <li><Link to={`${parentPath}/company-allow-lists`}>Company Allow List</Link></li>
+            }
+          </ul>
 
-        <Switch>
-          <Route exact path={`${parentPath}`}>
-            <Redirect to={`${parentPath}/my-profile`} />
-          </Route>
-
-          <Route exact path={`${parentPath}/my-profile`}>
-            <MyProfile />
-          </Route>
-
-          {
-          user.usertype === "admin" &&
-            <Route exact path={`${parentPath}/company-allow-lists`}>
-                <CompanyAllowlists />
+          <Switch>
+            <Route exact path={`${parentPath}`}>
+              <Redirect to={`${parentPath}/my-profile`} />
             </Route>
-          }
 
-          <Route path="*"> 
-            <section className="section section--redirector">
-              <RedirectPrompt
-                message={"404 Page Not Found"}
-                buttonText={"Return To Profile Page"}
-                pathName={parentPath}
-              />
-            </section>
-          </Route>
-        </Switch>
+            <Route exact path={`${parentPath}/my-profile`}>
+              <MyProfile />
+            </Route>
+
+            {
+            user.usertype === "admin" &&
+              <Route exact path={`${parentPath}/company-allow-lists`}>
+                  <CompanyAllowlists />
+              </Route>
+            }
+
+            <Route path="*"> 
+              <section className="section section--redirector">
+                <RedirectPrompt
+                  message={"404 Page Not Found"}
+                  buttonText={"Return To Profile Page"}
+                  pathName={parentPath}
+                />
+              </section>
+            </Route>
+          </Switch>
+        </div>
       </div>
     );
   }

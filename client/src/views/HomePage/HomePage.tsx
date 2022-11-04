@@ -9,7 +9,7 @@ class HomePage extends React.Component<IHomePageProps, {}> {
   public render(): React.ReactElement<IHomePageProps> {
     // const { user } = this.props;
       return (
-        <div>Home Page</div>
+        <h1 className="heading-primary">Home Page</h1>
       );
   }
 }
