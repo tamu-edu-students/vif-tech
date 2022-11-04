@@ -11,14 +11,12 @@ class AllowlistDomainsController < ApplicationController
 
            if @domains
               render json: {
-                status: 200,
               domains: @domains
-           }
+           }, status: :ok
           else
               render json: {
-              status: 500,
               errors: ['no domains found']
-          }
+          }, status: :internal_server_error
          end
     end
     
@@ -29,14 +27,12 @@ class AllowlistDomainsController < ApplicationController
         end
            if @domain
               render json: {
-              status: 200,
               domain: @domain
-           }
+           }, status: :ok
            else
               render json: {
-              status: 500,
               errors: ['domain not found']
-            }
+            }, status: :not_found
            end
       end
       
@@ -65,14 +61,12 @@ class AllowlistDomainsController < ApplicationController
             end
 
             render json: {
-            status: 201,
             domain: @domain
-        }
+        }, status: :created
         else 
             render json: {
-            status: 500,
             errors: @domain.errors.full_messages
-        }
+        }, status: :internal_server_error
         end
       end
 
@@ -89,15 +83,13 @@ class AllowlistDomainsController < ApplicationController
             @domain.destroy
 
            render json: {
-            status: 200,
             errors: ['domain deleted']
-            }
+            }, status: :ok
         
         else
            render json: {
-           status: 500,
            errors: ['domain not found']
-            }
+            }, status: :not_found
         end
       end
 
@@ -105,9 +97,8 @@ private
     def confirm_user_logged_in
         if !(logged_in? && current_user)
         render json: {
-            status: 500,
             errors: ["User not logged in"],
-        }
+        }, status: :forbidden
         end
     end
 
@@ -118,9 +109,8 @@ private
             current_user.allowlist_email != nil &&
             current_user.allowlist_email.isPrimaryContact > 0))
           render json: {
-            status: 400,
             errors: ["User does not have previleges for requested action"],
-          }
+          }, status: :forbidden
           return false
         end
         return true

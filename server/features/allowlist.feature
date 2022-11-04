@@ -265,8 +265,8 @@ Feature: Allowlist Management
             | usertype | company representative |
             | company_id | 1 |
         And that I log in with email test@test.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
         And that I sign up with the following
             | firstname | james |
             | lastname | bond |
@@ -276,8 +276,8 @@ Feature: Allowlist Management
             | usertype | company representative |
             | company_id | 2 |
         And that I log in with email test2@test2.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
 
 
     Scenario: Multiple company emails are added and only appropriate users can see them
@@ -296,8 +296,8 @@ Feature: Allowlist Management
             | usertype | company representative |
             | company_id | 1 |
         And that I log in with email test@test.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
 
     Scenario: A rep transfers primary contact correctly
         Given that I log in as admin
@@ -323,12 +323,12 @@ Feature: Allowlist Management
         And that I log in with email test@test.com and password password1!
         Then I should see 2 new email in the database
         And that I log in with email test2@test.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
         And that I log in with email test@test.com and password password1!
         And I transfer my primary contact role to user with id 3
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
         And that I log in with email test2@test.com and password password1!
         Then I should see 2 new email in the database
 
@@ -357,13 +357,13 @@ Feature: Allowlist Management
         And that I log in with email test@test.com and password password1!
         Then I should see 2 new email in the database
         And that I log in with email test2@test.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
         And that I log in as admin
         And I transfer primary contact role to user with id 3 from user with id 2
         And that I log in with email test@test.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
         And that I log in with email test2@test.com and password password1!
         Then I should see 2 new email in the database
 
@@ -443,8 +443,8 @@ Feature: Allowlist Management
         And that I log in with email test@test.com and password password1!
         Then I should see 1 new email in the database
         And that I log in with email test2@test.com and password password1!
-        Then I should get a 400 code from the domain database
-        And I should get a 400 code from the email database
+        Then I should get a 403 code from the domain database
+        And I should get a 403 code from the email database
         And that I log in as admin
         And I fail to transfer primary contact role to user with id 3 from user with id 2
 

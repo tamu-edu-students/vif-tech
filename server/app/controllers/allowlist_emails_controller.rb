@@ -11,14 +11,12 @@ class AllowlistEmailsController < ApplicationController
 
            if @emails
               render json: {
-                status: 200,
               emails: @emails
-           }
+           }, status: :ok
           else
               render json: {
-              status: 500,
               errors: ['no emails found']
-          }
+          }, status: :internal_server_error
          end
     end
     
@@ -30,14 +28,12 @@ class AllowlistEmailsController < ApplicationController
 
         if @email
             render json: {
-            status: 200,
             email: @email
-        }
+        }, status: :ok
         else
             render json: {
-            status: 500,
             errors: ['email not found']
-        }
+        }, status: :not_found
         end
       end
       
@@ -64,14 +60,12 @@ class AllowlistEmailsController < ApplicationController
             
 
             render json: {
-            status: 201,
             email: @email
-        }
+        }, status: :created
         else 
             render json: {
-            status: 500,
             errors: @email.errors.full_messages
-        }
+        }, status: :internal_server_error
         end
 
       end
@@ -89,15 +83,14 @@ class AllowlistEmailsController < ApplicationController
            @email.destroy
 
            render json: {
-            status: 200,
             errors: ['email deleted']
-            }
+            }, status: :ok
         
         else
            render json: {
            status: 500,
            errors: ['email not found']
-            }
+            }, status: :not_found
         end
       end
 
@@ -123,17 +116,16 @@ class AllowlistEmailsController < ApplicationController
             from_user.usertype != "company representative")
            
             render json: {
-                status: 400,
                 errors: ["User does not have previleges for requested action"],
-            }
+            }, status: :forbidden
             
         else
             to_user.allowlist_email.update(isPrimaryContact: 1)
             from_user.allowlist_email.update(isPrimaryContact: 0)
 
             render json: {
-                status: 200
-            }
+                message: "transfer success"
+            }, status: :ok
         end
 
       end
@@ -142,9 +134,8 @@ private
     def confirm_user_logged_in
         if !(logged_in? && current_user)
         render json: {
-            status: 500,
             errors: ["User not logged in"],
-        }
+        }, status: :forbidden
         end
     end
 
@@ -155,9 +146,8 @@ private
             current_user.allowlist_email != nil &&
             current_user.allowlist_email.isPrimaryContact > 0))
         render json: {
-            status: 400,
             errors: ["User does not have previleges for requested action"],
-        }
+        }, status: :forbidden
         return false
         end
         return true
