@@ -1,16 +1,19 @@
 import { LOG_IN, LOG_OUT, FETCH_LOGIN_STATUS } from "../actions/types";
 
-const INITIAL_STATE = {
+interface Store_Auth {
+  isLoggedIn: boolean | null;
+  user: User | null;
+}
+
+const INITIAL_STATE: Store_Auth = {
   isLoggedIn: null,
   user: null,
 };
 
-const authReducer = (state = INITIAL_STATE, action: any) => {
+const authReducer = (state: Store_Auth = INITIAL_STATE, action: any) => {
   switch (action.type) {
     case LOG_IN:
-      return { ...state, isLoggedIn: true, user: action.payload };
     case LOG_OUT:
-      return { ...state, isLoggedIn: false, user: null };
     case FETCH_LOGIN_STATUS:
       return { ...state, ...action.payload };
     default:

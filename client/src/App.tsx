@@ -17,7 +17,7 @@ import ProfilePage from './views/ProfilePage/ProfilePage';
 interface IAppProps {
   fetchLoginStatus?: any;
   logOut?: any;
-  user: any;
+  user: User;
   isLoggedIn: boolean;
 }
 

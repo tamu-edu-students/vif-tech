@@ -26,7 +26,7 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   });
   console.log(`createUser response: `, response);
 
-  const user: any = response.data.user;
+  const user: User = response.data.user;
   dispatch({ type: CREATE_USER, payload: user });
 
   history.push('/users/new/success');
@@ -44,8 +44,8 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
     throw new Error(response.data.errors);
   }
 
-  const { user = null } = response.data;
-  dispatch({ type: LOG_IN, payload: user });
+  const user: User = response.data.user;
+  dispatch({ type: LOG_IN, payload: { isLoggedIn: true, user } });
 
   history.push('/');
 }
@@ -60,7 +60,7 @@ export const logOut = () => async (dispatch: any) => {
     return;
   }
 
-  dispatch({ type: LOG_OUT })
+  dispatch({ type: LOG_OUT, payload: { isLoggedIn: false, user: null } });
 }
 
 export const fetchLoginStatus = () => async (dispatch: any) => {
@@ -68,8 +68,10 @@ export const fetchLoginStatus = () => async (dispatch: any) => {
   // TODO: Add catch()
   console.log('fetchLoginStatus response:', response);
 
-  const { logged_in, user = null } = response.data;
-  dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn: logged_in, user } });
+  const isLoggedIn: boolean = response.data.logged_in;
+  const user: User = response.data.user ?? null;
+
+  dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn, user } });
 }
 
 export const fetchCompanies = () => async (dispatch: any) => {

@@ -8,14 +8,15 @@ import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import RedirectPrompt from '../../components/RedirectPrompt';
 
 interface IProfilePageProps {
-  user: any;
-  match: any;
+  user: User;
+  match: Match;
 }
 
 class ProfilePage extends React.Component<IProfilePageProps, {}> {
   public render(): React.ReactElement<IProfilePageProps> {
     const { user } = this.props;
     const parentPath = this.props.match.path;
+    console.log(this.props.match)
     return (
       <div>
         <h1>ProfilePage</h1>

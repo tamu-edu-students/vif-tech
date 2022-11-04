@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 interface IHomePageProps {
-  user: any;
+  user: User;
 }
 
 class HomePage extends React.Component<IHomePageProps, {}> {
