@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "/users/find", to: "users#find"
   resources :users, only: [:create, :show, :index, :new]
 
-  resources :faq, only: [:create, :show, :index, :update, :destroy] 
+  resources :faq, only: [:create, :show, :index, :update, :destroy]
 
   # English: For each user, make a route to get user/:id/confirm_email
   resources :users do
@@ -16,13 +16,14 @@ Rails.application.routes.draw do
   end
 
   # Allowlist routes
-  resources :allowlist_domains, only: [:create, :show, :index, :destroy] 
-  resources :allowlist_emails, only: [:create, :show, :index, :destroy] 
-
+  resources :allowlist_domains, only: [:create, :show, :index, :destroy]
+  resources :allowlist_emails, only: [:create, :show, :index, :destroy]
 
   get "/users/:id/meetings", to: "users#get_meetings"
-  get "/users/:id/meetings/attending", to: "users#get_attending_meetings"
+  get "/users/:id/meetings/accepted", to: "users#get_accepted_meetings"
   get "/users/:id/meetings/pending", to: "users#get_pending_meetings"
+  get "/users/:id/meetings/rejected", to: "users#get_rejected_meetings"
+  get "/users/:id/meetings/cancelled", to: "users#get_cancelled_meetings"
   get "/users/:id/meetings/owned", to: "users#get_owned_meetings"
   get "/users/:id/meetings/:meeting_id", to: "users#invited_to_meeting?"
   post "/users/:id/meetings/:meeting_id", to: "users#add_to_meeting"

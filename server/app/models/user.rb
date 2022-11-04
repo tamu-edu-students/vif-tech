@@ -10,8 +10,8 @@ class User < ApplicationRecord
   validates :lastname, presence: true
   validates :lastname, length: { minimum: 1 }
   validates :usertype,
-            :inclusion  => { :in => [ 'company representative', 'student', 'faculty', 'admin', 'volunteer'],
-                             :message    => "%{value} is not a valid usertype" }
+            :inclusion => { :in => ["company representative", "student", "faculty", "admin", "volunteer"],
+                            :message => "%{value} is not a valid usertype" }
 
   has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting", dependent: :destroy
   has_many :user_meetings, dependent: :destroy
@@ -28,10 +28,10 @@ class User < ApplicationRecord
     save!
   end
 
-  def attending_meetings
+  def accepted_meetings
     ret = []
     for user_meeting in user_meetings
-      if user_meeting.accepted
+      if user_meeting.status == "accepted"
         ret.push(user_meeting.meeting)
       end
     end
@@ -41,7 +41,27 @@ class User < ApplicationRecord
   def pending_meetings
     ret = []
     for user_meeting in user_meetings
-      if !user_meeting.accepted
+      if user_meeting.status == "pending"
+        ret.push(user_meeting.meeting)
+      end
+    end
+    return ret
+  end
+
+  def cancelled_meetings
+    ret = []
+    for user_meeting in user_meetings
+      if user_meeting.status == "cancelled"
+        ret.push(user_meeting.meeting)
+      end
+    end
+    return ret
+  end
+
+  def rejected_meetings
+    ret = []
+    for user_meeting in user_meetings
+      if user_meeting.status == "rejected"
         ret.push(user_meeting.meeting)
       end
     end
