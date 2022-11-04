@@ -90,25 +90,25 @@ Then('I should get a {int} code from the domain database') do |int|
 end
 
 Given('I transfer my primary contact role to user with id {int}') do |int|
-    ret = page.driver.post('/allowlist_emails/transferPrimaryContact', {"to":int})
+    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(200)
 end
 
 Given('I transfer primary contact role to user with id {int} from user with id {int}') do |int1, int2|
-    ret = page.driver.post('/allowlist_emails/transferPrimaryContact', {"to":int1, "from":int2})
+    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1, "from":int2})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(200)
 end
 
 Given('I fail to transfer my primary contact role to user with id {int}') do |int|
-    ret = page.driver.post('/allowlist_emails/transferPrimaryContact', {"to":int})
+    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(403)
 end
 
 Given('I fail to transfer primary contact role to user with id {int} from user with id {int}') do |int1, int2|
-    ret = page.driver.post('/allowlist_emails/transferPrimaryContact', {"to":int1, "from":int2})
+    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1, "from":int2})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(403)
 end
