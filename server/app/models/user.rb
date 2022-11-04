@@ -58,10 +58,10 @@ class User < ApplicationRecord
     return ret
   end
 
-  def rejected_meetings
+  def declined_meetings
     ret = []
     for user_meeting in user_meetings
-      if user_meeting.status == "rejected"
+      if user_meeting.status == "declined"
         ret.push(user_meeting.meeting)
       end
     end

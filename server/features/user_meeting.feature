@@ -75,13 +75,13 @@ Feature: User-meeting interaction
         And that I assign user 2 to meeting 5 with status "pending"
         And that user 2 sets status as "accepted" to meeting 1 invite
         And that user 2 sets status as "accepted" to meeting 2 invite
-        And that user 2 sets status as "rejected" to meeting 3 invite
+        And that user 2 sets status as "declined" to meeting 3 invite
         And that user 2 sets status as "pending" to meeting 4 invite
         And that user 2 sets status as "cancelled" to meeting 5 invite
         Then I should be able to fetch 1 "pending" meetings for user 2
         Then I should be able to fetch 1 "cancelled" meetings for user 2
         And I should be able to fetch 2 "accepted" meetings for user 2
-        And I should be able to fetch 1 "rejected" meetings for user 2
+        And I should be able to fetch 1 "declined" meetings for user 2
         And I should be able to fetch 5 invited meetings for user 2
         And I should be able to fetch 0 owned meetings for user 2
         And user 2 should be invited to meeting 1
@@ -91,14 +91,14 @@ Feature: User-meeting interaction
         And user 2 should be invited to meeting 5
         And user 2 should have "accepted" invite to meeting 1
         And user 2 should have "accepted" invite to meeting 2
-        And user 2 should have "rejected" invite to meeting 3
+        And user 2 should have "declined" invite to meeting 3
         And user 2 should have "pending" invite to meeting 4
         And user 2 should have "cancelled" invite to meeting 5
         Given that user 2 deletes meeting 1 invite
         And that user 2 deletes meeting 5 invite
         Then I should be able to fetch 1 "pending" meetings for user 2
         And I should be able to fetch 1 "accepted" meetings for user 2
-        And I should be able to fetch 1 "rejected" meetings for user 2
+        And I should be able to fetch 1 "declined" meetings for user 2
         And I should be able to fetch 0 "cancelled" meetings for user 2
         And I should be able to fetch 3 invited meetings for user 2
         And I should be able to fetch 0 owned meetings for user 2

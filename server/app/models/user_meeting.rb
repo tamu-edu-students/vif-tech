@@ -4,7 +4,7 @@ class UserMeeting < ApplicationRecord
   before_create :owner_not_invitee
   before_create :duplicate_invitee
   validates :status,
-            :inclusion => { :in => ["pending", "accepted", "cancelled", "rejected"],
+            :inclusion => { :in => ["pending", "accepted", "cancelled", "declined"],
                             :message => "%{value} is not a valid status" }
 
   def owner_not_invitee

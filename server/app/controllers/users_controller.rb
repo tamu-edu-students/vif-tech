@@ -159,9 +159,9 @@ class UsersController < ApplicationController
     }, status: :ok
   end
 
-  # GET /users/1/meetings/rejected
-  def get_rejected_meetings
-    meetings = User.find_by_id(params[:id]).rejected_meetings
+  # GET /users/1/meetings/declined
+  def get_declined_meetings
+    meetings = User.find_by_id(params[:id]).declined_meetings
     render json: {
       meetings: meetings,
     }, status: :ok

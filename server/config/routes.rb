@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get "/users/:id/meetings", to: "users#get_meetings"
   get "/users/:id/meetings/accepted", to: "users#get_accepted_meetings"
   get "/users/:id/meetings/pending", to: "users#get_pending_meetings"
-  get "/users/:id/meetings/rejected", to: "users#get_rejected_meetings"
+  get "/users/:id/meetings/declined", to: "users#get_declined_meetings"
   get "/users/:id/meetings/cancelled", to: "users#get_cancelled_meetings"
   get "/users/:id/meetings/owned", to: "users#get_owned_meetings"
   get "/users/:id/meetings/:meeting_id", to: "users#invited_to_meeting?"
