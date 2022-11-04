@@ -9,15 +9,23 @@ class AllowlistEmailsController < ApplicationController
             @emails = @emails.filter {|e| e.company == current_user.company}
         end
 
-           if @emails
-              render json: {
-              emails: @emails
-           }, status: :ok
-          else
-              render json: {
-              errors: ['no emails found']
-          }, status: :internal_server_error
-         end
+        if params[:usertype] != nil
+            @emails = @emails.where(usertype: params[:usertype])
+        end
+
+        if params[:company_id] != nil
+            @emails = @emails.where(company_id: params[:company_id])
+        end
+
+        if @emails
+            render json: {
+            emails: @emails
+        }, status: :ok
+        else
+            render json: {
+            errors: ['no emails found']
+        }, status: :internal_server_error
+        end
     end
     
     def show

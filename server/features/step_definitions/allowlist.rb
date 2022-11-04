@@ -35,6 +35,18 @@ Then('I should see {int} domain in the database') do |int|
   expect(ret_body['domains'].size).to eq(int)
 end
 
+Then("I should see {int} domain with usertype: student in the database") do |int|
+    ret = page.driver.get("/allowlist_domains/?usertype=student")
+    ret_body = JSON.parse ret.body
+    expect(ret_body['domains'].size).to eq(int)
+end
+
+Then("I should see {int} domain with company_id: 1 in the database") do |int|
+    ret = page.driver.get("/allowlist_domains/?company_id=1")
+    ret_body = JSON.parse ret.body
+    expect(ret_body['domains'].size).to eq(int)
+end
+
 Then('I should see a domain with index {int} in the database') do |int|
     ret = page.driver.get('/allowlist_domains/' + int.to_s)
     ret_body = JSON.parse ret.body
@@ -69,6 +81,18 @@ Then('I should see {int} new email in the database') do |int|
 ret = page.driver.get('/allowlist_emails')
 ret_body = JSON.parse ret.body
 expect(ret_body['emails'].size).to eq(int)
+end
+
+Then('I should see {int} email with usertype: student in the database') do |int|
+    ret = page.driver.get('/allowlist_emails/?usertype=student')
+    ret_body = JSON.parse ret.body
+    expect(ret_body['emails'].size).to eq(int)
+end
+
+Then('I should see {int} email with company_id: 1 in the database') do |int|
+    ret = page.driver.get('/allowlist_emails/?company_id=1')
+    ret_body = JSON.parse ret.body
+    expect(ret_body['emails'].size).to eq(int)
 end
 
 Then('I should see an email with index {int} in the database') do |int|
@@ -111,4 +135,24 @@ Given('I fail to transfer primary contact role to user with id {int} from user w
     ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1, "from":int2})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(403)
+end
+
+Then("I should see allowlist emails and domains in company 1 when indexing") do
+    ret = page.driver.get("/companies")
+    ret_body = JSON.parse ret.body
+    ae = ret_body["companies"][0]["allowlist_emails"]
+    ad = ret_body["companies"][0]["allowlist_domains"]
+    p ret_body
+    expect(ae.size > 0).to eq(true)
+    expect(ad.size > 0).to eq(true)
+end
+
+Then("I should not see allowlist emails and domains in company 1 when indexing") do
+    ret = page.driver.get("/companies")
+    ret_body = JSON.parse ret.body
+    ae = ret_body["companies"][0]["allowlist_emails"]
+    ad = ret_body["companies"][0]["allowlist_domains"]
+    p ret_body
+    expect(ae).to eq(nil)
+    expect(ad).to eq(nil)
 end
