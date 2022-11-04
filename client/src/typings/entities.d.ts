@@ -1,8 +1,8 @@
 enum Usertype {
-  Student = "student",
-  Admin = "admin",
-  Representative = "representative",
-  Volunteer = "volunteer",
+  STUDENT = "student",
+  ADMIN = "admin",
+  REPRESENTATIVE = "company representative",
+  VOLUNTEER = "volunteer",
 }
 
 interface User {
