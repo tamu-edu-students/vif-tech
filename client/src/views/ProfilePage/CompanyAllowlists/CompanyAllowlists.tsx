@@ -36,6 +36,8 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
       <React.Fragment key={company_id}>
         <Allowlist
           title={name}
+          usertype={Usertype.REPRESENTATIVE}
+          company_id={company_id}
           showsPrimaryContact
           showsEmails
           showsDomains

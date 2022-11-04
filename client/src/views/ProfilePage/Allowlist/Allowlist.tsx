@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 interface IAllowlistProps {
-  title: string
+  title: string;
+  usertype: Usertype;
+  company_id?: number;
   showsPrimaryContact?: boolean;
   showsEmails?: boolean;
   showsDomains?: boolean;
