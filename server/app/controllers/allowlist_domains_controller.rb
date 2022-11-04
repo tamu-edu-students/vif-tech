@@ -9,15 +9,23 @@ class AllowlistDomainsController < ApplicationController
             @domains = @domains.filter {|e| e.company == current_user.company}
         end
 
-           if @domains
-              render json: {
-              domains: @domains
-           }, status: :ok
-          else
-              render json: {
-              errors: ['no domains found']
-          }, status: :internal_server_error
-         end
+        if params[:usertype] != nil
+            @domains = @domains.where(usertype: params[:usertype])
+        end
+
+        if params[:company_id] != nil
+            @domains = @domains.where(company_id: params[:company_id])
+        end
+
+        if @domains
+            render json: {
+            domains: @domains
+        }, status: :ok
+        else
+            render json: {
+            errors: ['no domains found']
+        }, status: :internal_server_error
+        end
     end
     
     def show
@@ -25,16 +33,16 @@ class AllowlistDomainsController < ApplicationController
         if current_user.usertype == "company representative" and @domain.company_id != current_user.company_id
             @domain=nil
         end
-           if @domain
-              render json: {
-              domain: @domain
-           }, status: :ok
-           else
-              render json: {
-              errors: ['domain not found']
-            }, status: :not_found
-           end
-      end
+        if @domain
+            render json: {
+            domain: @domain
+        }, status: :ok
+        else
+            render json: {
+            errors: ['domain not found']
+        }, status: :not_found
+        end
+    end
       
       def create
 
