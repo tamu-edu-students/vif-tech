@@ -516,3 +516,49 @@ Feature: Allowlist Management
         Given that I log in as admin
         And I delete the allowed domain with index 4
         Then the user with firstname james and lastname bond should be found in the user DB
+
+    Scenario: Filter domain allowlist
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype admin
+        And I allow a new domain test2.com for usertype admin
+        And there is a company with id 1
+        And I allow a new company domain test3.com for usertype company representative for company id 1
+        Then I should see 6 domain in the database
+        And I should see 3 domain with usertype: student in the database
+        And I should see 1 domain with company_id: 1 in the database
+
+    Scenario: Filter email allowlist
+        Given that I log in as admin
+        And I allow a new email 1@test.com for usertype admin
+        And I allow a new email 1@test2.com for usertype admin
+        And there is a company with id 1
+        And I allow a new company email test@test3.com for usertype company representative for company id 1
+        Then I should see 3 new email in the database
+        And I should see 0 email with usertype: student in the database
+        And I should see 1 email with company_id: 1 in the database
+
+    Scenario: Companies is joined on allowlist for an admin        
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new company email test@test1.com for usertype company representative for company id 1
+        And I allow a new company email test@test2.com for usertype company representative for company id 1
+        And I allow a new company domain test3.com for usertype company representative for company id 1
+        Then I should see allowlist emails and domains in company 1 when indexing
+
+    Scenario: Companies is not joined on allowlist for an admin        
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new company email test@test1.com for usertype company representative for company id 1
+        And I allow a new company email test@test2.com for usertype company representative for company id 1
+        And I allow a new company domain test3.com for usertype company representative for company id 1
+        And I allow a new domain test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        And that I log in with email test@test.com and password password1!
+        Then I should not see allowlist emails and domains in company 1 when indexing
+        And that I log out
