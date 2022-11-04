@@ -7,7 +7,7 @@ class Meeting < ApplicationRecord
   def attendees
     ret = []
     for user_meeting in user_meetings
-      if user_meeting.accepted
+      if user_meeting.status == "accepted"
         ret.push(user_meeting.user)
       end
     end
@@ -17,7 +17,7 @@ class Meeting < ApplicationRecord
   def pending_invitees
     ret = []
     for user_meeting in user_meetings
-      if !user_meeting.accepted
+      if user_meeting.status != "accepted"
         ret.push(user_meeting.user)
       end
     end

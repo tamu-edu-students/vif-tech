@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :confirm_user_logged_in, except: [:new, :create, :confirm_email]
-  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_attending_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting, :delete]
+  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting, :delete]
   before_action :confirm_meeting_exists, only: [:assigned_to_meeting?, :add_to_meeting, :update_meeting, :delete_from_meeting]
 
   def confirm_user_logged_in
@@ -112,6 +112,12 @@ class UsersController < ApplicationController
       if params["user"]["usertype"] == "representative"
         company.users << @user
       end
+      if exact_match != nil and company == exact_match.company
+        exact_match.users << @user
+      end
+      if domain_match != nil and company == domain_match.company
+        domain_match.users << @user
+      end
       logger.debug { resp }
       render json: {
                user: @user,
@@ -143,9 +149,9 @@ class UsersController < ApplicationController
     }, status: :ok
   end
 
-  # GET /users/1/meetings/attending
-  def get_attending_meetings
-    meetings = User.find_by_id(params[:id]).attending_meetings
+  # GET /users/1/meetings/accepted
+  def get_accepted_meetings
+    meetings = User.find_by_id(params[:id]).accepted_meetings
     render json: {
       meetings: meetings,
     }, status: :ok
@@ -154,6 +160,22 @@ class UsersController < ApplicationController
   # GET /users/1/meetings/pending
   def get_pending_meetings
     meetings = User.find_by_id(params[:id]).pending_meetings
+    render json: {
+      meetings: meetings,
+    }, status: :ok
+  end
+
+  # GET /users/1/meetings/declined
+  def get_declined_meetings
+    meetings = User.find_by_id(params[:id]).declined_meetings
+    render json: {
+      meetings: meetings,
+    }, status: :ok
+  end
+
+  # GET /users/1/meetings/cancelled
+  def get_cancelled_meetings
+    meetings = User.find_by_id(params[:id]).cancelled_meetings
     render json: {
       meetings: meetings,
     }, status: :ok
@@ -236,6 +258,6 @@ class UsersController < ApplicationController
   end
 
   def user_meeting_params
-    params.require(:user_meeting).permit(:accepted)
+    params.require(:user_meeting).permit(:status)
   end
 end
