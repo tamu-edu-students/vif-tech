@@ -51,6 +51,7 @@ class App extends React.Component<IAppProps, {}> {
                   <>
                     <li>firstname: {this.props.user.firstname}</li>
                     <li>lastname: {this.props.user.lastname}</li>
+                    <li><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
                     <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
                   </>
                 )
