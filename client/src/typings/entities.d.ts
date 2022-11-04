@@ -1,16 +1,9 @@
-enum Usertype {
-  STUDENT = "student",
-  ADMIN = "admin",
-  REPRESENTATIVE = "company representative",
-  VOLUNTEER = "volunteer",
-}
-
 interface User {
   id: number;
   email: string;
   firstname: string;
   lastname: string;
-  usertype: Usertype;
+  usertype: string;
   company_id?: number;
   interests?: string[];
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Usertype } from '../../../shared/enums';
 
 interface IAllowlistProps {
   title: string;

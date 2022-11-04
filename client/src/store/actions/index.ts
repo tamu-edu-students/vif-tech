@@ -10,6 +10,7 @@ import {
 } from "./types";
 import history from "../../history";
 import vifTech from "../../apis/vifTech";
+import { Usertype } from "../../shared/enums";
 
 export const fetchUsers = () => async (dispatch: any) => {
   const response: any = await vifTech.get("/users");
