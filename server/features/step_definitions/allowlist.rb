@@ -136,3 +136,23 @@ Given('I fail to transfer primary contact role to user with id {int} from user w
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(403)
 end
+
+Then("I should see allowlist emails and domains in company 1 when indexing") do
+    ret = page.driver.get("/companies")
+    ret_body = JSON.parse ret.body
+    ae = ret_body["companies"][0]["allowlist_emails"]
+    ad = ret_body["companies"][0]["allowlist_domains"]
+    p ret_body
+    expect(ae.size > 0).to eq(true)
+    expect(ad.size > 0).to eq(true)
+end
+
+Then("I should not see allowlist emails and domains in company 1 when indexing") do
+    ret = page.driver.get("/companies")
+    ret_body = JSON.parse ret.body
+    ae = ret_body["companies"][0]["allowlist_emails"]
+    ad = ret_body["companies"][0]["allowlist_domains"]
+    p ret_body
+    expect(ae).to eq(nil)
+    expect(ad).to eq(nil)
+end
