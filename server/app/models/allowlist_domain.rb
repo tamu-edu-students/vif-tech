@@ -7,5 +7,5 @@ class AllowlistDomain < ApplicationRecord
                      :message    => "%{value} is not a valid usertype" }
     belongs_to :company, optional: true
 
-    has_many :users, dependent: :destroy
+    has_many :users#, dependent: :destroy_if_not_allowed
 end

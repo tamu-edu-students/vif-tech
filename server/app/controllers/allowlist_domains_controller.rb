@@ -55,6 +55,15 @@ class AllowlistDomainsController < ApplicationController
             if company != nil
                 company.allowlist_domains << @domain
             end
+
+            us = User.where(usertype: @domain.usertype)
+            filter = Regexp.new("@"+@domain.email_domain)
+            for u in us
+                if u != nil && @domain.usertype == u.usertype && u.company == @domain.company && (u.email =~ filter) != nil
+                    @domain.users << u
+                end
+            end
+
             render json: {
             status: 201,
             domain: @domain
@@ -74,7 +83,11 @@ class AllowlistDomainsController < ApplicationController
             @domain=nil
         end
         if @domain 
+
+            @domain.users.where(allowlist_email_id: nil).destroy_all
+            @domain.users.update_all(allowlist_domain_id: nil)
             @domain.destroy
+
            render json: {
             status: 200,
             errors: ['domain deleted']

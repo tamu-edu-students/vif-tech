@@ -447,3 +447,72 @@ Feature: Allowlist Management
         And I should get a 400 code from the email database
         And that I log in as admin
         And I fail to transfer primary contact role to user with id 3 from user with id 2
+
+    Scenario: A student signs up to a newly allowed email and email, which is then deleted, but he remains
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Given that I log in as admin
+        And I allow a new email test@test.com for usertype student
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Given that I log in as admin
+        And I delete the allowed email with index 1
+        Then the user with firstname james and lastname bond should be found in the user DB
+
+    Scenario: A student signs up to a newly allowed email and email, which is then deleted, but he remains
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Given that I log in as admin
+        And I allow a new email test@test.com for usertype student
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Given that I log in as admin
+        And I delete the allowed domain with index 4
+        Then the user with firstname james and lastname bond should be found in the user DB
+
+        
+    Scenario: A student signs up to a newly allowed email and email, which is then deleted, but he remains
+        Given that I log in as admin
+        And I allow a new email test@test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype student
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Given that I log in as admin
+        And I delete the allowed email with index 1
+        Then the user with firstname james and lastname bond should be found in the user DB
+
+    Scenario: A student signs up to a newly allowed email and email, which is then deleted, but he remains
+        Given that I log in as admin
+        And I allow a new email test@test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype student
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Given that I log in as admin
+        And I delete the allowed domain with index 4
+        Then the user with firstname james and lastname bond should be found in the user DB

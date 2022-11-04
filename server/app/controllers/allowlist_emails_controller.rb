@@ -56,6 +56,13 @@ class AllowlistEmailsController < ApplicationController
             if company != nil
                 company.allowlist_emails << @email
             end
+
+            u = User.find_by(email: @email.email)
+            if u != nil && @email.usertype == u.usertype && u.company == @email.company
+                @email.users << u
+            end
+            
+
             render json: {
             status: 201,
             email: @email
@@ -76,7 +83,11 @@ class AllowlistEmailsController < ApplicationController
             @email=nil
         end
         if @email 
+            
+           @email.users.where(allowlist_domain_id: nil).destroy_all
+           @email.users.update_all(allowlist_email_id: nil)
            @email.destroy
+
            render json: {
             status: 200,
             errors: ['email deleted']

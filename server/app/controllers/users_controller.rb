@@ -114,7 +114,8 @@ class UsersController < ApplicationController
       end
       if exact_match != nil
         exact_match.users << @user
-      else
+      end
+      if domain_match != nil
         domain_match.users << @user
       end
       logger.debug { resp }
