@@ -127,9 +127,9 @@ And(`I should no longer be on the login page`, () => {
 And(`I should see my first name and last name in the nav bar`, (table) => {
   const { firstname, lastname } = table.hashes()[0];
   cy.findByRole('navigation')
-    .findByText(firstname).should('be.visible');
+    .should('contain', firstname);
   cy.findByRole('navigation')
-    .findByText(lastname).should('be.visible');
+    .should('contain', lastname);
 });
 
 And(`I should remain on the login page`, () => {
