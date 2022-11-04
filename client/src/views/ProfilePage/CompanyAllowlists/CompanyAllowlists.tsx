@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import { Usertype } from '../../../shared/enums';
 

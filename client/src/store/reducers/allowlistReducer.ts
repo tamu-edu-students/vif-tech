@@ -1,6 +1,7 @@
 import {
   CREATE_ALLOWLIST_EMAIL,
   CREATE_ALLOWLIST_DOMAIN,
+  DELETE_ALLOWLIST_EMAIL,
   DELETE_ALLOWLIST_DOMAIN,
  } from "../actions/types";
 
@@ -16,7 +17,7 @@ const INITIAL_STATE = {
 
 const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any) => {
   switch(action.type) {
-    case DELETE_ALLOWLIST_DOMAIN:
+    case DELETE_ALLOWLIST_EMAIL:
     case CREATE_ALLOWLIST_EMAIL:
       return {
         ...state,
