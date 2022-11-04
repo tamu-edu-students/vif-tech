@@ -29,43 +29,19 @@ class User < ApplicationRecord
   end
 
   def accepted_meetings
-    ret = []
-    for user_meeting in user_meetings
-      if user_meeting.status == "accepted"
-        ret.push(user_meeting.meeting)
-      end
-    end
-    return ret
+    return UserMeeting.where(status: :accepted, user: self).map { |um| um.meeting }
   end
 
   def pending_meetings
-    ret = []
-    for user_meeting in user_meetings
-      if user_meeting.status == "pending"
-        ret.push(user_meeting.meeting)
-      end
-    end
-    return ret
+    return UserMeeting.where(status: :pending, user: self).map { |um| um.meeting }
   end
 
   def cancelled_meetings
-    ret = []
-    for user_meeting in user_meetings
-      if user_meeting.status == "cancelled"
-        ret.push(user_meeting.meeting)
-      end
-    end
-    return ret
+    return UserMeeting.where(status: :cancelled, user: self).map { |um| um.meeting }
   end
 
   def declined_meetings
-    ret = []
-    for user_meeting in user_meetings
-      if user_meeting.status == "declined"
-        ret.push(user_meeting.meeting)
-      end
-    end
-    return ret
+    return UserMeeting.where(status: :declined, user: self).map { |um| um.meeting }
   end
 
   private
