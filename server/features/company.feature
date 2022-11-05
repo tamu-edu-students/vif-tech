@@ -1,4 +1,7 @@
-Feature: CRUD a company object/account
+Feature: admin can CRUD a company object/account
+    In order to manage who can make an account
+    As an admin
+    I want to controll access with an allowlist
 
 Background: 
       Given that I log in as admin

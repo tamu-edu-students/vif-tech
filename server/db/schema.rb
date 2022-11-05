@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_04_022906) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "email_domain"
     t.string "usertype"
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "company_id"
+    t.boolean "isPrimaryContact", default: false
     t.index ["company_id"], name: "index_allowlist_emails_on_company_id"
     t.index ["email", "usertype"], name: "index_allowlist_emails_on_email_and_usertype", unique: true
   end
@@ -58,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "accepted", default: false
+    t.string "status", default: "pending"
     t.index ["meeting_id"], name: "index_user_meetings_on_meeting_id"
     t.index ["user_id"], name: "index_user_meetings_on_user_id"
   end
@@ -74,6 +75,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
     t.string "firstname"
     t.string "lastname"
     t.integer "company_id"
+    t.integer "allowlist_email_id"
+    t.integer "allowlist_domain_id"
+    t.index ["allowlist_domain_id"], name: "index_users_on_allowlist_domain_id"
+    t.index ["allowlist_email_id"], name: "index_users_on_allowlist_email_id"
     t.index ["company_id"], name: "index_users_on_company_id"
   end
 
@@ -82,5 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_071837) do
   add_foreign_key "meetings", "users", column: "owner_id"
   add_foreign_key "user_meetings", "meetings"
   add_foreign_key "user_meetings", "users"
+  add_foreign_key "users", "allowlist_domains"
+  add_foreign_key "users", "allowlist_emails"
   add_foreign_key "users", "companies"
 end

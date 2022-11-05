@@ -2,9 +2,21 @@ class CompaniesController < ApplicationController
   def index
     # Displays all companies
     @companies = Company.all
-    render json: {
-             companies: @companies,
-           }, status: :ok
+
+    include_ = []
+    p "LOGGED IN?"
+    p logged_in?
+    p current_user
+    if logged_in? && current_user && current_user.usertype == "admin"
+      p "LOGGED IN!"
+      include_ = ["allowlist_domains", "allowlist_emails"]
+    end
+    p "HERE"
+
+    # render json: {
+    #          companies: @companies, include: include_,
+    #        }, status: :ok
+    render :json=> {companies: @companies}.to_json(include: include_), status: :ok
   end
 
   def new
