@@ -40,38 +40,38 @@ RSpec.describe Meeting, type: :model do
     expect(Meeting.find(1)).to be_valid
     expect(Meeting.find(2)).to be_valid
 
-    UserMeeting.create(meeting_id: 1, user_id: 2, accepted: true)
-    UserMeeting.create(meeting_id: 1, user_id: 3, accepted: true)
-    UserMeeting.create(meeting_id: 1, user_id: 5, accepted: true)
-    UserMeeting.create(meeting_id: 1, user_id: 4, accepted: false)
-    UserMeeting.create(meeting_id: 1, user_id: 6, accepted: false)
+    UserMeeting.create(meeting_id: 1, user_id: 2, status: :accepted)
+    UserMeeting.create(meeting_id: 1, user_id: 3, status: :accepted)
+    UserMeeting.create(meeting_id: 1, user_id: 5, status: :accepted)
+    UserMeeting.create(meeting_id: 1, user_id: 4, status: :pending)
+    UserMeeting.create(meeting_id: 1, user_id: 6, status: :pending)
 
-    UserMeeting.create(meeting_id: 2, user_id: 1, accepted: true)
-    UserMeeting.create(meeting_id: 2, user_id: 5, accepted: true)
-    UserMeeting.create(meeting_id: 2, user_id: 6, accepted: true)
-    UserMeeting.create(meeting_id: 2, user_id: 3, accepted: false)
-    UserMeeting.create(meeting_id: 2, user_id: 4, accepted: false)
+    UserMeeting.create(meeting_id: 2, user_id: 1, status: :accepted)
+    UserMeeting.create(meeting_id: 2, user_id: 5, status: :accepted)
+    UserMeeting.create(meeting_id: 2, user_id: 6, status: :accepted)
+    UserMeeting.create(meeting_id: 2, user_id: 3, status: :pending)
+    UserMeeting.create(meeting_id: 2, user_id: 4, status: :pending)
 
     expect(User.find(1).owned_meetings).to match_array([Meeting.find(1)])
-    expect(User.find(1).attending_meetings).to match_array([Meeting.find(2)])
+    expect(User.find(1).accepted_meetings).to match_array([Meeting.find(2)])
     expect(User.find(1).pending_meetings).to match_array([])
     expect(User.find(1).invited_meetings).to match_array([Meeting.find(2)])
 
     expect(User.find(2).owned_meetings).to match_array([Meeting.find(2)])
-    expect(User.find(2).attending_meetings).to match_array([Meeting.find(1)])
+    expect(User.find(2).accepted_meetings).to match_array([Meeting.find(1)])
     expect(User.find(2).pending_meetings).to match_array([])
     expect(User.find(2).invited_meetings).to match_array([Meeting.find(1)])
 
     expect(User.find(3).owned_meetings).to match_array([])
-    expect(User.find(3).attending_meetings).to match_array([Meeting.find(1)])
+    expect(User.find(3).accepted_meetings).to match_array([Meeting.find(1)])
     expect(User.find(3).pending_meetings).to match_array([Meeting.find(2)])
 
     expect(User.find(4).owned_meetings).to match_array([])
-    expect(User.find(4).attending_meetings).to match_array([])
+    expect(User.find(4).accepted_meetings).to match_array([])
     expect(User.find(4).pending_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
 
     expect(User.find(5).owned_meetings).to match_array([])
-    expect(User.find(5).attending_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
+    expect(User.find(5).accepted_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
     expect(User.find(5).pending_meetings).to match_array([])
 
     for user in [User.find(3), User.find(4), User.find(5), User.find(6)]
@@ -101,17 +101,17 @@ RSpec.describe Meeting, type: :model do
     expect(Meeting.find(1)).to be_valid
     expect(Meeting.find(2)).to be_valid
 
-    UserMeeting.create(meeting_id: 1, user_id: 2, accepted: true)
-    UserMeeting.create(meeting_id: 1, user_id: 3, accepted: true)
-    UserMeeting.create(meeting_id: 1, user_id: 4, accepted: false)
-    UserMeeting.create(meeting_id: 1, user_id: 5, accepted: true)
-    UserMeeting.create(meeting_id: 1, user_id: 6, accepted: false)
+    UserMeeting.create(meeting_id: 1, user_id: 2, status: :accepted)
+    UserMeeting.create(meeting_id: 1, user_id: 3, status: :accepted)
+    UserMeeting.create(meeting_id: 1, user_id: 4, status: :pending)
+    UserMeeting.create(meeting_id: 1, user_id: 5, status: :accepted)
+    UserMeeting.create(meeting_id: 1, user_id: 6, status: :pending)
 
-    UserMeeting.create(meeting_id: 2, user_id: 1, accepted: true)
-    UserMeeting.create(meeting_id: 2, user_id: 5, accepted: true)
-    UserMeeting.create(meeting_id: 2, user_id: 6, accepted: true)
-    UserMeeting.create(meeting_id: 2, user_id: 3, accepted: false)
-    UserMeeting.create(meeting_id: 2, user_id: 4, accepted: false)
+    UserMeeting.create(meeting_id: 2, user_id: 1, status: :accepted)
+    UserMeeting.create(meeting_id: 2, user_id: 5, status: :accepted)
+    UserMeeting.create(meeting_id: 2, user_id: 6, status: :accepted)
+    UserMeeting.create(meeting_id: 2, user_id: 3, status: :pending)
+    UserMeeting.create(meeting_id: 2, user_id: 4, status: :pending)
 
     expect(Meeting.find(1).invitees).to match_array([User.find(2), User.find(3), User.find(4), User.find(5), User.find(6)])
     expect(Meeting.find(2).invitees).to match_array([User.find(1), User.find(3), User.find(4), User.find(5), User.find(6)])
