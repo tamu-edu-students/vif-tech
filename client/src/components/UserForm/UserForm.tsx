@@ -70,7 +70,7 @@ class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & 
         <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
         <fieldset>
           <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value={Usertype.STUDENT} />
-          <Field name="usertype" id="usertype--faculty" type="radio" component={this._renderInput} label="Faculty" value="faculty" />
+          <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderInput} label="Volunteer" value="volunteer" />
           <Field name="usertype" id="usertype--representative" type="radio" component={this._renderInput} label="Company Representative" value={Usertype.REPRESENTATIVE} />
         </fieldset>
         {
