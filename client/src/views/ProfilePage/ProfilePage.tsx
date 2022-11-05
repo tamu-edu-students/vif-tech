@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import MyProfile from './MyProfile/MyProfile';
-import Allowlist from './Allowlist/Allowlist';
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import RedirectPrompt from '../../components/RedirectPrompt';
 
