@@ -14,15 +14,21 @@ class CompaniesController < ApplicationController
 
   def create
     # Creates a new company
-    @company = Company.new(company_params)
-    if @company.save
-      render json: {
-               company: @company,
-             }, status: :created
+    if current_user.usertype = "admin"
+      @company = Company.new(company_params)
+      if @company.save
+        render json: {
+                company: @company,
+              }, status: :created
+      else
+        render json: {
+                errors: ["Something went wrong when saving this company"],
+              }, status: :internal_server_error
+      end
     else
       render json: {
-               errors: ["Something went wrong when saving this company"],
-             }, status: :internal_server_error
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
     end
   end
 

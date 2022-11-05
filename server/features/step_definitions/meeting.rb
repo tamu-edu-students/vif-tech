@@ -43,6 +43,7 @@ end
 Then("{int} meetings should be in meeting DB") do |int|
   ret = page.driver.get("/meetings")
   ret_body = JSON.parse ret.body
+  # expect(ret_body["meetings"]).to be_truthy
   expect(ret_body["meetings"].size).to eq(int)
 end
 

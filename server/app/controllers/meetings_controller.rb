@@ -30,9 +30,9 @@ class MeetingsController < ApplicationController
 
   def confirm_requester_is_admin
     if current_user.usertype != "admin"
-      render json: {
-               errors: ["User does not have previleges for requested action"],
-             }, status: :forbidden
+      # render json: {
+      #          errors: ["User does not have previleges for requested action"],
+      #        }, status: :forbidden
       return false
     end
     return true
@@ -41,6 +41,9 @@ class MeetingsController < ApplicationController
   # GET /meetings
   def index
     if !confirm_requester_is_admin
+      render json: {
+               meetings: [],
+             }, status: :forbidden
       return
     end
 

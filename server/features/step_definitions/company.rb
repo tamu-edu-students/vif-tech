@@ -7,7 +7,7 @@ Given("name as a string and description as a text") do
   ret = page.driver.post("/companies", { 'company': { 'name': name, 'description': description } })
 end
 
-Then("{int} company should be in company DB") do |int|
+Then("{int} companies should be in company DB") do |int|
   ret = page.driver.get("/companies")
   ret_body = JSON.parse ret.body
   expect(ret_body["companies"].size).to eq(int)
@@ -19,7 +19,7 @@ Given("name as a string") do
   ret = page.driver.post("/companies", { 'company': { 'name': name, 'description': description } })
 end
 
-Then("{int} new company with the specified name will be created in the database") do |int|
+Then("{int} new companies with the specified name will be created in the database") do |int|
   ret = page.driver.get("/companies")
   ret_body = JSON.parse ret.body
   expect(ret_body["companies"].size).to eq(int)
@@ -35,4 +35,18 @@ Then("an error page is shown") do
   ret_body = JSON.parse ret.body
   expect(ret.status).to eq(500)
   expect(ret_body["errors"]).to eq(["Something went wrong when saving this company"])
+end
+
+Given("a company with name {string} already exists in the database") do |company_name|
+  name = company_name
+  description = nil
+  page.driver.post("/companies", { 'company': { 'name': name, 'description': description } })
+end
+
+When('I try to create a company with name {string} and description {string}') do |name, description|
+  @ret = page.driver.post("/companies", { 'company': { 'name': name, 'description': description } })
+end
+
+Then('an error page of status of {int} is shown') do |code|
+  expect(@ret.status).to eq(code)
 end

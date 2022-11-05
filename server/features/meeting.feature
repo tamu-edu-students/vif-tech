@@ -133,4 +133,5 @@ Feature: Meeting
             | title | A meeting |
             | start_time | '2022-10-18 18:10:00' |
             | end_time | '2022-10-18 18:20:00' |
+        And that I log in as admin
         Then 1 meetings should be in meeting DB
