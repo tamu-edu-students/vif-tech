@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_03_043751) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_04_022906) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "email_domain"
     t.string "usertype"
@@ -19,8 +19,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_043751) do
     t.index ["email_domain", "usertype"], name: "index_allowlist_domains_on_email_domain_and_usertype", unique: true
   end
 
-# Could not dump table "allowlist_emails" because of following StandardError
-#   Unknown type 'bool' for column 'isPrimaryContact'
+  create_table "allowlist_emails", force: :cascade do |t|
+    t.string "email"
+    t.string "usertype"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "company_id"
+    t.boolean "isPrimaryContact", default: false
+    t.index ["company_id"], name: "index_allowlist_emails_on_company_id"
+    t.index ["email", "usertype"], name: "index_allowlist_emails_on_email_and_usertype", unique: true
+  end
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
@@ -30,8 +38,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_043751) do
   end
 
   create_table "faqs", force: :cascade do |t|
-    t.string "question"
-    t.text "answer"
+    t.string "question", null: false
+    t.text "answer", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

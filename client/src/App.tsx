@@ -12,11 +12,12 @@ import Users from './components/Users';
 import UserCreate from './components/UserCreate';
 
 import { fetchLoginStatus, logOut } from './store/actions'
+import ProfilePage from './views/ProfilePage/ProfilePage';
 
 interface IAppProps {
   fetchLoginStatus?: any;
   logOut?: any;
-  user: any;
+  user: User;
   isLoggedIn: boolean;
 }
 
@@ -48,8 +49,9 @@ class App extends React.Component<IAppProps, {}> {
                 this.props.user
                 ? (
                   <>
-                    <li>{this.props.user.firstname}</li>
-                    <li>{this.props.user.lastname}</li>
+                    <li>firstname: {this.props.user.firstname}</li>
+                    <li>lastname: {this.props.user.lastname}</li>
+                    <li><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
                     <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
                   </>
                 )
@@ -106,6 +108,17 @@ class App extends React.Component<IAppProps, {}> {
                 : <LoginPage />
               }
             </Route>
+
+            <Route
+              path={"/profile"}
+              render={ (routeProps: any) => {
+                return (
+                  this.props.user
+                  ? <ProfilePage {...routeProps} />
+                  : <Redirect to={'/login'} />
+                )
+              } }
+            />
             
             <Route path="*" status={404}>
               <section className="section section--redirector">
