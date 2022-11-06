@@ -1,33 +1,16 @@
 /// <reference types="cypress" />
 
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
+import { setSession, fetchLoginStatus } from "../utils";
 
 let registeredUser;
 let users;
-function fetchLoginStatus() {
-  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
-}
 
 Before(function() {
   cy.fixture('users').then(data => {
     users = data.users;
   });
-});
 
-Given(`I am not logged in`, () => {
-  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-    req.reply({
-      status: 200,
-      logged_in: false,
-      user: null
-    },
-    {
-      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
-    });
-  }).as('Logged In');
-});
-
-Given(`I visit the registration page`, function() {
   cy.intercept('POST', "http://localhost:3001/users", req => {
     const { user: newUser } = req.body;
     if (users.find(user => user.email === newUser.email)) {
@@ -37,16 +20,21 @@ Given(`I visit the registration page`, function() {
       );
     }
     else {
-      registeredUser = { ...newUser};
+      registeredUser = { ...newUser };
       req.reply(
         201,
         { user: newUser }
       );
     }
   }).as('Sign Up');
+});
 
+Given(`I am not logged in`, () => {
+  setSession(false);
+});
+
+Given(`I visit the registration page`, function() {
   cy.visit('/users/new');
-  fetchLoginStatus();
 });
 
 When(`I provide the following:`, (table) => {

@@ -1,4 +1,5 @@
-import '@testing-library/cypress/add-commands'
+import '@testing-library/cypress/add-commands';
+import { fetchLoginStatus } from "../integration/utils";
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -24,3 +25,7 @@ import '@testing-library/cypress/add-commands'
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+  originalFn(url, options);
+  fetchLoginStatus();
+});

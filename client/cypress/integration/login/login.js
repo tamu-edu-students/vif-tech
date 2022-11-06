@@ -1,15 +1,9 @@
 /// <reference types="cypress" />
 
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
+import { setSession, fetchLoginStatus } from "../utils";
 
 let users;
-function fetchLoginStatus() {
-  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
-}
-
-// before(() => {
-//   cy.on('window:load', () => {console.log('FETCHING'); fetchLoginStatus();});
-// });
 
 Before(function() {
   cy.fixture('users').then(data => {
@@ -50,12 +44,11 @@ Before(function() {
     {
       'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
     });
-  }).as('Log Out');;
+  }).as('Log Out');
 });
 
 Given(`I visit the home page`, () => {
   cy.visit('/');
-  fetchLoginStatus();
 });
 
 Given(`login session is inactive`, () => {
@@ -63,38 +56,16 @@ Given(`login session is inactive`, () => {
 });
 
 Given(`I am not logged in`, () => {
-  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-    req.reply({
-      status: 200,
-      logged_in: false,
-      user: null
-    },
-    {
-      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
-    });
-  }).as('Logged In');
+  setSession(false);
 });
 
 Given(`I am logged in with the following email:`, (table) => {
  const { email } = table.hashes()[0];
-  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-      const matchingUser = users.find(({ email: targetEmail }) => targetEmail === email);
-      if (matchingUser) {
-        req.reply({
-          status: 200,
-          logged_in: true,
-          user: matchingUser
-        },
-        {
-          'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email })}`
-        });
-      }
-  }).as('Logged In');
+  setSession(true, email, users);
 });
 
 When(`I visit the login page`, function() {
   cy.visit('/login');
-  fetchLoginStatus();
 });
 
 When(`I reload`, () => {
