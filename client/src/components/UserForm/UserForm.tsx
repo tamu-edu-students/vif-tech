@@ -17,7 +17,7 @@ interface IUserFormProps {
 
 class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & IUserFormProps, {}> {
   public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, IUserFormProps, string> & IUserFormProps>, prevState: Readonly<{}>, snapshot?: any): void {
-    if (this.props.usertype) {
+    if (this.props.usertype !== prevProps.usertype) {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {
         this.props.fetchCompanies();
       }
@@ -28,12 +28,25 @@ class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & 
   }
 
   private _renderInput = ({ input, label, meta, id, type }: any) => {
-    const className = `field ${meta.error && meta.touched ? "error" : ""}`;
     return (
-      <div className={className}>
+      <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
         <label htmlFor={id}>
           {label}
           <input {...input} type={type} id={id} autoComplete="off" />
+          {this._renderError(meta)}
+        </label>
+      </div>
+    );
+  }
+
+  private _renderSelect = ({ input, label, meta, id, type, children }: any) => {
+    return (
+      <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
+        <label htmlFor={id}>
+          {label}
+          <select {...input} id={id}>
+            {children}
+          </select>
           {this._renderError(meta)}
         </label>
       </div>
@@ -70,7 +83,7 @@ class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & 
         <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
         <fieldset>
           <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value={Usertype.STUDENT} />
-          <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderInput} label="Volunteer" value="volunteer" />
+          <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderInput} label="Volunteer" value={Usertype.VOLUNTEER} />
           <Field name="usertype" id="usertype--representative" type="radio" component={this._renderInput} label="Company Representative" value={Usertype.REPRESENTATIVE} />
         </fieldset>
         {
@@ -78,7 +91,7 @@ class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & 
           (
           <div>
             <label htmlFor="company_id">Company</label>
-            <Field name="company_id" id="company_id" component="select">
+            <Field name="company_id" id="company_id" component={this._renderSelect}>
               <option />
               {this._renderCompanyOptions()}
             </Field>
@@ -111,7 +124,7 @@ const validate = ({firstname, lastname, email, password, password_confirmation, 
   }
 
   if (password !== password_confirmation) {
-    errors.password_confirmation = "Passwords do no match";
+    errors.password_confirmation = "Passwords do not match";
   }
 
   if (usertype === Usertype.REPRESENTATIVE && !company_id) {
