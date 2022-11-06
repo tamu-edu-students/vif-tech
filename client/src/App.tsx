@@ -23,20 +23,13 @@ interface IAppProps {
 
 class App extends React.Component<IAppProps, {}> {
   componentDidMount(): void {
-    if (!(window as any).Cypress) {
       this.props.fetchLoginStatus();
-    }
   }
 
   render() {
     if (this.props.isLoggedIn === null) {
       return (
-        <>
         <div>Checking login status...</div>
-        {
-          (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
-        }
-        </>
       );
     }
 
@@ -64,10 +57,6 @@ class App extends React.Component<IAppProps, {}> {
               }
             </ul>
           </nav>
-
-          {
-            (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
-          }
 
           <Switch>
             <Route exact path="/">

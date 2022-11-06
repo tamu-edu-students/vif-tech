@@ -24,8 +24,3 @@ export const setSession = (isLoggedIn, email, users) => {
   }
  }).as('Logged In');
 }
-
-
-export const fetchLoginStatus = () => {
-  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
-}
