@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 
 interface ICompanyFormProps {
   onSubmit?: any;
+  onCancel?: any;
 }
 
-class CompanyForm extends React.Component<InjectedFormProps & ICompanyFormProps, {}> {
+class CompanyForm extends React.Component<InjectedFormProps<any, ICompanyFormProps> & ICompanyFormProps, {}> {
   private _renderInput = ({ input, label, meta, id, type }: any) => {
     const className = `field ${meta.error && meta.touched ? "error" : ""}`;
     return (
@@ -38,7 +39,8 @@ class CompanyForm extends React.Component<InjectedFormProps & ICompanyFormProps,
     return (
       <form data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
         <Field name="name" id="name" type="text" component={this._renderInput} label="Company name" />
-        <button type='submit' data-testid="create-company-form-button">Add New Company</button>
+        <button type='submit' data-testid="create-company-form-button">Confirm</button>
+        <button onClick={() => this.props.onCancel()} type='button'>Cancel</button>
       </form>
     );
   }
@@ -54,7 +56,7 @@ const validate = ({name}: any) => {
   return errors;
 };
 
-const formWrapped = reduxForm({
+const formWrapped = reduxForm<any, ICompanyFormProps>({
   form: "companyCreate",
   validate: validate,
 })(CompanyForm);

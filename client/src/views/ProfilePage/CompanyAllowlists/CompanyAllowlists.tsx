@@ -88,7 +88,10 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
         {
           this.state.shouldShowModal &&
           <Modal onDismiss={() => this.setState({ shouldShowModal: false })}>
-            <CompanyForm onSubmit={this._onCompanySubmit} />
+            <CompanyForm
+              onSubmit={this._onCompanySubmit}
+              onCancel={() => this.setState({ shouldShowModal: false })}
+            />
           </Modal>
         }
       </div>

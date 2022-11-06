@@ -19,6 +19,11 @@ body {
   background-color: $color-blue-darkest;
   font-family: $font-body;
   color: $color-white;
+
+  &.body--modal-open {
+    height: 100vh;
+    overflow-y: hidden;
+  }
 }
 
 ::selection {
