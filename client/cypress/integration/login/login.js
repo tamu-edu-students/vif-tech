@@ -70,7 +70,6 @@ When(`I visit the login page`, function() {
 
 When(`I reload`, () => {
   cy.reload();
-  fetchLoginStatus();
 });
 
 When(`I click the log in page button`, () => {

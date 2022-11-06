@@ -29,3 +29,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   originalFn(url, options);
   fetchLoginStatus();
 });
+
+Cypress.Commands.overwrite('reload', (originalFn) => {
+  originalFn();
+  fetchLoginStatus();
+});

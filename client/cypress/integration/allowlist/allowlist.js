@@ -1,12 +1,10 @@
 /// <reference types="cypress" />
 
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
+import { setSession, fetchLoginStatus } from "../utils";
 
 let users;
 let companies;
-function fetchLoginStatus() {
-  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
-}
 
 Before(function() {
   cy.fixture('users').then(data => { users = data.users; });
@@ -102,7 +100,6 @@ Given(`I am logged in as an admin`, () => {
 
 When(`I reload`, () => {
   cy.reload();
-  fetchLoginStatus();
 });
 
 When('I click the add new company button', () => {
