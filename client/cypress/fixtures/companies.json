@@ -2,15 +2,26 @@
   "companies": [
     {
       "id": 1,
-      "name": "Disney"
+      "name": "Disney",
+      "description": null,
+      "allowlist_emails": [
+        { "id": 1, "email": "jimBoy@gmail.com", "usertype": "company representative", "isPrimaryContact": false }
+      ],
+      "allowlist_domains": []
     },
     {
       "id": 2,
-      "name": "Activision"
+      "name": "Activision",
+      "description": null,
+      "allowlist_emails": [],
+      "allowlist_domains": []
     },
     {
       "id": 3,
-      "name": "Blizzard"
+      "name": "Blizzard",
+      "description": null,
+      "allowlist_emails": [],
+      "allowlist_domains": []
     }
   ]
 }
