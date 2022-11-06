@@ -3,7 +3,7 @@ import {
   CREATE_COMPANY,
 } from "../actions/types";
 
-const companyReducer = (state: Company[] = [], action: any) => {
+const companyReducer = (state: Company[] = [], action: any): Company[] => {
   switch(action.type) {
     case FETCH_COMPANIES:
       return action.payload;

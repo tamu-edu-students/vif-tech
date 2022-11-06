@@ -10,12 +10,12 @@ interface Store_Allowlist {
   allowlist_domains: AllowlistDomain[];
 }
 
-const INITIAL_STATE = {
+const INITIAL_STATE: Store_Allowlist = {
   allowlist_emails: [],
   allowlist_domains: [],
 };
 
-const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any) => {
+const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): Store_Allowlist => {
   switch(action.type) {
     case DELETE_ALLOWLIST_EMAIL:
     case CREATE_ALLOWLIST_EMAIL:

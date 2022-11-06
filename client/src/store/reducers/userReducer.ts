@@ -3,7 +3,7 @@ import {
   CREATE_USER,
 } from "../actions/types";
 
-const userReducer = (state = [], action: any) => {
+const userReducer = (state: User[] = [], action: any): User[] => {
   switch(action.type) {
     case FETCH_USERS:
       return action.payload;

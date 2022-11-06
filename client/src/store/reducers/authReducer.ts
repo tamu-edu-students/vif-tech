@@ -10,7 +10,7 @@ const INITIAL_STATE: Store_Auth = {
   user: null,
 };
 
-const authReducer = (state: Store_Auth = INITIAL_STATE, action: any) => {
+const authReducer = (state: Store_Auth = INITIAL_STATE, action: any): Store_Auth => {
   switch (action.type) {
     case LOG_IN:
     case LOG_OUT:
