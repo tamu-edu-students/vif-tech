@@ -57,6 +57,7 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
 
   private _onCompanySubmit = (formValues: any) => {
     this.props.createCompany(formValues)
+    .then(() => this.setState({ shouldShowModal: false }))
     .catch((err: Error) => {
       console.error(err.message);
     });
