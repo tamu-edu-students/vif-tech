@@ -38,7 +38,7 @@ class CompanyForm extends React.Component<InjectedFormProps & ICompanyFormProps,
     return (
       <form data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
         <Field name="name" id="name" type="text" component={this._renderInput} label="Company name" />
-        <button type='submit' data-testid="create-company-form-button">Add Company</button>
+        <button type='submit' data-testid="create-company-form-button">Add New Company</button>
       </form>
     );
   }

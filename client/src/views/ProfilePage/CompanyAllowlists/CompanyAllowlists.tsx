@@ -5,6 +5,7 @@ import { Usertype } from '../../../shared/enums';
 
 import Allowlist from '../Allowlist/Allowlist';
 import CompanyForm from './CompanyForm/CompanyForm';
+import Modal from '../../../components/Modal/Modal';
 
 import {
   fetchCompanies,
@@ -19,12 +20,16 @@ interface ICompanyAllowlistsProps {
 
 interface ICompanyAllowlistsState {
   isLoaded: boolean;
+  shouldShowModal: boolean;
 }
 
 class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompanyAllowlistsState> {
   public constructor(props: ICompanyAllowlistsProps) {
     super(props);
-    this.state = { isLoaded: false };
+    this.state = {
+      isLoaded: false,
+      shouldShowModal: false,
+    };
   }
 
   public componentDidMount(): void {
@@ -72,14 +77,20 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
       <div>
         <h2>CompanyAllowlists</h2>
         <br />
-        <div className="allowlists">
+        <div className="allowlists" data-testid="admin-company-allowlists">
           {
             companies.length > 0
             ? (<>{ this._renderAllowlists() }</>)
             : (<p>No companies yet!</p>)
           }
         </div>
-        <CompanyForm onSubmit={this._onCompanySubmit} />
+        <button onClick={() => this.setState({ shouldShowModal: true })}>Add New Company</button>
+        {
+          this.state.shouldShowModal &&
+          <Modal onDismiss={() => this.setState({ shouldShowModal: false })}>
+            <CompanyForm onSubmit={this._onCompanySubmit} />
+          </Modal>
+        }
       </div>
     )
   }
