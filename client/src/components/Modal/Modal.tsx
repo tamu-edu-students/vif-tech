@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import { Usertype } from '../../shared/enums';
+import { hideModal } from '../../store/actions'
 
 interface IModalProps {
-  onDismiss: any;
+  hideModal?: any;
   children: any;
 }
 
@@ -25,7 +25,7 @@ class Modal extends React.Component<IModalProps, {}> {
   }
 
   private _onDismiss(): void {
-    this.props.onDismiss();
+    this.props.hideModal();
   }
 
   public render(): React.ReactElement<IModalProps> {
@@ -38,4 +38,10 @@ class Modal extends React.Component<IModalProps, {}> {
   }
 }
 
-export default connect()(Modal);
+const mapStateToProps = (state: any) => {
+  return {
+    children: state.modal.children,
+  };
+}
+
+export default connect(mapStateToProps, { hideModal })(Modal);

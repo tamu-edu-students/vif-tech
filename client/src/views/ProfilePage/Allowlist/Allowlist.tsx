@@ -3,9 +3,17 @@ import { connect } from 'react-redux';
 
 import { Usertype } from '../../../shared/enums';
 
-import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
+import AllowlistEntryForm, { IAllowlistEntryFormProps } from './AllowlistEntryForm/AllowlistEntryForm';
 
-import { createAllowlistEmail, createAllowlistDomain, deleteAllowlistEmail, deleteAllowlistDomain, fetchCompanies } from "../../../store/actions";
+import {
+  createAllowlistEmail,
+  createAllowlistDomain,
+  deleteAllowlistEmail,
+  deleteAllowlistDomain,
+  fetchCompanies,
+  showModal,
+  hideModal,
+} from "../../../store/actions";
 
 interface IAllowlistProps {
   title: string;
@@ -23,9 +31,20 @@ interface IAllowlistProps {
   deleteAllowlistEmail?: any;
   deleteAllowlistDomain?: any;
   fetchCompanies?: any;
+  showModal?: any;
+  hideModal?: any;
 }
 
 class Allowlist extends React.Component<IAllowlistProps, {}> {
+  private _showModal = (allowlistEntryFormProps: IAllowlistEntryFormProps): void => {
+    this.props.showModal((
+      <AllowlistEntryForm
+        {...allowlistEntryFormProps} 
+        onCancel={this.props.hideModal}
+      />
+    ));
+  }
+
   private _renderEmails(allowlist_emails: AllowlistEmail[]): JSX.Element[] {
     return allowlist_emails.map(({email, id}: AllowlistEmail) => (
       <li className="allowlist__entry" key={id}>
@@ -65,39 +84,39 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
       </li>
     ));
   }
-
-  _onSubmitEmail = (formValues: any) => {
+  
+  private _onSubmitPrimaryContact = (formValues: any) => {
     this.props.createAllowlistEmail({
-      email: formValues[`email-${this.props.company_id}`],
-      usertype: this.props.usertype,
-      company_id: this.props.company_id,
-    })
-    .then(() => {
-      if (this.props.usertype === Usertype.REPRESENTATIVE) {
-        this.props.fetchCompanies();
-      }
-    });
-  }
-
-  _onSubmitDomain = (formValues: any) => {
-    this.props.createAllowlistDomain({
-      email_domain: formValues[`email_domain-${this.props.company_id}`],
-      usertype: this.props.usertype,
-      company_id: this.props.company_id,
-    })
-    .then(() => {
-      if (this.props.usertype === Usertype.REPRESENTATIVE) {
-        this.props.fetchCompanies();
-      }
-    });
-  }
-
-  _onSubmitPrimaryContact = (formValues: any) => {
-    this.props.createAllowlistEmail({
-      email: formValues[`email-primary-${this.props.company_id}`],
+      email: formValues.email,
       usertype: this.props.usertype,
       company_id: this.props.company_id,
       isPrimaryContact: true,
+    })
+    .then(() => {
+      if (this.props.usertype === Usertype.REPRESENTATIVE) {
+        this.props.fetchCompanies();
+      }
+    });
+  }
+
+  private _onSubmitEmail = (formValues: any) => {
+    this.props.createAllowlistEmail({
+      email: formValues.email,
+      usertype: this.props.usertype,
+      company_id: this.props.company_id,
+    })
+    .then(() => {
+      if (this.props.usertype === Usertype.REPRESENTATIVE) {
+        this.props.fetchCompanies();
+      }
+    });
+  }
+
+  private _onSubmitDomain = (formValues: any) => {
+    this.props.createAllowlistDomain({
+      email_domain: formValues.domain,
+      usertype: this.props.usertype,
+      company_id: this.props.company_id,
     })
     .then(() => {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {
@@ -126,12 +145,17 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
           <ul>
             {this._renderEmails(primaryContacts)}
           </ul>
-          <AllowlistEntryForm
-            onSubmit={this._onSubmitPrimaryContact}
-            name={`email-primary-${this.props.company_id}`}
-            id={`email-primary-${this.props.company_id}`}
-            buttonLabel="Add Primary Contact"
-          />
+        <button
+          onClick={() => this._showModal({
+            onSubmit: this._onSubmitPrimaryContact,
+            name: `email`,
+            id: `email`,
+            label: "Primary Contact",
+            form: "createPrimaryContact",
+            }
+          )}>
+            Add Primary Contact
+          </button>
         </div>
         )}
         { showsEmails && (
@@ -140,12 +164,16 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
           <ul>
             {this._renderEmails(allowlist_emails)}
           </ul>
-          <AllowlistEntryForm
-            onSubmit={this._onSubmitEmail}
-            name={`email-${this.props.company_id}`}
-            id={`email-${this.props.company_id}`}
-            buttonLabel="Add Email"
-          />
+          <button
+            onClick={() => this._showModal({
+              onSubmit: this._onSubmitEmail,
+              name: `email`,
+              id: `email`,
+              label: "Email",
+              form: "createEmail",
+          })}>
+            Add Email
+          </button>
         </div>
         )}
         
@@ -155,13 +183,16 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
           <ul>
             {this._renderDomains(allowlist_domains)}
           </ul>
-          
-          <AllowlistEntryForm
-            onSubmit={this._onSubmitDomain}
-            name={`email_domain-${this.props.company_id}`}
-            id={`email_domain-${this.props.company_id}`}
-            buttonLabel="Add Domain"
-          />
+          <button
+            onClick={() => this._showModal({
+              onSubmit: this._onSubmitDomain,
+              name: `domain`,
+              id: `domain`,
+              label: "Domain",
+              form: "createDomain",
+            })}>
+            Add Domain
+          </button>
         </div>
         )}
       </div>
@@ -169,4 +200,12 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
   }
 }
 
-export default connect(null, { createAllowlistEmail, createAllowlistDomain, deleteAllowlistEmail, deleteAllowlistDomain, fetchCompanies })(Allowlist);
+export default connect(null, {
+  createAllowlistEmail,
+  createAllowlistDomain,
+  deleteAllowlistEmail,
+  deleteAllowlistDomain,
+  fetchCompanies,
+  showModal,
+  hideModal,
+})(Allowlist);

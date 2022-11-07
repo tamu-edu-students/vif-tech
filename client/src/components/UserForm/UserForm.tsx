@@ -2,8 +2,8 @@ import React from 'react';
 import { Field, reduxForm, InjectedFormProps, change } from "redux-form";
 import { connect } from 'react-redux';
 
+import CustomForm from '../CustomForm/CustomForm';
 import { Usertype } from "../../shared/enums";
-
 import { fetchCompanies } from "../../store/actions";
 
 interface IUserFormProps {
@@ -15,7 +15,7 @@ interface IUserFormProps {
   fetchCompanies?: any;
 }
 
-class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & IUserFormProps, {}> {
+class UserForm extends CustomForm<IUserFormProps> {
   public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, IUserFormProps, string> & IUserFormProps>, prevState: Readonly<{}>, snapshot?: any): void {
     if (this.props.usertype !== prevProps.usertype) {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {
@@ -24,42 +24,6 @@ class UserForm extends React.Component<InjectedFormProps<any, IUserFormProps> & 
       if (this.props.usertype !== Usertype.REPRESENTATIVE) {
         this.props.changeFieldValue('company_id', '');
       }
-    }
-  }
-
-  private _renderInput = ({ input, label, meta, id, type }: any) => {
-    return (
-      <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
-        <label htmlFor={id}>
-          {label}
-          <input {...input} type={type} id={id} autoComplete="off" />
-          {this._renderError(meta)}
-        </label>
-      </div>
-    );
-  }
-
-  private _renderSelect = ({ input, label, meta, id, type, children }: any) => {
-    return (
-      <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
-        <label htmlFor={id}>
-          {label}
-          <select {...input} id={id}>
-            {children}
-          </select>
-          {this._renderError(meta)}
-        </label>
-      </div>
-    );
-  }
-
-  private _renderError({ error, touched }: any) {
-    if (touched && error) {
-      return (
-        <div className="error-text">
-          <div>{error}</div>
-        </div>
-      );
     }
   }
 
@@ -141,7 +105,7 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-const  mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     changeFieldValue : function(field: any, value: any) {
       dispatch(change('userCreate', field, value))
@@ -151,7 +115,6 @@ const  mapDispatchToProps = (dispatch: any) => {
 }
 
 const formWrapped = reduxForm<any, IUserFormProps>({
-  form: "userCreate",
   initialValues: { usertype: Usertype.STUDENT },
   validate: validate,
 })(UserForm);

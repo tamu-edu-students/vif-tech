@@ -18,7 +18,7 @@ class UserCreate extends React.Component<IUserCreateProps, {}> {
 
   public render(): React.ReactElement<IUserCreateProps> {
     return (
-      <UserForm onSubmit={this._onSubmit} />
+      <UserForm form="userCreate" onSubmit={this._onSubmit} />
     );
   }
 }

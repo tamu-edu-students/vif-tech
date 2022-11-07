@@ -1,33 +1,14 @@
 import React from 'react';
-import { Field, reduxForm, InjectedFormProps } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import { connect } from 'react-redux';
+
+import CustomForm from '../../../components/CustomForm/CustomForm';
 
 interface ILoginFormProps {
   onSubmit?: any;
 }
 
-class LoginForm extends React.Component<InjectedFormProps & ILoginFormProps, {}> {
-  private _renderInput = ({ input, label, meta, id }: any) => {
-    const className = `field ${meta.error && meta.touched ? "error" : ""}`;
-    return (
-      <div className={className}>
-        <label htmlFor={id}>{label}</label>
-        <input {...input} id={id} autoComplete="off" />
-        {this._renderError(meta)}
-      </div>
-    );
-  }
-
-  private _renderError({ error, touched }: any) {
-    if (touched && error) {
-      return (
-        <div className="error-text">
-          <div>{error}</div>
-        </div>
-      );
-    }
-  }
-
+class LoginForm extends CustomForm<ILoginFormProps> {
   private _onSubmit = (formValues: any) => {
     this.props.onSubmit(formValues);
   }

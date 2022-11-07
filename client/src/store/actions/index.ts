@@ -13,6 +13,9 @@ import {
   CREATE_ALLOWLIST_DOMAIN,
   DELETE_ALLOWLIST_EMAIL,
   DELETE_ALLOWLIST_DOMAIN,
+
+  SHOW_MODAL,
+  HIDE_MODAL,
 } from "./types";
 import history from "../../history";
 import vifTech from "../../apis/vifTech";
@@ -139,6 +142,14 @@ export const deleteAllowlistDomain = (id: number) => async (dispatch: any, getSt
   console.log('deleteAllowlistDomain response_delete:', response_delete);
 
   dispatch({ type: DELETE_ALLOWLIST_DOMAIN });
+}
+
+export const showModal = (children: any) => {
+  return { type: SHOW_MODAL, payload: children }
+}
+
+export const hideModal = () => {
+  return { type: HIDE_MODAL };
 }
 
 // export const fetchCompanyAllowlists = () => async (dispatch: any, getState: any) => {

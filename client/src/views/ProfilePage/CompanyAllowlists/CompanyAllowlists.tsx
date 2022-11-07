@@ -5,22 +5,24 @@ import { Usertype } from '../../../shared/enums';
 
 import Allowlist from '../Allowlist/Allowlist';
 import CompanyForm from './CompanyForm/CompanyForm';
-import Modal from '../../../components/Modal/Modal';
 
 import {
   fetchCompanies,
   createCompany,
+  showModal,
+  hideModal,
 } from '../../../store/actions';
 
 interface ICompanyAllowlistsProps {
   fetchCompanies?: any;
   createCompany?: any;
+  showModal?: any;
+  hideModal?: any;
   companies: Company[];
 }
 
 interface ICompanyAllowlistsState {
   isLoaded: boolean;
-  shouldShowModal: boolean;
 }
 
 class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompanyAllowlistsState> {
@@ -28,13 +30,22 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
     super(props);
     this.state = {
       isLoaded: false,
-      shouldShowModal: false,
     };
   }
 
   public componentDidMount(): void {
     this.setState({ isLoaded: false });
     this.props.fetchCompanies().then(() => this.setState({ isLoaded: true }));
+  }
+
+  private _renderForm = (): void => {
+    this.props.showModal((
+      <CompanyForm
+        form="createCompany"
+        onSubmit={this._onCompanySubmit}
+        onCancel={this.props.hideModal}
+      />
+    ))
   }
 
   private _renderAllowlists(): JSX.Element[] {
@@ -57,7 +68,7 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
 
   private _onCompanySubmit = (formValues: any) => {
     this.props.createCompany(formValues)
-    .then(() => this.setState({ shouldShowModal: false }))
+    .then(() => this.props.hideModal())
     .catch((err: Error) => {
       console.error(err.message);
     });
@@ -85,16 +96,7 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
             : (<p>No companies yet!</p>)
           }
         </div>
-        <button onClick={() => this.setState({ shouldShowModal: true })}>Add New Company</button>
-        {
-          this.state.shouldShowModal &&
-          <Modal onDismiss={() => this.setState({ shouldShowModal: false })}>
-            <CompanyForm
-              onSubmit={this._onCompanySubmit}
-              onCancel={() => this.setState({ shouldShowModal: false })}
-            />
-          </Modal>
-        }
+        <button onClick={this._renderForm}>Add New Company</button>
       </div>
     )
   }
@@ -106,4 +108,4 @@ const mapStateToProps = (state: any) => {
   };
 }
 
-export default connect(mapStateToProps, { fetchCompanies, createCompany })(CompanyAllowlists);
+export default connect(mapStateToProps, { fetchCompanies, createCompany, showModal, hideModal })(CompanyAllowlists);

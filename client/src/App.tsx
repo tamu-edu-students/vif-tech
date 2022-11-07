@@ -10,6 +10,7 @@ import LoginPage from './views/LoginPage/LoginPage';
 import RedirectPrompt from './components/RedirectPrompt';
 import Users from './components/Users';
 import UserCreate from './components/UserCreate';
+import Modal from './components/Modal/Modal';
 
 import { fetchLoginStatus, logOut } from './store/actions'
 import ProfilePage from './views/ProfilePage/ProfilePage';
@@ -19,6 +20,7 @@ interface IAppProps {
   logOut?: any;
   user: User;
   isLoggedIn: boolean;
+  shouldShowModal: boolean;
 }
 
 class App extends React.Component<IAppProps, {}> {
@@ -119,6 +121,10 @@ class App extends React.Component<IAppProps, {}> {
               </section>
             </Route>
           </Switch>
+
+          {
+            this.props.shouldShowModal && <Modal />
+          }
         </Router>
       </div>
     );
@@ -128,7 +134,8 @@ class App extends React.Component<IAppProps, {}> {
 const mapStateToProps = (state: any) => {
   return {
     user: state.auth.user,
-    isLoggedIn: state.auth.isLoggedIn
+    isLoggedIn: state.auth.isLoggedIn,
+    shouldShowModal: state.modal.shouldRender,
   };
 }
 

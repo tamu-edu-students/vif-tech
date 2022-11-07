@@ -1,36 +1,14 @@
 import React from 'react';
-import { Field, reduxForm, InjectedFormProps } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import { connect } from 'react-redux';
+import CustomForm from '../../../../components/CustomForm/CustomForm';
 
 interface ICompanyFormProps {
   onSubmit?: any;
   onCancel?: any;
 }
 
-class CompanyForm extends React.Component<InjectedFormProps<any, ICompanyFormProps> & ICompanyFormProps, {}> {
-  private _renderInput = ({ input, label, meta, id, type }: any) => {
-    const className = `field ${meta.error && meta.touched ? "error" : ""}`;
-    return (
-      <div className={className}>
-        <label htmlFor={id}>
-          {label}
-          <input {...input} type={type} id={id} autoComplete="off" />
-          {this._renderError(meta)}
-        </label>
-      </div>
-    );
-  }
-
-  private _renderError({ error, touched }: any) {
-    if (touched && error) {
-      return (
-        <div className="error-text">
-          <div>{error}</div>
-        </div>
-      );
-    }
-  }
-
+class CompanyForm extends CustomForm<ICompanyFormProps> {
   private _onSubmit = (formValues: any) => {
     this.props.onSubmit(formValues);
   }
@@ -57,7 +35,6 @@ const validate = ({name}: any) => {
 };
 
 const formWrapped = reduxForm<any, ICompanyFormProps>({
-  form: "companyCreate",
   validate: validate,
 })(CompanyForm);
 
