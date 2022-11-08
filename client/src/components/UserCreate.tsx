@@ -1,14 +1,19 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 
 import { createUser } from "../store/actions";
 import UserForm from "./UserForm/UserForm";
 
-interface IUserCreateProps {
-  createUser?: any;
+interface OwnProps {
 }
 
-class UserCreate extends React.Component<IUserCreateProps, {}> {
+const mapStateToProps = null;
+const mapDispatchToProps = { createUser };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class UserCreate extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any) => {
     this.props.createUser(formValues)
     .catch((err: Error) => {
@@ -16,11 +21,11 @@ class UserCreate extends React.Component<IUserCreateProps, {}> {
     });
   }
 
-  public render(): React.ReactElement<IUserCreateProps> {
+  public render(): React.ReactElement<Props> {
     return (
       <UserForm form="userCreate" onSubmit={this._onSubmit} />
     );
   }
 }
 
-export default connect(null, { createUser })(UserCreate)
+export default connector(UserCreate);

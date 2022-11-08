@@ -1,9 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Usertype } from '../../../shared/enums';
 
-import AllowlistEntryForm, { IAllowlistEntryFormProps } from './AllowlistEntryForm/AllowlistEntryForm';
+import AllowlistEntryForm, { OwnProps as AllowlistEntryFormProps } from './AllowlistEntryForm/AllowlistEntryForm';
 
 import {
   createAllowlistEmail,
@@ -15,7 +15,7 @@ import {
   hideModal,
 } from "../../../store/actions";
 
-interface IAllowlistProps {
+interface OwnProps {
   title: string;
   usertype: Usertype;
   company_id?: number;
@@ -25,18 +25,24 @@ interface IAllowlistProps {
   primaryContacts?: AllowlistEmail[];
   allowlist_emails?: AllowlistEmail[];
   allowlist_domains?: AllowlistDomain[];
-
-  createAllowlistEmail?: any;
-  createAllowlistDomain?: any;
-  deleteAllowlistEmail?: any;
-  deleteAllowlistDomain?: any;
-  fetchCompanies?: any;
-  showModal?: any;
-  hideModal?: any;
 }
 
-class Allowlist extends React.Component<IAllowlistProps, {}> {
-  private _showModal = (allowlistEntryFormProps: IAllowlistEntryFormProps): void => {
+const mapStateToProps = null;
+const mapDispatchToProps = {
+  createAllowlistEmail,
+  createAllowlistDomain,
+  deleteAllowlistEmail,
+  deleteAllowlistDomain,
+  fetchCompanies,
+  showModal,
+  hideModal,
+}
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class Allowlist extends React.Component<Props, {}> {
+  private _showModal = (allowlistEntryFormProps: AllowlistEntryFormProps): void => {
     this.props.showModal((
       <AllowlistEntryForm
         {...allowlistEntryFormProps} 
@@ -125,7 +131,7 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
     });
   }
 
-  public render(): React.ReactElement<IAllowlistProps> {
+  public render(): React.ReactElement<Props> {
     const {
       title,
       showsPrimaryContacts,
@@ -200,12 +206,4 @@ class Allowlist extends React.Component<IAllowlistProps, {}> {
   }
 }
 
-export default connect(null, {
-  createAllowlistEmail,
-  createAllowlistDomain,
-  deleteAllowlistEmail,
-  deleteAllowlistDomain,
-  fetchCompanies,
-  showModal,
-  hideModal,
-})(Allowlist);
+export default connector(Allowlist);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
 import history from "./history";
 
@@ -14,21 +14,29 @@ import Modal from './components/Modal/Modal';
 
 import { fetchLoginStatus, logOut } from './store/actions'
 import ProfilePage from './views/ProfilePage/ProfilePage';
+import { IRootState } from './store/reducers';
 
-interface IAppProps {
-  fetchLoginStatus?: any;
-  logOut?: any;
-  user: User;
-  isLoggedIn: boolean;
-  shouldShowModal: boolean;
+interface OwnProps {
 }
 
-class App extends React.Component<IAppProps, {}> {
+const mapStateToProps = (state: IRootState) => {
+  return {
+    user: state.auth.user,
+    isLoggedIn: state.auth.isLoggedIn,
+    shouldShowModal: state.modal.shouldRender,
+  };
+}
+const mapDispatchToProps = { fetchLoginStatus, logOut };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class App extends React.Component<Props, {}> {
   componentDidMount(): void {
       this.props.fetchLoginStatus();
   }
 
-  render() {
+  render(): React.ReactElement<Props> {
     if (this.props.isLoggedIn === null) {
       return (
         <div>Checking login status...</div>
@@ -131,12 +139,4 @@ class App extends React.Component<IAppProps, {}> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    user: state.auth.user,
-    isLoggedIn: state.auth.isLoggedIn,
-    shouldShowModal: state.modal.shouldRender,
-  };
-}
-
-export default connect(mapStateToProps, {fetchLoginStatus, logOut})(App);
+export default connector(App);

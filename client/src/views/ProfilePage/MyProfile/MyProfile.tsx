@@ -1,16 +1,21 @@
 import React from "react";
-import { connect } from "react-redux"
+import { connect, ConnectedProps } from "react-redux"
 
-interface IMyProfileProps {
-
+interface OwnProps {
 }
 
-class MyProfile extends React.Component<IMyProfileProps, {}> {
-  public render(): React.ReactElement<IMyProfileProps> {
+const mapStateToProps = null;
+const mapDispatchToProps = {};
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class MyProfile extends React.Component<Props, {}> {
+  public render(): React.ReactElement<Props> {
     return (
       <h2 className="heading-secondary">MyProfile</h2>
     );
   }
 }
 
-export default connect()(MyProfile);
+export default connector(MyProfile);

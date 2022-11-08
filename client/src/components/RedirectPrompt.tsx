@@ -3,22 +3,22 @@ import { Link } from 'react-router-dom'
 
 import { VifLogoMark } from "./iconComponents";
 
-interface IRedirectPromptProps {
+interface RedirectPromptProps {
   message: string;
   buttonText: string;
 }
 
-interface IInternalRedirectPromptProps extends IRedirectPromptProps {
+interface InternalRedirectPromptProps extends RedirectPromptProps {
   href?: never;
   pathName: string;
 }
 
-interface IExternalRedirectPromptProps extends IRedirectPromptProps {
+interface IExternalRedirectPromptProps extends RedirectPromptProps {
   href: string
   pathName?: never;
 }
 
-class RedirectPrompt extends React.Component<IInternalRedirectPromptProps | IExternalRedirectPromptProps, {}> {
+class RedirectPrompt extends React.Component<InternalRedirectPromptProps | IExternalRedirectPromptProps, {}> {
   private _generateLink(): JSX.Element | null {
     if (this.props.pathName) {
       return (
@@ -41,7 +41,7 @@ class RedirectPrompt extends React.Component<IInternalRedirectPromptProps | IExt
     }
   }
 
-  public render(): React.ReactElement<IRedirectPromptProps> {
+  public render(): React.ReactElement<RedirectPromptProps> {
     return (
       <div className="redirector">
         <VifLogoMark className="redirector__logo-mark" />

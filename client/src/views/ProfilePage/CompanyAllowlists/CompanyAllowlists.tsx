@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Usertype } from '../../../shared/enums';
 
@@ -12,21 +12,32 @@ import {
   showModal,
   hideModal,
 } from '../../../store/actions';
+import { IRootState } from '../../../store/reducers';
 
-interface ICompanyAllowlistsProps {
-  fetchCompanies?: any;
-  createCompany?: any;
-  showModal?: any;
-  hideModal?: any;
-  companies: Company[];
+interface OwnProps {
 }
 
-interface ICompanyAllowlistsState {
+const mapStateToProps = (state: IRootState) => {
+  return {
+    companies: state.companies,
+  };
+}
+const mapDispatchToProps = {
+  fetchCompanies,
+  createCompany,
+  showModal,
+  hideModal,
+};
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+interface OwnState {
   isLoaded: boolean;
 }
 
-class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompanyAllowlistsState> {
-  public constructor(props: ICompanyAllowlistsProps) {
+class CompanyAllowlists extends React.Component<Props, OwnState> {
+  public constructor(props: Props) {
     super(props);
     this.state = {
       isLoaded: false,
@@ -74,7 +85,7 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
     });
   }
 
-  public render(): React.ReactElement<ICompanyAllowlistsProps> {
+  public render(): React.ReactElement<Props> {
     if (!this.state.isLoaded) {
       return (
         <div>Loading CompanyAllowlists...</div>
@@ -102,10 +113,4 @@ class CompanyAllowlists extends React.Component<ICompanyAllowlistsProps, ICompan
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    companies: state.companies,
-  };
-}
-
-export default connect(mapStateToProps, { fetchCompanies, createCompany, showModal, hideModal })(CompanyAllowlists);
+export default connector(CompanyAllowlists);

@@ -1,19 +1,30 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 
 import { fetchUsers } from "../store/actions";
 
-interface IUsersProps {
+interface OwnProps {
   users: any[];
   fetchUsers?: any;
 }
 
-class Users extends React.Component<IUsersProps, {}> {
+
+const mapStateToProps = (state: any) => {
+  return {
+    users: state.users,
+  };
+};
+const mapDispatchToProps = { fetchUsers };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class Users extends React.Component<Props, {}> {
   public componentDidMount(): void {
     this.props.fetchUsers();
   }
 
-  public render(): React.ReactElement<IUsersProps> {
+  public render(): React.ReactElement<Props> {
     if (this.props.users.length === 0) { return <div>No users!</div>; }
 
     return (
@@ -39,10 +50,4 @@ class Users extends React.Component<IUsersProps, {}> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    users: state.users,
-  };
-};
-
-export default connect(mapStateToProps, { fetchUsers })(Users);
+export default connector(Users);

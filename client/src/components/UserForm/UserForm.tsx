@@ -1,22 +1,37 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, change } from "redux-form";
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import CustomForm from '../CustomForm/CustomForm';
 import { Usertype } from "../../shared/enums";
 import { fetchCompanies } from "../../store/actions";
+import { IRootState } from '../../store/reducers';
 
-interface IUserFormProps {
+interface OwnProps {
   onSubmit?: any;
-  changeFieldValue?: any;
-  usertype: Usertype;
-  companies: Company[];
-
-  fetchCompanies?: any;
 }
 
-class UserForm extends CustomForm<IUserFormProps> {
-  public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, IUserFormProps, string> & IUserFormProps>, prevState: Readonly<{}>, snapshot?: any): void {
+const mapStateToProps = (state: IRootState) => {
+  return {
+    usertype: state.form?.userCreate?.values.usertype ?? Usertype.STUDENT,
+    companies: state.companies,
+  }
+}
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+  const formName = ownProps.form;
+  return {
+    changeFieldValue : function(field: any, value: any) {
+      dispatch(change(formName, field, value));
+    },
+    fetchCompanies: () => dispatch(fetchCompanies()),
+  }
+}
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class UserForm extends CustomForm<Props> {
+  public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, Props, string> & Props>, prevState: Readonly<{}>, snapshot?: any): void {
     if (this.props.usertype !== prevProps.usertype) {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {
         this.props.fetchCompanies();
@@ -98,25 +113,9 @@ const validate = ({firstname, lastname, email, password, password_confirmation, 
   return errors;
 };
 
-const mapStateToProps = (state: any) => {
-  return {
-    usertype: state.form?.userCreate?.values.usertype ?? Usertype.STUDENT,
-    companies: state.companies,
-  }
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    changeFieldValue : function(field: any, value: any) {
-      dispatch(change('userCreate', field, value))
-    },
-    fetchCompanies: () => dispatch(fetchCompanies()),
-  }
-}
-
-const formWrapped = reduxForm<any, IUserFormProps>({
+const formWrapped = reduxForm<any, Props>({
   initialValues: { usertype: Usertype.STUDENT },
   validate: validate,
 })(UserForm);
 
-export default connect(mapStateToProps, mapDispatchToProps)(formWrapped);
+export default connector(formWrapped);

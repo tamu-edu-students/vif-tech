@@ -1,15 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { hideModal } from '../../store/actions'
+import { IRootState } from '../../store/reducers';
 
-interface IModalProps {
-  hideModal?: any;
-  children: any;
+interface OwnProps {
 }
 
-class Modal extends React.Component<IModalProps, {}> {
+const mapStateToProps = (state: IRootState) => {
+  return {
+    children: state.modal.children,
+  };
+}
+const mapDispatchToProps = { hideModal };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class Modal extends React.Component<Props, {}> {
   public componentDidMount(): void {
     window.addEventListener('keydown', this._handleEscape);
     document.querySelector('body')?.classList.add('body--modal-open');
@@ -28,7 +37,7 @@ class Modal extends React.Component<IModalProps, {}> {
     this.props.hideModal();
   }
 
-  public render(): React.ReactElement<IModalProps> {
+  public render(): React.ReactElement<Props> {
     return ReactDOM.createPortal(
       <div className="Modal">
         {this.props.children}
@@ -38,10 +47,4 @@ class Modal extends React.Component<IModalProps, {}> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    children: state.modal.children,
-  };
-}
-
-export default connect(mapStateToProps, { hideModal })(Modal);
+export default connector(Modal);

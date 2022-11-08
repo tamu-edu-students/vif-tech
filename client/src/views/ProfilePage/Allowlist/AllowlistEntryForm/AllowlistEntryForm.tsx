@@ -1,10 +1,10 @@
 import React from 'react';
 import { Field, reduxForm } from "redux-form";
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import CustomForm from '../../../../components/CustomForm/CustomForm';
 
-export interface IAllowlistEntryFormProps {
+export interface OwnProps {
   onSubmit?: any;
   onCancel?: any;
   name: string;
@@ -13,7 +13,13 @@ export interface IAllowlistEntryFormProps {
   form: string;
 }
 
-class AllowlistEntryForm extends CustomForm<IAllowlistEntryFormProps> {
+const mapStateToProps = null;
+const mapDispatchToProps = { };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class AllowlistEntryForm extends CustomForm<Props> {
   private _onSubmit = (formValues: any) => {
     this.props.onSubmit(formValues);
   }
@@ -47,8 +53,8 @@ const validate = (fields: any, formProps: any) => {
   return errors;
 };
 
-const formWrapped = reduxForm<any, IAllowlistEntryFormProps>({
+const formWrapped = reduxForm<any, Props>({
   validate: validate,
 })(AllowlistEntryForm);
 
-export default connect()(formWrapped);
+export default connector(formWrapped);

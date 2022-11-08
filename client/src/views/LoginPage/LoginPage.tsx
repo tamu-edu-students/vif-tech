@@ -1,19 +1,25 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 
 import {logIn } from "../../store/actions";
 import LoginForm from "./LoginForm/LoginForm";
 
-interface ILoginPageProps {
- logIn?: any;
+interface OwnProps {
 }
 
-interface ILoginPageState {
+const mapStateToProps = null;
+const mapDispatchToProps = { logIn };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+
+interface OwnState {
   errors: string[];
 }
 
-class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
-  constructor(props: ILoginPageProps) {
+class LoginPage extends React.Component<Props, OwnState> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       errors: []
@@ -33,10 +39,10 @@ class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
     });
   }
 
-  public render(): React.ReactElement<ILoginPageProps> {
+  public render(): React.ReactElement<Props> {
     return (
       <section className="section section--login">
-        <LoginForm onSubmit={this._onSubmit} />
+        <LoginForm onSubmit={this._onSubmit} form="login" />
         {
           this.state.errors?.map((error: string) => (
             <div className="error" key={error}>{error}</div>
@@ -47,4 +53,4 @@ class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
   }
 }
 
-export default connect(null, { logIn })(LoginPage)
+export default connector(LoginPage)

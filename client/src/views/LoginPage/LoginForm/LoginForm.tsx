@@ -1,14 +1,20 @@
 import React from 'react';
 import { Field, reduxForm } from "redux-form";
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import CustomForm from '../../../components/CustomForm/CustomForm';
 
-interface ILoginFormProps {
+interface OwnProps {
   onSubmit?: any;
 }
 
-class LoginForm extends CustomForm<ILoginFormProps> {
+const mapStateToProps = null;
+const mapDispatchToProps = {};
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class LoginForm extends CustomForm<Props> {
   private _onSubmit = (formValues: any) => {
     this.props.onSubmit(formValues);
   }
@@ -24,7 +30,7 @@ class LoginForm extends CustomForm<ILoginFormProps> {
   }
 }
 
-const validate = ({username, email, password, password_confirmation}: any) => {
+const validate = ({email, password}: any) => {
   const errors: any = {};
 
   if (!email) {
@@ -39,8 +45,7 @@ const validate = ({username, email, password, password_confirmation}: any) => {
 };
 
 const formWrapped = reduxForm({
-  form: "login",
   validate: validate,
 })(LoginForm);
 
-export default connect()(formWrapped);
+export default connector(formWrapped);

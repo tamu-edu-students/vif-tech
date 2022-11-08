@@ -1,18 +1,28 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import MyProfile from './MyProfile/MyProfile';
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import RedirectPrompt from '../../components/RedirectPrompt';
+import { IRootState } from '../../store/reducers';
 
-interface IProfilePageProps {
-  user: User;
+interface OwnProps {
   match: Match;
 }
 
-class ProfilePage extends React.Component<IProfilePageProps, {}> {
-  public render(): React.ReactElement<IProfilePageProps> {
+const mapStateToProps = (state: IRootState) => {
+  return {
+    user: state.auth.user,
+  }
+}
+const mapDispatchToProps = {};
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class ProfilePage extends React.Component<Props, {}> {
+  public render(): React.ReactElement<Props> {
     const { user } = this.props;
     const parentPath = this.props.match.path;
     return (
@@ -23,7 +33,7 @@ class ProfilePage extends React.Component<IProfilePageProps, {}> {
           <ul>
             <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
             {
-              user.usertype === "admin" &&
+              user?.usertype === "admin" &&
               <li><Link to={`${parentPath}/company-allow-lists`}>Company Allow List</Link></li>
             }
           </ul>
@@ -38,7 +48,7 @@ class ProfilePage extends React.Component<IProfilePageProps, {}> {
             </Route>
 
             {
-            user.usertype === "admin" &&
+            user?.usertype === "admin" &&
               <Route exact path={`${parentPath}/company-allow-lists`}>
                   <CompanyAllowlists />
               </Route>
@@ -60,10 +70,4 @@ class ProfilePage extends React.Component<IProfilePageProps, {}> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    user: state.auth.user,
-  }
-}
-
-export default connect(mapStateToProps)(ProfilePage);
+export default connector(ProfilePage);
