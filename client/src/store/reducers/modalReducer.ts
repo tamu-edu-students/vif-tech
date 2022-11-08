@@ -3,9 +3,9 @@ import {
   HIDE_MODAL,
  } from "../actions/types";
 
-interface Store_Modal {
+export interface Store_Modal {
   shouldRender: boolean;
-  children: any;
+  children: JSX.Element | null;
 }
 
 const INITIAL_STATE: Store_Modal = {

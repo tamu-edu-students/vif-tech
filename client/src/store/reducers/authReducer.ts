@@ -1,6 +1,6 @@
 import { LOG_IN, LOG_OUT, FETCH_LOGIN_STATUS } from "../actions/types";
 
-interface Store_Auth {
+export interface Store_Auth {
   isLoggedIn: boolean | null;
   user: User | null;
 }

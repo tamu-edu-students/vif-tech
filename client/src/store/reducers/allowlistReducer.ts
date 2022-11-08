@@ -5,7 +5,7 @@ import {
   DELETE_ALLOWLIST_DOMAIN,
  } from "../actions/types";
 
-interface Store_Allowlist {
+export interface Store_Allowlist {
   allowlist_emails: AllowlistEmail[];
   allowlist_domains: AllowlistDomain[];
 }
