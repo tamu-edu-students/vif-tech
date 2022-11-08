@@ -10,13 +10,13 @@ const mapStateToProps = (state: IRootState) => {
     user: state.auth.user
   };
 }
-const mapDispatchToProps = null;
+const mapDispatchToProps = {};
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class HomePage extends React.Component<OwnProps, {}> {
-  public render(): React.ReactElement<OwnProps> {
+class HomePage extends React.Component<Props, {}> {
+  public render(): React.ReactElement<Props> {
     // const { user } = this.props;
       return (
         <h1 className="heading-primary">Home Page</h1>
