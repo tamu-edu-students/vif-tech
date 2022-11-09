@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from "react-redux";
 
-import {logIn } from "../../store/actions";
+import {logIn } from "Store/actions";
 import LoginForm from "./LoginForm/LoginForm";
 
 interface OwnProps {

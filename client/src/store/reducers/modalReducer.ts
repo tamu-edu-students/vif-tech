@@ -1,7 +1,7 @@
 import {
   SHOW_MODAL,
   HIDE_MODAL,
- } from "../actions/types";
+ } from "Store/actions/types";
 
 export interface Store_Modal {
   shouldRender: boolean;

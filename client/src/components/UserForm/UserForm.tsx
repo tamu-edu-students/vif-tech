@@ -2,10 +2,10 @@ import React from 'react';
 import { Field, reduxForm, InjectedFormProps, change } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 
-import CustomForm from '../CustomForm/CustomForm';
-import { Usertype } from "../../shared/enums";
-import { fetchCompanies } from "../../store/actions";
-import { IRootState } from '../../store/reducers';
+import CustomForm from 'Components/CustomForm/CustomForm';
+import { Usertype } from "Shared/enums";
+import { fetchCompanies } from "Store/actions";
+import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
   onSubmit?: any;

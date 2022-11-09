@@ -2,7 +2,7 @@ import React from 'react';
 import { Field, reduxForm } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 
-import CustomForm from '../../../components/CustomForm/CustomForm';
+import CustomForm from 'Components/CustomForm/CustomForm';
 
 interface OwnProps {
   onSubmit?: any;

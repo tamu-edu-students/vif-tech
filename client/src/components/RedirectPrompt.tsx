@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 
-import { VifLogoMark } from "./iconComponents";
+import { VifLogoMark } from "Components/iconComponents";
 
 interface RedirectPromptProps {
   message: string;

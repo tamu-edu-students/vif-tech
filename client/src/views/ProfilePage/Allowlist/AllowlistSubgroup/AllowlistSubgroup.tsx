@@ -3,8 +3,8 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
 
-import { fetchCompanies, showModal, hideModal } from '../../../../store/actions';
-import { Usertype } from '../../../../shared/enums';
+import { fetchCompanies, showModal, hideModal } from 'Store/actions';
+import { Usertype } from 'Shared/enums';
 
 interface BaseProps {
   usertype: Usertype;

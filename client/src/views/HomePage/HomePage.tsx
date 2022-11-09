@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../store/reducers';
+import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
 }

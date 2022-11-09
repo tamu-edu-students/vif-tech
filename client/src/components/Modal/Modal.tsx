@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { hideModal } from '../../store/actions'
-import { IRootState } from '../../store/reducers';
+import { hideModal } from 'Store/actions'
+import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
 }

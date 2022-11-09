@@ -16,9 +16,9 @@ import {
 
   SHOW_MODAL,
   HIDE_MODAL,
-} from "./types";
-import history from "../../history";
-import vifTech from "../../apis/vifTech";
+} from './types';
+import history from "History/history";
+import vifTech from "Apis/vifTech";
 // import { Usertype } from "../../shared/enums";
 
 export const fetchUsers = () => async (dispatch: any) => {

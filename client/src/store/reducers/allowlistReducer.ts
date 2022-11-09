@@ -3,7 +3,7 @@ import {
   CREATE_ALLOWLIST_DOMAIN,
   DELETE_ALLOWLIST_EMAIL,
   DELETE_ALLOWLIST_DOMAIN,
- } from "../actions/types";
+ } from "Store/actions/types";
 
 export interface Store_Allowlist {
   allowlist_emails: AllowlistEmail[];

@@ -1,7 +1,7 @@
 import {
   FETCH_COMPANIES,
   CREATE_COMPANY,
-} from "../actions/types";
+} from "Store/actions/types";
 
 const companyReducer = (state: Company[] = [], action: any): Company[] => {
   switch(action.type) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Usertype } from '../../../shared/enums';
+import { Usertype } from 'Shared/enums';
 
 import AllowlistSubgroup from './AllowlistSubgroup/AllowlistSubgroup';
 
@@ -11,7 +11,7 @@ import {
   deleteAllowlistEmail,
   deleteAllowlistDomain,
   fetchCompanies,
-} from "../../../store/actions";
+} from "../../../Store/actions";
 
 interface OwnProps {
   title: string;

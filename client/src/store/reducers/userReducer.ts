@@ -1,7 +1,7 @@
 import {
   FETCH_USERS,
   CREATE_USER,
-} from "../actions/types";
+} from "Store/actions/types";
 
 const userReducer = (state: User[] = [], action: any): User[] => {
   switch(action.type) {

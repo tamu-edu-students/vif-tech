@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import { reducer as formReducer} from "redux-form";
-import userReducer from "./userReducer";
-import authReducer, { Store_Auth } from "./authReducer";
-import allowlistReducer, { Store_Allowlist } from "./allowlistReducer";
-import companyReducer from "./companyReducer";
-import modalReducer, { Store_Modal } from "./modalReducer";
+import userReducer from './userReducer';
+import authReducer, { Store_Auth } from './authReducer';
+import allowlistReducer, { Store_Allowlist } from './allowlistReducer';
+import companyReducer from './companyReducer';
+import modalReducer, { Store_Modal } from './modalReducer';
 
 export interface IRootState {
   users: User[];

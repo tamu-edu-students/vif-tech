@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect, ConnectedProps } from "react-redux";
 
-import { createUser } from "../store/actions";
-import UserForm from "./UserForm/UserForm";
+import { createUser } from "Store/actions";
+import UserForm from "Components/UserForm/UserForm";
 
 interface OwnProps {
 }

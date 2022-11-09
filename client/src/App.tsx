@@ -1,20 +1,21 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
-import history from "./history";
 
-import './sass/main.scss';
+import history from 'History/history';
 
-import HomePage from './views/HomePage/HomePage';
-import LoginPage from './views/LoginPage/LoginPage';
-import RedirectPrompt from './components/RedirectPrompt';
-import Users from './components/Users';
-import UserCreate from './components/UserCreate';
-import Modal from './components/Modal/Modal';
+import './Sass/main.scss';
 
-import { fetchLoginStatus, logOut } from './store/actions'
-import ProfilePage from './views/ProfilePage/ProfilePage';
-import { IRootState } from './store/reducers';
+import HomePage from 'Views/HomePage/HomePage';
+import LoginPage from 'Views/LoginPage/LoginPage';
+import RedirectPrompt from 'Components/RedirectPrompt';
+import Users from 'Components/Users';
+import UserCreate from 'Components/UserCreate';
+import Modal from 'Components/Modal/Modal';
+
+import { fetchLoginStatus, logOut } from './Store/actions'
+import ProfilePage from 'Views/ProfilePage/ProfilePage';
+import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
 }

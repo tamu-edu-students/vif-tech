@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from "react-redux";
 import reportWebVitals from './reportWebVitals';
 
-import createPreconfiguredStore from './store/createPreconfiguredStore';
+import createPreconfiguredStore from './Store/createPreconfiguredStore';
 import App from "./App";
 
 const store = createPreconfiguredStore();

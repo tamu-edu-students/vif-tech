@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, FETCH_LOGIN_STATUS } from "../actions/types";
+import { LOG_IN, LOG_OUT, FETCH_LOGIN_STATUS } from "Store/actions/types";
 
 export interface Store_Auth {
   isLoggedIn: boolean | null;

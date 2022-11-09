@@ -4,8 +4,8 @@ import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import MyProfile from './MyProfile/MyProfile';
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
-import RedirectPrompt from '../../components/RedirectPrompt';
-import { IRootState } from '../../store/reducers';
+import RedirectPrompt from 'Components/RedirectPrompt';
+import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
   match: Match;
