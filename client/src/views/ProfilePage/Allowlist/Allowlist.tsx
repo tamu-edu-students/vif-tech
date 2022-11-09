@@ -38,44 +38,38 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class Allowlist extends React.Component<Props, {}> {
-  private _onSubmitPrimaryContact = (formValues: any) => {
-    this.props.createAllowlistEmail({
+  private _onSubmitPrimaryContact = async (formValues: any) => {
+    await this.props.createAllowlistEmail({
       email: formValues.email,
       usertype: this.props.usertype,
       company_id: this.props.company_id,
       isPrimaryContact: true,
-    })
-    .then(() => {
-      if (this.props.usertype === Usertype.REPRESENTATIVE) {
-        this.props.fetchCompanies();
-      }
     });
+    if (this.props.usertype === Usertype.REPRESENTATIVE) {
+      this.props.fetchCompanies();
+    }
   }
 
-  private _onSubmitEmail = (formValues: any) => {
-    this.props.createAllowlistEmail({
+  private _onSubmitEmail = async (formValues: any) => {
+    await this.props.createAllowlistEmail({
       email: formValues.email,
       usertype: this.props.usertype,
       company_id: this.props.company_id,
-    })
-    .then(() => {
-      if (this.props.usertype === Usertype.REPRESENTATIVE) {
-        this.props.fetchCompanies();
-      }
     });
+    if (this.props.usertype === Usertype.REPRESENTATIVE) {
+      this.props.fetchCompanies();
+    }
   }
 
-  private _onSubmitDomain = (formValues: any) => {
-    this.props.createAllowlistDomain({
+  private _onSubmitDomain = async (formValues: any) => {
+    await this.props.createAllowlistDomain({
       email_domain: formValues.email_domain,
       usertype: this.props.usertype,
       company_id: this.props.company_id,
-    })
-    .then(() => {
-      if (this.props.usertype === Usertype.REPRESENTATIVE) {
-        this.props.fetchCompanies();
-      }
     });
+    if (this.props.usertype === Usertype.REPRESENTATIVE) {
+      this.props.fetchCompanies();
+    }
   }
 
   public render(): React.ReactElement<Props> {

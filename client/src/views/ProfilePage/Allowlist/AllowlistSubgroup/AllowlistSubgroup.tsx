@@ -80,6 +80,15 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
     this.props.showModal(<AllowlistEntryForm {...allowlistEntryFormProps} />);
   }
 
+  private _onSubmit = (formValues: any): void => {
+    this.props.onSubmit(formValues)
+    .then(() => this.props.hideModal());
+  }
+
+  private _onCancel = (): void => {
+    this.props.hideModal();
+  }
+
   render(): React.ReactElement<Props> {
     const {
       entries,
@@ -88,8 +97,8 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
     } = this.props;
 
     const allowlistEntryFormProps = {
-      onSubmit: this.props.onSubmit,
-      onCancel: this.props.hideModal,
+      onSubmit: this._onSubmit,
+      onCancel: this._onCancel,
       name,
       id: name,
       label: heading,
