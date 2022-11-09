@@ -32,9 +32,9 @@ class AllowlistEntryForm extends CustomForm<Props> {
     } = this.props;
 
     return (
-      <form data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
+      <form data-testid="allowlist-entry-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
         <Field name={name} id={id} type="text" component={this._renderInput} label={label}/>
-        <button type='submit' data-testid="create-company-form-button">Confirm</button>
+        <button type='submit' data-testid="create-allowlist-entry-form-button">Confirm</button>
         <button onClick={() => this.props.onCancel()} type='button'>Cancel</button>
       </form>
     );
