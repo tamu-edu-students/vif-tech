@@ -18,10 +18,12 @@ class Users extends React.Component<IUsersProps, {}> {
 
     return (
       <div>
+        <h1 className="heading-primary">Users</h1>
+
         {this.props.users.map((user: any) => {
           return (
             <div key={user.id}>
-              <h1>{user.email}</h1>
+              <h2 className="heading-secondary">{user.email}</h2>
               <ul>
                 <li>id: {user.id}</li>
                 <li>Email: {user.email}</li>
