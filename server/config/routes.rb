@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "/faq/find", to: "faq#find"
   resources :faq, only: [:create, :new, :show, :index, :update, :destroy] 
 
+  get "abouts/find", to: "abouts#find"
   resources :abouts, only: [:create, :new, :show, :index, :update, :destroy]
 
   # English: For each user, make a route to get user/:id/confirm_email

@@ -24,6 +24,29 @@ class AboutsController < ApplicationController
         @about = About.new
     end
 
+
+    def find
+        uri = URI.parse(request.url)
+        params = CGI.parse(uri.query)
+        @about = nil
+        puts params
+        if params.key?("firstname")
+            @about = About.find_by_firstname(params["firstname"])
+        elsif params.key?("lastname")
+            # Use this only for testing purposes as firstname-lastname pair is not guarenteed to be unique.
+            @about = About.find_by lastname: params["lastname"]
+        end
+        if @about
+            render json: {
+                about: @about,
+            }, status: :ok
+        else
+            render json: {
+                    errors: ["record not found"],
+                    }, status: :not_found
+        end
+    end
+
     def create
         if params["about"]["rank"] == nil
             params["about"]["rank"] == "normal"
