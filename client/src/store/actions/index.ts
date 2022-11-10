@@ -9,6 +9,7 @@ import {
   FETCH_COMPANIES,
   CREATE_COMPANY,
 
+  FETCH_ALLOWLIST,
   CREATE_ALLOWLIST_EMAIL,
   CREATE_ALLOWLIST_DOMAIN,
   DELETE_ALLOWLIST_EMAIL,
@@ -19,7 +20,7 @@ import {
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
-// import { Usertype } from "../../shared/enums";
+import { Usertype } from "Shared/enums";
 
 export const fetchUsers = () => async (dispatch: any) => {
   const response: any = await vifTech.get("/users");
@@ -104,6 +105,24 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
   dispatch({ type: CREATE_COMPANY, payload: response.data.company });
 }
 
+export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => {
+  const response: any = await vifTech.get(`/allowlist_emails`)
+  .catch(({response: { errors }}) => {
+    throw(new Error(errors.join('///')))
+  });
+
+  console.log('fetchAllowlist response:', response);
+
+  const allowlist_emails: AllowlistEmail = usertype ?
+    response.data.emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === usertype) :
+    response.data.emails;
+  const allowlist_domains: AllowlistDomain = usertype ?
+    response.data.domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === usertype) :
+    response.data.domains;
+
+  dispatch({ type: FETCH_ALLOWLIST, payload: {allowlist_emails, allowlist_domains} });
+}
+
 export const createAllowlistEmail = (formValues: any) => async (dispatch: any, getState: any) => {
   const allowlist_email: AllowlistEmail = {...formValues};
   
@@ -133,7 +152,7 @@ export const deleteAllowlistEmail = (id: number) => async (dispatch: any, getSta
 
   console.log('deleteAllowlistEmail response_delete:', response_delete);
 
-  dispatch({ type: DELETE_ALLOWLIST_EMAIL });
+  dispatch({ type: DELETE_ALLOWLIST_EMAIL, payload: id });
 }
 
 export const deleteAllowlistDomain = (id: number) => async (dispatch: any, getState: any) => {
@@ -141,7 +160,7 @@ export const deleteAllowlistDomain = (id: number) => async (dispatch: any, getSt
 
   console.log('deleteAllowlistDomain response_delete:', response_delete);
 
-  dispatch({ type: DELETE_ALLOWLIST_DOMAIN });
+  dispatch({ type: DELETE_ALLOWLIST_DOMAIN, payload: id });
 }
 
 export const showModal = (children: any) => {
