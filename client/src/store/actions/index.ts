@@ -106,19 +106,24 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
 }
 
 export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => {
-  const response: any = await vifTech.get(`/allowlist_emails`)
+  const response_emails: any = await vifTech.get(`/allowlist_emails`)
+  .catch(({response: { errors }}) => {
+    throw(new Error(errors.join('///')))
+  });
+  const response_domains: any = await vifTech.get(`/allowlist_domains`)
   .catch(({response: { errors }}) => {
     throw(new Error(errors.join('///')))
   });
 
-  console.log('fetchAllowlist response:', response);
+  console.log('fetchAllowlist (emails) response:', response_emails);
+  console.log('fetchAllowlist (domains) response:', response_domains);
 
   const allowlist_emails: AllowlistEmail = usertype ?
-    response.data.emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === usertype) :
-    response.data.emails;
+    response_emails.data.emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === usertype) :
+    response_emails.data.emails;
   const allowlist_domains: AllowlistDomain = usertype ?
-    response.data.domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === usertype) :
-    response.data.domains;
+    response_domains.data.domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === usertype) :
+    response_domains.data.domains;
 
   dispatch({ type: FETCH_ALLOWLIST, payload: {allowlist_emails, allowlist_domains} });
 }
