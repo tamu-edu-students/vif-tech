@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { Usertype } from 'Shared/enums';
 
-import Allowlist from '../Allowlist/Allowlist';
+import Allowlist from 'Components/Allowlist/Allowlist';
 import CompanyForm from './CompanyForm/CompanyForm';
 
 import {
@@ -11,8 +11,8 @@ import {
   createCompany,
   showModal,
   hideModal,
-} from '../../../Store/actions';
-import { IRootState } from '../../../Store/reducers';
+} from 'Store/actions';
+import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
 }

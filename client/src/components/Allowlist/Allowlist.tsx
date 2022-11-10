@@ -11,7 +11,7 @@ import {
   deleteAllowlistEmail,
   deleteAllowlistDomain,
   fetchCompanies,
-} from "../../../Store/actions";
+} from "Store/actions";
 
 interface OwnProps {
   title: string;
@@ -42,7 +42,7 @@ class Allowlist extends React.Component<Props, {}> {
     await this.props.createAllowlistEmail({
       email: formValues.email,
       usertype: this.props.usertype,
-      company_id: this.props.company_id,
+      ...(this.props.company_id && {company_id: this.props.company_id}),
       isPrimaryContact: true,
     });
     if (this.props.usertype === Usertype.REPRESENTATIVE) {
@@ -54,7 +54,7 @@ class Allowlist extends React.Component<Props, {}> {
     await this.props.createAllowlistEmail({
       email: formValues.email,
       usertype: this.props.usertype,
-      company_id: this.props.company_id,
+      ...(this.props.company_id && {company_id: this.props.company_id}),
     });
     if (this.props.usertype === Usertype.REPRESENTATIVE) {
       this.props.fetchCompanies();
@@ -65,7 +65,7 @@ class Allowlist extends React.Component<Props, {}> {
     await this.props.createAllowlistDomain({
       email_domain: formValues.email_domain,
       usertype: this.props.usertype,
-      company_id: this.props.company_id,
+      ...(this.props.company_id && {company_id: this.props.company_id}),
     });
     if (this.props.usertype === Usertype.REPRESENTATIVE) {
       this.props.fetchCompanies();
@@ -107,7 +107,6 @@ class Allowlist extends React.Component<Props, {}> {
             onSubmit={this._onSubmitPrimaryContact}
             onDelete={this.props.deleteAllowlistEmail}
             name="email"
-            isPrimaryContact={false}
           />
         )}
         

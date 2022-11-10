@@ -15,14 +15,13 @@ interface BaseProps {
 type PrimaryContact = {
   heading: 'Primary Contacts';
   entries: AllowlistEmail[];
-  isPrimaryContact: true;
   name: 'email';
+  isPrimaryContact: true;
 }
 
 type Email = {
   heading: 'Personal Emails';
   entries: AllowlistEmail[];
-  isPrimaryContact: false;
   name: 'email';
 }
 
@@ -89,7 +88,7 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
     this.props.hideModal();
   }
 
-  render(): React.ReactElement<Props> {
+  public render(): React.ReactElement<Props> {
     const {
       entries,
       name,
