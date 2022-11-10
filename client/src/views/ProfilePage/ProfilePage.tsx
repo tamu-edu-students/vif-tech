@@ -4,6 +4,7 @@ import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import MyProfile from './MyProfile/MyProfile';
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
+import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import RedirectPrompt from 'Components/RedirectPrompt';
 import { IRootState } from 'Store/reducers';
 
@@ -34,7 +35,10 @@ class ProfilePage extends React.Component<Props, {}> {
             <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
             {
               user?.usertype === "admin" &&
-              <li><Link to={`${parentPath}/company-allow-lists`}>Company Allow List</Link></li>
+              <>
+                <li><Link to={`${parentPath}/company-allow-lists`}>Company Allowlist</Link></li>
+                <li><Link to={`${parentPath}/student-allow-list`}>Student Allowlist</Link></li>
+              </>
             }
           </ul>
 
@@ -48,10 +52,14 @@ class ProfilePage extends React.Component<Props, {}> {
             </Route>
 
             {
-            user?.usertype === "admin" &&
-              <Route exact path={`${parentPath}/company-allow-lists`}>
-                  <CompanyAllowlists />
+            user?.usertype === "admin" && [
+              <Route exact path={`${parentPath}/company-allow-lists`} key={`${parentPath}/company-allow-lists`}>
+                <CompanyAllowlists />
+              </Route>,
+              <Route exact path={`${parentPath}/student-allow-list`} key={`${parentPath}/student-allow-list`}>
+                <StudentAllowlist />
               </Route>
+            ]
             }
 
             <Route path="*"> 
