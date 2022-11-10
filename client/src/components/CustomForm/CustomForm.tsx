@@ -5,19 +5,19 @@ export interface OwnProps {
 }
 
 class CustomForm<T> extends React.Component<InjectedFormProps<any, OwnProps & T> & OwnProps & T, {}> {
-  protected _renderInput = ({ input, label, meta, id, type }: any) => {
+  protected _renderInput = ({ input, label, meta, id, type, ...rest }: any) => {
     return (
       <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
         <label htmlFor={id}>
           {label}
-          <input {...input} type={type} id={id} autoComplete="off" />
+          <input {...input} type={type} id={id} autoComplete="off" {...rest} />
           {this._renderError(meta)}
         </label>
       </div>
     );
   }
 
-  protected _renderSelect = ({ input, label, meta, id, type, children }: any) => {
+  protected _renderSelect = ({ input, label, meta, id, children }: any) => {
     return (
       <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
         <label htmlFor={id}>

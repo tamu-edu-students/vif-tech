@@ -22,7 +22,7 @@ class CompanyForm extends CustomForm<Props> {
   public render() {
     return (
       <form data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name="name" id="name" type="text" component={this._renderInput} label="Company name" />
+        <Field name="name" id="name" type="text" component={this._renderInput} label="Company name" autoFocus />
         <button type='submit' data-testid="create-company-form-button">Confirm</button>
         <button onClick={() => this.props.onCancel()} type='button'>Cancel</button>
       </form>
