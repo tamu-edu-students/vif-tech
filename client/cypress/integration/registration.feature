@@ -17,7 +17,7 @@ Feature: Registration
     Examples:
       | email                  | firstname | lastname | password | password_confirmation | usertype |
       | unusedEmail@gmail.com  | Newboy    | Junior   | abcdefg  | abcdefg               | student  |
-      | unusedEmail@gmail.com  | Newboy    | Junior   | abcdefg  | abcdefg               | faculty  |
+      | unusedEmail@gmail.com  | Newboy    | Junior   | abcdefg  | abcdefg               | volunteer  |
 
   Scenario Outline: invalid registration with used email
     When I provide the following:

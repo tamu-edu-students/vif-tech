@@ -1,0 +1,16 @@
+{
+  "companies": [
+    {
+      "id": 1,
+      "name": "Disney"
+    },
+    {
+      "id": 2,
+      "name": "Activision"
+    },
+    {
+      "id": 3,
+      "name": "Blizzard"
+    }
+  ]
+}

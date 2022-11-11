@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :show, :index, :new]
 
   get "/faq/find", to: "faq#find"
-  resources :faq, only: [:create, :new, :show, :index, :update, :destroy] 
+  resources :faq, only: [:create, :new, :show, :index, :update, :destroy]
 
   get "abouts/find", to: "abouts#find"
   resources :abouts, only: [:create, :new, :show, :index, :update, :destroy]
@@ -20,13 +20,15 @@ Rails.application.routes.draw do
   end
 
   # Allowlist routes
-  resources :allowlist_domains, only: [:create, :show, :index, :destroy] 
-  resources :allowlist_emails, only: [:create, :show, :index, :destroy] 
-
+  resources :allowlist_domains, only: [:create, :show, :index, :destroy]
+  resources :allowlist_emails, only: [:create, :show, :index, :destroy]
+  post "/allowlist_emails/transfer_primary_contact", to: "allowlist_emails#transferPrimaryContact"
 
   get "/users/:id/meetings", to: "users#get_meetings"
-  get "/users/:id/meetings/attending", to: "users#get_attending_meetings"
+  get "/users/:id/meetings/accepted", to: "users#get_accepted_meetings"
   get "/users/:id/meetings/pending", to: "users#get_pending_meetings"
+  get "/users/:id/meetings/declined", to: "users#get_declined_meetings"
+  get "/users/:id/meetings/cancelled", to: "users#get_cancelled_meetings"
   get "/users/:id/meetings/owned", to: "users#get_owned_meetings"
   get "/users/:id/meetings/:meeting_id", to: "users#invited_to_meeting?"
   post "/users/:id/meetings/:meeting_id", to: "users#add_to_meeting"
