@@ -13,7 +13,7 @@ import Users from 'Components/Users';
 import UserCreate from 'Components/UserCreate';
 import Modal from 'Components/Modal/Modal';
 
-import { fetchLoginStatus, logOut } from './Store/actions'
+import { fetchLoginStatus, logOut } from 'Store/actions'
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import { IRootState } from 'Store/reducers';
 
