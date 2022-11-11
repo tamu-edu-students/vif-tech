@@ -7,8 +7,8 @@ class CreateAbouts < ActiveRecord::Migration[7.0]
       t.string :role
       t.text :description
       t.string :rank, :default => 'normal'
-      t.text :social_links, :default => {:facebook => nil, :github => nil, :linkedin => nil, 
-                                          :portfolio => nil, :twitter => nil, :youtube => nil}.to_yaml
+      t.text :social_links, :default => {:facebook => "nil", :github => "nil", :linkedin => "nil", 
+                                          :portfolio => "nil", :twitter => "nil", :youtube => "nil"}.to_yaml
 
       t.timestamps
     end

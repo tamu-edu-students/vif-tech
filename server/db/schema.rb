@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_02_202335) do
     t.string "role"
     t.text "description"
     t.string "rank", default: "normal"
-    t.text "social_links", default: "---\n:facebook:\n:github:\n:linkedin:\n:portfolio:\n:twitter:\n:youtube:\n"
+    t.text "social_links", default: "---\n:facebook: nil\n:github: nil\n:linkedin: nil\n:portfolio: nil\n:twitter: nil\n:youtube: nil\n"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -32,9 +32,9 @@ class AboutsController < ApplicationController
         puts params
         if params.key?("firstname")
             @about = About.find_by_firstname(params["firstname"])
-        elsif params.key?("lastname")
-            # Use this only for testing purposes as firstname-lastname pair is not guarenteed to be unique.
-            @about = About.find_by lastname: params["lastname"]
+        elsif params.key?("lastname") and params.key?("rank")
+            # Use this only for testing purposes as lastname and rank pair is not guarenteed to be unique.
+            @about = About.find_by lastname: params["lastname"], rank: params["rank"]
         end
         if @about
             render json: {
