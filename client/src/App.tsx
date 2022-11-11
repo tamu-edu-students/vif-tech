@@ -9,8 +9,8 @@ import './Sass/main.scss';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
 import RedirectPrompt from 'Components/RedirectPrompt';
-import Users from 'Components/Users';
-import UserCreate from 'Components/UserCreate';
+import UsersPage from 'Views/UsersPage/UsersPage';
+import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
 import Modal from 'Components/Modal/Modal';
 
 import { fetchLoginStatus, logOut } from 'Store/actions'
@@ -85,11 +85,11 @@ class App extends React.Component<Props, {}> {
             </Route>
 
             <Route exact path="/users">
-              <Users />
+              <UsersPage />
             </Route>
 
             <Route exact path="/users/new">
-              <UserCreate />
+              <RegistrationPage />
             </Route>
 
             <Route exact path="/users/new/success">

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from "react-redux";
 
 import { createUser } from "Store/actions";
-import UserForm from "Components/UserForm/UserForm";
+import UserForm from "Views/RegistrationPage/UserForm/UserForm";
 
 interface OwnProps {
 }
@@ -13,7 +13,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class UserCreate extends React.Component<Props, {}> {
+class RegistrationPage extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any) => {
     this.props.createUser(formValues)
     .catch((err: Error) => {
@@ -28,4 +28,4 @@ class UserCreate extends React.Component<Props, {}> {
   }
 }
 
-export default connector(UserCreate);
+export default connector(RegistrationPage);

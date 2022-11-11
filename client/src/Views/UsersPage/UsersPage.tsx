@@ -19,7 +19,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class Users extends React.Component<Props, {}> {
+class UsersPage extends React.Component<Props, {}> {
   public componentDidMount(): void {
     this.props.fetchUsers();
   }
@@ -50,4 +50,4 @@ class Users extends React.Component<Props, {}> {
   }
 }
 
-export default connector(Users);
+export default connector(UsersPage);
