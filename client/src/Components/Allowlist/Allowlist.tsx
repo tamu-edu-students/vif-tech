@@ -90,9 +90,9 @@ class Allowlist extends React.Component<Props, {}> {
         { showsPrimaryContacts &&
           <AllowlistSubgroup
             heading="Primary Contacts"
-            entries={allowlist_emails}
+            entries={primaryContacts}
             usertype={usertype}
-            onSubmit={this._onSubmitEmail}
+            onSubmit={this._onSubmitPrimaryContact}
             onDelete={this.props.deleteAllowlistEmail}
             name="email"
             isPrimaryContact={true}
@@ -102,9 +102,9 @@ class Allowlist extends React.Component<Props, {}> {
         { showsEmails && (
           <AllowlistSubgroup
             heading="Personal Emails"
-            entries={primaryContacts}
+            entries={allowlist_emails}
             usertype={usertype}
-            onSubmit={this._onSubmitPrimaryContact}
+            onSubmit={this._onSubmitEmail}
             onDelete={this.props.deleteAllowlistEmail}
             name="email"
           />
