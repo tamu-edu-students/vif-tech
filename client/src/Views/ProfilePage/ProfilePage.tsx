@@ -36,8 +36,8 @@ class ProfilePage extends React.Component<Props, {}> {
             {
               user?.usertype === "admin" &&
               <>
-                <li><Link to={`${parentPath}/company-allow-lists`}>Company Allowlist</Link></li>
-                <li><Link to={`${parentPath}/student-allow-list`}>Student Allowlist</Link></li>
+                <li><Link to={`${parentPath}/company-allowlists`}>Company Allowlist</Link></li>
+                <li><Link to={`${parentPath}/student-allowlist`}>Student Allowlist</Link></li>
               </>
             }
           </ul>
@@ -53,12 +53,13 @@ class ProfilePage extends React.Component<Props, {}> {
 
             {
             user?.usertype === "admin" && [
-              <Route exact path={`${parentPath}/company-allow-lists`} key={`${parentPath}/company-allow-lists`}>
-                <CompanyAllowlists />
-              </Route>,
-              <Route exact path={`${parentPath}/student-allow-list`} key={`${parentPath}/student-allow-list`}>
-                <StudentAllowlist />
-              </Route>
+            <Route exact path={`${parentPath}/company-allowlists`} key={`${parentPath}/company-allowlists`}>
+              <CompanyAllowlists />
+            </Route>,
+            
+            <Route exact path={`${parentPath}/student-allowlist`} key={`${parentPath}/student-allowlist`}>
+              <StudentAllowlist />
+            </Route>
             ]
             }
 

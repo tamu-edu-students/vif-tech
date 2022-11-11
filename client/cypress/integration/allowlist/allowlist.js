@@ -51,7 +51,7 @@ Before(function() {
 });
 
 Given(`I visit the companies allow list page`, () => {
-  cy.visit('/profile/company-allow-lists');
+  cy.visit('/profile/company-allowlists');
   cy.wait('@Fetch Companies')
 });
 
