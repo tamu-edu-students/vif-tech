@@ -1,0 +1,23 @@
+
+
+
+
+
+// TODO: Remove garbage styles
+.nav {
+  color: white;
+  background-color: $color-violet;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+
+  ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+  }
+
+  a:visited,
+  a:link {
+    color: white;
+  }
+}
