@@ -14,16 +14,16 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class StudentAllowlist extends React.Component<Props, {}> {
+class VolunteerAllowlist extends React.Component<Props, {}> {
   public render(): React.ReactElement<Props> {
     return (
       <GenericAllowlistSubview
-        title="Students"
-        usertype={Usertype.STUDENT}
-        showsDomains
+        title="Volunteers"
+        usertype={Usertype.VOLUNTEER}
+        showsEmails
       />
     )
   }
 }
 
-export default connector(StudentAllowlist);
+export default connector(VolunteerAllowlist);
