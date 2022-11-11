@@ -6,8 +6,6 @@ import {
   DELETE_ALLOWLIST_DOMAIN,
  } from "Store/actions/types";
 
- import { Usertype } from "Shared/enums";
-
 export interface Store_Allowlist {
   allowlist_emails: AllowlistEmail[];
   allowlist_domains: AllowlistDomain[];
