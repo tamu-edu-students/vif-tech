@@ -10,7 +10,7 @@ import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Users from 'Components/Users';
-import UserCreate from 'Components/UserCreate';
+import UserCreate from 'UserCreate';
 import Modal from 'Components/Modal/Modal';
 
 import { fetchLoginStatus, logOut } from 'Store/actions'
