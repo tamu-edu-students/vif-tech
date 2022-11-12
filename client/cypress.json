@@ -4,6 +4,6 @@
   "video": false,
   "screenshotOnRunFailure": false,
   "env": {
-    "TAGS": ""
+    "TAGS": "not @ignore"
   }
 }
