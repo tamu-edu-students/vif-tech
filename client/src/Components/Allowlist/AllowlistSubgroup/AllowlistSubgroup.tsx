@@ -95,6 +95,11 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
       heading,
     } = this.props;
 
+    let classModifier;
+    if (heading === 'Primary Contacts') { classModifier = 'primary-contacts'; }
+    if (heading === 'Personal Emails') { classModifier = 'personal-emails'; }
+    if (heading === 'Domains') { classModifier = 'domains'; }
+
     const allowlistEntryFormProps = {
       onSubmit: this._onSubmit,
       onCancel: this._onCancel,
@@ -105,13 +110,13 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
     };
 
     return (
-      <div className={`allowlist__group`}>
+      <div className={`allowlist__subgroup allowlist__subgroup--${classModifier}`}>
         <h3 className="heading-tertiary">{heading}</h3>
         <ul>
           {this._renderEntries(entries)}
         </ul>
         <button onClick={() => this._renderForm(allowlistEntryFormProps)}>
-          Add {heading.slice(0, -1)}
+          Add
         </button>
       </div>
     );
