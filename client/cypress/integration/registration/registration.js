@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
-import { setSession, fetchLoginStatus } from "../utils";
+import { setSession } from "../utils";
 
 let registeredUser;
 let users;
@@ -37,15 +37,32 @@ Given(`I visit the registration page`, function() {
   cy.visit('/users/new');
 });
 
-When(`I provide the following:`, (table) => {
-  const { email, firstname, lastname, password, password_confirmation, usertype } = table.hashes()[0];
+Given(`I choose the {word} usertype`, (usertype) => {
+  console.log(usertype);
+  cy.findByLabelText(new RegExp(`${usertype}`, 'i')).check();
+});
 
-  cy.findByLabelText(/email/i).type(email);
-  cy.findByLabelText(/first name/i).type(firstname);
-  cy.findByLabelText(/last name/i).type(lastname);
-  cy.findByLabelText(/^password$/i).type(password);
-  cy.findByLabelText(/confirm password/i).type(password_confirmation);
+Given(`I am about to submit invalid data`, () => {
+  cy.intercept('POST', "http://localhost:3001/users", req => {
+    req.reply(
+      400,
+      { errors: ['Some error occured while registering'] }
+    );
+  }).as('Sign Up');
+});
 
+When(`I provide the following details:`, (table) => {
+  const { email, firstname, lastname, password, password_confirmation} = table.hashes()[0];
+
+  email && cy.findByLabelText(/email/i).type(email);
+  firstname && cy.findByLabelText(/first name/i).type(firstname);
+  lastname && cy.findByLabelText(/last name/i).type(lastname);
+  password && cy.findByLabelText(/^password$/i).type(password);
+  password_confirmation && cy.findByLabelText(/confirm password/i).type(password_confirmation);
+});
+
+When(`I choose the following usertype:`, (table) => {
+  const { usertype } = table.hashes()[0];
   cy.findByLabelText(new RegExp(`${usertype}`, 'i')).check();
 });
 
@@ -55,10 +72,19 @@ And(`I click the sign up button`, () => {
     .wait(`@Sign Up`);
 });
 
+And(`I click the sign up button --no waiting--`, () => {
+  cy.findByRole('button', { name: /sign up/i })
+    .click();
+});
+
 And(`the provided credentials should match the resulting user`, table => {
   const fields = table.hashes()[0];
   // compare each value in the table to each corresponding field in the user object
     Object.entries(fields).forEach(([key, value]) => expect(registeredUser[key]).to.eq(value));
+});
+
+Then(`I should see an error`, () => {
+  cy.get('.error').should('be.visible');
 });
 
 Then(`the registration should be successful`, () => {
