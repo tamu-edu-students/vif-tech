@@ -1,113 +1,81 @@
 /// <reference types="cypress" />
 
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
+import { setSession, fetchLoginStatus } from "../utils";
 
-let users;
-let companies;
-function fetchLoginStatus() {
-  cy.findByRole('button', { name: /fetchloginstatus/i }).click().wait('@Logged In');
-}
+let users = [];
+let companies = [];
+let allowlist_emails = [];
+let allowlist_domains = [];
+
+const createCompany = (() => {
+  let id = 1;
+  const createCompanyWithIdClosure = (name) => ({
+    id: id++,
+    name,
+    description: null,
+    allowlist_emails: [],
+    allowlist_domains: [],
+  });
+  return createCompanyWithIdClosure;
+})();
 
 Before(function() {
   cy.fixture('users').then(data => { users = data.users; });
-  cy.fixture('companies').then(data => { companies = data.companies; });
+  users = [];
+  let companies = [];
+  let allowlist_emails = [];
+  let allowlist_domains = [];
 
-  cy.intercept('POST', "http://localhost:3001/login", req => {
-    const { user: {email: inputEmail, password: inputPassword} } = req.body;
-    const matchingUser = users.find(({ email, password }) => email === inputEmail && password === inputPassword);
-    if (!matchingUser) {
-      req.reply({
-        status: 401,
-        errors: 'Invalid credentials'
-      },
-      {
-        'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email: inputEmail })}`
-      });
-    }
-    else {
-      req.reply(
-      {
-        status: 200,
-        logged_in: true,
-        user: matchingUser
-      },
-      {
-        'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email: inputEmail })}`
-      });
-    }
-  }).as('Log In');
-
-  cy.intercept('POST', "http://localhost:3001/logout", req => {
-    req.reply(
-    {
-      status: 200,
-      logged_out: true,
-    },
-    {
-      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
+  cy.intercept('GET', "http://localhost:3001/companies", req => {
+    req.reply(200, {
+      companies: []
     });
-  }).as('Log Out');
+  }).as('Fetch Companies');
 
-  cy.intercept('GET')
+  cy.intercept('POST', "http://localhost:3001/companies", req => {
+    const { company: { name } } = req.body;
+    if (companies.some(company => company.name === name)) {
+      req.reply(
+        400,
+        { errors: ['Company name already in use'] }
+      )
+    }
+    const newCompany = createCompany(name);
+    companies.push(newCompany)
+    req.reply(
+      200,
+      { company: newCompany }
+    );
+  }).as('Create Company');
 });
 
 Given(`I visit the companies allow list page`, () => {
-  cy.visit('/profile/companies-allow-list');
-  fetchLoginStatus();
+  cy.visit('/profile/company-allowlists');
+  cy.wait('@Fetch Companies')
 });
 
 Given(`I am not logged in`, () => {
-  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-    req.reply({
-      status: 200,
-      logged_in: false,
-      user: null
-    },
-    {
-      'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: false, email: null })}`
-    });
-  }).as('Logged In');
+  setSession(false);
 });
 
 Given(`I am logged in with the following email:`, (table) => {
  const { email } = table.hashes()[0];
-  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-      const matchingUser = users.find(({ email: targetEmail }) => targetEmail === email);
-      if (matchingUser) {
-        req.reply({
-          status: 200,
-          logged_in: true,
-          user: matchingUser
-        },
-        {
-          'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email })}`
-        });
-      }
-  }).as('Logged In');
+  setSession(true, email, users);
 });
 
 Given(`I am logged in as an admin`, () => {
-  cy.intercept('GET', "http://localhost:3001/logged_in", req => {
-    const adminUser = users.find(user => user.usertype === 'admin');
-      req.reply({
-        status: 200,
-        logged_in: true,
-        user: adminUser
-      },
-      {
-        'Set-Cookie': `mock_logged-in=${JSON.stringify({ logged_in: true, email: adminUser.email })}`
-      });
-  }).as('Logged In');
+  const adminEmail = users.find(user => user.usertype === 'admin').email;
+  setSession(true, adminEmail, users);
 });
 
 When(`I reload`, () => {
   cy.reload();
-  fetchLoginStatus();
 });
 
 When('I click the add new company button', () => {
   cy.findByRole('button', { name: /add new company/i })
-    .click();
+    .click()
 });
 
 And('I enter the following company name:', (table) => {
@@ -116,13 +84,13 @@ And('I enter the following company name:', (table) => {
     .type(name); 
 });
 
-And('I click the submit button', () => {
-  cy.findByRole('button', { name: /add new company/i })
+And('I click the confirm button', () => {
+  cy.findByRole('button', { name: /confirm/i })
     .click()
     .wait("@Create Company");
 });
 
-Then(`I should see the following company name in the list`, (table) => {
+Then(`I should see the following company name in the list:`, (table) => {
   const { name } = table.hashes()[0];
-  cy.findByTestId("admin-allowlist-of-companies").should('contain', name);
+  cy.findByTestId("admin-company-allowlists").should('contain', name);
 });
