@@ -105,8 +105,8 @@ Before(function() {
 });
 
 Given(`I visit the companies allowlist page`, () => {
-  cy.visit('/profile/company-allowlists');
-  cy.wait('@Fetch Companies')
+  cy.visit('/profile/company-allowlists')
+  .wait('@Fetch Companies')
 });
 
 Given(`I am not logged in`, () => {
