@@ -28,9 +28,11 @@ import { fetchLoginStatus } from "../integration/utils";
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   originalFn(url, options);
   cy.wait('@Logged In');
+  cy.window().then(win => window.store = win.store);
 });
 
 Cypress.Commands.overwrite('reload', (originalFn) => {
   originalFn();
   cy.wait('@Logged In');
+  cy.window().then(win => window.store = win.store);
 });
