@@ -107,17 +107,27 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
       heading,
     } = this.props;
 
-    let classModifier;
-    if (heading === 'Primary Contacts') { classModifier = 'primary-contacts'; }
-    if (heading === 'Personal Emails') { classModifier = 'personal-emails'; }
-    if (heading === 'Domains') { classModifier = 'domains'; }
+    let classModifier: string = '';
+    let label: string = '';
+    if (heading === 'Primary Contacts') {
+      classModifier = 'primary-contacts';
+      label = 'Primary Contact';
+    }
+    if (heading === 'Personal Emails') {
+      classModifier = 'personal-emails';
+      label = 'Personal Email'
+    }
+    if (heading === 'Domains') {
+      classModifier = 'domains';
+      label = 'Domain';
+    }
 
     const allowlistEntryFormProps = {
       onSubmit: this._onSubmit,
       onCancel: this._onCancel,
       name,
       id: name,
-      label: heading,
+      label,
       form: "createAllowlistEntry"
     };
 
