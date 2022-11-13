@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": ["cypress", "@testing-library/cypress"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,7 +23,9 @@
     "baseUrl": "src"
   },
   "include": [
-    "src"
+    "src",
+    "node_modules/cypress",
+    "cypress/**/*.js"
   ],
   "typeRoots": [
     "./Typings",

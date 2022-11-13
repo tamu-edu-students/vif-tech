@@ -89,6 +89,7 @@ class Allowlist extends React.Component<Props, {}> {
         <h2 className="heading-secondary">Title: {title}</h2>
         { showsPrimaryContacts &&
           <AllowlistSubgroup
+            parentTitle={title}
             heading="Primary Contacts"
             entries={primaryContacts}
             usertype={usertype}
@@ -101,6 +102,7 @@ class Allowlist extends React.Component<Props, {}> {
 
         { showsEmails && (
           <AllowlistSubgroup
+            parentTitle={title}
             heading="Personal Emails"
             entries={allowlist_emails}
             usertype={usertype}
@@ -112,6 +114,7 @@ class Allowlist extends React.Component<Props, {}> {
         
         { showsDomains && (
           <AllowlistSubgroup
+            parentTitle={title}
             heading="Domains"
             entries={allowlist_domains}
             usertype={usertype}

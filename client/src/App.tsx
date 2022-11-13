@@ -6,15 +6,16 @@ import history from 'History/history';
 
 import './Sass/main.scss';
 
+import RedirectPrompt from 'Components/RedirectPrompt';
+import Modal from 'Components/Modal/Modal';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
-import RedirectPrompt from 'Components/RedirectPrompt';
 import UsersPage from 'Views/UsersPage/UsersPage';
 import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
-import Modal from 'Components/Modal/Modal';
-
-import { fetchLoginStatus, logOut } from 'Store/actions'
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
+
+import { waitThen } from 'Shared/utils';
+import { fetchLoginStatus, logOut } from 'Store/actions'
 import { IRootState } from 'Store/reducers';
 
 interface OwnProps {
@@ -34,7 +35,12 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class App extends React.Component<Props, {}> {
   componentDidMount(): void {
+    if ((window as any).Cypress) {
+      waitThen(150, () => this.props.fetchLoginStatus());
+    }
+    else {
       this.props.fetchLoginStatus();
+    }
   }
 
   render(): React.ReactElement<Props> {

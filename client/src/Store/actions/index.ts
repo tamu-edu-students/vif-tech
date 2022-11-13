@@ -101,7 +101,7 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
     throw(new Error(errors.join('///')));
   });
 
-  console.log('fetchCompanies response:', response);
+  console.log('createCompany response:', response);
   dispatch({ type: CREATE_COMPANY, payload: response.data.company });
 }
 

@@ -7,6 +7,7 @@ import { fetchCompanies, showModal, hideModal } from 'Store/actions';
 import { Usertype } from 'Shared/enums';
 
 interface BaseProps {
+  parentTitle: string;
   usertype: Usertype;
   onSubmit: any;
   onDelete: any;
@@ -48,14 +49,15 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {
         this.props.fetchCompanies();
       }
-    });
+    })
+    .then(() => this.props.hideModal());
   }
 
   private _renderEntry(entryString: string, id: number): JSX.Element {
     return (
       <li className="allowlist__entry" key={id}>
         {`${this.props.name === 'email_domain' ? '@' : ''}${entryString}`}
-        <button onClick={() => this._onEntryDeletion(id)}>
+        <button onClick={() => this._renderConfirmationDialogue(id, entryString, this.props.parentTitle)}>
           Delete
         </button>
       </li>
@@ -73,6 +75,16 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
     else {
       throw new Error(`Invalid Allowlist field name type "${name}"`);
     }
+  }
+
+  private _renderConfirmationDialogue = (id: number, entryString: string, parentTitle: string): void => {
+    this.props.showModal(
+      <div>
+        <p>Warning: Users registered under {parentTitle} will be deleted if {entryString} was their only tie to the {parentTitle} allowlist. Delete?</p>
+        <button onClick={() => this._onEntryDeletion(id)} type="button">Confirm</button>
+        <button onClick={this._onCancel} type="button">Cancel</button>
+      </div>
+    );
   }
 
   private _renderForm = (allowlistEntryFormProps: any): void => {
@@ -95,23 +107,38 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
       heading,
     } = this.props;
 
+    let classModifier: string = '';
+    let label: string = '';
+    if (heading === 'Primary Contacts') {
+      classModifier = 'primary-contacts';
+      label = 'Primary Contact';
+    }
+    if (heading === 'Personal Emails') {
+      classModifier = 'personal-emails';
+      label = 'Personal Email'
+    }
+    if (heading === 'Domains') {
+      classModifier = 'domains';
+      label = 'Domain';
+    }
+
     const allowlistEntryFormProps = {
       onSubmit: this._onSubmit,
       onCancel: this._onCancel,
       name,
       id: name,
-      label: heading,
+      label,
       form: "createAllowlistEntry"
     };
 
     return (
-      <div className={`allowlist__group`}>
+      <div className={`allowlist__subgroup allowlist__subgroup--${classModifier}`}>
         <h3 className="heading-tertiary">{heading}</h3>
         <ul>
           {this._renderEntries(entries)}
         </ul>
         <button onClick={() => this._renderForm(allowlistEntryFormProps)}>
-          Add {heading.slice(0, -1)}
+          Add
         </button>
       </div>
     );

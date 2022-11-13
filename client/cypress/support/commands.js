@@ -27,10 +27,14 @@ import { fetchLoginStatus } from "../integration/utils";
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   originalFn(url, options);
-  cy.wait('@Logged In');
+  cy.wait(100)
+    .window().then(win => window.store = win.store)
+    .wait('@Logged In');
 });
 
 Cypress.Commands.overwrite('reload', (originalFn) => {
   originalFn();
-  cy.wait('@Logged In');
+  cy.wait(100)
+    .wait('@Logged In')
+    .window().then(win => window.store = win.store);
 });
