@@ -31,36 +31,55 @@ Feature: Allowlist
     And the following companies are in the allowlist:
       | companyName1 | companyName2 |
       | <name1>      | <name2>      |
-    When I click the add <category> button for the following company name:
+    When I click the add <subgroupType> button for the following company name:
       | companyName |
       | <name1>     |
     And I enter the following into the modal form:
-      | input   |
-      | <input> |
-    And I click the <category> confirm add button
-    And I click the add <category> button for the following company name:
+      | input    |
+      | <input1> |
+    And I click the <subgroupType> confirm add button
+    And I click the add <subgroupType> button for the following company name:
       | companyName |
       | <name2>     |
     And I enter the following into the modal form:
       | input    |
       | <input2> |
-    And I click the <category> confirm add button
-    Then I should see the correct <category> in the correct company allowlist
-      | companyName | input   |
-      | <name1>     | <input> |
-    And I should see the correct <category> in the correct company allowlist
-      | companyName | input    |
+    And I click the <subgroupType> confirm add button
+    Then I should see the correct <subgroupType> in the correct company allowlist
+      | companyName | entry    |
+      | <name1>     | <input1> |
+    And I should see the correct <subgroupType> in the correct company allowlist
+      | companyName | entry    |
       | <name2>     | <input2> |
 
     Examples:
-      | category        | name1   | name2      | input                  | input2                 |
+      | subgroupType    | name1   | name2      | input1                 | input2                 |
       | personal email  | Disney  | Activision | validEmail@gmail.com   | anotherEmail@gmail.com |
       | primary contact | Credera | EA         | primaryEmail@gmail.com | prime2@gmail.com       |
       | domain          | Disney  | Activision | disney.com             | activision.com         |
 
-  # Scenario Outline: deleting allowlist entries should work
-  #   Given I visit the companies allowlist page
-  #   And the following companies are in the allowlist:
-  #     | companyName1 | companyName2 |
-  #     | <name1>      | <name2>      |
-  #   And 
+  Scenario Outline: deleting allowlist entries should work
+    Given I visit the companies allowlist page
+    And the following companies are in the allowlist:
+      | companyName1 | companyName2 |
+      | <name1>      | <name2>      |
+    When I click the add <subgroupType> button for the following company name:
+      | companyName |
+      | <name1>     |
+    And I enter the following into the modal form:
+      | input    |
+      | <input1> |
+    And I click the <subgroupType> confirm add button
+    And I click the delete button for the following <subgroupType> entry for the following company:
+      | entry    | companyName |
+      | <input1> | <name1>     |
+    And I click the <subgroupType> confirm delete button
+    Then I should not see the <subgroupType> in the correct company allowlist
+      | companyName | entry    |
+      | <name1>     | <input1> |
+
+    Examples:
+      | subgroupType    | name1   | name2      | input1                 | input2                 |
+      | personal email  | Disney  | Activision | validEmail@gmail.com   | anotherEmail@gmail.com |
+      | primary contact | Credera | EA         | primaryEmail@gmail.com | prime2@gmail.com       |
+      | domain          | Disney  | Activision | disney.com             | activision.com         |

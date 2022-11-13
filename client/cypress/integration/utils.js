@@ -39,16 +39,14 @@ export const createCompany = (() => {
 
 export const createAllowlistEmail = (() => {
   let id = 1;
-  const createAllowlistEmailWithIdClosure = ({email, company_id, usertype, isPrimaryContact}, companies) => {
+  const createAllowlistEmailWithIdClosure = ({email, company_id, usertype, isPrimaryContact}) => {
     const newAllowlistEmail = {
       id: id++,
       email,
       ...(company_id && {company_id: company_id}),
       usertype,
       isPrimaryContact: isPrimaryContact === 1 ? true : false,
-    }
-    const matchingCompany = companies.find(company => company.id === newAllowlistEmail.company_id);
-    if (matchingCompany) { matchingCompany.allowlist_emails.push(newAllowlistEmail); }
+    };
     return newAllowlistEmail;
   };
   return createAllowlistEmailWithIdClosure;
@@ -56,16 +54,54 @@ export const createAllowlistEmail = (() => {
 
 export const createAllowlistDomain = (() => {
   let id = 1;
-  const createAllowlistDomainWithIdClosure = ({email_domain, company_id, usertype}, companies) => {
+  const createAllowlistDomainWithIdClosure = ({email_domain, company_id, usertype}) => {
     const newAllowlistDomain = {
       id: id++,
       email_domain,
       ...(company_id && {company_id: company_id}),
       usertype,
-    }
-    const matchingCompany = companies.find(company => company.id === newAllowlistDomain.company_id);
-    if (matchingCompany) { matchingCompany.allowlist_domains.push(newAllowlistDomain); }
+    };
     return newAllowlistDomain;
   };
   return createAllowlistDomainWithIdClosure;
 })();
+
+export const getCompaniesAllowlistJoined = () => {
+  const companies = window.store.getState().companies;
+  const allowlist_emails = window.store.getState().allowlist.allowlist_emails;
+  const allowlist_domains = window.store.getState().allowlist.allowlist_domains;
+
+  companies.forEach(company => {
+    company.allowlist_emails = company.allowlist_emails.filter(comp_allowlist_email => 
+      allowlist_emails.some(allowlist_email =>
+        allowlist_email.id === comp_allowlist_email.id
+      )
+    );
+
+    company.allowlist_domains = company.allowlist_domains.filter(comp_allowlist_domain =>
+      allowlist_domains.some(allowlist_domain =>
+        allowlist_domain.id === comp_allowlist_domain.id
+      )
+    );
+
+    allowlist_emails.forEach(allowlist_email => {
+      if (
+        allowlist_email.company_id === company.id
+        && !company.allowlist_emails.some(comp_allowlist_email => comp_allowlist_email.id === allowlist_email.id)
+      ) {
+        company.allowlist_emails.push(allowlist_email);
+      }
+    });
+    
+    allowlist_domains.forEach(allowlist_domain => {
+      if (
+        allowlist_domain.company_id === company.id
+        && !company.allowlist_domains.some(comp_allowlist_domain => comp_allowlist_domain.id === allowlist_domain.id)
+      ) {
+        company.allowlist_domains.push(allowlist_domain);
+      }
+    });
+  });
+
+  return companies;
+}
