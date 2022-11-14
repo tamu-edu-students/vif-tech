@@ -12,12 +12,12 @@ class SessionsController < ApplicationController
       else
         render json: {
           errors: ["email not confirmed"],
-        }, status: :forbidden
+        }, status: :unauthorized
       end
     else
       render json: {
                errors: ["no such user, please try again"],
-             }, status: :forbidden
+             }, status: :unauthorized
     end
   end
 
