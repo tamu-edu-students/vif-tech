@@ -61,6 +61,7 @@ end
 Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) and ([^\'^\ ]*) ([^\'^\ ]*) should be found in the user DB$/ do |key1, value1, key2, value2|
   ret = page.driver.get("/users/find/?" + key1 + "=" + value1 + "&" + key2 + "=" + value2)
   ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
   expect(ret_body["user"][key1]).to eq(value1)
   expect(ret_body["user"][key2]).to eq(value2)
 end

@@ -7,6 +7,9 @@ Given("that I sign up and log in as a valid student") do
   password = SecureRandom.alphanumeric(16)
   email = SecureRandom.alphanumeric(8) + "@tamu.edu"
   page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email } })
+  user = User.find_by_email(email)
+  user.email_confirmed = true
+  user.save
   ret = page.driver.post("/login", { 'user': { 'password': password, 'email': email } })
   ret_body = JSON.parse ret.body
   expect(ret_body["logged_in"]).to eq(true)

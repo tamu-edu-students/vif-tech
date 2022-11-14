@@ -101,6 +101,7 @@ Feature: Student signup
             | email | test@tamu.edu |
             | usertype | student |   
         And that the user verified their email test@tamu.edu
+        And that I log in as admin
         Then the user with firstname james and lastname bond should be found in the user DB
         And the user with firstname jane and lastname bond should NOT be found in the user DB
         And the user with email test@tamu.edu should be marked as verified
