@@ -8,18 +8,16 @@ class SessionsController < ApplicationController
         render json: {
                 logged_in: true,
                 user: @user,
-              }
+              }, status: :ok
       else
         render json: {
-          status: 401,
           errors: ["email not confirmed"],
-        }
+        }, status: :forbidden
       end
     else
       render json: {
-               status: 401,
                errors: ["no such user, please try again"],
-             }
+             }, status: :forbidden
     end
   end
 
@@ -28,21 +26,20 @@ class SessionsController < ApplicationController
       render json: {
                logged_in: true,
                user: current_user,
-             }
+             }, status: :ok
     else
       render json: {
                logged_in: false,
                message: "no such user",
-             }
+             }, status: :ok
     end
   end
 
   def destroy
     logout!
     render json: {
-             status: 200,
              logged_out: true,
-           }
+           }, status: :ok
   end
 
   private
