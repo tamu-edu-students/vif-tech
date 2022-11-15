@@ -1,5 +1,5 @@
 import React from 'react';
-import { IRootState } from 'Store/reducers';
+// import { IRootState } from 'Store/reducers';
 import EditorConvertToHTML from 'Components/EditorToHTML/EditorToHTML';
 
 interface Props {
@@ -31,7 +31,7 @@ class FAQForm extends React.Component<Props, OwnState> {
         <h2 className="heading-secondary">Question</h2>
         <EditorConvertToHTML placeholder="Question" onChange={this._setQuestion} />
         <br />
-        
+
         <h2 className="heading-secondary">Answer</h2>
         <EditorConvertToHTML placeholder="Answer" onChange={this._setAnswer} />
 
