@@ -5,6 +5,7 @@ import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
 import history from 'History/history';
 
 import './Sass/main.scss';
+import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
