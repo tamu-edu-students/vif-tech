@@ -5,9 +5,11 @@ import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
 import history from 'History/history';
 
 import './Sass/main.scss';
+import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
+import FAQPage from 'Views/FAQPage/FAQPage';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
 import UsersPage from 'Views/UsersPage/UsersPage';
@@ -55,6 +57,7 @@ class App extends React.Component<Props, {}> {
         <Router history={history}>
           <nav className="nav">
             <ul>
+              <li><Link to="/faq" data-testid="faq-page-button">FAQ</Link></li>
               {
                 this.props.user
                 ? (
@@ -92,6 +95,10 @@ class App extends React.Component<Props, {}> {
 
             <Route exact path="/users">
               <UsersPage />
+            </Route>
+
+            <Route exact path="/faq">
+              <FAQPage />
             </Route>
 
             <Route exact path="/users/new">
