@@ -15,8 +15,12 @@ import {
   DELETE_ALLOWLIST_EMAIL,
   DELETE_ALLOWLIST_DOMAIN,
 
+  FETCH_FAQS,
+  UPDATE_FAQ,
+
   SHOW_MODAL,
   HIDE_MODAL,
+  CREATE_FAQ,
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
@@ -160,12 +164,36 @@ export const deleteAllowlistEmail = (id: number) => async (dispatch: any, getSta
   dispatch({ type: DELETE_ALLOWLIST_EMAIL, payload: id });
 }
 
-export const deleteAllowlistDomain = (id: number) => async (dispatch: any, getState: any) => {
+export const deleteAllowlistDomain = (id: number) => async (dispatch: any) => {
   const response_delete = await vifTech.delete(`/allowlist_domains/${id}`);
 
   console.log('deleteAllowlistDomain response_delete:', response_delete);
 
   dispatch({ type: DELETE_ALLOWLIST_DOMAIN, payload: id });
+}
+
+export const fetchFAQs = () => async (dispatch: any) => {
+  const response_fetchFAQs = await vifTech.get('/faq');
+
+  console.log('response_fetchFAQs:', response_fetchFAQs);
+
+  dispatch({ type: FETCH_FAQS, payload: response_fetchFAQs.data.faqs });
+}
+
+export const createFAQ = (formValues: any) => async (dispatch: any) => {
+  const response_createFAQ = await vifTech.post('/faq', { faq: {...formValues} });
+
+  console.log('response_createFAQ:', response_createFAQ);
+
+  dispatch({ type: CREATE_FAQ, payload: response_createFAQ.data.faq });
+}
+
+export const updateFAQ = (id: number) => async (dispatch: any) => {
+  const response_updateFAQ = await vifTech.put(`/faq/${id}`);
+
+  console.log('response_updateFAQ:', response_updateFAQ);
+
+  dispatch({ type: UPDATE_FAQ, payload: response_updateFAQ.data.faq });
 }
 
 export const showModal = (children: any) => {

@@ -5,6 +5,7 @@ import authReducer, { Store_Auth } from './authReducer';
 import allowlistReducer, { Store_Allowlist } from './allowlistReducer';
 import companyReducer from './companyReducer';
 import modalReducer, { Store_Modal } from './modalReducer';
+import faqReducer from "./faqReducer";
 
 export interface IRootState {
   users: User[];
@@ -13,6 +14,7 @@ export interface IRootState {
   allowlist: Store_Allowlist;
   companies: Company[];
   modal: Store_Modal;
+  faqs: FAQ[];
 }
 
 const rootReducer = combineReducers<IRootState> ({
@@ -22,6 +24,7 @@ const rootReducer = combineReducers<IRootState> ({
   allowlist: allowlistReducer,
   companies: companyReducer,
   modal: modalReducer,
+  faqs: faqReducer,
 });
 
 export default rootReducer;

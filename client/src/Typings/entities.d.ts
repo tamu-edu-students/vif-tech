@@ -30,3 +30,9 @@ interface AllowlistDomain {
   email_domain: string;
   usertype: Usertype;
 }
+
+interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+}
