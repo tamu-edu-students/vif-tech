@@ -2,12 +2,12 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { IRootState } from 'Store/reducers';
+import { Usertype } from 'Shared/enums';
 
-import EditorConvertToHTML from 'Components/EditorToHTML/EditorToHTML';
+import FAQ from './FAQ/FAQ';
 import FAQForm from './FAQForm/FAQForm';
 
 import { fetchFAQs, createFAQ, showModal, hideModal } from 'Store/actions';
-import FAQ from './FAQ/FAQ';
 
 interface OwnProps {
 }
@@ -15,6 +15,7 @@ interface OwnProps {
 const mapStateToProps = (state: IRootState) => {
   return {
     faqs: state.faqs,
+    isAdmin: state.auth.user?.usertype === Usertype.ADMIN,
   };
 }
 const mapDispatchToProps = { fetchFAQs, createFAQ, showModal, hideModal };
@@ -71,7 +72,10 @@ class FAQPage extends React.Component<Props, OwnState> {
       );
     }
 
-    const {faqs} = this.props;
+    const {
+      faqs,
+      isAdmin
+    } = this.props;
 
     return (
       <div>
@@ -83,7 +87,10 @@ class FAQPage extends React.Component<Props, OwnState> {
             : (<p>No FAQs yet!</p>)
           }
         </div>
-        <button onClick={() => this._renderEditor()}>Add FAQ</button>
+        {
+          isAdmin && 
+          <button onClick={() => this._renderEditor()}>Add FAQ</button>
+        }
       </div>
     );
   }
