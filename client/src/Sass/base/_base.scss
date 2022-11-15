@@ -125,3 +125,28 @@ a {
     align-items: flex-end;
   }
 }
+
+.FAQs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .FAQ {
+    width: 80%;
+    border: 1px solid white;
+    padding: 1rem;
+
+    &__question {
+      margin-bottom: 1rem;
+      color: $color-brand-yellow;
+    }
+  }
+}
+
+.editor-wrapper {
+  border: 1px solid white;
+}
+
+.toolbar {
+  color: $color-black;
+}
