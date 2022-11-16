@@ -54,6 +54,7 @@ class AllowlistDomainsController < ApplicationController
     end
 
     @domain = AllowlistDomain.new(domain_params)
+    @domain.company_id = company ? company.id : nil
     if @domain.save
       if company != nil
         company.allowlist_domains << @domain
@@ -124,6 +125,9 @@ class AllowlistDomainsController < ApplicationController
   def domain_params
     if params[:domain] != nil && params[:domain][:email_domain] != nil
       params[:domain][:email_domain] = params[:domain][:email_domain].downcase
+    end
+    if @current_user.usertype != "admin"
+      params[:domain][:usertype] = "company representative"
     end
     params.require(:domain).permit(:email_domain, :usertype)
   end

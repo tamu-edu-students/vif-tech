@@ -82,6 +82,44 @@ Feature: Allowlist Management
         And that I log in as admin
         Then I should see 4 domain in the database
         And the company with id 1 should have 1 reps
+
+    Scenario: An admin allows the same domain for a multiple company
+        Given that I log in as admin
+        And there is a company with id 1
+        And there is a company with id 2
+        And I allow a new domain test.com for usertype student
+        And I allow a new company domain test.com for usertype company representative for company id 1        
+        And I allow a new company domain test.com for usertype company representative for company id 2        
+        Then I should see 6 domain in the database
+
+    Scenario: An admin allows the same domain for a the same company
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new company domain test.com for usertype company representative for company id 1        
+        And I fail to allow a new company domain test.com for usertype company representative for company id 1        
+        Then I should see 4 domain in the database
+
+    Scenario: An admin allows the same email for a the same company
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I fail to allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        Then I should see 1 new email in the database
+
+    Scenario: An admin allows the same email for a multiple company
+        Given that I log in as admin
+        And there is a company with id 1
+        And there is a company with id 2
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 2
+        Then I should see 2 new email in the database
+
+    Scenario: An admin allows the same email for a the same company
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I fail to allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        Then I should see 1 new email in the database
         
     Scenario: Log in as admin and create a new email allowed
         Given that I log in as admin

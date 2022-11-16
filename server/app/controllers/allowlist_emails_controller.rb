@@ -55,6 +55,7 @@ class AllowlistEmailsController < ApplicationController
     end
 
     @email = AllowlistEmail.new(email_params)
+    @email.company_id = company ? company.id : nil
     if @email.save
       if company != nil
         company.allowlist_emails << @email
@@ -158,6 +159,7 @@ class AllowlistEmailsController < ApplicationController
     end
     if @current_user.usertype != "admin"
       params[:email][:isPrimaryContact] = false
+      params[:email][:usertype] = "company representative"
     end
     params.require(:email).permit(:email, :usertype, :isPrimaryContact)
   end
