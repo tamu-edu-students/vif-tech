@@ -20,6 +20,21 @@ Given("that an user signs up as a valid student") do
   expect(ret.status).to eq(201)
 end
 
+Given('I delete my account') do
+  ret = page.driver.delete('/users/')
+  expect(ret.status).to eq(200)
+end
+
+Given('I delete the account for id {int}') do |int|
+  ret = page.driver.delete('/users/'+int.to_s)
+  expect(ret.status).to eq(200)
+end
+
+Given('I fail to delete the account for id {int}') do |int|
+  ret = page.driver.delete('/users/'+int.to_s)
+  expect(ret.status).to eq(403)
+end
+
 Given /^that the user verified their email ([^\']*)$/ do |email|
   @user = User.find_by_email(email)
   ret = page.driver.get("/users/" + @user.confirm_token + "/confirm_email")
