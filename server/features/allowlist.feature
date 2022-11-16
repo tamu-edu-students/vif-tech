@@ -171,6 +171,7 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         And I allow a new email test2@test2.com for usertype company representative
             And that I sign up with the following
@@ -200,6 +201,7 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should see 1 new email in the database
         And that I sign up with the following
@@ -210,6 +212,7 @@ Feature: Allowlist Management
             | email | test2@test2.com |
             | usertype | company representative |
             | company_id | 2 |
+        And that the user verified their email test2@test2.com
         And that I log in with email test2@test2.com and password password1!
         Then I should see 2 new email in the database
         And I should see an email with index 2 in the database
@@ -233,6 +236,7 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should see 1 domain in the database
         And that I sign up with the following
@@ -243,6 +247,7 @@ Feature: Allowlist Management
             | email | test2@test2.com |
             | usertype | company representative |
             | company_id | 2 |
+        And that the user verified their email test2@test2.com
         And that I log in with email test2@test2.com and password password1!
         Then I should see 2 domain in the database
         And I should see a domain with index 5 in the database
@@ -264,6 +269,7 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should get a 403 code from the domain database
         And I should get a 403 code from the email database
@@ -275,6 +281,7 @@ Feature: Allowlist Management
             | email | test2@test2.com |
             | usertype | company representative |
             | company_id | 2 |
+        And that the user verified their email test2@test2.com
         And that I log in with email test2@test2.com and password password1!
         Then I should get a 403 code from the domain database
         And I should get a 403 code from the email database
@@ -295,6 +302,7 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should get a 403 code from the domain database
         And I should get a 403 code from the email database
@@ -320,8 +328,10 @@ Feature: Allowlist Management
             | email | test2@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should see 2 new email in the database
+        And that the user verified their email test2@test.com
         And that I log in with email test2@test.com and password password1!
         Then I should get a 403 code from the domain database
         And I should get a 403 code from the email database
@@ -354,8 +364,10 @@ Feature: Allowlist Management
             | email | test2@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should see 2 new email in the database
+        And that the user verified their email test2@test.com
         And that I log in with email test2@test.com and password password1!
         Then I should get a 403 code from the domain database
         And I should get a 403 code from the email database
@@ -388,6 +400,7 @@ Feature: Allowlist Management
             | email | test2@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         And I fail to transfer my primary contact role to user with id 3
 
@@ -440,8 +453,10 @@ Feature: Allowlist Management
             | email | test2@test.com |
             | usertype | company representative |
             | company_id | 2 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should see 1 new email in the database
+        And that the user verified their email test2@test.com
         And that I log in with email test2@test.com and password password1!
         Then I should get a 403 code from the domain database
         And I should get a 403 code from the email database
@@ -559,6 +574,7 @@ Feature: Allowlist Management
             | password_confirmation | password1! |
             | email | test@test.com |
             | usertype | student |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         Then I should not see allowlist emails and domains in company 1 when indexing
         And that I log out

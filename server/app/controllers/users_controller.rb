@@ -107,7 +107,6 @@ class UsersController < ApplicationController
 
     @user = User.new(user_params)
     if @user.save
-      login!
       resp = UserMailer.registration_confirmation(@user).deliver_now
       if params["user"]["usertype"] == "company representative"
         company.users << @user
