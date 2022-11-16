@@ -17,10 +17,22 @@ Given /^I allow a new domain ([^\']*) for usertype ([^\']*)$/ do |domain, userty
   expect(ret.status).to eq(201)
 end
 
+Given /^I fail to allow a new domain ([^\']*) for usertype ([^\']*)$/ do |domain, usertype|
+    ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype}})
+    ret_body = JSON.parse ret.body
+    expect(ret.status).to eq(500)
+  end
+
 Given /^I allow a new company domain ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |domain, usertype, int|
     ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype, "company_id":int}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
+end
+
+Given /^I fail to allow a new company domain ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |domain, usertype, int|
+    ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype, "company_id":int}})
+    ret_body = JSON.parse ret.body
+    expect(ret.status).to eq(500)
 end
 
 Given /^I delete the allowed domain with index 4$/ do 
@@ -65,10 +77,22 @@ Given /^I allow a new company email ([^\']*) for usertype ([^\']*) for company i
     expect(ret.status).to eq(201)
 end
 
+Given /^I fail to allow a new company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
+    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int}})
+    ret_body = JSON.parse ret.body
+    expect(ret.status).to eq(500)
+end
+
 Given /^I allow a new primary contact company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
     ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int, "isPrimaryContact":1}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
+end
+
+Given /^I fail to allow a new primary contact company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
+    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int, "isPrimaryContact":1}})
+    ret_body = JSON.parse ret.body
+    expect(ret.status).to eq(500)
 end
 
 Given /^I delete the allowed email with index 1$/ do 
