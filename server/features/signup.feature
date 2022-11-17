@@ -199,3 +199,15 @@ Feature: Student signup
         And I fail to delete the account for id 1
         And that I log in as admin
         Then the user with email admin@admin.com should be found in the user DB
+
+    Scenario: Change my password
+        Given that I log in as admin
+        Then I should be logged in
+        And that I update my password to new_pw
+        Then I should not be logged in
+        And that I log in with email admin@admin.com and password new_pw
+        Then I should be logged in
+        And that I log out
+        Then I should not be logged in
+        And that I log in with email admin@admin.com and password pw
+        Then I should not be logged in
