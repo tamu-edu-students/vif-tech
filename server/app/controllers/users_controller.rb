@@ -263,6 +263,32 @@ class UsersController < ApplicationController
     @company.users.delete(@user)
   end
 
+  def destroy
+
+    # Deletes a specific user
+    if params[:id] != nil
+      @user = User.find(params[:id])
+      if !((@current_user == @user) || (@current_user.usertype == "admin"))
+          render json: {
+                  error: "Action not allowed",
+                }, status: :forbidden
+          return
+      end
+    else
+      @user = @current_user
+    end
+
+    if @user.destroy
+      render json: {
+               company: @user,
+             }, status: :ok
+    else
+      render json: {
+               errors: ["something went wrong when deleting this user"],
+             }, status: :internal_server_error
+    end
+  end
+
   private
 
   def user_params
