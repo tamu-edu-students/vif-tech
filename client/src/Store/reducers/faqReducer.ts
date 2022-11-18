@@ -2,6 +2,7 @@ import {
   FETCH_FAQS,
   CREATE_FAQ,
   UPDATE_FAQ,
+  DELETE_FAQ,
 } from "Store/actions/types";
 
 const faqReducer = (state: FAQ[] = [], action: any): FAQ[] => {
@@ -11,7 +12,9 @@ const faqReducer = (state: FAQ[] = [], action: any): FAQ[] => {
     case CREATE_FAQ:
       return [...state, action.payload];
     case UPDATE_FAQ:
-      return state.map((faq: FAQ) => faq.id === action.payload ? action.payload : faq);
+      return state.map((faq: FAQ) => faq.id === action.payload.id ? action.payload : faq);
+    case DELETE_FAQ:
+      return state.filter((faq: FAQ) => faq.id !== action.payload);
     default:
       return state;
   }
