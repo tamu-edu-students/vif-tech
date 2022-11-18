@@ -27,4 +27,9 @@ RSpec.describe User, type: :model do
     expect(user.email_confirmed).to be(true)
     expect(user.confirm_token).to be(nil)
   end
+
+  it "has confirm token enabled when email activation is executed" do
+    user = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    expect(user.confirm_token).to_not be(nil)
+  end
 end
