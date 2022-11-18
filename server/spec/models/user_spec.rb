@@ -68,7 +68,7 @@ RSpec.describe User, type: :model do
     UserMeeting.create(meeting_id: 3, user_id: 2, status: :pending)
     UserMeeting.create(meeting_id: 4, user_id: 2, status: :pending)
 
-    expect(User.find(2).invited_meetings_available_for).to match_array([Meeting.find(1), Meeting.find(2), Meeting.find(3)])
-    expect(User.find(2).invited_meetings_not_available_for).to match_array([Meeting.find(4)])
+    expect(User.find(2).meeting_invitations_available_for).to match_array([UserMeeting.find(1), UserMeeting.find(2), UserMeeting.find(3)])
+    expect(User.find(2).meeting_invitations_not_available_for).to match_array([UserMeeting.find(4)])
   end
 end

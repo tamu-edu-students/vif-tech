@@ -59,15 +59,13 @@ class User < ApplicationRecord
     return owned_meetings - owned_meetings_available_for
   end
 
-  def invited_meetings_available_for
+  def meeting_invitations_available_for
     # NOTE: if we end up with more than 10^4 meetings, this will take a while to return
-    meetings = []
-    availabilities.each { |x| meetings |= x.associated_invited_meetings }
-    return meetings
+    return UserMeeting.where(user: self, meeting: invited_meetings_available_for)
   end
 
-  def invited_meetings_not_available_for
-    return invited_meetings - invited_meetings_available_for
+  def meeting_invitations_not_available_for
+    return UserMeeting.where(user: self, meeting: invited_meetings - invited_meetings_available_for)
   end
 
   private
@@ -76,5 +74,11 @@ class User < ApplicationRecord
     if self.confirm_token.blank?
       self.confirm_token = SecureRandom.urlsafe_base64.to_s
     end
+  end
+
+  def invited_meetings_available_for
+    meetings = []
+    availabilities.each { |x| meetings |= x.associated_invited_meetings }
+    return meetings
   end
 end
