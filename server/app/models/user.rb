@@ -48,28 +48,6 @@ class User < ApplicationRecord
     return UserMeeting.where(status: :declined, user: self).map { |um| um.meeting }
   end
 
-  def owned_meetings_available_for
-    # NOTE: if we end up with more than 10^4 meetings, this will take a while to return
-    meetings = []
-    availabilities.each { |x| meetings |= x.associated_owned_meetings }
-    return meetings
-  end
-
-  def owned_meetings_not_available_for
-    return owned_meetings - owned_meetings_available_for
-  end
-
-  def invited_meetings_available_for
-    # NOTE: if we end up with more than 10^4 meetings, this will take a while to return
-    meetings = []
-    availabilities.each { |x| meetings |= x.associated_invited_meetings }
-    return meetings
-  end
-
-  def invited_meetings_not_available_for
-    return invited_meetings - invited_meetings_available_for
-  end
-
   private
 
   def set_confirm_token
