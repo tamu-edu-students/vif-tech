@@ -4,7 +4,7 @@ class AvailabilitiesController < ApplicationController
 
   # GET /availabilities
   def index
-    if !current_user.user_type == :admin
+    if current_user.usertype == "admin"
       render json: {
                availabilities: Availability.all,
              }, status: :ok
@@ -22,7 +22,7 @@ class AvailabilitiesController < ApplicationController
       return
     end
     render json: {
-             meeting: @availability,
+             availability: @availability,
            }, status: :ok
   end
 
@@ -40,7 +40,7 @@ class AvailabilitiesController < ApplicationController
     @availability = Availability.new(params)
     if @availability.save
       render json: {
-               meeting: @availability,
+               availability: @availability,
              }, status: :created
     else
       render json: {
@@ -57,7 +57,7 @@ class AvailabilitiesController < ApplicationController
     end
     if @availability.update(availability_params)
       render json: {
-               meeting: @availability,
+               availability: @availability,
              }, status: :ok
     else
       render json: {
@@ -74,7 +74,7 @@ class AvailabilitiesController < ApplicationController
     end
     if @availability.destroy
       render json: {
-               meeting: @availability,
+               availability: @availability,
              }, status: :ok
     else
       render json: {
@@ -104,7 +104,7 @@ class AvailabilitiesController < ApplicationController
   def confirm_requester_is_owner_or_admin(user_id)
     if !(current_user.id == user_id or current_user.usertype == "admin")
       render json: {
-               errors: ["User does not have previleges for requested action"],
+               errors: ["User does not have previleges for requested action (not owner nor admin)"],
              }, status: :forbidden
       return false
     end
@@ -114,7 +114,7 @@ class AvailabilitiesController < ApplicationController
   def confirm_requester_is_admin
     if current_user.usertype != "admin"
       render json: {
-               errors: ["User does not have previleges for requested action"],
+               errors: ["Only admin can perform requested action"],
              }, status: :forbidden
       return false
     end
@@ -122,9 +122,9 @@ class AvailabilitiesController < ApplicationController
   end
 
   def confirm_requester_is_admin_or_rep_or_volunteer
-    if current_user.usertype != "company representative" or current_user.usertype != "company representative" or current_user.usertype != "admin"
+    if current_user.usertype != "company representative" and current_user.usertype != "volunteer" and current_user.usertype != "admin"
       render json: {
-               errors: ["User does not have previleges for requested action"],
+               errors: ["User should be one of the following types for requested action: admin, company representative, or volunteer", "User type: #{current_user.usertype}"],
              }, status: :forbidden
       return false
     end
