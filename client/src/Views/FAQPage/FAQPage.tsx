@@ -41,7 +41,6 @@ class FAQPage extends React.Component<Props, OwnState> {
   }
 
   private _onFAQSubmit = (formValues: any) => {
-    console.log(formValues);
     this.props.createFAQ(formValues)
     .then(() => this.props.hideModal())
     .catch((err: any) => {

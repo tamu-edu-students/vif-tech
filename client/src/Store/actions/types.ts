@@ -17,6 +17,7 @@ export const DELETE_ALLOWLIST_DOMAIN = 'DELETE_ALLOWLIST_DOMAIN';
 export const FETCH_FAQS = 'FETCH_FAQS';
 export const CREATE_FAQ = 'CREATE_FAQ';
 export const UPDATE_FAQ = 'UPDATE_FAQ';
+export const DELETE_FAQ = 'DELETE_FAQ';
 
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const HIDE_MODAL = 'HIDE_MODAL';
