@@ -26,6 +26,8 @@ Feature: User availability
             | user_id | 2 |
             | start_time | 2022-11-18 14:00:00 |
             | end_time | 2022-11-18 14:01:00 |
+        And I want to update the availability with id 1 with the following and get return status 200
+            | start_time | 2022-11-18 13:50:00 |
         And the user with "firstname" "james" and "lastname" "bond" should have availability with id 1
         And there should be 1 availabilities entries visible to me
         Given that I delete availability with id 1

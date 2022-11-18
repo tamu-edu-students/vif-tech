@@ -42,3 +42,8 @@ Then("I should NOT be able to delete availability with id {int} with status code
   ret = page.driver.delete("/availabilities/#{avail_id}")
   expect(ret.status).to eq(code)
 end
+
+Given("I want to update the availability with id {int} with the following and get return status {int}") do |avail_id, code, table|
+  ret = page.driver.put("/availabilities/#{avail_id}", { "availability": table.rows_hash })
+  expect(ret.status).to eq(code)
+end
