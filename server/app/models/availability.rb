@@ -14,7 +14,7 @@ class Availability < ApplicationRecord
 
   def associated_meetings(meetings)
     return meetings.where(:start_time => self.start_time..self.end_time)
-             .or(meetings.where(:end_time => self.start_time..self.end_time))
+             .and(meetings.where(:end_time => self.start_time..self.end_time))
   end
 
   private

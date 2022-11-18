@@ -65,7 +65,8 @@ class User < ApplicationRecord
   end
 
   def meeting_invitations_not_available_for
-    return UserMeeting.where(user: self, meeting: invited_meetings - invited_meetings_available_for)
+    meetings = invited_meetings - invited_meetings_available_for
+    return UserMeeting.where(user: self, meeting: meetings)
   end
 
   private

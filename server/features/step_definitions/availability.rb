@@ -47,3 +47,56 @@ Given("I want to update the availability with id {int} with the following and ge
   ret = page.driver.put("/availabilities/#{avail_id}", { "availability": table.rows_hash })
   expect(ret.status).to eq(code)
 end
+
+Then("there should be {int} availabilities for user {int}") do |count, user_id|
+  ret = page.driver.get("/users/#{user_id}/availabilities")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  expect(ret_body["availabilities"].length).to eq(count)
+end
+
+Then("there should be {int} owned and avaliable meetings for user {int}") do |count, user_id|
+  ret = page.driver.get("/users/#{user_id}/meetings/owned/available")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  expect(ret_body["meetings"].length).to eq(count)
+end
+
+Then("there should be {int} owned but not avaliable meetings for user {int}") do |count, user_id|
+  ret = page.driver.get("/users/#{user_id}/meetings/owned/not_available")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  expect(ret_body["meetings"].length).to eq(count)
+end
+
+Then("there should be {int} invitations user {int} is avaliable for") do |count, user_id|
+  ret = page.driver.get("/users/#{user_id}/user_meetings/available")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  expect(ret_body["user_meetings"].length).to eq(count)
+end
+
+Then("there should be {int} invitations user {int} is not avaliable for") do |count, user_id|
+  ret = page.driver.get("/users/#{user_id}/user_meetings/not_available")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  expect(ret_body["user_meetings"].length).to eq(count)
+end
+
+Given("that I delete owned but not avaliable meetings for user {int}") do |id|
+  ret = page.driver.delete("/users/#{id}/meetings/owned/not_available")
+  expect(ret.status).to eq(200)
+end
+
+Given("that I delete invitations user {int} is not avaliable for") do |id|
+  ret = page.driver.delete("/users/#{id}/user_meetings/not_available")
+  expect(ret.status).to eq(200)
+end
+
+Then("meeting {int} should not exist") do |id|
+  expect(Meeting.find_by_id(id)).to eq(nil)
+end
+
+Then("user meeting {int} should not exist") do |id|
+  expect(UserMeeting.find_by_id(id)).to eq(nil)
+end
