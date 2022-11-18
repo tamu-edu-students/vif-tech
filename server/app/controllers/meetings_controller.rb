@@ -62,7 +62,6 @@ class MeetingsController < ApplicationController
 
   # POST /meetings/
   def create
-    # TODO: handle creation by company representatives
     if !confirm_requester_is_admin
       return
     end
