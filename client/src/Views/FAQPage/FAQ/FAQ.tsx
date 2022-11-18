@@ -6,7 +6,7 @@ import { IRootState } from 'Store/reducers';
 
 import FAQForm from 'Views/FAQPage/FAQForm/FAQForm';
 
-import { updateFAQ, showModal, hideModal } from 'Store/actions'
+import { updateFAQ, showModal, hideModal, deleteFAQ } from 'Store/actions'
 
 interface OwnProps {
   id: number;
@@ -19,7 +19,7 @@ const mapStateToProps = (state: IRootState) => {
     isAdmin: state.auth.user?.usertype === Usertype.ADMIN,
   };
 }
-const mapDispatchToProps = { updateFAQ, showModal, hideModal };
+const mapDispatchToProps = { updateFAQ, showModal, hideModal, deleteFAQ };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -43,6 +43,16 @@ class FAQ extends React.Component<Props, {}> {
     ));
   }
 
+  private _renderDeleteConfirmation = (): void => {
+    this.props.showModal((
+      <div>
+        <p>Are you sure you want to delete this FAQ?</p>
+        <button onClick={() => this.props.deleteFAQ(this.props.id).then(() => this.props.hideModal())}>Confirm</button>
+        <button onClick={this.props.hideModal}>Cancel</button>
+      </div>
+    ));
+  }
+
   render(): React.ReactElement<Props> {
     const {
       question,
@@ -59,6 +69,7 @@ class FAQ extends React.Component<Props, {}> {
           this.props.isAdmin &&
           <div className="buttons">
             <button onClick={this._renderEditor}>Edit</button>
+            <button onClick={this._renderDeleteConfirmation}>Delete</button>
           </div>
         }
       </div>

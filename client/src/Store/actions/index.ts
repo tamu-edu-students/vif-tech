@@ -16,11 +16,12 @@ import {
   DELETE_ALLOWLIST_DOMAIN,
 
   FETCH_FAQS,
+  CREATE_FAQ,
   UPDATE_FAQ,
+  DELETE_FAQ,
 
   SHOW_MODAL,
   HIDE_MODAL,
-  CREATE_FAQ,
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
@@ -194,6 +195,14 @@ export const updateFAQ = (id: number, formValues: any) => async (dispatch: any) 
   console.log('response_updateFAQ:', response_updateFAQ);
 
   dispatch({ type: UPDATE_FAQ, payload: response_updateFAQ.data.faq });
+}
+
+export const deleteFAQ = (id: number) => async (dispatch: any) => {
+  const response_deleteFAQ = await vifTech.delete(`/faq/${id}`);
+
+  console.log('response_deleteFAQ:', response_deleteFAQ);
+
+  dispatch({ type: DELETE_FAQ, payload: id });
 }
 
 export const showModal = (children: any) => {
