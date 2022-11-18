@@ -46,11 +46,4 @@ Rails.application.routes.draw do
   delete "users/:id/companies/:id", to: "users#delete_from_company"
 
   resources :availabilities, only: [:create, :show, :index, :update, :destroy]
-  get "users/:id/availabilities", to: "users#get_availabilies"
-  get "users/:id/meetings/owned/available", to: "users#get_owned_avail_meetings"
-  get "users/:id/meetings/invited/available", to: "users#get_invited_and_avail_meetings"
-  get "users/:id/meetings/owned/not_available", to: "users#get_owned_but_na_meetings"
-  get "users/:id/meetings/invited/not_available", to: "users#get_invited_but_na_meetings"
-  delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
-  delete "users/:id/meetings/invited/not_available", to: "users#delete_invited_but_na_meetings"
 end
