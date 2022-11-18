@@ -32,8 +32,14 @@ class AvailabilitiesController < ApplicationController
       return
     end
     params = availability_params.to_h
-    # If owner key is not provided, use the owner key provided by the requester
-    if !params.key?("user_id")
+    # For admins user_id should be passed to create availability for other users.
+    # Admins themselves cannot hold onto availabilities
+    if params.key?("user_id")
+      if !confirm_requester_is_admin
+        return
+      end
+    else
+      # Company rep and volunteers creates availability for themselves
       params["user_id"] = current_user.id
     end
 
