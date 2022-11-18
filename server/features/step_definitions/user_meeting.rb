@@ -13,7 +13,6 @@ end
 
 Given("that user {int} sets status as {string} to meeting {int} invite") do |user_id, status, meeting_id|
   ret = page.driver.put("users/#{user_id}/meetings/#{meeting_id}", { "user_meeting": { "status": status } })
-  puts ret.body
   expect(ret.status).to eq(200)
 end
 

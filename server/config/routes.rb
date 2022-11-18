@@ -46,4 +46,6 @@ Rails.application.routes.draw do
   delete "/companies/:id", to: "companies#destroy"
   post "/users/:id/companies/:id", to: "users#add_to_company"
   delete "users/:id/companies/:id", to: "users#delete_from_company"
+
+  resources :availabilities, only: [:create, :show, :index, :update, :destroy]
 end
