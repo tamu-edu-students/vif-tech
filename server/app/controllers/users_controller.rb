@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :confirm_user_logged_in, except: [:new, :create, :confirm_email]
-  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting, :delete]
+  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting, :delete, :get_availabilies, :get_owned_and_avail_meetings, :get_invited_and_avail_meetings, :get_owned_but_na_meetings, :get_invited_but_na_meetings, :delete_owned_but_na_meetings, :delete_invited_but_na_meetings]
   before_action :confirm_meeting_exists, only: [:assigned_to_meeting?, :add_to_meeting, :update_meeting, :delete_from_meeting]
 
   def confirm_user_logged_in
@@ -263,6 +263,91 @@ class UsersController < ApplicationController
     @company.users.delete(@user)
   end
 
+  # get "users/:id/availabilities", to: "users#get_availabilies"
+  def get_availabilies
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @availabilities = User.find_by_id(params[:id]).availabilities
+    render json: {
+      availabilities: @availabilities,
+    }, status: :ok
+  end
+
+  # get "users/:id/meetings/owned/available", to: "users#get_owned_avail_meetings"
+  def get_owned_and_avail_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+      meetings: User.find_by_id(params[:id]).owned_meetings_available_for,
+    }, status: :ok
+  end
+
+  # get "users/:id/meetings/invited/available", to: "users#get_invited_and_avail_meetings"
+  def get_invited_and_avail_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+      meetings: User.find_by_id(params[:id]).invited_meetings_available_for,
+    }, status: :ok
+  end
+
+  # get "users/:id/meetings/owned/not_available", to: "users#get_owned_but_na_meetings"
+  def get_owned_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+      meetings: User.find_by_id(params[:id]).owned_meetings_not_available_for,
+    }, status: :ok
+  end
+
+  # get "users/:id/meetings/invited/not_available", to: "users#get_invited_but_na_meetings"
+  def get_invited_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+      meetings: User.find_by_id(params[:id]).invited_meetings_not_available_for,
+    }, status: :ok
+  end
+
+  # delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
+  def delete_owned_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @meetings = User.find_by_id(params[:id]).owned_meetings_not_available_for
+    @meetings.each do |meeting|
+      if !meeting.destroy
+        render json: {
+          errors: meeting.errors.full_messages,
+        }, status: :bad_request
+        return
+      end
+    end
+    render json: {}, status: :ok
+  end
+
+  # delete "users/:id/meetings/invited/not_available", to: "users#delete_invited_but_na_meetings"
+  def delete_invited_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @meetings = User.find_by_id(params[:id]).invited_meetings_not_available_for
+    @meetings.each do |meeting|
+      if !meeting.destroy
+        render json: {
+          errors: meeting.errors.full_messages,
+        }, status: :bad_request
+        return
+      end
+    end
+    render json: {}, status: :ok
+  end
+
   private
 
   def user_params
@@ -271,5 +356,15 @@ class UsersController < ApplicationController
 
   def user_meeting_params
     params.require(:user_meeting).permit(:status)
+  end
+
+  def confirm_requester_is_owner_or_admin(user_id)
+    if !(current_user.id == user_id or current_user.usertype == "admin")
+      render json: {
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
+      return false
+    end
+    return true
   end
 end

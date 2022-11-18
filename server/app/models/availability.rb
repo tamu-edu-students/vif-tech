@@ -21,7 +21,7 @@ class Availability < ApplicationRecord
 
   def is_user_corporate_or_volunteer?
     if self.user.usertype != "company representative" and self.user.usertype != "volunteer"
-      self.errors.add(:base, "#{self.user.usertype} cannot add availability.")
+      self.errors.add(:base, "Cannot add availability to user of type #{self.user.usertype}")
     end
   end
 end
