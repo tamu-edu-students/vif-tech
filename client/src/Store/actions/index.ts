@@ -188,8 +188,8 @@ export const createFAQ = (formValues: any) => async (dispatch: any) => {
   dispatch({ type: CREATE_FAQ, payload: response_createFAQ.data.faq });
 }
 
-export const updateFAQ = (id: number) => async (dispatch: any) => {
-  const response_updateFAQ = await vifTech.put(`/faq/${id}`);
+export const updateFAQ = (id: number, formValues: any) => async (dispatch: any) => {
+  const response_updateFAQ = await vifTech.put(`/faq/${id}`, { faq: {...formValues} });
 
   console.log('response_updateFAQ:', response_updateFAQ);
 

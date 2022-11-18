@@ -11,7 +11,7 @@ const faqReducer = (state: FAQ[] = [], action: any): FAQ[] => {
     case CREATE_FAQ:
       return [...state, action.payload];
     case UPDATE_FAQ:
-      return state.map((faq: FAQ) => faq.id === action.payload ? action.payload : faq);
+      return state.map((faq: FAQ) => faq.id === action.payload.id ? action.payload : faq);
     default:
       return state;
   }
