@@ -289,6 +289,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_password
+    if @current_user.update(password_params)
+      logout!
+      render json: {
+        user: @user,
+      }, status: :ok
+    else
+      render json: {
+               errors: ["something went wrong when updating your password"],
+             }, status: :internal_server_error
+    end
+  end
+
   private
 
   def user_params
@@ -298,4 +311,8 @@ class UsersController < ApplicationController
   def user_meeting_params
     params.require(:user_meeting).permit(:status)
   end
+
+  def password_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end 
 end

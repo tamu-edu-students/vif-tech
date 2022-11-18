@@ -35,6 +35,11 @@ Given('I fail to delete the account for id {int}') do |int|
   expect(ret.status).to eq(403)
 end
 
+Given /^that I update my password to ([^\']*)$/ do |pw|
+  ret = page.driver.put("/users/password", { 'user': {'password': pw, 'password_confirmation': pw} })
+  expect(ret.status).to eq(200)
+end
+
 Given /^that the user verified their email ([^\']*)$/ do |email|
   @user = User.find_by_email(email)
   ret = page.driver.get("/users/" + @user.confirm_token + "/confirm_email")
@@ -122,6 +127,12 @@ Then("I should be logged in") do
   ret = page.driver.get("/logged_in")
   ret_body = JSON.parse ret.body
   expect(ret_body["logged_in"]).to be true
+end
+
+Then("I should not be logged in") do
+  ret = page.driver.get("/logged_in")
+  ret_body = JSON.parse ret.body
+  expect(ret_body["logged_in"]).to be false
 end
 
 Then("the company with id {int} should have user with email {string}") do |company_id, email|
