@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   get "/logged_in", to: "sessions#is_logged_in?"
 
   get "/users/find", to: "users#find"
-  resources :users, only: [:create, :show, :index, :new]
+  resources :users, only: [:create, :show, :index, :new, :destroy]
+  delete "/users", to: "users#destroy"
+  put "/users/password", to: "users#update_password"
 
   get "/faq/find", to: "faq#find"
   resources :faq, only: [:create, :new, :show, :index, :update, :destroy]

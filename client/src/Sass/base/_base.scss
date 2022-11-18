@@ -131,14 +131,27 @@ a {
   flex-direction: column;
   align-items: center;
 
-  .FAQ {
+  .FAQ-container {
     width: 80%;
-    border: 1px solid white;
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    &__question {
-      margin-bottom: 1rem;
-      color: $color-brand-yellow;
+    .FAQ {
+      width: 100%;
+      border: 1px solid white;
+      padding: 1rem;
+  
+      &__question {
+        margin-bottom: 1rem;
+        color: $color-brand-yellow;
+      }
+    }
+
+    .buttons {
+      align-self: flex-start;
+
+      display: flex;
     }
   }
 }
