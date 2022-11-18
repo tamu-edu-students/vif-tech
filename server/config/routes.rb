@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get "/users/find", to: "users#find"
   resources :users, only: [:create, :show, :index, :new, :destroy]
   delete "/users", to: "users#destroy"
-  delete "/users", to: "users#destroy"
   put "/users/password", to: "users#update_password"
 
   get "/faq/find", to: "faq#find"
