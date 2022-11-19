@@ -12,7 +12,7 @@ class AboutsController < ApplicationController
         if @about
             render json: {
                 about: @about
-        }.to_json(include: ["social_links"]), status: :ok
+            }.to_json(include: ["social_links"]), status: :ok
         else
             render json: {
                 errors: ["Record not found on the Abouts list"],
@@ -53,10 +53,11 @@ class AboutsController < ApplicationController
             params["about"]["rank"] == "normal"
         end
         @about = About.new(about_params)
+
         if @about.save
             render json: {
-                about: @about, 
-            }, status: :created
+                about: @about
+            }.to_json(include: ["social_links"]), status: :created
         else
             render json: {
                 errors: ["Something went wrong when creating this record"],
