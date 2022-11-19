@@ -269,10 +269,10 @@ class UsersController < ApplicationController
     if params[:id] != nil
       @user = User.find(params[:id])
       if !((@current_user == @user) || (@current_user.usertype == "admin"))
-          render json: {
-                  error: "Action not allowed",
-                }, status: :forbidden
-          return
+        render json: {
+                 error: "Action not allowed",
+               }, status: :forbidden
+        return
       end
     else
       @user = @current_user
@@ -302,6 +302,91 @@ class UsersController < ApplicationController
     end
   end
 
+  # get "users/:id/availabilities", to: "users#get_availabilies"
+  def get_availabilies
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @availabilities = User.find_by_id(params[:id]).availabilities
+    render json: {
+             availabilities: @availabilities,
+           }, status: :ok
+  end
+
+  # get "users/:id/meetings/owned/available", to: "users#get_owned_and_avail_meetings"
+  def get_owned_and_avail_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             meetings: User.find_by_id(params[:id]).owned_meetings_available_for,
+           }, status: :ok
+  end
+
+  # get "users/:id/meetings/owned/not_available", to: "users#get_owned_but_na_meetings"
+  def get_owned_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             meetings: User.find_by_id(params[:id]).owned_meetings_not_available_for,
+           }, status: :ok
+  end
+
+  # get "users/:id/user_meetings/available", to: "users#get_invitations_avail"
+  def get_invitations_avail
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             user_meetings: User.find_by_id(params[:id]).meeting_invitations_available_for,
+           }, status: :ok
+  end
+
+  # get "users/:id/user_meetings/not_available", to: "users#get_invitations_na"
+  def get_invitations_na
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             user_meetings: User.find_by_id(params[:id]).meeting_invitations_not_available_for,
+           }, status: :ok
+  end
+
+  # delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
+  def delete_owned_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @meetings = User.find_by_id(params[:id]).owned_meetings_not_available_for
+    @meetings.each do |meeting|
+      if !meeting.destroy
+        render json: {
+                 errors: meeting.errors.full_messages,
+               }, status: :bad_request
+        return
+      end
+    end
+    render json: {}, status: :ok
+  end
+
+  # delete "users/:id/user_meetings/not_available", to: "users#delete_na_invitations"
+  def delete_na_invitations
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @user_meetings = User.find_by_id(params[:id]).meeting_invitations_not_available_for
+    @user_meetings.each do |um|
+      if !um.destroy
+        render json: {
+                 errors: um.errors.full_messages,
+               }, status: :bad_request
+        return
+      end
+    end
+    render json: {}, status: :ok
+  end
+
   private
 
   def user_params
@@ -314,5 +399,15 @@ class UsersController < ApplicationController
 
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
-  end 
+  end
+
+  def confirm_requester_is_owner_or_admin(user_id)
+    if !(current_user.id == user_id or current_user.usertype == "admin")
+      render json: {
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
+      return false
+    end
+    return true
+  end
 end

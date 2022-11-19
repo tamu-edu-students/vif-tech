@@ -142,3 +142,113 @@ Feature: User availability
             | start_time | 2022-11-18 14:00:00 |
             | end_time | 2022-11-18 14:01:00 |
         Then there should be 1 availabilities entries visible to me
+
+    Scenario: Admin request meetings and invitations based on user availabilities 
+        # User 1, admin
+        Given that I log in as admin
+        And I allow a new domain tamu.edu for usertype volunteer
+        # User 2
+        And that an user signs up as a valid volunteer
+        And I want to create an availability with the following and get return status 201
+            | user_id | 2 |
+            | start_time | 2022-10-18 18:00:00 |
+            | end_time | 2022-10-18 19:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | user_id | 2 |
+            | start_time | 2022-10-18 20:20:00 |
+            | end_time | 2022-10-18 20:35:00 |
+        And that I create a meeting with the following
+            | title | Meeting1 |
+            | start_time | '2022-10-18 18:00:00' |
+            | end_time | '2022-10-18 18:30:00' |
+        And that I create a meeting with the following
+            | title | Meeting2 |
+            | start_time | '2022-10-18 18:30:00' |
+            | end_time | '2022-10-18 19:00:00' |
+        And that I create a meeting with the following
+            | title | Meeting3 |
+            | start_time | '2022-10-18 18:40:00' |
+            | end_time | '2022-10-18 19:20:00' |
+        And that I create a meeting with the following
+            | title | Meeting4 |
+            | start_time | '2022-10-18 19:00:00' |
+            | end_time | '2022-10-18 19:05:00' |
+            | owner_id | 2 |
+        And that I create a meeting with the following
+            | title | Meeting5 |
+            | start_time | '2022-10-18 20:20:00' |
+            | end_time | '2022-10-18 20:30:00' |
+            | owner_id | 2 |
+        And that I create a meeting with the following
+            | title | Meeting5 |
+            | start_time | '2022-10-18 20:30:00' |
+            | end_time | '2022-10-18 20:35:00' |
+            | owner_id | 2 |
+        And that I assign user 2 to meeting 1 with status "pending"
+        And that I assign user 2 to meeting 2 with status "accepted"
+        And that I assign user 2 to meeting 3 with status "declined"
+        Then there should be 2 availabilities for user 2
+        And there should be 2 owned and avaliable meetings for user 2
+        And there should be 1 owned but not avaliable meetings for user 2
+        And there should be 2 invitations user 2 is avaliable for
+        And there should be 1 invitations user 2 is not avaliable for
+        
+
+    Scenario: Admin deletes meetinsg and invitations based on user availabilities
+        # User 1, admin
+        Given that I log in as admin
+        And I allow a new domain tamu.edu for usertype volunteer
+        # User 2
+        And that an user signs up as a valid volunteer
+        And I want to create an availability with the following and get return status 201
+            | user_id | 2 |
+            | start_time | 2022-10-18 18:00:00 |
+            | end_time | 2022-10-18 19:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | user_id | 2 |
+            | start_time | 2022-10-18 20:20:00 |
+            | end_time | 2022-10-18 20:35:00 |
+        # Meetings 1~6
+        And that I create a meeting with the following
+            | title | Meeting1 |
+            | start_time | '2022-10-18 18:00:00' |
+            | end_time | '2022-10-18 18:30:00' |
+        And that I create a meeting with the following
+            | title | Meeting2 |
+            | start_time | '2022-10-18 18:30:00' |
+            | end_time | '2022-10-18 19:00:00' |
+        And that I create a meeting with the following
+            | title | Meeting3 |
+            | start_time | '2022-10-18 18:40:00' |
+            | end_time | '2022-10-18 19:20:00' |
+        And that I create a meeting with the following
+            | title | Meeting4 |
+            | start_time | '2022-10-18 19:00:00' |
+            | end_time | '2022-10-18 19:05:00' |
+            | owner_id | 2 |
+        And that I create a meeting with the following
+            | title | Meeting5 |
+            | start_time | '2022-10-18 20:20:00' |
+            | end_time | '2022-10-18 20:30:00' |
+            | owner_id | 2 |
+        And that I create a meeting with the following
+            | title | Meeting5 |
+            | start_time | '2022-10-18 20:30:00' |
+            | end_time | '2022-10-18 20:35:00' |
+            | owner_id | 2 |
+        And that I assign user 2 to meeting 1 with status "pending"
+        And that I assign user 2 to meeting 2 with status "accepted"
+        And that I assign user 2 to meeting 3 with status "declined"
+        Then there should be 2 availabilities for user 2
+        And there should be 2 owned and avaliable meetings for user 2
+        And there should be 1 owned but not avaliable meetings for user 2
+        And there should be 2 invitations user 2 is avaliable for
+        And there should be 1 invitations user 2 is not avaliable for
+        Given that I delete owned but not avaliable meetings for user 2
+        And that I delete invitations user 2 is not avaliable for
+        Then meeting 4 should not exist
+        And user meeting 3 should not exist
+        And there should be 2 owned and avaliable meetings for user 2
+        And there should be 0 owned but not avaliable meetings for user 2
+        And there should be 2 invitations user 2 is avaliable for
+        And there should be 0 invitations user 2 is not avaliable for

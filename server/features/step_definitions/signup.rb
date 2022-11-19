@@ -20,23 +20,32 @@ Given("that an user signs up as a valid student") do
   expect(ret.status).to eq(201)
 end
 
-Given('I delete my account') do
-  ret = page.driver.delete('/users/')
+Given("that an user signs up as a valid volunteer") do
+  firstname = SecureRandom.alphanumeric(8)
+  lastname = SecureRandom.alphanumeric(8)
+  password = SecureRandom.alphanumeric(16)
+  email = SecureRandom.alphanumeric(8) + "@tamu.edu"
+  ret = page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email, 'usertype': "volunteer" } })
+  expect(ret.status).to eq(201)
+end
+
+Given("I delete my account") do
+  ret = page.driver.delete("/users/")
   expect(ret.status).to eq(200)
 end
 
-Given('I delete the account for id {int}') do |int|
-  ret = page.driver.delete('/users/'+int.to_s)
+Given("I delete the account for id {int}") do |int|
+  ret = page.driver.delete("/users/" + int.to_s)
   expect(ret.status).to eq(200)
 end
 
-Given('I fail to delete the account for id {int}') do |int|
-  ret = page.driver.delete('/users/'+int.to_s)
+Given("I fail to delete the account for id {int}") do |int|
+  ret = page.driver.delete("/users/" + int.to_s)
   expect(ret.status).to eq(403)
 end
 
 Given /^that I update my password to ([^\']*)$/ do |pw|
-  ret = page.driver.put("/users/password", { 'user': {'password': pw, 'password_confirmation': pw} })
+  ret = page.driver.put("/users/password", { 'user': { 'password': pw, 'password_confirmation': pw } })
   expect(ret.status).to eq(200)
 end
 
