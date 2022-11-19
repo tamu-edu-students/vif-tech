@@ -3,7 +3,7 @@ class AboutsController < ApplicationController
 
     def index
         render json: {
-                abouts: About.all,
+                abouts: About.all, 
                 }, status: :ok
     end
 
@@ -11,8 +11,8 @@ class AboutsController < ApplicationController
         @about = About.find(params[:id])
         if @about
             render json: {
-                about: @about,
-               }, status: :ok
+                about: @about
+        }.to_json(include: ["social_links"]), status: :ok
         else
             render json: {
                 errors: ["Record not found on the Abouts list"],
@@ -48,13 +48,14 @@ class AboutsController < ApplicationController
     end
 
     def create
+        # puts about_params
         if params["about"]["rank"] == nil
             params["about"]["rank"] == "normal"
         end
         @about = About.new(about_params)
         if @about.save
             render json: {
-                about: @about,
+                about: @about, 
             }, status: :created
         else
             render json: {
