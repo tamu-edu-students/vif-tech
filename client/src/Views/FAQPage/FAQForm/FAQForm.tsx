@@ -28,12 +28,15 @@ class FAQForm extends React.Component<Props, OwnState> {
   render() {
     return (
       <div className="FAQ-Form">
-        <h2 className="heading-secondary">Question</h2>
-        <EditorConvertToHTML placeholder="Question" onChange={this._setQuestion} />
+        <div className="FAQ-Form__group">
+          <h2 className="heading-secondary">Question</h2>
+          <EditorConvertToHTML placeholder="Question" onChange={this._setQuestion} /></div>
         <br />
 
-        <h2 className="heading-secondary">Answer</h2>
-        <EditorConvertToHTML placeholder="Answer" onChange={this._setAnswer} />
+        <div className="FAQ-Form__group">
+          <h2 className="heading-secondary">Answer</h2>
+          <EditorConvertToHTML placeholder="Answer" onChange={this._setAnswer} />
+        </div>
 
         
         <button onClick={() => this.props.onSubmit(this.state)}>Confirm</button>
