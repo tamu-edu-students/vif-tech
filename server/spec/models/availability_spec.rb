@@ -28,13 +28,13 @@ RSpec.describe Availability, type: :model do
     Meeting.create(owner_id: 1, title: "meeting2", start_time: "2022-10-18 14:50:00", end_time: "2022-10-18 14:51:00")
 
     Availability.create(user_id: 2, start_time: "2022-10-18 14:10:00", end_time: "2022-10-18 14:40:00")
-    Availability.create(user_id: 2, start_time: "2022-10-18 14:50:30", end_time: "2022-10-18 14:51:00")
+    Availability.create(user_id: 2, start_time: "2022-10-18 14:50:00", end_time: "2022-10-18 14:51:00")
 
     UserMeeting.create(meeting_id: 1, user_id: 2, status: :accepted)
     UserMeeting.create(meeting_id: 2, user_id: 2, status: :pending)
     UserMeeting.create(meeting_id: 3, user_id: 2, status: :pending)
 
-    expect(Availability.find(1).associated_invited_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
+    expect(Availability.find(1).associated_invited_meetings).to match_array([Meeting.find(1)])
     expect(Availability.find(2).associated_invited_meetings).to match_array([Meeting.find(3)])
     expect(Availability.find(1).associated_owned_meetings).to match_array([])
     expect(Availability.find(2).associated_owned_meetings).to match_array([])
@@ -43,9 +43,9 @@ RSpec.describe Availability, type: :model do
     Meeting.find(2).update_attribute(:owner_id, 2)
     Meeting.find(3).update_attribute(:owner_id, 2)
 
-    expect(Availability.find(1).associated_invited_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
+    expect(Availability.find(1).associated_invited_meetings).to match_array([Meeting.find(1)])
     expect(Availability.find(2).associated_invited_meetings).to match_array([Meeting.find(3)])
-    expect(Availability.find(1).associated_owned_meetings).to match_array([Meeting.find(1), Meeting.find(2)])
+    expect(Availability.find(1).associated_owned_meetings).to match_array([Meeting.find(1)])
     expect(Availability.find(2).associated_owned_meetings).to match_array([Meeting.find(3)])
   end
 end
