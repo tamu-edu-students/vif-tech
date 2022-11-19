@@ -66,6 +66,19 @@ export const createAllowlistDomain = (() => {
   return createAllowlistDomainWithIdClosure;
 })();
 
+export const createFAQ = (() => {
+  let id = 1;
+  const createFAQWithIdClosure = ({question, answer}) => {
+    const newFAQ = {
+      id: id++,
+      question,
+      answer,
+    };
+    return newFAQ;
+  };
+  return createFAQWithIdClosure;
+})();
+
 export const getCompaniesAllowlistJoined = () => {
   const companies = window.store.getState().companies;
   const allowlist_emails = window.store.getState().allowlist.allowlist_emails;
@@ -105,3 +118,5 @@ export const getCompaniesAllowlistJoined = () => {
 
   return companies;
 }
+
+export const getIdParam = (url) => Number.parseInt(url.match(/^.*\/(\d*)$/)[1]);

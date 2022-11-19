@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_15_192645) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_18_021729) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "email_domain"
     t.string "usertype"
@@ -28,6 +28,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_15_192645) do
     t.boolean "isPrimaryContact", default: false
     t.index ["company_id"], name: "index_allowlist_emails_on_company_id"
     t.index ["email", "usertype", "company_id"], name: "email_usertype_company", unique: true
+  end
+
+  create_table "availabilities", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "start_time", precision: nil
+    t.datetime "end_time", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_availabilities_on_user_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -77,17 +86,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_15_192645) do
     t.integer "company_id"
     t.integer "allowlist_email_id"
     t.integer "allowlist_domain_id"
+    t.integer "availabilities_id"
     t.index ["allowlist_domain_id"], name: "index_users_on_allowlist_domain_id"
     t.index ["allowlist_email_id"], name: "index_users_on_allowlist_email_id"
+    t.index ["availabilities_id"], name: "index_users_on_availabilities_id"
     t.index ["company_id"], name: "index_users_on_company_id"
   end
 
   add_foreign_key "allowlist_domains", "companies"
   add_foreign_key "allowlist_emails", "companies"
+  add_foreign_key "availabilities", "users"
   add_foreign_key "meetings", "users", column: "owner_id"
   add_foreign_key "user_meetings", "meetings"
   add_foreign_key "user_meetings", "users"
   add_foreign_key "users", "allowlist_domains"
   add_foreign_key "users", "allowlist_emails"
+  add_foreign_key "users", "availabilities", column: "availabilities_id"
   add_foreign_key "users", "companies"
 end
