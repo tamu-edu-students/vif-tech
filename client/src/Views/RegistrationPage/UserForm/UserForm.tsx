@@ -30,7 +30,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class UserForm extends CustomForm<Props> {
+class UserForm extends CustomForm<Props, {}> {
   public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, Props, string> & Props>, prevState: Readonly<{}>, snapshot?: any): void {
     if (this.props.usertype !== prevProps.usertype) {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {

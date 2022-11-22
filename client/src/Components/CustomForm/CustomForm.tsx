@@ -1,10 +1,14 @@
 import React from 'react';
 import { InjectedFormProps } from "redux-form";
 
-export interface OwnProps {
+interface OwnProps {
 }
 
-class CustomForm<T> extends React.Component<InjectedFormProps<any, OwnProps & T> & OwnProps & T, {}> {
+interface OwnState {
+  
+}
+
+class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps & T> & OwnProps & T, OwnState & U> {
   protected _renderInput = ({ input, label, meta, id, type, ...rest }: any) => {
     return (
       <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
