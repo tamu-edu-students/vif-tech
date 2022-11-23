@@ -36,3 +36,10 @@ Then("an error page is shown") do
   expect(ret.status).to eq(500)
   expect(ret_body["errors"]).to eq(["Something went wrong when saving this company"])
 end
+
+Then("I should see {int} reps for company with id {int}") do |int, cid|
+  ret = page.driver.get("/companies/" + cid.to_s + "/users")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  expect(ret_body["users"].length).to eq(int)
+end

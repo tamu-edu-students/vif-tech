@@ -1,4 +1,6 @@
 class CompaniesController < ApplicationController
+  before_action :confirm_user_logged_in
+
   def index
     # Displays all companies
     @companies = Company.all
@@ -9,6 +11,32 @@ class CompaniesController < ApplicationController
     end
 
     render :json=> {companies: @companies}.to_json(include: include_), status: :ok
+  end
+
+  def reps
+    @company = Company.find(params[:id])
+    if @company
+      render json: {
+               users: @company.users,
+    }.to_json, status: :ok
+    else
+      render json: {
+               errors: ["company not found"],
+             }, status: :not_found
+    end
+  end
+
+  def rep_availabilities
+    @company = Company.find(params[:id])
+    if @company
+      render json: {
+               users: @company.users,
+    }.to_json(:include => :availabilities), status: :ok
+    else
+      render json: {
+               errors: ["company not found"],
+             }, status: :not_found
+    end
   end
 
   def new
@@ -81,5 +109,13 @@ class CompaniesController < ApplicationController
 
   def company_params
     params.require(:company).permit(:name, :description)
+  end
+
+  def confirm_user_logged_in
+    if !(logged_in? && current_user)
+      render json: {
+               errors: ["User not logged in"],
+             }, status: :unauthorized
+    end
   end
 end

@@ -252,3 +252,95 @@ Feature: User availability
         And there should be 0 owned but not avaliable meetings for user 2
         And there should be 2 invitations user 2 is avaliable for
         And there should be 0 invitations user 2 is not avaliable for
+
+    Scenario: Create user availabilities as representative and then delete them
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that the user verified their email test@test.com
+        And that I log in with email test@test.com and password password1!
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-18 14:00:00 |
+            | end_time | 2022-11-18 14:01:00 |
+        Then the user with "firstname" "james" and "lastname" "bond" should have availability with id 1
+        Given that I delete availability with id 1
+        Then there should be 0 availabilities entries visible to me
+
+    Scenario: Create user availabilities as representative and then fetch that through the company
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that the user verified their email test@test.com
+        And that I log in with email test@test.com and password password1!
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-18 14:00:00 |
+            | end_time | 2022-11-18 14:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-19 14:00:00 |
+            | end_time | 2022-11-19 14:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-20 14:00:00 |
+            | end_time | 2022-11-20 14:01:00 |
+        Then the user with "firstname" "james" and "lastname" "bond" should have availability with id 1
+        And the user with "firstname" "james" and "lastname" "bond" should have availability with id 2
+        And the user with "firstname" "james" and "lastname" "bond" should have availability with id 3
+        And I should see 3 availabilities for user with id 2 for company with id 1
+
+    Scenario: Create multiple users availabilities as representative and then fetch that through the company
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I allow a new company email test2@test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that the user verified their email test@test.com
+        And that I sign up with the following
+            | firstname | james2 |
+            | lastname | bond2 |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test2@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that the user verified their email test2@test.com
+        And that I log in with email test@test.com and password password1!
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-18 14:00:00 |
+            | end_time | 2022-11-18 14:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-19 14:00:00 |
+            | end_time | 2022-11-19 14:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-20 14:00:00 |
+            | end_time | 2022-11-20 14:01:00 |
+        And that I log in with email test2@test.com and password password1!
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-18 14:00:00 |
+            | end_time | 2022-11-18 14:01:00 |
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-19 14:00:00 |
+            | end_time | 2022-11-19 14:01:00 |
+        And I should see 3 availabilities for user with id 2 for company with id 1
+        And I should see 2 availabilities for user with id 3 for company with id 1
