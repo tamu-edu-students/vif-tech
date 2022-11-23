@@ -42,6 +42,8 @@ Rails.application.routes.draw do
   post "/companies", to: "companies#create"
   get "/companies/:id", to: "companies#show"
   get "/companies/:id/edit", to: "companies#edit"
+  get "/companies/:id/users", to: "companies#reps"
+  get "/companies/:id/availabilities", to: "companies#rep_availabilities"
   put "/companies/:id", to: "companies#update"
   delete "/companies/:id", to: "companies#destroy"
   post "/users/:id/companies/:id", to: "users#add_to_company"

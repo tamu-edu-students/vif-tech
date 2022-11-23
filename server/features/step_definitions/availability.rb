@@ -31,6 +31,14 @@ Given("that I delete availability with id {int}") do |avail_id|
   expect(ret.status).to eq(200)
 end
 
+Then("I should see {int} availabilities for user with id {int} for company with id {int}") do |int, uid, cid|
+  ret = page.driver.get("/companies/" + cid.to_s + "/availabilities")
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+  users = ret_body["users"].select { |u| u["id"] == uid }
+  expect(users[0]["availabilities"].length).to eq(int)
+end
+
 Then("there should be {int} availabilities entries visible to me") do |int|
   ret = page.driver.get("/availabilities")
   ret_body = JSON.parse ret.body
