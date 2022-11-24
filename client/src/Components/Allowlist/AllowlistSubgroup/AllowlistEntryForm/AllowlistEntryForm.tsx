@@ -19,7 +19,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class AllowlistEntryForm extends CustomForm<Props> {
+class AllowlistEntryForm extends CustomForm<Props, {}> {
   private _onSubmit = (formValues: any) => {
     this.props.onSubmit(formValues);
   }
