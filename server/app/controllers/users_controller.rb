@@ -253,13 +253,13 @@ class UsersController < ApplicationController
     # write this in users_controller or companies_controller?
     # should i use foreign key instead of :id?
     @user = User.find_by_id(params[:id])
-    @company = Company.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:company_id])
     @company.users << @user
   end
 
   def delete_from_company
     @user = User.find_by_id(params[:id])
-    @company = Company.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:company_id])
     @company.users.delete(@user)
   end
 
