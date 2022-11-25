@@ -86,6 +86,12 @@ class MeetingsController < ApplicationController
   # PUT /meetings/1/
   def update
     @meeting = Meeting.find(params[:id])
+    if !@meeting
+      render json: {
+        errors: ["Meeting #{params[:id]} not found"],
+      }, status: :not_found
+      return
+    end
     if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
     end
@@ -103,6 +109,12 @@ class MeetingsController < ApplicationController
   # DELETE /meetings/1/
   def destroy
     @meeting = Meeting.find(params[:id])
+    if !@meeting
+      render json: {
+        errors: ["Meeting #{params[:id]} not found"],
+      }, status: :not_found
+      return
+    end
     if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
     end
@@ -117,9 +129,104 @@ class MeetingsController < ApplicationController
     end
   end
 
+  # GET /meetings/1/invitees
+  def get_invitees
+    @meeting = Meeting.find(params[:id])
+    # Check meeting existance
+    if !@meeting
+      render json: {
+        errors: ["Meeting #{params[:id]} not found"],
+      }, status: :not_found
+      return
+    end
+    # Check permission
+    if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
+      return
+    end
+
+    render json: {
+      invitees: @meeting.invitees,
+    }
+  end
+
+  # PUT /meetings/1/invitees
+  def swap_invitees
+    @meeting = Meeting.find(params[:id])
+    # Check meeting existance
+    if !@meeting
+      render json: {
+        errors: ["Meeting #{params[:id]} not found"],
+      }, status: :not_found
+      return
+    end
+    # Check permission
+    if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
+      return
+    end
+
+    # Check params is provided
+    invitees = invitee_params.to_h["invitees"]
+    if !invitees
+      render json: {
+        errors: ['"invitees" not found in provided parameters.'],
+      }, status: :bad_request
+      return
+    end
+
+    # Check if all entries in invitees are valid
+    valid_invite_status = UserMeeting.valid_status
+    for invitee_info in invitees
+      user = User.find_by_id(invitee_info["user_id"])
+      if !user
+        render json: {
+          errors: ["User #{invitee_info["user_id"]} not found"],
+        }, status: :bad_request
+        return
+      end
+
+      if !valid_invite_status.include?(invitee_info["status"])
+        render json: {
+          errors: ["Status '#{invitee_info["status"]}' is not valid"],
+        }, status: :bad_request
+        return
+      end
+    end
+
+    # -- Any error from here and on is potentially destructive --
+    if !@meeting.user_meetings.destroy_all
+      render json: {
+        errors: ["Previous user-meeting deletion failed",
+                 @meeting.user_meetings.errors.full_messages],
+      }, status: :bad_request
+      return
+    end
+
+    user_meetings = []
+    for invitee_info in invitees
+      user = User.find_by_id(invitee_info["user_id"])
+      status = invitee_info["status"]
+      user_meeting = UserMeeting.new({ user: user, meeting: @meeting, status: status })
+      if !user_meeting.save
+        render json: {
+                 errors: @user_meeting.errors.full_messages,
+               }, status: :internal_server_error
+        return
+      end
+      user_meetings << user_meeting
+    end
+
+    render json: {
+      user_meetings: user_meetings,
+    }, status: :ok
+  end
+
   private
 
   def meeting_params
     params.require(:meeting).permit(:title, :start_time, :end_time, :owner_id)
+  end
+
+  def invitee_params
+    params.require(:meeting).permit(invitees: [:user_id, :status])
   end
 end
