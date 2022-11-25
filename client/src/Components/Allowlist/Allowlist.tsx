@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { Usertype } from 'Shared/enums';
 
-import AllowlistSubgroupPrimaryContacts from './AllowlistSubgroup/AllowlistSubgroupPrimaryContacts';
+import AllowlistSubgroupPrimaryContact from './AllowlistSubgroup/AllowlistSubgroupPrimaryContact';
 import AllowlistSubgroupEmails from './AllowlistSubgroup/AllowlistSubgroupEmails';
 import AllowlistSubgroupDomains from './AllowlistSubgroup/AllowlistSubgroupDomains';
 
@@ -20,10 +20,10 @@ interface OwnProps {
   title: string;
   usertype: Usertype;
   company_id?: number;
-  showsPrimaryContacts?: boolean;
+  showsPrimaryContact?: boolean;
   showsEmails?: boolean;
   showsDomains?: boolean;
-  primaryContacts?: AllowlistEmail[];
+  primaryContact?: AllowlistEmail | null;
   allowlist_emails?: AllowlistEmail[];
   allowlist_domains?: AllowlistDomain[];
 }
@@ -44,10 +44,11 @@ class Allowlist extends React.Component<Props, {}> {
     const {
       title,
       usertype,
-      showsPrimaryContacts,
-      showsEmails,
-      showsDomains,
-      primaryContacts=[],
+      company_id,
+      showsPrimaryContact = false,
+      showsEmails = false,
+      showsDomains = false,
+      primaryContact = null,
       allowlist_emails = [],
       allowlist_domains = [],
     } = this.props;
@@ -55,14 +56,14 @@ class Allowlist extends React.Component<Props, {}> {
     return (
       <div className="allowlist">
         <h2 className="heading-secondary">Title: {title}</h2>
-        { showsPrimaryContacts &&
-          <AllowlistSubgroupPrimaryContacts
+        { showsPrimaryContact &&
+          <AllowlistSubgroupPrimaryContact
             parentTitle={title}
-            entries={primaryContacts}
+            entry={primaryContact}
             usertype={usertype}
             onSubmit={() => {}}
             onDelete={() => {}}
-            company_id={this.props.company_id}
+            company_id={company_id}
           />
         }
 
@@ -73,7 +74,7 @@ class Allowlist extends React.Component<Props, {}> {
             usertype={usertype}
             onSubmit={() => {}}
             onDelete={() => {}}
-            company_id={this.props.company_id}
+            company_id={company_id}
           />
         )}
         
@@ -84,7 +85,7 @@ class Allowlist extends React.Component<Props, {}> {
             usertype={usertype}
             onSubmit={() => {}}
             onDelete={() => {}}
-            company_id={this.props.company_id}
+            company_id={company_id}
           />
         )}
       </div>

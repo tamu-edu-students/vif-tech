@@ -13,7 +13,7 @@ interface OwnProps {
   onSubmit: any;
   onDelete: any;
   company_id?: number;
-  entries: AllowlistEmail[];
+  entry: AllowlistEmail | null;
 }
 
 const mapStateToProps = null;
@@ -42,19 +42,15 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     this.props.hideModal();
   }
 
-  private _renderEntry(entryString: string, id: number): JSX.Element {
+  private _renderEntry({email, id}: AllowlistEmail): JSX.Element {
     return (
       <li className="allowlist__entry" key={id}>
-        {entryString}
-        <button onClick={() => this._renderConfirmationDialogue(id, entryString, this.props.parentTitle)}>
+        {email}
+        <button onClick={() => this._renderConfirmationDialogue(id, email, this.props.parentTitle)}>
           Delete
         </button>
       </li>
-    )
-  }
-
-  private _renderEntries(allowlist_entries: any): JSX.Element[] {
-    return allowlist_entries.map(({email, id}: AllowlistEmail) => (this._renderEntry(email, id)));
+    );
   }
 
   private _renderConfirmationDialogue = (id: number, entryString: string, parentTitle: string): void => {
@@ -73,7 +69,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
 
   public render(): React.ReactElement<Props> {
     const {
-      entries,
+      entry,
     } = this.props;
 
     const allowlistEntryFormProps = {
@@ -86,14 +82,17 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     };
 
     return (
-      <div className={`allowlist__subgroup allowlist__subgroup--primary-contacts`}>
-        <h3 className="heading-tertiary">{'Primary Contacts'}</h3>
+      <div className={`allowlist__subgroup allowlist__subgroup--primary-contact`}>
+        <h3 className="heading-tertiary">{'Primary Contact'}</h3>
         <ul>
-          {this._renderEntries(entries)}
+          {entry && this._renderEntry(entry)}
         </ul>
-        <button onClick={() => this._renderForm(allowlistEntryFormProps)}>
-          Add
-        </button>
+        {
+          !entry &&
+          <button onClick={() => this._renderForm(allowlistEntryFormProps)}>
+            Add
+          </button>
+        }
       </div>
     );
   }
