@@ -9,6 +9,7 @@ import faqReducer from "./faqReducer";
 
 import Company from "Shared/entityClasses/Company";
 import User from "Shared/entityClasses/User";
+import FAQ from "Shared/entityClasses/FAQ";
 
 export interface IRootState {
   users: User[];
@@ -17,7 +18,7 @@ export interface IRootState {
   allowlist: Store_Allowlist;
   companies: Company[];
   modal: Store_Modal;
-  faqs: IFAQ[];
+  faqs: FAQ[];
 }
 
 const rootReducer = combineReducers<IRootState> ({

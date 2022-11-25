@@ -8,6 +8,7 @@ import FAQBlock from './FAQBlock/FAQBlock';
 import FAQForm from './FAQForm/FAQForm';
 
 import { fetchFAQs, createFAQ, showModal, hideModal } from 'Store/actions';
+import FAQ from 'Shared/entityClasses/FAQ';
 
 interface OwnProps {
 }
@@ -59,7 +60,7 @@ class FAQPage extends React.Component<Props, OwnState> {
   }
 
   private _renderFAQs = (): JSX.Element[] => {
-    return this.props.faqs.map((faq: IFAQ) => (
+    return this.props.faqs.map((faq: FAQ) => (
       <FAQBlock key={faq.id} {...faq} />
     ));
   }
