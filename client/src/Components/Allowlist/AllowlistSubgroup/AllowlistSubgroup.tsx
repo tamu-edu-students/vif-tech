@@ -5,6 +5,8 @@ import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
 
 import { fetchCompanies, showModal, hideModal } from 'Store/actions';
 import { Usertype } from 'Shared/enums';
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
 
 interface BaseProps {
   parentTitle: string;

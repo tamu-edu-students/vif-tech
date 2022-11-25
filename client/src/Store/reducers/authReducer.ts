@@ -1,3 +1,4 @@
+import User from "Shared/entityClasses/User";
 import { LOG_IN, LOG_OUT, FETCH_LOGIN_STATUS } from "Store/actions/types";
 
 export interface Store_Auth {

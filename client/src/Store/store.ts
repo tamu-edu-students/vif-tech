@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from '@redux-devtools/extension';
+import { Store } from "redux";
 import thunk from "redux-thunk";
 
 import reducers, {IRootState} from "./reducers";
@@ -10,4 +11,4 @@ const createPreconfiguredStore = (initialState?: any) => createStore<IRootState,
   composeWithDevTools(applyMiddleware(thunk))
 );
 
-export default createPreconfiguredStore;
+export const store: Store<IRootState> = createPreconfiguredStore();

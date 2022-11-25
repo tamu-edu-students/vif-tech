@@ -5,16 +5,16 @@ import {
   DELETE_FAQ,
 } from "Store/actions/types";
 
-const faqReducer = (state: FAQ[] = [], action: any): FAQ[] => {
+const faqReducer = (state: IFAQ[] = [], action: any): IFAQ[] => {
   switch(action.type) {
     case FETCH_FAQS:
       return action.payload;
     case CREATE_FAQ:
       return [...state, action.payload];
     case UPDATE_FAQ:
-      return state.map((faq: FAQ) => faq.id === action.payload.id ? action.payload : faq);
+      return state.map((faq: IFAQ) => faq.id === action.payload.id ? action.payload : faq);
     case DELETE_FAQ:
-      return state.filter((faq: FAQ) => faq.id !== action.payload);
+      return state.filter((faq: IFAQ) => faq.id !== action.payload);
     default:
       return state;
   }

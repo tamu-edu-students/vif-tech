@@ -1,4 +1,4 @@
-interface User {
+interface IUser {
   id: number;
   email: string;
   firstname: string;
@@ -8,15 +8,13 @@ interface User {
   interests?: string[];
 }
 
-interface Company {
+interface ICompany {
   id: number;
   name: string;
   description: string;
-  allowlist_emails: AllowlistEmail[];
-  allowlist_domains: AllowlistDomain[];
 }
 
-interface AllowlistEmail {
+interface IAllowlistEmail {
   id: number;
   company_id?: number;
   email: string;
@@ -24,14 +22,14 @@ interface AllowlistEmail {
   isPrimaryContact?: boolean;
 }
 
-interface AllowlistDomain {
+interface IAllowlistDomain {
   id: number;
   company_id?: number;
   email_domain: string;
   usertype: Usertype;
 }
 
-interface FAQ {
+interface IFAQ {
   id: number;
   question: string;
   answer: string;

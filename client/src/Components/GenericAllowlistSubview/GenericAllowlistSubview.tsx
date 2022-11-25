@@ -11,6 +11,8 @@ import {
   hideModal,
 } from 'Store/actions';
 import { IRootState } from 'Store/reducers';
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
 
 interface OwnProps {
   usertype: Usertype;

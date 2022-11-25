@@ -12,6 +12,8 @@ import {
   deleteAllowlistDomain,
   fetchCompanies,
 } from "Store/actions";
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
 
 interface OwnProps {
   title: string;

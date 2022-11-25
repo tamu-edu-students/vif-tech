@@ -3,6 +3,8 @@ import {
   CREATE_COMPANY,
 } from "Store/actions/types";
 
+import Company from "Shared/entityClasses/Company";
+
 const companyReducer = (state: Company[] = [], action: any): Company[] => {
   switch(action.type) {
     case FETCH_COMPANIES:
