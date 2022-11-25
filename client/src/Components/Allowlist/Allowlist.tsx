@@ -10,7 +10,6 @@ import {
   createAllowlistDomain,
   deleteAllowlistEmail,
   deleteAllowlistDomain,
-  fetchCompanies,
 } from "Store/actions";
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
@@ -33,7 +32,6 @@ const mapDispatchToProps = {
   createAllowlistDomain,
   deleteAllowlistEmail,
   deleteAllowlistDomain,
-  fetchCompanies,
 }
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

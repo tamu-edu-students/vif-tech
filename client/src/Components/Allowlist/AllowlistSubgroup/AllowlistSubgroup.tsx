@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
 
-import { fetchCompanies, showModal, hideModal } from 'Store/actions';
+import { showModal, hideModal } from 'Store/actions';
 import { Usertype } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
@@ -39,7 +39,7 @@ type Subgroup = PrimaryContact | Email | Domain;
 type OwnProps = Subgroup & BaseProps;
 
 const mapStateToProps = null;
-const mapDispatchToProps = { fetchCompanies, showModal, hideModal };
+const mapDispatchToProps = { showModal, hideModal };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
