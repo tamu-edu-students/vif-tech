@@ -3,7 +3,9 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { Usertype } from 'Shared/enums';
 
-import AllowlistSubgroup from './AllowlistSubgroup/AllowlistSubgroup';
+import AllowlistSubgroupPrimaryContacts from './AllowlistSubgroup/AllowlistSubgroupPrimaryContacts';
+import AllowlistSubgroupEmails from './AllowlistSubgroup/AllowlistSubgroupEmails';
+import AllowlistSubgroupDomains from './AllowlistSubgroup/AllowlistSubgroupDomains';
 
 import {
   createAllowlistEmail,
@@ -38,31 +40,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class Allowlist extends React.Component<Props, {}> {
-  private _onSubmitPrimaryContact = async (formValues: any) => {
-    await this.props.createAllowlistEmail({
-      email: formValues.email,
-      usertype: this.props.usertype,
-      ...(this.props.company_id && {company_id: this.props.company_id}),
-      isPrimaryContact: true,
-    });
-  }
-
-  private _onSubmitEmail = async (formValues: any) => {
-    await this.props.createAllowlistEmail({
-      email: formValues.email,
-      usertype: this.props.usertype,
-      ...(this.props.company_id && {company_id: this.props.company_id}),
-    });
-  }
-
-  private _onSubmitDomain = async (formValues: any) => {
-    await this.props.createAllowlistDomain({
-      email_domain: formValues.email_domain,
-      usertype: this.props.usertype,
-      ...(this.props.company_id && {company_id: this.props.company_id}),
-    });
-  }
-
   public render(): React.ReactElement<Props> {
     const {
       title,
@@ -79,39 +56,35 @@ class Allowlist extends React.Component<Props, {}> {
       <div className="allowlist">
         <h2 className="heading-secondary">Title: {title}</h2>
         { showsPrimaryContacts &&
-          <AllowlistSubgroup
+          <AllowlistSubgroupPrimaryContacts
             parentTitle={title}
-            heading="Primary Contacts"
             entries={primaryContacts}
             usertype={usertype}
-            onSubmit={this._onSubmitPrimaryContact}
-            onDelete={this.props.deleteAllowlistEmail}
-            name="email"
-            isPrimaryContact={true}
+            onSubmit={() => {}}
+            onDelete={() => {}}
+            company_id={this.props.company_id}
           />
         }
 
         { showsEmails && (
-          <AllowlistSubgroup
+          <AllowlistSubgroupEmails
             parentTitle={title}
-            heading="Personal Emails"
             entries={allowlist_emails}
             usertype={usertype}
-            onSubmit={this._onSubmitEmail}
-            onDelete={this.props.deleteAllowlistEmail}
-            name="email"
+            onSubmit={() => {}}
+            onDelete={() => {}}
+            company_id={this.props.company_id}
           />
         )}
         
         { showsDomains && (
-          <AllowlistSubgroup
+          <AllowlistSubgroupDomains
             parentTitle={title}
-            heading="Domains"
             entries={allowlist_domains}
             usertype={usertype}
-            onSubmit={this._onSubmitDomain}
-            onDelete={this.props.deleteAllowlistDomain}
-            name="email_domain"
+            onSubmit={() => {}}
+            onDelete={() => {}}
+            company_id={this.props.company_id}
           />
         )}
       </div>
