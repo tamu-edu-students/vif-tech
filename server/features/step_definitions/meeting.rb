@@ -110,5 +110,13 @@ Then("meeting {int} should have as invitees the following users") do |id, invite
   ret_body = JSON.parse ret.body
   invitees_actual = []
   ret_body["invitees"].each { |h| invitees_actual << h["id"].to_s }
-  expect(invitees_actual).to eq(p invitees.raw[0].each { |id| id.to_i })
+  expect(invitees_actual).to eq(invitees.raw[0].each { |id| id.to_i })
+end
+
+Then("meeting {int} should have as {string} invitees the following users") do |id, status, invitees|
+  ret = page.driver.get("/meetings/#{id}/invitees?status=#{status}")
+  ret_body = JSON.parse ret.body
+  invitees_actual = []
+  ret_body["invitees"].each { |h| invitees_actual << h["id"].to_s }
+  expect(invitees_actual).to eq(invitees.raw[0].each { |id| id.to_i })
 end

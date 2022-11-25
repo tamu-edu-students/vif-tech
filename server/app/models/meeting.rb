@@ -23,4 +23,14 @@ class Meeting < ApplicationRecord
     end
     return ret
   end
+
+  def invites_by_status(status)
+    ret = []
+    for user_meeting in user_meetings
+      if user_meeting.status == status
+        ret.push(user_meeting.user)
+      end
+    end
+    return ret
+  end
 end

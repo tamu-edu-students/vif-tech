@@ -156,3 +156,28 @@ Feature: Meeting
             | 5 | declined |
         Then meeting 1 should have as invitees the following users
             | 3 | 5 |
+    
+    Scenario: Mass update invitees
+        # User 2-6
+        Given a student signs up and confirms their email
+        And a student signs up and confirms their email
+        And a student signs up and confirms their email
+        And a student signs up and confirms their email
+        And a student signs up and confirms their email
+        And that I log in as admin
+        And that I create a valid meeting
+        Then I get code 200 when mass updating meeting 1's invitees with
+            | user_id | status |
+            | 2 | pending |
+            | 3 | accepted |
+            | 4 | cancelled |
+            | 5 | declined |
+            | 6 | accepted |
+        Then meeting 1 should have as "pending" invitees the following users
+            | 2 |
+        Then meeting 1 should have as "accepted" invitees the following users
+            | 3 | 6 |
+        Then meeting 1 should have as "cancelled" invitees the following users
+            | 4 |
+        Then meeting 1 should have as "declined" invitees the following users
+            | 5 |

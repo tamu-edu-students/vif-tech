@@ -143,9 +143,15 @@ class MeetingsController < ApplicationController
     if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
     end
-
+    invitees = nil
+    if params.key?("status")
+      # e.g. /meetings/1/invites/?status=accepted
+      invitees = @meeting.invites_by_status(params["status"])
+    else
+      invitees = @meeting.invitees
+    end
     render json: {
-      invitees: @meeting.invitees,
+      invitees: invitees,
     }
   end
 
