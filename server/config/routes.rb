@@ -46,8 +46,9 @@ Rails.application.routes.draw do
   get "/companies/:id/availabilities", to: "companies#rep_availabilities"
   put "/companies/:id", to: "companies#update"
   delete "/companies/:id", to: "companies#destroy"
-  post "/users/:id/companies/:id", to: "users#add_to_company"
-  delete "users/:id/companies/:id", to: "users#delete_from_company"
+  # post "/users/:id/companies/:company_id", to: "users#add_to_company"
+  # delete "users/:id/companies/:company_id", to: "users#delete_from_company"
+  get "/companies/public", to: "companies#public_index", as: 'public_index'
 
   resources :availabilities, only: [:create, :show, :index, :update, :destroy]
   get "users/:id/availabilities", to: "users#get_availabilies"
