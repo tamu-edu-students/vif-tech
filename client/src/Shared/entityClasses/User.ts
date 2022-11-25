@@ -1,13 +1,23 @@
-// import { Usertype } from "Shared/enums";
+import { Usertype } from "Shared/enums";
 import { store } from "Store/store";
 import Company from "./Company";
 
+export interface IUser {
+  id: number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  usertype: Usertype;
+  company_id?: number;
+  interests?: string[];
+}
+
 export default class User implements IUser {
-  public readonly id: number = -1;
-  public readonly email: string = '';
-  public readonly firstname: string = '';
-  public readonly lastname: string = '';
-  public readonly usertype: string = '';
+  public readonly id: number;
+  public readonly email: string;
+  public readonly firstname: string;
+  public readonly lastname: string;
+  public readonly usertype: Usertype;
   public readonly company_id?: number;
   public readonly interests?: string[];
 

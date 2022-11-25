@@ -28,8 +28,8 @@ import vifTech from "Apis/vifTech";
 import { Usertype } from "Shared/enums";
 import Company from 'Shared/entityClasses/Company';
 import User from 'Shared/entityClasses/User';
-import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
-import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
+import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 
 export const fetchUsers = () => async (dispatch: any) => {

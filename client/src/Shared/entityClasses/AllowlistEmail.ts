@@ -1,13 +1,21 @@
-// import { Usertype } from "Shared/enums";
+import { Usertype } from "Shared/enums";
 import { store } from "Store/store";
 import Company from "./Company";
 import User from "./User";
 
+export interface IAllowlistEmail {
+  id: number;
+  company_id?: number;
+  email: string;
+  usertype: Usertype;
+  isPrimaryContact?: boolean;
+}
+
 export default class AllowlistEmail implements IAllowlistEmail {
-  public readonly id: number = -1;
-  public readonly email: string = '';
+  public readonly id: number;
+  public readonly email: string;
   public readonly company_id?: number;
-  public readonly usertype: string;
+  public readonly usertype: Usertype;
   public readonly isPrimaryContact?: boolean;
 
   public constructor({ id, email, company_id, usertype, isPrimaryContact}: IAllowlistEmail) {

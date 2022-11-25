@@ -1,13 +1,20 @@
-// import { Usertype } from "Shared/enums";
+import { Usertype } from "Shared/enums";
 import { store } from "Store/store";
 import Company from "./Company";
 import User from "./User";
 
+export interface IAllowlistDomain {
+  id: number;
+  company_id?: number;
+  email_domain: string;
+  usertype: Usertype;
+}
+
 export default class AllowlistDomain implements IAllowlistDomain {
-  public readonly id: number = -1;
-  public readonly email_domain: string = '';
+  public readonly id: number;
+  public readonly email_domain: string;
   public readonly company_id?: number;
-  public readonly usertype: string;
+  public readonly usertype: Usertype;
 
   public constructor({ id, email_domain, company_id, usertype}: IAllowlistDomain) {
     this.id = id;

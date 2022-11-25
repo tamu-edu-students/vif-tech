@@ -1,7 +1,13 @@
+export interface IFAQ {
+  id: number;
+  question: string;
+  answer: string;
+}
+
 export default class FAQ implements IFAQ {
-  public readonly id: number = -1;
-  public readonly question: string = '';
-  public readonly answer: string = '';
+  public readonly id: number;
+  public readonly question: string;
+  public readonly answer: string;
 
   public constructor({ id, question, answer }: IFAQ) {
     this.id = id;

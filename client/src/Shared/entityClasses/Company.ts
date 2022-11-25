@@ -3,10 +3,16 @@ import AllowlistDomain from "./AllowlistDomain";
 import AllowlistEmail from "./AllowlistEmail";
 import User from "./User";
 
+export interface ICompany {
+  id: number;
+  name: string;
+  description: string;
+}
+
 export default class Company implements ICompany {
-  public readonly id: number = -1;
-  public readonly name: string = '';
-  public readonly description: string = '';
+  public readonly id: number;
+  public readonly name: string;
+  public readonly description: string;
 
   public constructor({ id, name, description }: ICompany) {
     this.id = id;
