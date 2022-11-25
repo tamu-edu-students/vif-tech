@@ -23,6 +23,9 @@ interface OwnProps {
 const mapStateToProps = (state: IRootState) => {
   return {
     companies: state.companies,
+
+    allowlist_emails: state.allowlist.allowlist_emails,
+    allowlist_domains: state.allowlist.allowlist_domains,
   };
 }
 const mapDispatchToProps = {
@@ -96,10 +99,10 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
 
   private _onCompanySubmit = (formValues: any) => {
     this.props.createCompany(formValues)
-    .then(() => this.props.hideModal())
-    .catch((err: Error) => {
-      console.error(err.message);
-    });
+      .then(() => this.props.hideModal())
+      .catch((err: Error) => {
+        console.error(err.message);
+      });
   }
 
   public render(): React.ReactElement<Props> {

@@ -47,9 +47,6 @@ class Allowlist extends React.Component<Props, {}> {
       ...(this.props.company_id && {company_id: this.props.company_id}),
       isPrimaryContact: true,
     });
-    if (this.props.usertype === Usertype.REPRESENTATIVE) {
-      this.props.fetchCompanies();
-    }
   }
 
   private _onSubmitEmail = async (formValues: any) => {
@@ -58,9 +55,6 @@ class Allowlist extends React.Component<Props, {}> {
       usertype: this.props.usertype,
       ...(this.props.company_id && {company_id: this.props.company_id}),
     });
-    if (this.props.usertype === Usertype.REPRESENTATIVE) {
-      this.props.fetchCompanies();
-    }
   }
 
   private _onSubmitDomain = async (formValues: any) => {
@@ -69,9 +63,6 @@ class Allowlist extends React.Component<Props, {}> {
       usertype: this.props.usertype,
       ...(this.props.company_id && {company_id: this.props.company_id}),
     });
-    if (this.props.usertype === Usertype.REPRESENTATIVE) {
-      this.props.fetchCompanies();
-    }
   }
 
   public render(): React.ReactElement<Props> {

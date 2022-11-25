@@ -47,12 +47,7 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 class AllowlistSubgroup extends React.Component<Props, {}> {
   private _onEntryDeletion = (id: number): void => {
     this.props.onDelete(id)
-    .then(() => {
-      if (this.props.usertype === Usertype.REPRESENTATIVE) {
-        this.props.fetchCompanies();
-      }
-    })
-    .then(() => this.props.hideModal());
+      .then(() => this.props.hideModal());
   }
 
   private _renderEntry(entryString: string, id: number): JSX.Element {
