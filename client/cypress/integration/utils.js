@@ -27,13 +27,19 @@ export const setSession = (isLoggedIn, email, users) => {
 
 export const createCompany = (() => {
   let id = 1;
-  const createCompanyWithIdClosure = (name) => ({
-    id: id++,
-    name,
-    description: null,
-    allowlist_emails: [],
-    allowlist_domains: [],
-  });
+  const createCompanyWithIdClosure = (name) => {
+    const newId = id++;
+    const findAllowlistEmails = () => window.store.getState().allowlist.allowlist_emails.filter(allowlist_email => allowlist_email.company_id === newId);
+    const findAllowlistDomains = () => window.store.getState().allowlist.allowlist_domains.filter(allowlist_domain => allowlist_domain.company_id === newId);
+    const findPrimaryContact = () => findAllowlistEmails().find(allowlist_email => allowlist_email.isPrimaryContact === true) ?? null;
+    return {
+      id: newId,
+      name,
+      description: '',
+      findAllowlistEmails,
+      findAllowlistDomains,
+      findPrimaryContact,
+  }};
   return createCompanyWithIdClosure;
 })();
 
@@ -78,45 +84,5 @@ export const createFAQ = (() => {
   };
   return createFAQWithIdClosure;
 })();
-
-export const getCompaniesAllowlistJoined = () => {
-  const companies = window.store.getState().companies;
-  const allowlist_emails = window.store.getState().allowlist.allowlist_emails;
-  const allowlist_domains = window.store.getState().allowlist.allowlist_domains;
-
-  companies.forEach(company => {
-    company.allowlist_emails = company.allowlist_emails.filter(comp_allowlist_email => 
-      allowlist_emails.some(allowlist_email =>
-        allowlist_email.id === comp_allowlist_email.id
-      )
-    );
-
-    company.allowlist_domains = company.allowlist_domains.filter(comp_allowlist_domain =>
-      allowlist_domains.some(allowlist_domain =>
-        allowlist_domain.id === comp_allowlist_domain.id
-      )
-    );
-
-    allowlist_emails.forEach(allowlist_email => {
-      if (
-        allowlist_email.company_id === company.id
-        && !company.allowlist_emails.some(comp_allowlist_email => comp_allowlist_email.id === allowlist_email.id)
-      ) {
-        company.allowlist_emails.push(allowlist_email);
-      }
-    });
-    
-    allowlist_domains.forEach(allowlist_domain => {
-      if (
-        allowlist_domain.company_id === company.id
-        && !company.allowlist_domains.some(comp_allowlist_domain => comp_allowlist_domain.id === allowlist_domain.id)
-      ) {
-        company.allowlist_domains.push(allowlist_domain);
-      }
-    });
-  });
-
-  return companies;
-}
 
 export const getIdParam = (url) => Number.parseInt(url.match(/^.*\/(\d*)$/)[1]);

@@ -6,6 +6,7 @@ import CustomForm from 'Components/CustomForm/CustomForm';
 import { Usertype } from "Shared/enums";
 import { fetchCompanies } from "Store/actions";
 import { IRootState } from 'Store/reducers';
+import Company from 'Shared/entityClasses/Company';
 
 interface OwnProps {
   onSubmit?: any;
@@ -30,7 +31,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class UserForm extends CustomForm<Props> {
+class UserForm extends CustomForm<Props, {}> {
   public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, Props, string> & Props>, prevState: Readonly<{}>, snapshot?: any): void {
     if (this.props.usertype !== prevProps.usertype) {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {

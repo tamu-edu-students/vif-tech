@@ -26,13 +26,17 @@ import {
 import history from "History/history";
 import vifTech from "Apis/vifTech";
 import { Usertype } from "Shared/enums";
+import Company from 'Shared/entityClasses/Company';
+import User from 'Shared/entityClasses/User';
+import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
+import FAQ from 'Shared/entityClasses/FAQ';
 
 export const fetchUsers = () => async (dispatch: any) => {
   const response: any = await vifTech.get("/users");
   console.log(`fetchUsers response: `, response);
-  const users: any[] = response.data.users;
 
-  dispatch({ type: FETCH_USERS, payload: users });
+  dispatch({ type: FETCH_USERS, payload: User.createNewUsers(response.data.users) });
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
@@ -42,8 +46,7 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   });
   console.log(`createUser response: `, response);
 
-  const user: User = response.data.user;
-  dispatch({ type: CREATE_USER, payload: user });
+  dispatch({ type: CREATE_USER, payload: new User(response.data.user) });
 
   history.push('/users/new/success');
 }
@@ -60,8 +63,13 @@ export const logIn = (formValues: any) => async (dispatch: any) => {
     throw new Error(response.data.errors);
   }
 
-  const user: User = response.data.user;
-  dispatch({ type: LOG_IN, payload: { isLoggedIn: true, user } });
+  dispatch({
+    type: LOG_IN,
+    payload: {
+      isLoggedIn: true,
+      user: new User(response.data.user)
+    }
+  });
 
   history.push('/');
 }
@@ -85,7 +93,7 @@ export const fetchLoginStatus = () => async (dispatch: any) => {
   console.log('fetchLoginStatus response:', response);
 
   const isLoggedIn: boolean = response.data.logged_in;
-  const user: User = response.data.user ?? null;
+  const user: User | null = response.data.user ? new User(response.data.user) : null;
 
   dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn, user } });
 }
@@ -97,7 +105,7 @@ export const fetchCompanies = () => async (dispatch: any) => {
   });
 
   console.log('fetchCompanies response:', response);
-  dispatch({ type: FETCH_COMPANIES, payload: response.data.companies });
+  dispatch({ type: FETCH_COMPANIES, payload: Company.createCompanies(response.data.companies) });
 }
 
 export const createCompany = (formValues: any) => async (dispatch: any) => {
@@ -107,7 +115,7 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
   });
 
   console.log('createCompany response:', response);
-  dispatch({ type: CREATE_COMPANY, payload: response.data.company });
+  dispatch({ type: CREATE_COMPANY, payload: new Company(response.data.company) });
 }
 
 export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => {
@@ -123,12 +131,16 @@ export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => 
   console.log('fetchAllowlist (emails) response:', response_emails);
   console.log('fetchAllowlist (domains) response:', response_domains);
 
-  const allowlist_emails: AllowlistEmail = usertype ?
-    response_emails.data.emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === usertype) :
-    response_emails.data.emails;
-  const allowlist_domains: AllowlistDomain = usertype ?
-    response_domains.data.domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === usertype) :
-    response_domains.data.domains;
+  const allowlist_emails: AllowlistEmail[] = AllowlistEmail.createAllowlistEmails(
+    usertype ?
+    response_emails.data.emails.filter((allowlist_email: IAllowlistEmail) => allowlist_email.usertype === usertype) :
+    response_emails.data.emails
+  );
+  const allowlist_domains: AllowlistDomain[] = AllowlistDomain.createAllowlistDomains(
+    usertype ?
+    response_domains.data.domains.filter((allowlist_domain: IAllowlistDomain) => allowlist_domain.usertype === usertype) :
+    response_domains.data.domains
+  );
 
   dispatch({ type: FETCH_ALLOWLIST, payload: {allowlist_emails, allowlist_domains} });
 }
@@ -142,7 +154,7 @@ export const createAllowlistEmail = (formValues: any) => async (dispatch: any, g
 
   console.log('createAllowlistEmail response_create:', response_create);
 
-  dispatch({ type: CREATE_ALLOWLIST_EMAIL, payload: response_create.data.email });
+  dispatch({ type: CREATE_ALLOWLIST_EMAIL, payload: new AllowlistEmail(response_create.data.email) });
 }
 
 export const createAllowlistDomain = (formValues: any) => async (dispatch: any, getState: any) => {
@@ -154,7 +166,7 @@ export const createAllowlistDomain = (formValues: any) => async (dispatch: any, 
 
   console.log('createAllowlistDomain response_create:', response_create);
 
-  dispatch({ type: CREATE_ALLOWLIST_DOMAIN, payload: response_create.data.domain });
+  dispatch({ type: CREATE_ALLOWLIST_DOMAIN, payload: new AllowlistDomain(response_create.data.domain) });
 }
 
 export const deleteAllowlistEmail = (id: number) => async (dispatch: any, getState: any) => {
@@ -178,7 +190,7 @@ export const fetchFAQs = () => async (dispatch: any) => {
 
   console.log('response_fetchFAQs:', response_fetchFAQs);
 
-  dispatch({ type: FETCH_FAQS, payload: response_fetchFAQs.data.faqs });
+  dispatch({ type: FETCH_FAQS, payload: FAQ.createFAQs(response_fetchFAQs.data.faqs) });
 }
 
 export const createFAQ = (formValues: any) => async (dispatch: any) => {
@@ -186,7 +198,7 @@ export const createFAQ = (formValues: any) => async (dispatch: any) => {
 
   console.log('response_createFAQ:', response_createFAQ);
 
-  dispatch({ type: CREATE_FAQ, payload: response_createFAQ.data.faq });
+  dispatch({ type: CREATE_FAQ, payload: new FAQ(response_createFAQ.data.faq) });
 }
 
 export const updateFAQ = (id: number, formValues: any) => async (dispatch: any) => {
@@ -194,7 +206,7 @@ export const updateFAQ = (id: number, formValues: any) => async (dispatch: any) 
 
   console.log('response_updateFAQ:', response_updateFAQ);
 
-  dispatch({ type: UPDATE_FAQ, payload: response_updateFAQ.data.faq });
+  dispatch({ type: UPDATE_FAQ, payload: new FAQ(response_updateFAQ.data.faq) });
 }
 
 export const deleteFAQ = (id: number) => async (dispatch: any) => {

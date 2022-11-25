@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from "react-redux";
 import reportWebVitals from './reportWebVitals';
 
-import createPreconfiguredStore from './Store/createPreconfiguredStore';
+import { store}  from './Store/store';
 import App from "./App";
-
-const store = createPreconfiguredStore();
  
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

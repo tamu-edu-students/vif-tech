@@ -1,3 +1,4 @@
+import FAQ from "Shared/entityClasses/FAQ";
 import {
   FETCH_FAQS,
   CREATE_FAQ,

@@ -1,3 +1,5 @@
+import AllowlistDomain from "Shared/entityClasses/AllowlistDomain";
+import AllowlistEmail from "Shared/entityClasses/AllowlistEmail";
 import {
   FETCH_ALLOWLIST,
   CREATE_ALLOWLIST_EMAIL,

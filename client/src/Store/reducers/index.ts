@@ -7,6 +7,10 @@ import companyReducer from './companyReducer';
 import modalReducer, { Store_Modal } from './modalReducer';
 import faqReducer from "./faqReducer";
 
+import Company from "Shared/entityClasses/Company";
+import User from "Shared/entityClasses/User";
+import FAQ from "Shared/entityClasses/FAQ";
+
 export interface IRootState {
   users: User[];
   form: any;

@@ -50,7 +50,7 @@ Before(function() {
   cy.intercept('GET', "http://localhost:3001/companies", req => {
     req.reply(
       200,
-      { companies: getCompaniesAllowlistJoined() }
+      { companies  }
     );
   }).as('Fetch Companies');
 
@@ -68,6 +68,20 @@ Before(function() {
       { company: newCompany }
     );
   }).as('Create Company');
+
+  cy.intercept('GET', "http://localhost:3001/allowlist_emails", req => {
+    req.reply(
+      200,
+      { emails: allowlist_emails }
+    );
+  }).as('Fetch Allowlist Emails');
+
+  cy.intercept('GET', "http://localhost:3001/allowlist_domains", req => {
+    req.reply(
+      200,
+      { domains: allowlist_domains }
+    );
+  }).as('Fetch Allowlist Domains');
 
   cy.intercept('POST', "http://localhost:3001/allowlist_emails", req => {
     const { email } = req.body;
@@ -107,6 +121,8 @@ Before(function() {
 Given(`I visit the companies allowlist page`, () => {
   cy.visit('/profile/company-allowlists')
   .wait('@Fetch Companies')
+  .wait('@Fetch Allowlist Emails')
+  .wait('@Fetch Allowlist Domains');
 });
 
 Given(`I am not logged in`, () => {

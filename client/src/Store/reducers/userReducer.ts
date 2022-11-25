@@ -1,3 +1,4 @@
+import User from "Shared/entityClasses/User";
 import {
   FETCH_USERS,
   CREATE_USER,

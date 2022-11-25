@@ -4,10 +4,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { Usertype } from 'Shared/enums';
 
-import FAQ from './FAQ/FAQ';
+import FAQBlock from './FAQBlock/FAQBlock';
 import FAQForm from './FAQForm/FAQForm';
 
 import { fetchFAQs, createFAQ, showModal, hideModal } from 'Store/actions';
+import FAQ from 'Shared/entityClasses/FAQ';
 
 interface OwnProps {
 }
@@ -60,7 +61,7 @@ class FAQPage extends React.Component<Props, OwnState> {
 
   private _renderFAQs = (): JSX.Element[] => {
     return this.props.faqs.map((faq: FAQ) => (
-      <FAQ key={faq.id} {...faq} />
+      <FAQBlock key={faq.id} {...faq} />
     ));
   }
 

@@ -11,8 +11,11 @@ import {
   createCompany,
   showModal,
   hideModal,
+  fetchAllowlist,
 } from 'Store/actions';
 import { IRootState } from 'Store/reducers';
+import Company from 'Shared/entityClasses/Company';
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 
 interface OwnProps {
 }
@@ -27,6 +30,7 @@ const mapDispatchToProps = {
   createCompany,
   showModal,
   hideModal,
+  fetchAllowlist,
 };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -45,8 +49,12 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
   }
 
   public componentDidMount(): void {
-    this.setState({ isLoaded: false });
-    this.props.fetchCompanies().then(() => this.setState({ isLoaded: true }));
+    (async () => {
+      this.setState({ isLoaded: false });
+      await this.props.fetchCompanies();
+      await this.props.fetchAllowlist();
+      this.setState({ isLoaded: true });
+    })();
   }
 
   private _renderForm = (): void => {
@@ -60,21 +68,30 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
   }
 
   private _renderAllowlists(): JSX.Element[] {
-    return this.props.companies.map(({ allowlist_emails=[], allowlist_domains=[], id: company_id, name }: any) => (
-      <React.Fragment key={company_id}>
-        <Allowlist
-          title={name}
-          usertype={Usertype.REPRESENTATIVE}
-          company_id={company_id}
-          showsPrimaryContacts
-          showsEmails
-          showsDomains
-          primaryContacts={ allowlist_emails.filter((email: AllowlistEmail) => email.isPrimaryContact) }
-          allowlist_emails={allowlist_emails.filter((email: AllowlistEmail) => !email.isPrimaryContact)}
-          allowlist_domains={allowlist_domains}
-        />
-      </React.Fragment>
-    ));
+    return this.props.companies.map((company: Company) => {
+      const { id: company_id, name, } = company;
+      const [primaryContact, allowlist_emails, allowlist_domains] = [
+        company.findPrimaryContact(),
+        company.findAllowlistEmails(),
+        company.findAllowlistDomains(),
+      ];
+      
+      return (
+        <React.Fragment key={company_id}>
+          <Allowlist
+            title={name}
+            usertype={Usertype.REPRESENTATIVE}
+            company_id={company_id}
+            showsPrimaryContacts
+            showsEmails
+            showsDomains
+            primaryContacts={primaryContact ? [primaryContact] : []}
+            allowlist_emails={allowlist_emails.filter((allowlist_email: AllowlistEmail) => !allowlist_email.isPrimaryContact)}
+            allowlist_domains={allowlist_domains}
+          />
+        </React.Fragment>
+      )
+    });
   }
 
   private _onCompanySubmit = (formValues: any) => {
