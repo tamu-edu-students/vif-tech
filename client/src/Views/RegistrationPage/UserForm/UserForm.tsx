@@ -15,7 +15,7 @@ interface OwnProps {
 const mapStateToProps = (state: IRootState) => {
   return {
     usertype: state.form?.userCreate?.values.usertype ?? Usertype.STUDENT,
-    companies: state.companies,
+    companies: state.companyData.companies,
   }
 }
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {

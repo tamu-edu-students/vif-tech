@@ -5,11 +5,13 @@ import { allowlistActionTypes } from "Store/actions/types";
 export interface Store_Allowlist {
   allowlist_emails: AllowlistEmail[];
   allowlist_domains: AllowlistDomain[];
+  isStale: boolean;
 }
 
 const INITIAL_STATE: Store_Allowlist = {
   allowlist_emails: [],
   allowlist_domains: [],
+  isStale: true,
 };
 
 const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): Store_Allowlist => {
@@ -49,6 +51,8 @@ const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): 
           ...[newTo, newFrom]
         ]
       }
+    case allowlistActionTypes.SET_ALLOWLIST_STALENESS:
+      return { ...state, isStale: action.payload }
     default:
       return state;
   }

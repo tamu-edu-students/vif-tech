@@ -30,7 +30,7 @@ export const fetchUsers = () => async (dispatch: any) => {
     .then((response) => {
       console.log(`fetchUsers response: `, response);
       dispatch({ type: userActionTypes.FETCH_USERS__SUCCESS });
-      dispatch({ type: userActionTypes.USERS_SET_STALENESS, payload: false });
+      dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: false });
     })
     .catch((response) => {
       console.log(`fetchUsers response: `, response);
@@ -169,7 +169,7 @@ export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => 
   );
 
   dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails, allowlist_domains} });
-  dispatch({ type: allowlistActionTypes.ALLOWLIST_SET_STALENESS, payload: false });
+  dispatch({ type: allowlistActionTypes.SET_ALLOWLIST_STALENESS, payload: false });
 }
 
 export const createAllowlistEmail = (formValues: any) => async (dispatch: any, getState: any) => {
@@ -212,7 +212,7 @@ export const deleteAllowlistEmail = (id: number) => async (dispatch: any, getSta
   .then((response_delete) => {
     console.log('deleteAllowlistEmail response_delete:', response_delete);
     dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS, payload: id });
-    dispatch({ type: userActionTypes.USERS_SET_STALENESS, payload: true });
+    dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistEmail response_delete:', response_delete);
@@ -226,7 +226,7 @@ export const deleteAllowlistDomain = (id: number) => async (dispatch: any) => {
   .then((response_delete) => {
     console.log('deleteAllowlistDomain response_delete:', response_delete);
     dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS, payload: id });
-    dispatch({ type: userActionTypes.USERS_SET_STALENESS, payload: true });
+    dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistDomain response_delete:', response_delete);

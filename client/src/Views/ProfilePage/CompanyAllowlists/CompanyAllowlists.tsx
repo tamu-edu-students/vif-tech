@@ -24,7 +24,7 @@ interface OwnProps {
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    companies: ownProps.company_id ? [Company.findById(ownProps.company_id) as Company] : state.companies,
+    companies: ownProps.company_id ? [Company.findById(ownProps.company_id) as Company] : state.companyData.companies,
     usertype: state.auth.user?.usertype,
     allowlist_emails: state.allowlist.allowlist_emails,
     allowlist_domains: state.allowlist.allowlist_domains,
