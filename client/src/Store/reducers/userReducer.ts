@@ -1,14 +1,11 @@
 import User from "Shared/entityClasses/User";
-import {
-  FETCH_USERS,
-  CREATE_USER,
-} from "Store/actions/types";
+import { userActionTypes } from "Store/actions/types";
 
 const userReducer = (state: User[] = [], action: any): User[] => {
   switch(action.type) {
-    case FETCH_USERS:
+    case userActionTypes.FETCH_USERS__SUCCESS:
       return action.payload;
-    case CREATE_USER:
+    case userActionTypes.CREATE_USER__SUCCESS:
       return [...state, action.payload];
     default:
       return state;

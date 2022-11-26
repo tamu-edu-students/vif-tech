@@ -81,7 +81,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath} = this.props;
     return ([
       ...(
-        this.props.user?.isPrimaryContact ?
+        this.props.user?.isPrimaryContact() ?
         [
         <Route exact path={`${parentPath}/company-allowlist`} key={`${parentPath}/company-allowlist`}>
           <CompanyAllowlists company_id={this.props.user?.company_id} />
@@ -97,7 +97,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         {
-          this.props.user?.isPrimaryContact &&
+          this.props.user?.isPrimaryContact() &&
           <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
         }
       </>

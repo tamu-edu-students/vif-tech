@@ -44,6 +44,7 @@ export default class User implements IUser {
     return allowlist_emails.find((allowlist_email: AllowlistEmail) => 
       allowlist_email.company_id === this.company_id
       && allowlist_email.email.toLowerCase() === this.email.toLowerCase()
+      && allowlist_email.usertype === this.usertype
     )
     ?? null;
   }

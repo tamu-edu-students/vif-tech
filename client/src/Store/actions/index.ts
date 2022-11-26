@@ -1,20 +1,8 @@
 import {
-  FETCH_USERS,
-  CREATE_USER,
-
-  FETCH_LOGIN_STATUS,
-  LOG_IN,
-  LOG_OUT,
-
-  FETCH_COMPANIES,
-  CREATE_COMPANY,
-
-  FETCH_ALLOWLIST,
-  CREATE_ALLOWLIST_EMAIL,
-  CREATE_ALLOWLIST_DOMAIN,
-  DELETE_ALLOWLIST_EMAIL,
-  DELETE_ALLOWLIST_DOMAIN,
-  TRANSFER_PRIMARY_CONTACT,
+  userActionTypes,
+  authActionTypes,
+  companyActionTypes,
+  allowlistActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -33,104 +21,141 @@ import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEma
 import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 
+/********************************************************************************************* */
+/**************************************************************************         USERS */
+/********************************************************************************************* */
 export const fetchUsers = () => async (dispatch: any) => {
-  const response: any = await vifTech.get("/users");
-  console.log(`fetchUsers response: `, response);
-
-  dispatch({ type: FETCH_USERS, payload: User.createNewUsers(response.data.users) });
+  dispatch({ type: userActionTypes.FETCH_USERS__REQUEST });
+  await vifTech.get("/users")
+    .then((response) => {
+      console.log(`fetchUsers response: `, response);
+      dispatch({ type: userActionTypes.FETCH_USERS__SUCCESS });
+      dispatch({ type: userActionTypes.USERS_SET_STALENESS, payload: false });
+    })
+    .catch((response) => {
+      console.log(`fetchUsers response: `, response);
+      dispatch({ type: userActionTypes.FETCH_USERS__FAILURE, payload: { error: 'ERROR: Failed to fetch users' } });
+    });
 }
 
 export const createUser = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post("/users", { user: { ...formValues } })
-  .catch(({response: { data: { errors } }}) => {
-    throw(new Error(errors.join('///')));
+  dispatch({ type: userActionTypes.CREATE_USER__REQUEST });
+  await vifTech.post("/users", { user: { ...formValues } })
+  .then((response) => {
+    console.log(`createUser response: `, response);
+    dispatch({ type: userActionTypes.CREATE_USER__SUCCESS, payload: new User(response.data.user) });
+    history.push('/users/new/success');
+  })
+  .catch((response) => {
+    console.log(`createUser response: `, response);
+    dispatch({ type: userActionTypes.CREATE_USER__FAILURE, payload: {error: `ERROR: Failed to register new user ${formValues.firstname} ${formValues.lastname}`} });
   });
-  console.log(`createUser response: `, response);
-
-  dispatch({ type: CREATE_USER, payload: new User(response.data.user) });
-
-  history.push('/users/new/success');
 }
 
+
+
+/********************************************************************************************* */
+/**************************************************************************         AUTH */
+/********************************************************************************************* */
 export const logIn = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post('/login', {
-    user: { ...formValues }
-  });
-
-  console.log('logIn response:', response);
-
-  // TODO: Replace with catch()
-  if (response.data.status === 401) {
-    throw new Error(response.data.errors);
-  }
-
-  dispatch({
-    type: LOG_IN,
-    payload: {
-      isLoggedIn: true,
-      user: new User(response.data.user)
-    }
+  dispatch({ type: authActionTypes.LOG_IN__REQUEST });
+  await vifTech.post('/login', { user: {...formValues} })
+  .then((response) => {
+    console.log('logIn response:', response);
+    dispatch({ type: authActionTypes.LOG_IN__SUCCESS, payload: {isLoggedIn: true, user: new User(response.data.user)} })
+  })
+  .catch((response) => {
+    console.log('logIn response:', response);
+    dispatch({ type: authActionTypes.LOG_IN__FAILURE, payload: {error: `ERROR: Failed to log in ${formValues.email}`} });
   });
 
   history.push('/');
 }
 
-export const logOut = () => async (dispatch: any) => {
-  const response: any = await vifTech.post('/logout');
-  console.log('logOut response:', response);
-
-  // TODO: Replace with catch
-  if (response.data.status === 500) {
-    console.error('logOut error: ', response.data.errors);
-    return;
-  }
-
-  dispatch({ type: LOG_OUT, payload: { isLoggedIn: false, user: null } });
+export const logOut = () => async (dispatch: any, getState: any) => {
+  dispatch({ type: authActionTypes.LOG_OUT__REQUEST });
+  await vifTech.post('/logout')
+  .then((response) => {
+    console.log('logOut response:', response);
+    dispatch({ type: authActionTypes.LOG_OUT__SUCCESS, payload: { isLoggedIn: false, user: null } })
+  })
+  .catch((response) => {
+    console.log('logOut response:', response);
+    dispatch({ type: authActionTypes.LOG_OUT__FAILURE, payload: {error: `ERROR: Failed to log out ${getState().auth.email}`} });
+  });
 }
 
 export const fetchLoginStatus = () => async (dispatch: any) => {
-  const response: any = await vifTech.get('/logged_in');
-  // TODO: Add catch()
-  console.log('fetchLoginStatus response:', response);
-
-  const isLoggedIn: boolean = response.data.logged_in;
-  const user: User | null = response.data.user ? new User(response.data.user) : null;
-
-  dispatch({ type: FETCH_LOGIN_STATUS, payload: { isLoggedIn, user } });
+  dispatch({ type: authActionTypes.FETCH_LOGIN_STATUS__REQUEST });
+  await vifTech.get('/logged_in')
+  .then((response) => {
+    console.log('fetchLoginStatus response:', response);
+    const isLoggedIn: boolean = response.data.logged_in;
+    const user: User | null = response.data.user ? new User(response.data.user) : null;
+    dispatch({ type: authActionTypes.FETCH_LOGIN_STATUS__SUCCESS, payload: { isLoggedIn, user } })
+  })
+  .catch((response) => {
+    console.log('fetchLoginStatus response:', response);
+    dispatch({ type: authActionTypes.FETCH_LOGIN_STATUS__FAILURE, payload: {error: `ERROR: Failed to fetch login status`} });
+  });
 }
 
-export const fetchCompanies = () => async (dispatch: any) => {
-  const response: any = await vifTech.get(`/companies`)
-  .catch(({response: { data: { errors } }}) => {
-    throw(new Error(errors.join('///')));
-  });
 
-  console.log('fetchCompanies response:', response);
-  dispatch({ type: FETCH_COMPANIES, payload: Company.createCompanies(response.data.companies) });
+
+/********************************************************************************************* */
+/**************************************************************************         COMPANIES */
+/********************************************************************************************* */
+export const fetchCompanies = () => async (dispatch: any) => {
+  dispatch({ type: companyActionTypes.FETCH_COMPANIES__REQUEST });
+  await vifTech.get(`/companies`)
+  .then((response) => {
+    console.log('fetchCompanies response:', response);
+    dispatch({ type: companyActionTypes.FETCH_COMPANIES__SUCCESS, payload:  Company.createCompanies(response.data.companies) })
+    dispatch({ type: companyActionTypes.SET_COMPANIES_STALENESS, payload: false })
+  })
+  .catch((response) => {
+    console.log('fetchCompanies response:', response);
+    dispatch({ type: companyActionTypes.FETCH_COMPANIES__FAILURE, payload: {error: `ERROR: Failed to fetch companies data`} });
+  });
 }
 
 export const createCompany = (formValues: any) => async (dispatch: any) => {
-  const response: any = await vifTech.post(`/companies`, { company: { ...formValues } })
-  .catch(({response: { data: { errors } }}) => {
-    throw(new Error(errors.join('///')));
+  dispatch({ type: companyActionTypes.CREATE_COMPANY__REQUEST });
+  await vifTech.post(`/companies`, { company: { ...formValues } })
+  .then((response) => {
+    console.log('createCompany response:', response);
+    dispatch({ type: companyActionTypes.CREATE_COMPANY__SUCCESS, payload: new Company(response.data.company) });
+  })
+  .catch((response) => {
+    console.log('createCompany response:', response);
+    dispatch({ type: companyActionTypes.CREATE_COMPANY__FAILURE, payload: {error: `ERROR: Failed to fetch companies data`} });
   });
-
-  console.log('createCompany response:', response);
-  dispatch({ type: CREATE_COMPANY, payload: new Company(response.data.company) });
 }
 
+
+/********************************************************************************************* */
+/**************************************************************************         ALLOWLIST */
+/********************************************************************************************* */
 export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => {
+  dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__REQUEST });
+  let success: boolean = true;
   const response_emails: any = await vifTech.get(`/allowlist_emails`)
   .catch(({response: { errors }}) => {
-    throw(new Error(errors.join('///')))
+    success = false;
+    console.error(errors);
+    dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__FAILURE, payload: {error: 'ERROR: Failed to fetch allowlist email data'} });
   });
   const response_domains: any = await vifTech.get(`/allowlist_domains`)
   .catch(({response: { errors }}) => {
-    throw(new Error(errors.join('///')))
+    success = false;
+    console.error(errors);
+    dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__FAILURE, payload: {error: 'ERROR: Failed to fetch allowlist domain data'} });
   });
 
   console.log('fetchAllowlist (emails) response:', response_emails);
   console.log('fetchAllowlist (domains) response:', response_domains);
+
+  if (!success) { return; }
 
   const allowlist_emails: AllowlistEmail[] = AllowlistEmail.createAllowlistEmails(
     usertype ?
@@ -143,68 +168,106 @@ export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => 
     response_domains.data.domains
   );
 
-  dispatch({ type: FETCH_ALLOWLIST, payload: {allowlist_emails, allowlist_domains} });
+  dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails, allowlist_domains} });
+  dispatch({ type: allowlistActionTypes.ALLOWLIST_SET_STALENESS, payload: false });
 }
 
 export const createAllowlistEmail = (formValues: any) => async (dispatch: any, getState: any) => {
+  dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__REQUEST });
   const allowlist_email: AllowlistEmail = {...formValues};
   
-  const response_create = await vifTech.post('/allowlist_emails', {
+  await vifTech.post('/allowlist_emails', {
     email: { ...allowlist_email, isPrimaryContact: allowlist_email.isPrimaryContact ? 1 : 0 }
+  })
+  .then((response_create) => {
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.email) });
+    console.log('createAllowlistEmail response_create:', response_create);
+  })
+  .catch((response_create) => {
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__FAILURE, payload: { error: `ERROR: Failed to create allowlist email for ${formValues.email}` } });
+    console.log('createAllowlistEmail response_create:', response_create);
   });
-
-  console.log('createAllowlistEmail response_create:', response_create);
-
-  dispatch({ type: CREATE_ALLOWLIST_EMAIL, payload: new AllowlistEmail(response_create.data.email) });
 }
 
 export const createAllowlistDomain = (formValues: any) => async (dispatch: any, getState: any) => {
+  dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__REQUEST });
   const allowlist_domain: AllowlistDomain = {...formValues};
-  
-  const response_create = await vifTech.post('/allowlist_domains', {
+
+  await vifTech.post('/allowlist_domains', {
     domain: { ...allowlist_domain }
+  })
+  .then((response_create) => {
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS, payload: new AllowlistEmail(response_create.data.email) });
+    console.log('createAllowlistDomain response_create:', response_create);
+  })
+  .catch((response_create) => {
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist email for ${formValues.email}` } });
+    console.log('createAllowlistDomain response_create:', response_create);
   });
-
-  console.log('createAllowlistDomain response_create:', response_create);
-
-  dispatch({ type: CREATE_ALLOWLIST_DOMAIN, payload: new AllowlistDomain(response_create.data.domain) });
 }
 
 export const deleteAllowlistEmail = (id: number) => async (dispatch: any, getState: any) => {
-  const response_delete = await vifTech.delete(`/allowlist_emails/${id}`);
-
-  console.log('deleteAllowlistEmail response_delete:', response_delete);
-
-  dispatch({ type: DELETE_ALLOWLIST_EMAIL, payload: id });
+  dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__REQUEST });
+  await vifTech.delete(`/allowlist_emails/${id}`)
+  .then((response_delete) => {
+    console.log('deleteAllowlistEmail response_delete:', response_delete);
+    dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS, payload: id });
+    dispatch({ type: userActionTypes.USERS_SET_STALENESS, payload: true });
+  })
+  .catch((response_delete) => {
+    console.log('deleteAllowlistEmail response_delete:', response_delete);
+    dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__FAILURE, payload: {error: `ERROR: Failed to delete allowlist email`} });
+  });
 }
 
 export const deleteAllowlistDomain = (id: number) => async (dispatch: any) => {
-  const response_delete = await vifTech.delete(`/allowlist_domains/${id}`);
-
-  console.log('deleteAllowlistDomain response_delete:', response_delete);
-
-  dispatch({ type: DELETE_ALLOWLIST_DOMAIN, payload: id });
+  dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__REQUEST });
+  await vifTech.delete(`/allowlist_domains/${id}`)
+  .then((response_delete) => {
+    console.log('deleteAllowlistDomain response_delete:', response_delete);
+    dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS, payload: id });
+    dispatch({ type: userActionTypes.USERS_SET_STALENESS, payload: true });
+  })
+  .catch((response_delete) => {
+    console.log('deleteAllowlistDomain response_delete:', response_delete);
+    dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__FAILURE, payload: {error: `ERROR: Failed to delete allowlist domain`} });
+  });
 }
 
 export const transferPrimaryContact = (userId_to: number, userId_from: number, isAdmin: boolean) => async (dispatch: any, getState: any) => {
-  const response_transfer = await vifTech.post(`/allowlist_emails/transfer_primary_contact`, {to: userId_to, from: userId_from});
+  dispatch({ type: allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__REQUEST });
+  const userTo: User | null = User.findById(userId_to, getState().users);
+  const userFrom: User | null = User.findById(userId_from, getState().users);
+  await vifTech.post(`/allowlist_emails/transfer_primary_contact`, {to: userId_to, from: userId_from})
+  .then((response_transfer) => {
+    console.log('response_transfer:', response_transfer); 
 
-  console.log('response_transfer:', response_transfer);
+    // TODO: Handle case where userTo's allowlist_email doesn't exist
+    const allowlist_email_to: AllowlistEmail | null = userTo?.findAllowlistEmail(getState().allowist.allowlist_emails) ?? null;
+    const allowlist_email_from: AllowlistEmail | null = userFrom?.findAllowlistEmail(getState().allowist.allowlist_emails) ?? null;
+    const newTo = new AllowlistEmail({...allowlist_email_to as AllowlistEmail, isPrimaryContact: true});
+    const newFrom = new AllowlistEmail({...allowlist_email_from as AllowlistEmail, isPrimaryContact: false});
 
-  const users = getState().users;
-
-  const allowlist_email_to = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser(users)?.id === userId_to );
-  const allowlist_email_from = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser(users)?.id === userId_from );
-  const newTo = new AllowlistEmail({...allowlist_email_to, isPrimaryContact: true});
-  const newFrom = new AllowlistEmail({...allowlist_email_from, isPrimaryContact: false});
-
-  if (!isAdmin) {
-    history.push('/');
-  }
-
-  dispatch({ type: TRANSFER_PRIMARY_CONTACT, payload: {newTo, newFrom} });
+    dispatch({ type: allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS, payload: {newTo, newFrom} });
+    
+    if (!isAdmin) {
+      history.push('/');
+    }
+  })
+  .catch((response_transfer) => {
+    console.log('response_transfer:', response_transfer); 
+    dispatch({
+      type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__FAILURE,
+      payload: {error: `ERROR: Failed to transfer primary contact privilege from ${userFrom?.email} to ${userTo?.email}`}
+    });
+  });
 }
 
+
+
+/********************************************************************************************* */
+/**************************************************************************         FAQ */
+/********************************************************************************************* */
 export const fetchFAQs = () => async (dispatch: any) => {
   const response_fetchFAQs = await vifTech.get('/faq');
 
@@ -237,6 +300,11 @@ export const deleteFAQ = (id: number) => async (dispatch: any) => {
   dispatch({ type: DELETE_FAQ, payload: id });
 }
 
+
+
+/********************************************************************************************* */
+/**************************************************************************         MODAL */
+/********************************************************************************************* */
 export const showModal = (children: any) => {
   return { type: SHOW_MODAL, payload: children }
 }

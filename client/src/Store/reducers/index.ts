@@ -6,6 +6,8 @@ import allowlistReducer, { Store_Allowlist } from './allowlistReducer';
 import companyReducer from './companyReducer';
 import modalReducer, { Store_Modal } from './modalReducer';
 import faqReducer from "./faqReducer";
+import loadingReducer from "./loadingReducer";
+import errorReducer from "./errorReducer";
 
 import Company from "Shared/entityClasses/Company";
 import User from "Shared/entityClasses/User";
@@ -19,6 +21,8 @@ export interface IRootState {
   companies: Company[];
   modal: Store_Modal;
   faqs: FAQ[];
+  loading: any;
+  errors: any;
 }
 
 const rootReducer = combineReducers<IRootState> ({
@@ -29,6 +33,8 @@ const rootReducer = combineReducers<IRootState> ({
   companies: companyReducer,
   modal: modalReducer,
   faqs: faqReducer,
+  loading: loadingReducer,
+  errors: errorReducer,
 });
 
 export default rootReducer;
