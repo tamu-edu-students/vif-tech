@@ -19,7 +19,7 @@ class StudentAllowlist extends React.Component<Props, {}> {
     return (
       <GenericAllowlistSubview
         title="Students"
-        usertype={Usertype.STUDENT}
+        entryUsertype={Usertype.STUDENT}
         showsDomains
       />
     )

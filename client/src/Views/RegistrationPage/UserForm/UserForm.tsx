@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
     changeFieldValue : function(field: any, value: any) {
       dispatch(change(formName, field, value));
     },
-    fetchCompanies: () => dispatch(fetchCompanies()),
+    fetchCompanies: function() { dispatch(fetchCompanies()) },
   }
 }
 const connector = connect(mapStateToProps, mapDispatchToProps);

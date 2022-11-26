@@ -37,14 +37,18 @@ export default class Company implements ICompany {
   }
 
   public findPrimaryUser(): User | null {
-    const primaryAllowlistEmail = this.findAllowlistEmails().find((allowlist_email: AllowlistEmail) => allowlist_email.isPrimaryContact === true);
+    const primaryAllowlistEmail: AllowlistEmail | null = this.findPrimaryContact();
     if (primaryAllowlistEmail) {
-      return this.findRepresentatives().find((user: User) => user.email === primaryAllowlistEmail.email) ?? null;
+      return this.findRepresentatives().find((user: User) => user.email.toLowerCase() === primaryAllowlistEmail.email.toLowerCase()) ?? null;
     }
     return null;
   }
 
   public static createCompanies(companyData: ICompany[]): Company[] {
     return companyData.map((companyDatum: ICompany) => new Company(companyDatum));
+  }
+
+  public static findById(id: number): Company | null {
+    return store.getState().companies.find((company: Company) => company.id === id) ?? null;
   }
 }

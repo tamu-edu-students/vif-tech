@@ -30,7 +30,7 @@ export default class AllowlistDomain implements IAllowlistDomain {
   public findUsers(): User[] {
     return store.getState().users.filter((user: User) => {
       const atSignIdx: number = user.email.indexOf('@');
-      return user.email.slice(atSignIdx) === this.email_domain;
+      return user.email.slice(atSignIdx).toLowerCase() === this.email_domain.toLowerCase();
     });
   }
 

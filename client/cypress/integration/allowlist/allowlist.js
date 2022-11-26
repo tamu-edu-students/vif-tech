@@ -199,7 +199,7 @@ And('I click the company confirm add button', () => {
 And(/I click the (.*) confirm add button/, (subgroupType) => {
   cy.findByRole('button', { name: /confirm/i })
     .click()
-    .wait([getSubgroupOptions(subgroupType).aliasCreate, '@Fetch Companies'])
+    .wait([getSubgroupOptions(subgroupType).aliasCreate])
     .then(() => {
       companies = store.getState().companies;
       allowlist_emails = store.getState().allowlist.allowlist_emails;
@@ -210,7 +210,7 @@ And(/I click the (.*) confirm add button/, (subgroupType) => {
 And(/I click the (.*) confirm delete button/, (subgroupType) => {
   cy.findByRole('button', { name: /confirm/i })
     .click()
-    .wait([getSubgroupOptions(subgroupType).aliasDelete, '@Fetch Companies'])
+    .wait([getSubgroupOptions(subgroupType).aliasDelete])
     .then(() => {
       companies = store.getState().companies;
       allowlist_emails = store.getState().allowlist.allowlist_emails;

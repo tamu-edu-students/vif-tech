@@ -1,5 +1,6 @@
 import { Usertype } from "Shared/enums";
 import { store } from "Store/store";
+import AllowlistEmail from "./AllowlistEmail";
 import Company from "./Company";
 
 export interface IUser {
@@ -29,6 +30,13 @@ export default class User implements IUser {
     this.usertype = usertype;
     this.company_id = company_id;
     this.interests = interests;
+  }
+
+  public get isPrimaryContact(): boolean {
+    return store.getState().allowlist.allowlist_emails.some((allowlist_email: AllowlistEmail) =>
+      allowlist_email.findUser()?.id === this.id &&
+      allowlist_email.isPrimaryContact
+    );
   }
 
   public findCompany(): Company | null {
