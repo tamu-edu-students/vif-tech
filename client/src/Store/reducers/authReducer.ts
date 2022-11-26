@@ -19,8 +19,10 @@ const authReducer = (state: Store_Auth = INITIAL_STATE, action: any): Store_Auth
     case authActionTypes.LOG_OUT__SUCCESS:
     case authActionTypes.FETCH_LOGIN_STATUS__SUCCESS:
       return { ...state, ...action.payload };
+    case authActionTypes.FETCH_LOGIN_STATUS__FAILURE:
+      return { ...state, isLoggedIn: false, user: null };
     case authActionTypes.SET_AUTH_STALENESS:
-      return { ...state, isStale: action.payload }
+      return { ...state, isStale: action.payload };
     default:
       return state;
   }

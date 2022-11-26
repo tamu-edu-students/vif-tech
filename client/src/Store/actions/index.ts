@@ -98,6 +98,7 @@ export const fetchLoginStatus = () => async (dispatch: any) => {
     console.log('fetchLoginStatus response:', response);
     dispatch({ type: authActionTypes.FETCH_LOGIN_STATUS__FAILURE, payload: {error: `ERROR: Failed to fetch login status`} });
   });
+  dispatch({ type: authActionTypes.SET_AUTH_STALENESS, payload: false });
 }
 
 
