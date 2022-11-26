@@ -47,4 +47,8 @@ export default class Company implements ICompany {
   public static createCompanies(companyData: ICompany[]): Company[] {
     return companyData.map((companyDatum: ICompany) => new Company(companyDatum));
   }
+
+  public static findById(id: number): Company | null {
+    return store.getState().companies.find((company: Company) => company.id === id) ?? null;
+  }
 }
