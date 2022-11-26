@@ -186,7 +186,7 @@ export const deleteAllowlistDomain = (id: number) => async (dispatch: any) => {
   dispatch({ type: DELETE_ALLOWLIST_DOMAIN, payload: id });
 }
 
-export const transferPrimaryContact = (userId_to: number, userId_from: number) => async (dispatch: any, getState: any) => {
+export const transferPrimaryContact = (userId_to: number, userId_from: number, isAdmin: boolean) => async (dispatch: any, getState: any) => {
   const response_transfer = await vifTech.post(`/allowlist_emails/transfer_primary_contact`, {to: userId_to, from: userId_from});
 
   console.log('response_transfer:', response_transfer);
@@ -195,6 +195,10 @@ export const transferPrimaryContact = (userId_to: number, userId_from: number) =
   const allowlist_email_from = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser()?.id === userId_from );
   const newTo = new AllowlistEmail({...allowlist_email_to, isPrimaryContact: true});
   const newFrom = new AllowlistEmail({...allowlist_email_from, isPrimaryContact: false});
+
+  if (!isAdmin) {
+    history.push('/');
+  }
 
   dispatch({ type: TRANSFER_PRIMARY_CONTACT, payload: {newTo, newFrom} });
 }

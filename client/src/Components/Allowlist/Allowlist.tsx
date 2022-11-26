@@ -18,7 +18,7 @@ import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
 
 interface OwnProps {
   title: string;
-  usertype: Usertype;
+  entryUsertype: Usertype;
   company_id?: number;
   showsPrimaryContact?: boolean;
   showsEmails?: boolean;
@@ -43,7 +43,7 @@ class Allowlist extends React.Component<Props, {}> {
   public render(): React.ReactElement<Props> {
     const {
       title,
-      usertype,
+      entryUsertype,
       company_id,
       showsPrimaryContact = false,
       showsEmails = false,
@@ -60,7 +60,7 @@ class Allowlist extends React.Component<Props, {}> {
           <AllowlistSubgroupPrimaryContact
             parentTitle={title}
             entry={primaryContact}
-            usertype={usertype}
+            usertype={entryUsertype}
             onSubmit={() => {}}
             onDelete={() => {}}
             company_id={company_id}
@@ -71,7 +71,7 @@ class Allowlist extends React.Component<Props, {}> {
           <AllowlistSubgroupEmails
             parentTitle={title}
             entries={allowlist_emails}
-            usertype={usertype}
+            usertype={entryUsertype}
             onSubmit={() => {}}
             onDelete={() => {}}
             company_id={company_id}
@@ -82,7 +82,7 @@ class Allowlist extends React.Component<Props, {}> {
           <AllowlistSubgroupDomains
             parentTitle={title}
             entries={allowlist_domains}
-            usertype={usertype}
+            usertype={entryUsertype}
             onSubmit={() => {}}
             onDelete={() => {}}
             company_id={company_id}

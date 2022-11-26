@@ -13,7 +13,7 @@ import Company from 'Shared/entityClasses/Company';
 
 interface OwnProps {
   parentTitle: string;
-  usertype: Usertype;
+  entryUsertype: Usertype;
   onSubmit: any;
   onDelete: any;
   company_id?: number;
@@ -26,6 +26,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
     transferFromId,
     colleagues,
+    usertype: state.auth.user?.usertype,
   };
 };
 const mapDispatchToProps = { showModal, hideModal, createAllowlistEmail, deleteAllowlistEmail, transferPrimaryContact };
@@ -37,7 +38,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any): void => {
     this.props.createAllowlistEmail({
       email: formValues.email,
-      usertype: this.props.usertype,
+      usertype: this.props.entryUsertype,
       isPrimaryContact: true,
       ...(this.props.company_id && {company_id: this.props.company_id})
     })
@@ -45,7 +46,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
   }
 
   private _onTransfer = (formValues: any): void => {
-    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.transferFromId ?? -1)
+    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.transferFromId ?? -1, this.props.usertype === Usertype.ADMIN)
       .then(() => this.props.hideModal());
   }
 
@@ -62,9 +63,12 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     return (
       <li className="allowlist__entry" key={id}>
         {email}
-        <button onClick={() => this._renderConfirmationDialogue(id, email, this.props.parentTitle)}>
-          Delete
-        </button>
+        {
+          this.props.usertype === Usertype.ADMIN &&
+          <button onClick={() => this._renderConfirmationDialogue(id, email, this.props.parentTitle)}>
+            Delete
+          </button>
+        }
       </li>
     );
   }
@@ -109,6 +113,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
   public render(): React.ReactElement<Props> {
     const {
       entry,
+      usertype,
     } = this.props;
 
     return (
@@ -126,7 +131,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
           }
         </ul>
         {
-          !entry &&
+          (!entry && usertype === Usertype.ADMIN) &&
           <button onClick={() => this._renderEntryForm()}>
             Add
           </button>

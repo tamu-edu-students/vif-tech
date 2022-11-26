@@ -19,12 +19,13 @@ import Company from 'Shared/entityClasses/Company';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 
 interface OwnProps {
+  company_id?: number;
 }
 
-const mapStateToProps = (state: IRootState) => {
+const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    companies: state.companies,
-
+    companies: ownProps.company_id ? [Company.findById(ownProps.company_id) as Company] : state.companies,
+    usertype: state.auth.user?.usertype,
     allowlist_emails: state.allowlist.allowlist_emails,
     allowlist_domains: state.allowlist.allowlist_domains,
   };
@@ -88,7 +89,7 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
         <React.Fragment key={company_id}>
           <Allowlist
             title={name}
-            usertype={Usertype.REPRESENTATIVE}
+            entryUsertype={Usertype.REPRESENTATIVE}
             company_id={company_id}
             showsPrimaryContact
             showsEmails
@@ -118,7 +119,8 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
     }
 
     const {
-      companies
+      companies,
+      usertype,
     } = this.props;
 
     return (
@@ -132,7 +134,10 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
             : (<p>No companies yet!</p>)
           }
         </div>
-        <button onClick={this._renderForm}>Add New Company</button>
+        {
+          usertype === Usertype.ADMIN &&
+          <button onClick={this._renderForm}>Add New Company</button>
+        }
       </div>
     )
   }

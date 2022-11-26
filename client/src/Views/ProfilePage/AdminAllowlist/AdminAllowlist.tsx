@@ -19,7 +19,7 @@ class AdminAllowlist extends React.Component<Props, {}> {
     return (
       <GenericAllowlistSubview
         title="Admins"
-        usertype={Usertype.ADMIN}
+        entryUsertype={Usertype.ADMIN}
         showsEmails
       />
     )

@@ -31,7 +31,7 @@ export default class AllowlistEmail implements IAllowlistEmail {
   }
 
   public findUser(): User | null {
-    return store.getState().users.find((user: User) => user.email.toLowerCase() === this.email.toLowerCase()) ?? null;
+    return [...store.getState().users, store.getState().auth.user as User].find((user: User) => user.email.toLowerCase() === this.email.toLowerCase()) ?? null;
   }
 
   public static createAllowlistEmails(allowlistEmailData: IAllowlistEmail[]): AllowlistEmail[] {

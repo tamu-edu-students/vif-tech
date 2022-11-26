@@ -19,7 +19,7 @@ class VolunteerAllowlist extends React.Component<Props, {}> {
     return (
       <GenericAllowlistSubview
         title="Volunteers"
-        usertype={Usertype.VOLUNTEER}
+        entryUsertype={Usertype.VOLUNTEER}
         showsEmails
       />
     )

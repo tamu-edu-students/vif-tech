@@ -15,7 +15,7 @@ import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
 
 interface OwnProps {
-  usertype: Usertype;
+  entryUsertype: Usertype;
   showsEmails?: boolean;
   showsDomains?: boolean;
   title: string;
@@ -23,8 +23,8 @@ interface OwnProps {
 
 const mapStateToProps = (state: IRootState, ownProps: OwnProps) => {
   return {
-    allowlist_emails: state.allowlist.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === ownProps.usertype),
-    allowlist_domains: state.allowlist.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === ownProps.usertype),
+    allowlist_emails: state.allowlist.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === ownProps.entryUsertype),
+    allowlist_domains: state.allowlist.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === ownProps.entryUsertype),
   };
 }
 const mapDispatchToProps = {
@@ -61,7 +61,7 @@ class AdminAllowlist extends React.Component<Props, OwnState> {
     }
 
     const {
-      usertype,
+      entryUsertype,
       showsEmails,
       showsDomains,
       title,
@@ -73,10 +73,10 @@ class AdminAllowlist extends React.Component<Props, OwnState> {
       <div>
         <h2>{title}Allowlist</h2>
         <br />
-        <div className="allowlists" data-testid={`admin-${usertype}-allowlists`}>
+        <div className="allowlists" data-testid={`admin-${entryUsertype}-allowlists`}>
           <Allowlist
             title={title}
-            usertype={usertype}
+            entryUsertype={entryUsertype}
             showsEmails={showsEmails}
             showsDomains={showsDomains}
             allowlist_emails={allowlist_emails}
