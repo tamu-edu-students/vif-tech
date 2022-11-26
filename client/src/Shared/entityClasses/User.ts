@@ -1,5 +1,4 @@
 import { Usertype } from "Shared/enums";
-import { store } from "Store/store";
 import AllowlistEmail from "./AllowlistEmail";
 import Company from "./Company";
 
@@ -32,15 +31,16 @@ export default class User implements IUser {
     this.interests = interests;
   }
 
-  public get isPrimaryContact(): boolean {
-    return store.getState().allowlist.allowlist_emails.some((allowlist_email: AllowlistEmail) =>
-      allowlist_email.findUser()?.id === this.id &&
+  public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
+    return allowlist_emails.some((allowlist_email: AllowlistEmail) =>
       allowlist_email.isPrimaryContact
+      && allowlist_email.company_id === this.company_id
+      && allowlist_email.email.toLowerCase() === this.email.toLowerCase()
     );
   }
 
-  public findCompany(): Company | null {
-    return store.getState().companies.find((company: Company) => company.id === this.company_id) ?? null;
+  public findCompany(companies: Company[]): Company | null {
+    return companies.find((company: Company) => company.id === this.company_id) ?? null;
   }
 
   public static createNewUsers(userData: IUser[]): User[] {

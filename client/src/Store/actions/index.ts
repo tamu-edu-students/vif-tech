@@ -191,8 +191,10 @@ export const transferPrimaryContact = (userId_to: number, userId_from: number, i
 
   console.log('response_transfer:', response_transfer);
 
-  const allowlist_email_to = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser()?.id === userId_to );
-  const allowlist_email_from = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser()?.id === userId_from );
+  const users = getState().users;
+
+  const allowlist_email_to = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser(users)?.id === userId_to );
+  const allowlist_email_from = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser(users)?.id === userId_from );
   const newTo = new AllowlistEmail({...allowlist_email_to, isPrimaryContact: true});
   const newFrom = new AllowlistEmail({...allowlist_email_from, isPrimaryContact: false});
 
