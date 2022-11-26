@@ -14,6 +14,7 @@ import {
   CREATE_ALLOWLIST_DOMAIN,
   DELETE_ALLOWLIST_EMAIL,
   DELETE_ALLOWLIST_DOMAIN,
+  TRANSFER_PRIMARY_CONTACT,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -185,6 +186,19 @@ export const deleteAllowlistDomain = (id: number) => async (dispatch: any) => {
   dispatch({ type: DELETE_ALLOWLIST_DOMAIN, payload: id });
 }
 
+export const transferPrimaryContact = (userId_to: number, userId_from: number) => async (dispatch: any, getState: any) => {
+  const response_transfer = await vifTech.post(`/allowlist_emails/transfer_primary_contact`, {to: userId_to, from: userId_from});
+
+  console.log('response_transfer:', response_transfer);
+
+  const allowlist_email_to = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser()?.id === userId_to );
+  const allowlist_email_from = getState().allowlist.allowlist_emails.find((allowlist_email: AllowlistEmail) => allowlist_email.findUser()?.id === userId_from );
+  const newTo = new AllowlistEmail({...allowlist_email_to, isPrimaryContact: true});
+  const newFrom = new AllowlistEmail({...allowlist_email_from, isPrimaryContact: false});
+
+  dispatch({ type: TRANSFER_PRIMARY_CONTACT, payload: {newTo, newFrom} });
+}
+
 export const fetchFAQs = () => async (dispatch: any) => {
   const response_fetchFAQs = await vifTech.get('/faq');
 
@@ -224,43 +238,3 @@ export const showModal = (children: any) => {
 export const hideModal = () => {
   return { type: HIDE_MODAL };
 }
-
-// export const fetchCompanyAllowlists = () => async (dispatch: any, getState: any) => {
-//   // FETCH COMPANIES AND THEN ALLOWLISTS
-//   await fetchCompanies();
-//   const response_domains: any = await vifTech.get('/allowlist_domains')
-//   .catch(({response: { data: { errors } }}) => {
-//     throw(new Error(errors.join('///')));
-//   });
-//   const response_emails: any = await vifTech.get('/allowlist_emails')
-//   .catch(({response: { data: { errors } }}) => {
-//     throw(new Error(errors.join('///')));
-//   });
-//   const companies = getState().companies;
-
-//   const obj = {
-//     companyAllowLists: {
-
-//     },
-//     studentAllowList: {
-
-//     }
-//     volunteerAllowList: {
-
-//     }
-//     adminAllowList: {
-
-//     }
-//   };
-
-//   // response.forEach(({ usertype }) => {
-//   //   switch(usertype) {
-//   //     case 'company representative':
-//   //       companyAllowLists
-//   //   }
-//   // })
-
-//   console.log('fetchAllowList response_domains:', response_domains);
-//   console.log('fetchAllowList response_emails:', response_emails);
-//   // dispatch({ type: FETCH_ALLOW_LIST, payload:  })
-// }

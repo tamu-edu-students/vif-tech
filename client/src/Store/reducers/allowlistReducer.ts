@@ -6,6 +6,7 @@ import {
   CREATE_ALLOWLIST_DOMAIN,
   DELETE_ALLOWLIST_EMAIL,
   DELETE_ALLOWLIST_DOMAIN,
+  TRANSFER_PRIMARY_CONTACT,
  } from "Store/actions/types";
 
 export interface Store_Allowlist {
@@ -45,6 +46,15 @@ const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): 
       return {
         ...state,
         allowlist_domains: state.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.id !== action.payload)
+      }
+    case TRANSFER_PRIMARY_CONTACT:
+      const { newTo, newFrom } = action.payload;
+      return {
+        ...state,
+        allowlist_emails: [
+          ...state.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.id !== newTo.id && allowlist_email.id !== newFrom.id),
+          ...[newTo, newFrom]
+        ]
       }
     default:
       return state;
