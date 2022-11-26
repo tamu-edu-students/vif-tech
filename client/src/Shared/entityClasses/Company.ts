@@ -39,7 +39,7 @@ export default class Company implements ICompany {
   public findPrimaryUser(): User | null {
     const primaryAllowlistEmail = this.findAllowlistEmails().find((allowlist_email: AllowlistEmail) => allowlist_email.isPrimaryContact === true);
     if (primaryAllowlistEmail) {
-      return this.findRepresentatives().find((user: User) => user.email === primaryAllowlistEmail.email) ?? null;
+      return this.findRepresentatives().find((user: User) => user.email.toLowerCase() === primaryAllowlistEmail.email.toLowerCase()) ?? null;
     }
     return null;
   }
