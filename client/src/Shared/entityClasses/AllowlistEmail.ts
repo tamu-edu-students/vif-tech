@@ -30,7 +30,11 @@ export default class AllowlistEmail implements IAllowlistEmail {
   }
 
   public findUser(users: User[]): User | null {
-    return users.find((user: User) => user.email.toLowerCase() === this.email.toLowerCase()) ?? null;
+    return users.find((user: User) =>
+      user.email.toLowerCase() === this.email.toLowerCase()
+      && user.usertype === this.usertype
+    )
+    ?? null;
   }
 
   public static createAllowlistEmails(allowlistEmailData: IAllowlistEmail[]): AllowlistEmail[] {

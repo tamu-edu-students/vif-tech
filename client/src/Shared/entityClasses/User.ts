@@ -32,15 +32,20 @@ export default class User implements IUser {
   }
 
   public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
-    return allowlist_emails.some((allowlist_email: AllowlistEmail) =>
-      allowlist_email.isPrimaryContact
-      && allowlist_email.company_id === this.company_id
-      && allowlist_email.email.toLowerCase() === this.email.toLowerCase()
-    );
+    const user_allowlist_email: AllowlistEmail | null = this.findAllowlistEmail(allowlist_emails);
+    return user_allowlist_email?.isPrimaryContact ?? false;
   }
 
   public findCompany(companies: Company[]): Company | null {
     return companies.find((company: Company) => company.id === this.company_id) ?? null;
+  }
+
+  public findAllowlistEmail(allowlist_emails: AllowlistEmail[]): AllowlistEmail | null {
+    return allowlist_emails.find((allowlist_email: AllowlistEmail) => 
+      allowlist_email.company_id === this.company_id
+      && allowlist_email.email.toLowerCase() === this.email.toLowerCase()
+    )
+    ?? null;
   }
 
   public static createNewUsers(userData: IUser[]): User[] {
