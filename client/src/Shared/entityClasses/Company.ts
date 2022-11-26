@@ -47,7 +47,7 @@ export default class Company implements ICompany {
     return companyData.map((companyDatum: ICompany) => new Company(companyDatum));
   }
 
-  public static findById(companies: Company[], id: number): Company | null {
+  public static findById(id: number, companies: Company[]): Company | null {
     return companies.find((company: Company) => company.id === id) ?? null;
   }
 }

@@ -46,4 +46,8 @@ export default class User implements IUser {
   public static createNewUsers(userData: IUser[]): User[] {
     return userData.map((userDatum: IUser) => new User(userDatum));
   }
+
+  public static findById(id: number, users: User[]): User | null {
+    return users.find((user: User) => user.id === id) ?? null;
+  }
 }
