@@ -2,10 +2,14 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
+import AllowlistTransferForm from './AllowlistTransferForm/AllowlistTransferForm';
 
-import { showModal, hideModal, createAllowlistEmail, deleteAllowlistEmail } from 'Store/actions';
+import { showModal, hideModal, createAllowlistEmail, deleteAllowlistEmail, transferPrimaryContact } from 'Store/actions';
 import { Usertype } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
+import { IRootState } from 'Store/reducers';
+import User from 'Shared/entityClasses/User';
+import Company from 'Shared/entityClasses/Company';
 
 interface OwnProps {
   parentTitle: string;
@@ -16,8 +20,15 @@ interface OwnProps {
   entry: AllowlistEmail | null;
 }
 
-const mapStateToProps = null;
-const mapDispatchToProps = { showModal, hideModal, createAllowlistEmail, deleteAllowlistEmail };
+const mapStateToProps = (state: IRootState, ownProps: any) => {
+  const transferFromId: number | undefined = ownProps.entry?.findUser()?.id ?? undefined;
+  const colleagues: User[] = Company.findById(ownProps.company_id)?.findRepresentatives().filter((rep: User) => rep.id !== transferFromId) ?? [];
+  return {
+    transferFromId,
+    colleagues,
+  };
+};
+const mapDispatchToProps = { showModal, hideModal, createAllowlistEmail, deleteAllowlistEmail, transferPrimaryContact };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -30,6 +41,11 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
       isPrimaryContact: true,
       ...(this.props.company_id && {company_id: this.props.company_id})
     })
+      .then(() => this.props.hideModal());
+  }
+
+  private _onTransfer = (formValues: any): void => {
+    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.transferFromId ?? -1)
       .then(() => this.props.hideModal());
   }
 
@@ -63,8 +79,31 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     );
   }
 
-  private _renderForm = (allowlistEntryFormProps: any): void => {
-    this.props.showModal(<AllowlistEntryForm {...allowlistEntryFormProps} />);
+  private _renderEntryForm = (): void => {
+    this.props.showModal(
+      <AllowlistEntryForm
+        onSubmit={this._onSubmit}
+        onCancel={this._onCancel}
+        name="email"
+        id="email"
+        label="Primary Contact"
+        form="createAllowlistEmail"
+      />
+    );
+  }
+
+  private _renderTransferForm = (): void => {
+    this.props.showModal(
+      <AllowlistTransferForm
+        colleagues={this.props.colleagues}
+        onSubmit={this._onTransfer}
+        onCancel={this._onCancel}
+        name="to"
+        id="to"
+        label="Colleagues"
+        form="transferPrimaryContact"
+      />
+    );
   }
 
   public render(): React.ReactElement<Props> {
@@ -72,24 +111,23 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
       entry,
     } = this.props;
 
-    const allowlistEntryFormProps = {
-      onSubmit: this._onSubmit,
-      onCancel: this._onCancel,
-      name: 'email',
-      id: 'email',
-      label: 'Primary Contact',
-      form: "createAllowlistEmail"
-    };
-
     return (
       <div className={`allowlist__subgroup allowlist__subgroup--primary-contact`}>
         <h3 className="heading-tertiary">{'Primary Contact'}</h3>
         <ul>
-          {entry && this._renderEntry(entry)}
+          {
+          entry &&
+          <>
+            {this._renderEntry(entry)}
+            <button onClick={() => this._renderTransferForm()}>
+              Transfer
+            </button>
+          </>
+          }
         </ul>
         {
           !entry &&
-          <button onClick={() => this._renderForm(allowlistEntryFormProps)}>
+          <button onClick={() => this._renderEntryForm()}>
             Add
           </button>
         }

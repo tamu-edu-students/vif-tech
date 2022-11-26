@@ -12,6 +12,7 @@ import {
   showModal,
   hideModal,
   fetchAllowlist,
+  fetchUsers
 } from 'Store/actions';
 import { IRootState } from 'Store/reducers';
 import Company from 'Shared/entityClasses/Company';
@@ -34,6 +35,7 @@ const mapDispatchToProps = {
   showModal,
   hideModal,
   fetchAllowlist,
+  fetchUsers
 };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -54,8 +56,11 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     (async () => {
       this.setState({ isLoaded: false });
-      await this.props.fetchCompanies();
-      await this.props.fetchAllowlist();
+      await Promise.all([
+        this.props.fetchCompanies(),
+        this.props.fetchAllowlist(),
+        this.props.fetchUsers(),
+      ])
       this.setState({ isLoaded: true });
     })();
   }
