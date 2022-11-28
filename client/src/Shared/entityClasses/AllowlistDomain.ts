@@ -36,4 +36,8 @@ export default class AllowlistDomain implements IAllowlistDomain {
   public static createAllowlistDomains(allowlistDomainData: IAllowlistDomain[]): AllowlistDomain[] {
     return allowlistDomainData.map((allowlistDomainDatum: IAllowlistDomain) => new AllowlistDomain(allowlistDomainDatum));
   }
+
+  public static filterByUsertype(usertype: Usertype, allowlist_domains: AllowlistDomain[]): AllowlistDomain[] {
+    return allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === usertype)
+  }
 }

@@ -40,4 +40,8 @@ export default class AllowlistEmail implements IAllowlistEmail {
   public static createAllowlistEmails(allowlistEmailData: IAllowlistEmail[]): AllowlistEmail[] {
     return allowlistEmailData.map((allowlistEmailDatum: IAllowlistEmail) => new AllowlistEmail(allowlistEmailDatum));
   }
+
+  public static filterByUsertype(usertype: Usertype, allowlist_emails: AllowlistEmail[]): AllowlistEmail[] {
+    return allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === usertype)
+  }
 }

@@ -56,4 +56,8 @@ export default class User implements IUser {
   public static findById(id: number, users: User[]): User | null {
     return users.find((user: User) => user.id === id) ?? null;
   }
+
+  public static filterByUsertype(usertype: Usertype, users: User[]): User[] {
+    return users.filter((user: User) => user.usertype === usertype)
+  }
 }
