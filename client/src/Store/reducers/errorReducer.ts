@@ -1,6 +1,6 @@
 const INITIAL_STATE = {};
 
-const errorReducer = (state = {}, action: any) => {
+const errorReducer = (state = INITIAL_STATE, action: any) => {
   const { type, payload } = action;
   const matches = /(.*)__(REQUEST|FAILURE)/.exec(type);
 
