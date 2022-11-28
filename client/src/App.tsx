@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
-
+import { IRootState } from 'Store/reducers';
+import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+import { authActionTypes } from 'Store/actions/types';
+import { fetchLoginStatus, logOut } from 'Store/actions'
 import history from 'History/history';
 
-import './Sass/main.scss';
-import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { waitThen } from 'Shared/utils';
 
-import RedirectPrompt from 'Components/RedirectPrompt';
-import Modal from 'Components/Modal/Modal';
 import FAQPage from 'Views/FAQPage/FAQPage';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
@@ -16,9 +16,12 @@ import UsersPage from 'Views/UsersPage/UsersPage';
 import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
 
-import { waitThen } from 'Shared/utils';
-import { fetchLoginStatus, logOut } from 'Store/actions'
-import { IRootState } from 'Store/reducers';
+import RedirectPrompt from 'Components/RedirectPrompt';
+import Modal from 'Components/Modal/Modal';
+
+import './Sass/main.scss';
+import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
 
 interface OwnProps {
 }
@@ -28,6 +31,10 @@ const mapStateToProps = (state: IRootState) => {
     user: state.auth.user,
     isLoggedIn: state.auth.isLoggedIn,
     shouldShowModal: state.modal.shouldRender,
+
+    loginStatusIsStale: state.auth.isStale,
+    isLoading_fetchLoginStatus: createLoadingSelector([authActionTypes.FETCH_LOGIN_STATUS])(state),
+    errors_fetchLoginStatus: createErrorMessageSelector([authActionTypes.FETCH_LOGIN_STATUS])(state),
   };
 }
 const mapDispatchToProps = { fetchLoginStatus, logOut };
@@ -46,10 +53,17 @@ class App extends React.Component<Props, {}> {
   }
 
   render(): React.ReactElement<Props> {
-    if (this.props.isLoggedIn === null) {
+    if (this.props.isLoggedIn === null || this.props.isLoading_fetchLoginStatus) {
       return (
         <div>Checking login status...</div>
       );
+    }
+
+    if (this.props.errors_fetchLoginStatus.length > 0) {
+      console.log(this.props.errors_fetchLoginStatus)
+      // return (
+      //   <div>{this.props.errors_fetchLoginStatus}</div>
+      // );
     }
 
     return (

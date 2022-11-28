@@ -21,8 +21,8 @@ interface OwnProps {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const transferFromId: number | undefined = ownProps.entry?.findUser()?.id ?? undefined;
-  const colleagues: User[] = Company.findById(ownProps.company_id)?.findRepresentatives().filter((rep: User) => rep.id !== transferFromId) ?? [];
+  const transferFromId: number | undefined = ownProps.entry?.findUser(state.userData.users)?.id ?? undefined;
+  const colleagues: User[] = Company.findById(ownProps.company_id, state.companyData.companies)?.findRepresentatives(state.userData.users).filter((rep: User) => rep.id !== transferFromId) ?? [];
   return {
     transferFromId,
     colleagues,
@@ -41,17 +41,17 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
       usertype: this.props.entryUsertype,
       isPrimaryContact: true,
       ...(this.props.company_id && {company_id: this.props.company_id})
-    })
+    }, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 
   private _onTransfer = (formValues: any): void => {
-    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.transferFromId ?? -1, this.props.usertype === Usertype.ADMIN)
+    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.transferFromId ?? -1, this.props.usertype === Usertype.ADMIN, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 
   private _onEntryDeletion = (id: number): void => {
-    this.props.deleteAllowlistEmail(id)
+    this.props.deleteAllowlistEmail(id, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 

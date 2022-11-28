@@ -1,18 +1,20 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-
-import { Usertype } from 'Shared/enums';
-
-import Allowlist from 'Components/Allowlist/Allowlist';
-
+import { IRootState } from 'Store/reducers';
+import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+import { allowlistActionTypes } from 'Store/actions/types';
 import {
   fetchAllowlist,
   showModal,
   hideModal,
 } from 'Store/actions';
-import { IRootState } from 'Store/reducers';
+
+import { Usertype } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
+
+import Allowlist from 'Components/Allowlist/Allowlist';
+
 
 interface OwnProps {
   entryUsertype: Usertype;
@@ -21,10 +23,17 @@ interface OwnProps {
   title: string;
 }
 
+interface OwnState {
+}
+
 const mapStateToProps = (state: IRootState, ownProps: OwnProps) => {
   return {
-    allowlist_emails: state.allowlist.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === ownProps.entryUsertype),
-    allowlist_domains: state.allowlist.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.usertype === ownProps.entryUsertype),
+    allowlist_emails: AllowlistEmail.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_emails),
+    allowlist_domains: AllowlistDomain.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_domains),
+
+    allowlistIsStale: state.allowlist.isStale,
+    isLoading_fetchAllowlist: createLoadingSelector([allowlistActionTypes.FETCH_ALLOWLIST])(state),
+    errors_fetchAllowlist: createErrorMessageSelector([allowlistActionTypes.FETCH_ALLOWLIST])(state),
   };
 }
 const mapDispatchToProps = {
@@ -36,27 +45,30 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-interface OwnState {
-  isLoaded: boolean;
-}
-
-class AdminAllowlist extends React.Component<Props, OwnState> {
-  public constructor(props: Props) {
-    super(props);
-    this.state = {
-      isLoaded: false,
-    };
+class GenericAllowlistSubview extends React.Component<Props, OwnState> {
+  public componentDidMount(): void {
+    if (this.props.allowlistIsStale && !this.props.isLoading_fetchAllowlist) {
+      this.props.fetchAllowlist();
+    }
   }
 
-  public componentDidMount(): void {
-    this.setState({ isLoaded: false });
-    this.props.fetchAllowlist().then(() => this.setState({ isLoaded: true }));
+  public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<OwnState>, snapshot?: any): void {
+    if (this.props.allowlistIsStale && !this.props.isLoading_fetchAllowlist) {
+      this.props.fetchAllowlist();
+    }
   }
 
   public render(): React.ReactElement<Props> {
-    if (!this.state.isLoaded) {
+    if (this.props.allowlistIsStale || this.props.isLoading_fetchAllowlist) {
       return (
         <div>Loading {this.props.title}Allowlist...</div>
+      );
+    }
+    
+    if (this.props.errors_fetchAllowlist.length > 0) {
+      console.log(this.props.errors_fetchAllowlist);
+      return (
+        <div>{this.props.errors_fetchAllowlist}</div>
       );
     }
 
@@ -88,4 +100,4 @@ class AdminAllowlist extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(AdminAllowlist);
+export default connector(GenericAllowlistSubview);

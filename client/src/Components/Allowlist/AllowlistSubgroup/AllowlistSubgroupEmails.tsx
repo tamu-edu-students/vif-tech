@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-
-import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
-
 import { showModal, hideModal, createAllowlistEmail, deleteAllowlistEmail } from 'Store/actions';
+
 import { Usertype } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 
+import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
+
+
 interface OwnProps {
   parentTitle: string;
-  usertype: Usertype;
+  entryUsertype: Usertype;
   onSubmit: any;
   onDelete: any;
   company_id?: number;
@@ -26,9 +27,9 @@ class AllowlistSubgroupEmails extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any): void => {
     this.props.createAllowlistEmail({
       email: formValues.email,
-      usertype: this.props.usertype,
+      usertype: this.props.entryUsertype,
       ...(this.props.company_id && {company_id: this.props.company_id}),
-    })
+    }, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 
@@ -37,7 +38,7 @@ class AllowlistSubgroupEmails extends React.Component<Props, {}> {
   }
 
   private _onEntryDeletion = (id: number): void => {
-    this.props.deleteAllowlistEmail(id)
+    this.props.deleteAllowlistEmail(id, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 
