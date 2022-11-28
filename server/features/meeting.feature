@@ -103,7 +103,7 @@ Feature: Meeting
 
     Scenario: Trying to query meetings as non-admin
         Given that I sign up and log in as a valid student
-        Then I should NOT be able to fetch meetings due to 403 error
+        Then 0 meetings should be in meeting DB
     
     Scenario: Trying to create a meeting as non-admin
         Given that I sign up and log in as a valid student

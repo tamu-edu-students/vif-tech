@@ -40,10 +40,6 @@ class MeetingsController < ApplicationController
 
   # GET /meetings
   def index
-    if !confirm_requester_is_admin
-      return
-    end
-
     render json: {
              meetings: Meeting.all,
            }, status: :ok
@@ -51,12 +47,8 @@ class MeetingsController < ApplicationController
 
   # GET /meetings/1
   def show
-    @meeting = Meeting.find(params[:id])
-    if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
-      return
-    end
     render json: {
-             meeting: @meeting,
+             meeting: Meeting.find(params[:id]),
            }, status: :ok
   end
 
