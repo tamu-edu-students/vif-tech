@@ -3,11 +3,15 @@ import { connect, ConnectedProps } from "react-redux";
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { authActionTypes } from 'Store/actions/types';
-
 import { logIn } from "Store/actions";
+
 import LoginForm from "./LoginForm/LoginForm";
 
+
 interface OwnProps {
+}
+
+interface OwnState {
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -21,30 +25,9 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-
-interface OwnState {
-  errors: string[];
-}
-
 class LoginPage extends React.Component<Props, OwnState> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      errors: []
-    }
-  }
-
   private _onSubmit = (formValues: any) => {
-    // this.setState({
-    //   errors: []
-    // });
     this.props.logIn(formValues);
-    // .catch((err: Error) => {
-    //   console.error(err.message);
-    //   this.setState({
-    //     errors: [err.message]
-    //   });
-    // });
   }
 
   public render(): React.ReactElement<Props> {
