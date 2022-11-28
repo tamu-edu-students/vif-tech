@@ -34,8 +34,7 @@ class RegistrationPage extends React.Component<Props, {}> {
     }
 
     if (this.props.errors_createUser.length > 0) {
-      console.log('HELLO')
-      console.error(this.props.errors_createUser);
+      this.props.errors_createUser.forEach((error: string) => console.error(error));
     }
 
     return (

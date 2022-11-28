@@ -127,9 +127,9 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
     }
 
     if (this.props.errors_fetch.length > 0) {
-      console.error(this.props.errors_fetch)
+      this.props.errors_fetch.forEach((error: string) => console.error(error));
       return (
-        <div>{this.props.errors_fetch}</div>
+        <div className='error'>{this.props.errors_fetch}</div>
       );
     }
 

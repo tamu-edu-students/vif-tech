@@ -60,7 +60,7 @@ class App extends React.Component<Props, {}> {
     }
 
     if (this.props.errors_fetchLoginStatus.length > 0) {
-      console.log(this.props.errors_fetchLoginStatus)
+      this.props.errors_fetchLoginStatus.forEach((error: string) => console.error(error));
       // return (
       //   <div>{this.props.errors_fetchLoginStatus}</div>
       // );

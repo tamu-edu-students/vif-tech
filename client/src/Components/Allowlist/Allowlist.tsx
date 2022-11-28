@@ -78,7 +78,7 @@ class Allowlist extends React.Component<Props, OwnState> {
     }
 
     if (this.props.errors.length > 0) {
-      console.error(this.props.errors);
+      this.props.errors.forEach((error: string) => console.error(error));
     }
 
     return (

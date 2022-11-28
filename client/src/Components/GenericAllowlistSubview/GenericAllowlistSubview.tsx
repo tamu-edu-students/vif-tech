@@ -66,9 +66,9 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
     }
     
     if (this.props.errors_fetchAllowlist.length > 0) {
-      console.log(this.props.errors_fetchAllowlist);
+      this.props.errors_fetchAllowlist.forEach((error: string) => console.error(error));
       return (
-        <div>{this.props.errors_fetchAllowlist}</div>
+        <div className='error'>{this.props.errors_fetchAllowlist}</div>
       );
     }
 
