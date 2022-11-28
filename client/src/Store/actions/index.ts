@@ -29,7 +29,7 @@ export const fetchUsers = () => async (dispatch: any) => {
   await vifTech.get("/users")
     .then((response) => {
       console.log(`fetchUsers response: `, response);
-      dispatch({ type: userActionTypes.FETCH_USERS__SUCCESS });
+      dispatch({ type: userActionTypes.FETCH_USERS__SUCCESS, payload: response.data.users });
       dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: false });
     })
     .catch((response) => {
