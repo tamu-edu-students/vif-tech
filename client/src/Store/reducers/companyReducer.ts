@@ -15,7 +15,7 @@ const INITIAL_STATE: Store_CompanyData = {
 const companyReducer = (state: Store_CompanyData = INITIAL_STATE, action: any): Store_CompanyData => {
   switch(action.type) {
     case companyActionTypes.FETCH_COMPANIES__SUCCESS:
-      return {...state, companies: []};
+      return {...state, companies: action.payload};
     case companyActionTypes.CREATE_COMPANY__SUCCESS:
       return {...state, companies: [...state.companies, action.payload]};
     case companyActionTypes.SET_COMPANIES_STALENESS:
