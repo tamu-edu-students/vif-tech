@@ -1,5 +1,4 @@
 import { Usertype } from "Shared/enums";
-import { store } from "Store/store";
 import Company from "./Company";
 import User from "./User";
 
@@ -26,15 +25,23 @@ export default class AllowlistEmail implements IAllowlistEmail {
     this.isPrimaryContact = isPrimaryContact;
   }
 
-  public findCompany(): Company | null {
-    return store.getState().companies.find((company: Company) => company.id === this.company_id) ?? null;
+  public findCompany(companies: Company[]): Company | null {
+    return companies.find((company: Company) => company.id === this.company_id) ?? null;
   }
 
-  public findUser(): User | null {
-    return [...store.getState().users, store.getState().auth.user as User].find((user: User) => user.email.toLowerCase() === this.email.toLowerCase()) ?? null;
+  public findUser(users: User[]): User | null {
+    return users.find((user: User) =>
+      user.email.toLowerCase() === this.email.toLowerCase()
+      && user.usertype === this.usertype
+    )
+    ?? null;
   }
 
   public static createAllowlistEmails(allowlistEmailData: IAllowlistEmail[]): AllowlistEmail[] {
     return allowlistEmailData.map((allowlistEmailDatum: IAllowlistEmail) => new AllowlistEmail(allowlistEmailDatum));
+  }
+
+  public static filterByUsertype(usertype: Usertype, allowlist_emails: AllowlistEmail[]): AllowlistEmail[] {
+    return allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.usertype === usertype)
   }
 }

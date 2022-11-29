@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { showModal, hideModal, createAllowlistDomain, deleteAllowlistDomain } from 'Store/actions';
 
+import { Usertype } from 'Shared/enums';
 import AllowlistEntryForm from './AllowlistEntryForm/AllowlistEntryForm';
 
-import { showModal, hideModal, createAllowlistDomain, deleteAllowlistDomain } from 'Store/actions';
-import { Usertype } from 'Shared/enums';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
+
 
 interface OwnProps {
   parentTitle: string;
-  usertype: Usertype;
+  entryUsertype: Usertype;
   onSubmit: any;
   onDelete: any;
   company_id?: number;
@@ -26,9 +27,9 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any): void => {
     this.props.createAllowlistDomain({
       email_domain: formValues.email_domain,
-      usertype: this.props.usertype,
+      usertype: this.props.entryUsertype,
       ...(this.props.company_id && {company_id: this.props.company_id}),
-    })
+    }, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 
@@ -37,7 +38,7 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
   }
 
   private _onEntryDeletion = (id: number): void => {
-    this.props.deleteAllowlistDomain(id)
+    this.props.deleteAllowlistDomain(id, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 

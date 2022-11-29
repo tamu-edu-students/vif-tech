@@ -1,5 +1,4 @@
 import { Usertype } from "Shared/enums";
-import { store } from "Store/store";
 import AllowlistEmail from "./AllowlistEmail";
 import Company from "./Company";
 
@@ -32,18 +31,33 @@ export default class User implements IUser {
     this.interests = interests;
   }
 
-  public get isPrimaryContact(): boolean {
-    return store.getState().allowlist.allowlist_emails.some((allowlist_email: AllowlistEmail) =>
-      allowlist_email.findUser()?.id === this.id &&
-      allowlist_email.isPrimaryContact
-    );
+  public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
+    const user_allowlist_email: AllowlistEmail | null = this.findAllowlistEmail(allowlist_emails);
+    return user_allowlist_email?.isPrimaryContact ?? false;
   }
 
-  public findCompany(): Company | null {
-    return store.getState().companies.find((company: Company) => company.id === this.company_id) ?? null;
+  public findCompany(companies: Company[]): Company | null {
+    return companies.find((company: Company) => company.id === this.company_id) ?? null;
+  }
+
+  public findAllowlistEmail(allowlist_emails: AllowlistEmail[]): AllowlistEmail | null {
+    return allowlist_emails.find((allowlist_email: AllowlistEmail) => 
+      allowlist_email.company_id === this.company_id
+      && allowlist_email.email.toLowerCase() === this.email.toLowerCase()
+      && allowlist_email.usertype === this.usertype
+    )
+    ?? null;
   }
 
   public static createNewUsers(userData: IUser[]): User[] {
     return userData.map((userDatum: IUser) => new User(userDatum));
+  }
+
+  public static findById(id: number, users: User[]): User | null {
+    return users.find((user: User) => user.id === id) ?? null;
+  }
+
+  public static filterByUsertype(usertype: Usertype, users: User[]): User[] {
+    return users.filter((user: User) => user.usertype === usertype)
   }
 }
