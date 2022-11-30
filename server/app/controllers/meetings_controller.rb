@@ -1,6 +1,6 @@
 class MeetingsController < ApplicationController
   before_action :confirm_user_logged_in
-  before_action :confirm_meeting_exists, only: [:show, :update, :delete]
+  before_action :confirm_meeting_exists, only: [:show, :update, :destroy]
 
   def confirm_user_logged_in
     if !(logged_in? && current_user)

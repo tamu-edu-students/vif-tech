@@ -1,6 +1,6 @@
 class AllowlistEmailsController < ApplicationController
   before_action :confirm_user_logged_in
-  before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show, :transferPrimaryContact]
+  before_action :confirm_requester_is_rep_or_admin, only: [:create, :destroy, :index, :show, :transferPrimaryContact]
 
   def index
     @emails = AllowlistEmail.all

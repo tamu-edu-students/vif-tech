@@ -1,6 +1,6 @@
 class AvailabilitiesController < ApplicationController
   before_action :confirm_user_logged_in
-  before_action :confirm_availability_exists, only: [:show, :update, :delete]
+  before_action :confirm_availability_exists, only: [:show, :update, :destroy]
 
   def confirm_event_exists(event_id)
     if !Event.find_by_id(event_id)
