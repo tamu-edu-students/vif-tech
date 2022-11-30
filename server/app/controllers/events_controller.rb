@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :confirm_user_logged_in, except: [:index, :show]
-  before_action :confirm_event_exists, only: [:show, :update, :destroy]
+  before_action :confirm_event_exists, only: [:show, :update, :destroy, :get_availabilies, :get_meetings, :get_users, :signup, :signout]
 
   # GET /events
   def index
@@ -23,7 +23,6 @@ class EventsController < ApplicationController
       return
     end
     params = event_params.to_h
-
     @event = Event.new(params)
     if @event.save
       render json: {
@@ -56,10 +55,10 @@ class EventsController < ApplicationController
 
   # DELETE /events/1/
   def destroy
-    @event = Event.find(params[:id])
     if !confirm_requester_is_admin
       return
     end
+    @event = Event.find(params[:id])
     if @event.destroy
       render json: {
                event: @event,
@@ -68,6 +67,78 @@ class EventsController < ApplicationController
       render json: {
                errors: @event.errors.full_messages,
              }, status: :internal_server_error
+    end
+  end
+
+  # GET /events/1/availabilities
+  def get_availabilies
+    @event = Event.find(params[:id])
+    render json: {
+             availabilities: @event.availabilities,
+           }, status: :ok
+  end
+
+  # GET /events/1/meetings
+  def get_meetings
+    @event = Event.find(params[:id])
+    render json: {
+             meetings: @event.meetings,
+           }, status: :ok
+  end
+
+  # GET /events/1/users
+  def get_users
+    event = Event.find(params[:id])
+    users = event.users
+    if params.key?("usertype")
+      users = users.select { |u| u.usertype == params["usertype"] }
+    end
+    render json: {
+             users: users,
+           }, status: :ok
+  end
+
+  # POST /events/1/users/1
+  def signup
+    event = Event.find_by_id(params[:id])
+    user = User.find_by_id(params[:user_id])
+    if EventSignup.find_by(event: event, user: user) != nil
+      render json: {
+               errors: ["User #{params[:user_id]} already signed up to event #{params[:id]}"],
+             }, status: :bad_request
+      return
+    end
+    @event_signup = EventSignup.create(event: event, user: user)
+    if @event_signup.save
+      render json: {
+               event_signup: @event_signup,
+             }, status: :ok
+    else
+      render json: {
+        errors: @event_signup.errors.full_messages,
+      }, status: :internal_server_error
+    end
+  end
+
+  # DELETE /events/1/users/1
+  def signup
+    event = Event.find_by_id(params[:id])
+    user = User.find_by_id(params[:user_id])
+    @event_signup = EventSignup.find_by(event: event, user: user)
+    if @event_signup == nil
+      render json: {
+               errors: ["User #{params[:user_id]} did not sign up to event #{params[:id]}"],
+             }, status: :bad_request
+      return
+    end
+    if @event_signup.destroy
+      render json: {
+               event_signup: @event_signup,
+             }, status: :ok
+    else
+      render json: {
+        errors: @event_signup.errors.full_messages,
+      }, status: :internal_server_error
     end
   end
 
