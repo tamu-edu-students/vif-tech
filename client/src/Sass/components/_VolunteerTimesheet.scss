@@ -38,6 +38,10 @@
 
           .table__cell {
             background-color: $color-violet-darkest;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
 
@@ -51,6 +55,10 @@
           &--time {
             background-color: $color-violet-darkest;
             color: $color-white;
+
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
           }
 
           &--name {
