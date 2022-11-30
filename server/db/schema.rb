@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_28_183353) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_28_185617) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "email_domain"
     t.string "usertype"
@@ -36,6 +36,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_183353) do
     t.datetime "end_time", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "event_id"
+    t.index ["event_id"], name: "index_availabilities_on_event_id"
     t.index ["user_id"], name: "index_availabilities_on_user_id"
   end
 
@@ -78,6 +80,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_183353) do
     t.integer "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "event_id"
+    t.index ["event_id"], name: "index_meetings_on_event_id"
     t.index ["owner_id"], name: "index_meetings_on_owner_id"
   end
 
@@ -113,9 +117,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_183353) do
 
   add_foreign_key "allowlist_domains", "companies"
   add_foreign_key "allowlist_emails", "companies"
+  add_foreign_key "availabilities", "events"
   add_foreign_key "availabilities", "users"
   add_foreign_key "event_signups", "events"
   add_foreign_key "event_signups", "users"
+  add_foreign_key "meetings", "events"
   add_foreign_key "meetings", "users", column: "owner_id"
   add_foreign_key "user_meetings", "meetings"
   add_foreign_key "user_meetings", "users"
