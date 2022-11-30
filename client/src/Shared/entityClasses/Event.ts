@@ -1,3 +1,4 @@
+import { minToMs } from "Shared/utils";
 import Availability from "./Availability";
 
 export interface IEvent {
@@ -21,6 +22,30 @@ export default class Event implements IEvent {
     this.description = description;
     this.start_time = start_time;
     this.end_time = end_time;
+  }
+
+  public createTimeSlots(sessionLengthMins: number, breakLengthMins: number): any[] {
+    const sessionLength_ms: number = minToMs(sessionLengthMins);
+    const breakLength_ms: number = minToMs(breakLengthMins);
+    const start_ms: number = Date.parse(this.start_time);
+    const end_ms: number = Date.parse(this.end_time);
+
+    const timeSlots = [];
+
+    let mult = 0;
+    while (true) {
+      const timeSlot = {
+        start_time: new Date(start_ms + mult*(sessionLength_ms + breakLength_ms)).toISOString(),
+        end_time: new Date(start_ms + mult*(sessionLength_ms + breakLength_ms) + sessionLength_ms).toISOString(),
+      };
+
+      if (Date.parse(timeSlot.end_time) > end_ms) { break; }
+      else { timeSlots.push(timeSlot); }
+
+      mult += 1;
+    }
+
+    return timeSlots;
   }
 
   public findAvailabilities(availabilities: Availability[]): Availability[] {

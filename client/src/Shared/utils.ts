@@ -1,5 +1,6 @@
 export const wait = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
 export const waitThen = (milliseconds: number, func: Function) => wait(milliseconds).then(() => func());
+export const minToMs = (minutes: number) => minutes * 60000;
 export const msToTimeString = (dateMilliseconds: number, timeZone: string) => {
   return Intl.DateTimeFormat("en-US", {
     hour: "numeric",
