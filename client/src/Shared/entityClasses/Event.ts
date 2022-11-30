@@ -1,4 +1,4 @@
-import User from "./User";
+import Availability from "./Availability";
 
 export interface IEvent {
   id: number;
@@ -21,6 +21,10 @@ export default class Event implements IEvent {
     this.description = description;
     this.start_time = start_time;
     this.end_time = end_time;
+  }
+
+  public findAvailabilities(availabilities: Availability[]): Availability[] {
+    return availabilities.filter((availability: Availability) => availability.event_id === this.id);
   }
 
   public static createEvents(eventData: IEvent[]): Event[] {
