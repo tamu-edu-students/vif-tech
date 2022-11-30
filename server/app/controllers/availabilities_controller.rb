@@ -14,25 +14,15 @@ class AvailabilitiesController < ApplicationController
 
   # GET /availabilities
   def index
-    if current_user.usertype == "admin"
-      render json: {
-               availabilities: Availability.all,
-             }, status: :ok
-    else
-      render json: {
-               availabilities: current_user.availabilities,
-             }, status: :ok
-    end
+    render json: {
+             availabilities: Availability.all,
+           }, status: :ok
   end
 
   # GET /availabilities/1
   def show
-    @availability = Availability.find(params[:id])
-    if !confirm_requester_is_owner_or_admin(@availability.user.id)
-      return
-    end
     render json: {
-             availability: @availability,
+             availability: Availability.find(params[:id]),
            }, status: :ok
   end
 

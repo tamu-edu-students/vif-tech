@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   delete "/users/:id/meetings/:meeting_id", to: "users#delete_from_meeting"
 
   resources :meetings, only: [:create, :show, :index, :update, :destroy]
+  get "meetings/:id/invitees", to: "meetings#get_invitees"
+  put "meetings/:id/invitees", to: "meetings#swap_invitees"
   resources :user_meetings, only: [:show, :index]
 
   get "/companies", to: "companies#index"
@@ -64,6 +66,8 @@ Rails.application.routes.draw do
   get "events/:id/meetings", to: "events#get_meetings"
   get "events/:id/users", to: "events#get_users"
 
-  post "events/:id/users/:user_id", to: "events#signup"
-  delete "events/:id/users/:user_id", to: "events#signout"
+  post "events/:id/signup", to: "events#signup"
+  post "events/:id/signup/:user_id", to: "events#signup"
+  delete "events/:id/signout", to: "events#signout"
+  delete "events/:id/signout/:user_id", to: "events#signout"
 end

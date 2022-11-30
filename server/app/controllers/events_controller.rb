@@ -71,7 +71,7 @@ class EventsController < ApplicationController
   end
 
   # GET /events/1/availabilities
-  def get_availabilies
+  def get_availabilities
     @event = Event.find(params[:id])
     render json: {
              availabilities: @event.availabilities,
@@ -98,9 +98,18 @@ class EventsController < ApplicationController
            }, status: :ok
   end
 
-  # POST /events/1/users/1
+  # POST /events/1/signup/1
   def signup
     event = Event.find_by_id(params[:id])
+    if params[:user_id] != nil
+      # Only admin can provide arbitrary user ID for event signup
+      if !confirm_requester_is_admin
+        return
+      end
+    else
+      # Sign up themselves
+      params[:user_id] = current_user.id
+    end
     user = User.find_by_id(params[:user_id])
     if EventSignup.find_by(event: event, user: user) != nil
       render json: {
@@ -120,9 +129,18 @@ class EventsController < ApplicationController
     end
   end
 
-  # DELETE /events/1/users/1
-  def signup
+  # DELETE /events/1/signout/1
+  def signout
     event = Event.find_by_id(params[:id])
+    if params[:user_id] != nil
+      # Only admin can provide arbitrary user ID for event signout
+      if !confirm_requester_is_admin
+        return
+      end
+    else
+      # Sign out themselves
+      params[:user_id] = current_user.id
+    end
     user = User.find_by_id(params[:user_id])
     @event_signup = EventSignup.find_by(event: event, user: user)
     if @event_signup == nil

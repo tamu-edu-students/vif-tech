@@ -1,26 +1,42 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { connect, ConnectedProps } from 'react-redux';
+import { IRootState } from 'Store/reducers';
+import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+import { allowlistActionTypes } from 'Store/actions/types';
+import { fetchAllowlist } from 'Store/actions';
+
+import { Usertype } from 'Shared/enums';
+
+import RedirectPrompt from 'Components/RedirectPrompt';
 
 import MyProfile from './MyProfile/MyProfile';
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
-import RedirectPrompt from 'Components/RedirectPrompt';
-import { IRootState } from 'Store/reducers';
-import { Usertype } from 'Shared/enums';
 
-import { fetchAllowlist } from 'Store/actions';
+
 
 interface OwnProps {
   match: Match;
 }
 
+interface OwnState {
+}
+
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    user: state.auth.user,
     parentPath: ownProps.match.path,
+
+    user: state.auth.user,
+    amRepresentative: state.auth.user?.usertype === Usertype.REPRESENTATIVE,
+    amAdmin: state.auth.user?.usertype === Usertype.ADMIN,
+    amPrimaryContact: state.auth.user?.isPrimaryContact(state.allowlist.allowlist_emails),
+
+    allowlistIsStale: state.auth.user?.usertype === Usertype.REPRESENTATIVE ? state.allowlist.isStale : false,
+    isLoading_fetchAllowlist: createLoadingSelector([allowlistActionTypes.FETCH_ALLOWLIST])(state),
+    errors_fetchAllowlist: createErrorMessageSelector([allowlistActionTypes.FETCH_ALLOWLIST])(state),
   }
 }
 const mapDispatchToProps = { fetchAllowlist };
@@ -28,20 +44,17 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-interface OwnState {
-  isLoaded: boolean;
-}
-
 class ProfilePage extends React.Component<Props, OwnState> {
-  state = { isLoaded: false };
-  
   public componentDidMount(): void {
-    (async() => {
-      this.setState({ isLoaded: false });
-      await this.props.fetchAllowlist()
-        .catch(() => {  });//TODO: CLEAN
-      this.setState({ isLoaded: true });
-    })();
+    if (this.props.allowlistIsStale && !this.props.isLoading_fetchAllowlist) {
+      this.props.fetchAllowlist();
+    }
+  }
+
+  public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<OwnState>, snapshot?: any): void {
+    if (this.props.allowlistIsStale && !this.props.isLoading_fetchAllowlist) {
+      this.props.fetchAllowlist();
+    }
   }
 
   private _renderAdminRoutes(): JSX.Element[] {
@@ -81,7 +94,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath} = this.props;
     return ([
       ...(
-        this.props.user?.isPrimaryContact ?
+        this.props.amPrimaryContact ?
         [
         <Route exact path={`${parentPath}/company-allowlist`} key={`${parentPath}/company-allowlist`}>
           <CompanyAllowlists company_id={this.props.user?.company_id} />
@@ -97,7 +110,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         {
-          this.props.user?.isPrimaryContact &&
+          this.props.amPrimaryContact &&
           <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
         }
       </>
@@ -129,7 +142,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     const { parentPath } = this.props;
 
-    if (!this.state.isLoaded) {
+    if (this.props.isLoading_fetchAllowlist || this.props.allowlistIsStale) {
       return (
         <div>Loading ProfilePage...</div>
       );

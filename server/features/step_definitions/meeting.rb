@@ -15,16 +15,16 @@ Given("that I sign up and log in as a valid student") do
   expect(ret_body["logged_in"]).to eq(true)
 end
 
-# Given("that I sign up and log in as a valid admin") do
-#   firstname = SecureRandom.alphanumeric(8)
-#   lastname = SecureRandom.alphanumeric(8)
-#   password = SecureRandom.alphanumeric(16)
-#   email = SecureRandom.alphanumeric(8) + "@" + SecureRandom.alphanumeric(8) + "." + SecureRandom.alphanumeric(3)
-#   page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email, 'usertype': "admin" } })
-#   ret = page.driver.post("/login", { 'user': { 'password': password, 'email': email } })
-#   ret_body = JSON.parse ret.body
-#   expect(ret_body["logged_in"]).to eq(true)
-# end
+Given("a student signs up and confirms their email") do
+  firstname = SecureRandom.alphanumeric(8)
+  lastname = SecureRandom.alphanumeric(8)
+  password = SecureRandom.alphanumeric(16)
+  email = SecureRandom.alphanumeric(8) + "@tamu.edu"
+  page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email } })
+  user = User.find_by_email(email)
+  user.email_confirmed = true
+  user.save
+end
 
 Given("that I create a valid meeting") do
   title = SecureRandom.alphanumeric(8)
@@ -109,6 +109,26 @@ end
 
 Then("deleting the meeting with id {int} should succeed") do |id|
   ret = page.driver.delete("/meetings/" + id.to_s)
-  ret_body = JSON.parse ret.body
   expect(ret.status).to eq(200)
+end
+
+Then("I get code {int} when mass updating meeting {int}'s invitees with") do |status, id, table|
+  ret = page.driver.put("/meetings/#{id}/invitees", { 'meeting': { 'invitees': table.hashes } })
+  expect(ret.status).to eq(status)
+end
+
+Then("meeting {int} should have as invitees the following users") do |id, invitees|
+  ret = page.driver.get("/meetings/#{id}/invitees")
+  ret_body = JSON.parse ret.body
+  invitees_actual = []
+  ret_body["invitees"].each { |h| invitees_actual << h["id"].to_s }
+  expect(invitees_actual).to eq(invitees.raw[0].each { |id| id.to_i })
+end
+
+Then("meeting {int} should have as {string} invitees the following users") do |id, status, invitees|
+  ret = page.driver.get("/meetings/#{id}/invitees?status=#{status}")
+  ret_body = JSON.parse ret.body
+  invitees_actual = []
+  ret_body["invitees"].each { |h| invitees_actual << h["id"].to_s }
+  expect(invitees_actual).to eq(invitees.raw[0].each { |id| id.to_i })
 end

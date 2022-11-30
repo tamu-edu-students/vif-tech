@@ -1,53 +1,48 @@
 import AllowlistDomain from "Shared/entityClasses/AllowlistDomain";
 import AllowlistEmail from "Shared/entityClasses/AllowlistEmail";
-import {
-  FETCH_ALLOWLIST,
-  CREATE_ALLOWLIST_EMAIL,
-  CREATE_ALLOWLIST_DOMAIN,
-  DELETE_ALLOWLIST_EMAIL,
-  DELETE_ALLOWLIST_DOMAIN,
-  TRANSFER_PRIMARY_CONTACT,
- } from "Store/actions/types";
+import { allowlistActionTypes } from "Store/actions/types";
 
 export interface Store_Allowlist {
   allowlist_emails: AllowlistEmail[];
   allowlist_domains: AllowlistDomain[];
+  isStale: boolean;
 }
 
 const INITIAL_STATE: Store_Allowlist = {
   allowlist_emails: [],
   allowlist_domains: [],
+  isStale: true,
 };
 
 const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): Store_Allowlist => {
   switch(action.type) {
-    case FETCH_ALLOWLIST:
+    case allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS:
       return {
         ...state,
         allowlist_emails: action.payload.allowlist_emails,
         allowlist_domains: action.payload.allowlist_domains,
       }
-    case CREATE_ALLOWLIST_EMAIL:
+    case allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS:
       return {
         ...state,
         allowlist_emails: [...state.allowlist_emails, action.payload],
       };
-    case CREATE_ALLOWLIST_DOMAIN:
+    case allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS:
       return {
         ...state,
         allowlist_domains: [...state.allowlist_domains, action.payload],
       };
-    case DELETE_ALLOWLIST_EMAIL:
+    case allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS:
       return {
         ...state,
         allowlist_emails: state.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.id !== action.payload)
       }
-    case DELETE_ALLOWLIST_DOMAIN:
+    case allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS:
       return {
         ...state,
         allowlist_domains: state.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.id !== action.payload)
       }
-    case TRANSFER_PRIMARY_CONTACT:
+    case allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS:
       const { newTo, newFrom } = action.payload;
       return {
         ...state,
@@ -56,6 +51,8 @@ const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): 
           ...[newTo, newFrom]
         ]
       }
+    case allowlistActionTypes.SET_ALLOWLIST_STALENESS:
+      return { ...state, isStale: action.payload }
     default:
       return state;
   }

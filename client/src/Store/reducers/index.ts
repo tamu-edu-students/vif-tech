@@ -1,34 +1,38 @@
 import { combineReducers } from "redux";
 import { reducer as formReducer} from "redux-form";
-import userReducer from './userReducer';
+import userReducer, { Store_UserData } from './userReducer';
 import authReducer, { Store_Auth } from './authReducer';
 import allowlistReducer, { Store_Allowlist } from './allowlistReducer';
-import companyReducer from './companyReducer';
+import companyReducer, { Store_CompanyData } from './companyReducer';
 import modalReducer, { Store_Modal } from './modalReducer';
 import faqReducer from "./faqReducer";
+import loadingReducer from "./loadingReducer";
+import errorReducer from "./errorReducer";
 
-import Company from "Shared/entityClasses/Company";
-import User from "Shared/entityClasses/User";
 import FAQ from "Shared/entityClasses/FAQ";
 
 export interface IRootState {
-  users: User[];
+  userData: Store_UserData;
   form: any;
   auth: Store_Auth;
   allowlist: Store_Allowlist;
-  companies: Company[];
+  companyData: Store_CompanyData;
   modal: Store_Modal;
   faqs: FAQ[];
+  loading: any;
+  errors: any;
 }
 
 const rootReducer = combineReducers<IRootState> ({
-  users: userReducer,
+  userData: userReducer,
   form: formReducer,
   auth: authReducer,
   allowlist: allowlistReducer,
-  companies: companyReducer,
+  companyData: companyReducer,
   modal: modalReducer,
   faqs: faqReducer,
+  loading: loadingReducer,
+  errors: errorReducer,
 });
 
 export default rootReducer;

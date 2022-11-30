@@ -1,20 +1,23 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-
-import { Usertype } from 'Shared/enums';
-
-import AllowlistSubgroupPrimaryContact from './AllowlistSubgroup/AllowlistSubgroupPrimaryContact';
-import AllowlistSubgroupEmails from './AllowlistSubgroup/AllowlistSubgroupEmails';
-import AllowlistSubgroupDomains from './AllowlistSubgroup/AllowlistSubgroupDomains';
-
+import { IRootState } from 'Store/reducers';
+import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+import { allowlistActionTypes } from 'Store/actions/types';
 import {
   createAllowlistEmail,
   createAllowlistDomain,
   deleteAllowlistEmail,
   deleteAllowlistDomain,
 } from "Store/actions";
+
+import { Usertype } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
+
+import AllowlistSubgroupPrimaryContact from './AllowlistSubgroup/AllowlistSubgroupPrimaryContact';
+import AllowlistSubgroupEmails from './AllowlistSubgroup/AllowlistSubgroupEmails';
+import AllowlistSubgroupDomains from './AllowlistSubgroup/AllowlistSubgroupDomains';
+
 
 interface OwnProps {
   title: string;
@@ -28,7 +31,22 @@ interface OwnProps {
   allowlist_domains?: AllowlistDomain[];
 }
 
-const mapStateToProps = null;
+interface OwnState {
+}
+
+const mapStateToProps = (state: IRootState, ownProps: any) => {
+  const title = ownProps.title;
+  const actionOptions = [
+    allowlistActionTypes.CREATE_ALLOWLIST_EMAIL,
+    allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN,
+    allowlistActionTypes.DELETE_ALLOWLIST_EMAIL,
+    allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN,
+  ].map((option: string) => title+option);
+  return {
+    isLoading: createLoadingSelector(actionOptions)(state),
+    errors: createErrorMessageSelector(actionOptions)(state),
+  };
+};
 const mapDispatchToProps = {
   createAllowlistEmail,
   createAllowlistDomain,
@@ -39,7 +57,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class Allowlist extends React.Component<Props, {}> {
+class Allowlist extends React.Component<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     const {
       title,
@@ -53,6 +71,16 @@ class Allowlist extends React.Component<Props, {}> {
       allowlist_domains = [],
     } = this.props;
 
+    if (this.props.isLoading) {
+      return (
+        <div>{`Loading ${title} Allowlist...`}</div>
+      );
+    }
+
+    if (this.props.errors.length > 0) {
+      this.props.errors.forEach((error: string) => console.error(error));
+    }
+
     return (
       <div className="allowlist">
         <h2 className="heading-secondary">Title: {title}</h2>
@@ -60,9 +88,9 @@ class Allowlist extends React.Component<Props, {}> {
           <AllowlistSubgroupPrimaryContact
             parentTitle={title}
             entry={primaryContact}
-            usertype={entryUsertype}
-            onSubmit={() => {}}
-            onDelete={() => {}}
+            entryUsertype={entryUsertype}
+            onSubmit={() => {this.setState({ isLoaded: false })}}
+            onDelete={() => {this.setState({ isLoaded: false })}}
             company_id={company_id}
           />
         }
@@ -71,9 +99,9 @@ class Allowlist extends React.Component<Props, {}> {
           <AllowlistSubgroupEmails
             parentTitle={title}
             entries={allowlist_emails}
-            usertype={entryUsertype}
-            onSubmit={() => {}}
-            onDelete={() => {}}
+            entryUsertype={entryUsertype}
+            onSubmit={() => {this.setState({ isLoaded: false })}}
+            onDelete={() => {this.setState({ isLoaded: false })}}
             company_id={company_id}
           />
         )}
@@ -82,9 +110,9 @@ class Allowlist extends React.Component<Props, {}> {
           <AllowlistSubgroupDomains
             parentTitle={title}
             entries={allowlist_domains}
-            usertype={entryUsertype}
-            onSubmit={() => {}}
-            onDelete={() => {}}
+            entryUsertype={entryUsertype}
+            onSubmit={() => {this.setState({ isLoaded: false })}}
+            onDelete={() => {this.setState({ isLoaded: false })}}
             company_id={company_id}
           />
         )}

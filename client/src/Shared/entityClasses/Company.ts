@@ -1,4 +1,3 @@
-import { store } from "Store/store";
 import AllowlistDomain from "./AllowlistDomain";
 import AllowlistEmail from "./AllowlistEmail";
 import User from "./User";
@@ -20,26 +19,26 @@ export default class Company implements ICompany {
     this.description = description;
   }
 
-  public findAllowlistEmails(): AllowlistEmail[] {
-    return store.getState().allowlist.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.company_id === this.id);
+  public findAllowlistEmails(allowlist_emails: AllowlistEmail[]): AllowlistEmail[] {
+    return allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.company_id === this.id);
   }
   
-  public findPrimaryContact(): AllowlistEmail | null {
-    return this.findAllowlistEmails().find((allowlist_email: AllowlistEmail) => allowlist_email.isPrimaryContact === true) ?? null;
+  public findPrimaryContact(allowlist_emails: AllowlistEmail[]): AllowlistEmail | null {
+    return this.findAllowlistEmails(allowlist_emails).find((allowlist_email: AllowlistEmail) => allowlist_email.isPrimaryContact === true) ?? null;
   }
 
-  public findAllowlistDomains(): AllowlistDomain[] {
-    return store.getState().allowlist.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.company_id === this.id);
+  public findAllowlistDomains(allowlist_domains: AllowlistDomain[]): AllowlistDomain[] {
+    return allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.company_id === this.id);
   }
 
-  public findRepresentatives(): User[] {
-    return store.getState().users.filter((user: User) => user.company_id === this.id);
+  public findRepresentatives(users: User[]): User[] {
+    return users.filter((user: User) => user.company_id === this.id);
   }
 
-  public findPrimaryUser(): User | null {
-    const primaryAllowlistEmail: AllowlistEmail | null = this.findPrimaryContact();
+  public findPrimaryUser(users: User[], allowlist_emails: AllowlistEmail[]): User | null {
+    const primaryAllowlistEmail: AllowlistEmail | null = this.findPrimaryContact(allowlist_emails);
     if (primaryAllowlistEmail) {
-      return this.findRepresentatives().find((user: User) => user.email.toLowerCase() === primaryAllowlistEmail.email.toLowerCase()) ?? null;
+      return this.findRepresentatives(users).find((user: User) => user.email.toLowerCase() === primaryAllowlistEmail.email.toLowerCase()) ?? null;
     }
     return null;
   }
@@ -48,7 +47,7 @@ export default class Company implements ICompany {
     return companyData.map((companyDatum: ICompany) => new Company(companyDatum));
   }
 
-  public static findById(id: number): Company | null {
-    return store.getState().companies.find((company: Company) => company.id === id) ?? null;
+  public static findById(id: number, companies: Company[]): Company | null {
+    return companies.find((company: Company) => company.id === id) ?? null;
   }
 }
