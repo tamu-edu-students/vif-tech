@@ -182,26 +182,6 @@ class EventsController < ApplicationController
     end
   end
 
-  def confirm_meeting_exists(id)
-    if !Meeting.find_by_id(id)
-      render json: {
-               errors: ["Meeting with id #{id} not found"],
-             }, status: :not_found
-      return false
-    end
-    return true
-  end
-
-  def confirm_availability_exists(id)
-    if !Availability.find_by_id(id)
-      render json: {
-               errors: ["Availability with id #{id} not found"],
-             }, status: :not_found
-      return false
-    end
-    return true
-  end
-
   def confirm_requester_is_admin
     if current_user.usertype != "admin"
       render json: {
