@@ -122,9 +122,9 @@ class AllowlistEmailsController < ApplicationController
     else
       from_users = to_user.company.users.where.not(allowlist_email_id: nil)
       for fu in from_users
-        fu.allowlist_email.update(is_primary_contact: 0)
+        fu.allowlist_email.update(is_primary_contact: false)
       end
-      to_user.allowlist_email.update(is_primary_contact: 1)
+      to_user.allowlist_email.update(is_primary_contact: true)
 
       render json: {
                message: "transfer success",

@@ -84,13 +84,13 @@ Given /^I fail to allow a new company email ([^\']*) for usertype ([^\']*) for c
 end
 
 Given /^I allow a new primary contact company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
-    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int, "is_primary_contact":1}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int, "is_primary_contact":true}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
 end
 
 Given /^I fail to allow a new primary contact company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
-    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int, "is_primary_contact":1}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int, "is_primary_contact":true}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(403)
 end
