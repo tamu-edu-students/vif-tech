@@ -15,7 +15,9 @@
         grid-template-columns: 16fr repeat(3, 28fr);
 
         &:not(:last-child):not(.table__row--header) {
-          border-bottom: 1px solid $color-white;
+          .table__cell {
+            border-bottom: 1px solid $color-white;
+          }
         }
 
         &:not(.table__row--header) {
