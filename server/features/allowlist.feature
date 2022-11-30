@@ -305,6 +305,8 @@ Feature: Allowlist Management
         And I allow a new company domain test3.com for usertype company representative for company id 2
         And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
         And I allow a new primary contact company email test2@test2.com for usertype company representative for company id 2
+        Then I should see 6 domain in the database
+        And I should see 2 new email in the database
         And that I sign up with the following
             | firstname | james |
             | lastname | bond |
@@ -338,6 +340,7 @@ Feature: Allowlist Management
         And I allow a new company domain test.com for usertype company representative for company id 1
         And I allow a new company domain test2.com for usertype company representative for company id 2
         And I allow a new company domain test3.com for usertype company representative for company id 2
+        Then I should see 6 domain in the database
         And that I sign up with the following
             | firstname | james |
             | lastname | bond |
@@ -348,8 +351,9 @@ Feature: Allowlist Management
             | company_id | 1 |
         And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
-        Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
+        And I should see 1 domain in the database
         And that I sign up with the following
             | firstname | james |
             | lastname | bond |
@@ -360,8 +364,19 @@ Feature: Allowlist Management
             | company_id | 2 |
         And that the user verified their email test2@test2.com
         And that I log in with email test2@test2.com and password password1!
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
+        And I should see 2 domain in the database
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        And that the user verified their email test@tamu.edu
+        And that I log in with email test@tamu.edu and password password1!
         Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
 
 
     Scenario: Multiple company emails are added and only appropriate users can see them
@@ -371,6 +386,7 @@ Feature: Allowlist Management
         And I allow a new company domain test0.com for usertype company representative for company id 1
         And I allow a new company domain test02.com for usertype company representative for company id 2
         And I allow a new company email test@test.com for usertype company representative for company id 1
+        Then I should see 5 domain in the database
         And that I sign up with the following
             | firstname | james |
             | lastname | bond |
@@ -381,8 +397,21 @@ Feature: Allowlist Management
             | company_id | 1 |
         And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
+        And I should see 1 domain in the database
+        And I should see 1 new email in the database
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        And that the user verified their email test@tamu.edu
+        And that I log in with email test@tamu.edu and password password1!
         Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
+        
 
     Scenario: A rep transfers primary contact correctly
         Given that I log in as admin
@@ -412,12 +441,12 @@ Feature: Allowlist Management
         Then I should see 2 new email in the database
         And that the user verified their email test2@test.com
         And that I log in with email test2@test.com and password password1!
-        Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
         And that I log in with email test@test.com and password password1!
         And I transfer my primary contact role to user with id 3
-        Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
         And that I log in with email test2@test.com and password password1!
         Then I should see 2 new email in the database
         And that I log in as admin
@@ -452,19 +481,19 @@ Feature: Allowlist Management
         Then I should see 2 new email in the database
         And that the user verified their email test2@test.com
         And that I log in with email test2@test.com and password password1!
-        Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
         And that I log in as admin
         And I transfer primary contact role to user with id 3
         And that I log in with email test@test.com and password password1!
-        Then I should get a 403 code from the domain database
-        And I should get a 403 code from the email database
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
         And that I log in with email test2@test.com and password password1!
         Then I should see 2 new email in the database
         And that I log in as admin
         Then the primary contact for the company with id 1 should have email test2@test.com
 
-    Scenario: A rep fails  to transfer primary contact
+    Scenario: A rep fails to transfer primary contact
         Given that I log in as admin
         And there is a company with id 1
         And I allow a new company email test@test.com for usertype company representative for company id 1
@@ -489,7 +518,7 @@ Feature: Allowlist Management
         And that I log in with email test@test.com and password password1!
         And I fail to transfer my primary contact role to user with id 3
 
-    Scenario: A rep fails  to transfer primary contact
+    Scenario: A rep fails to transfer primary contact
         Given that I log in as admin
         And there is a company with id 1
         And there is a company with id 2

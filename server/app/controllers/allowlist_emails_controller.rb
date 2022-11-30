@@ -1,6 +1,7 @@
 class AllowlistEmailsController < ApplicationController
   before_action :confirm_user_logged_in
-  before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show, :transferPrimaryContact]
+  before_action :confirm_requester_is_primary_contact_or_admin, only: [:create, :delete, :transferPrimaryContact]
+  before_action :confirm_requester_is_rep_or_admin, only: [:index, :show]
   before_action :confirm_uniquness, only: [:create]
 
   def index
@@ -142,12 +143,24 @@ class AllowlistEmailsController < ApplicationController
     end
   end
 
-  def confirm_requester_is_rep_or_admin()
+  def confirm_requester_is_primary_contact_or_admin()
     if !(current_user.usertype == "admin" ||
          (current_user.usertype == "company representative" &&
           current_user.company != nil &&
           current_user.allowlist_email != nil &&
           current_user.allowlist_email.is_primary_contact == true))
+      render json: {
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
+      return false
+    end
+    return true
+  end
+
+  def confirm_requester_is_rep_or_admin()
+    if !(current_user.usertype == "admin" ||
+         (current_user.usertype == "company representative" &&
+          current_user.company != nil))
       render json: {
                errors: ["User does not have previleges for requested action"],
              }, status: :forbidden
