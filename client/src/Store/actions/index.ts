@@ -3,6 +3,7 @@ import {
   authActionTypes,
   companyActionTypes,
   allowlistActionTypes,
+  eventActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -14,12 +15,14 @@ import {
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
+
 import { Usertype } from "Shared/enums";
 import Company from 'Shared/entityClasses/Company';
 import User from 'Shared/entityClasses/User';
 import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
+import Event from 'Shared/entityClasses/Event';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -206,13 +209,13 @@ export const createAllowlistEmail = (formValues: any, allowlistTitle: string) =>
     email: { ...allowlist_email, isPrimaryContact: allowlist_email.isPrimaryContact ? 1 : 0 }
   })
   .then((response_create) => {
+    console.log('createAllowlistEmail response_create:', response_create);
     dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.email) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS });
-    console.log('createAllowlistEmail response_create:', response_create);
   })
   .catch((response_create) => {
-    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__FAILURE, payload: { error: `ERROR: Failed to create allowlist email for ${formValues.email} in the ${allowlistTitle} allowlist` } });
     console.log('createAllowlistEmail response_create:', response_create);
+    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__FAILURE, payload: { error: `ERROR: Failed to create allowlist email for ${formValues.email} in the ${allowlistTitle} allowlist` } });
   });
 }
 
@@ -224,13 +227,13 @@ export const createAllowlistDomain = (formValues: any, allowlistTitle: string) =
     domain: { ...allowlist_domain }
   })
   .then((response_create) => {
+    console.log('createAllowlistDomain response_create:', response_create);
     dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS, payload: new AllowlistDomain(response_create.data.domain) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS });
-    console.log('createAllowlistDomain response_create:', response_create);
   })
   .catch((response_create) => {
-    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist domain for ${formValues.email_domain} in the ${allowlistTitle} allowlist` } });
     console.log('createAllowlistDomain response_create:', response_create);
+    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist domain for ${formValues.email_domain} in the ${allowlistTitle} allowlist` } });
   });
 }
 
@@ -330,6 +333,25 @@ export const deleteFAQ = (id: number) => async (dispatch: any) => {
   console.log('response_deleteFAQ:', response_deleteFAQ);
 
   dispatch({ type: DELETE_FAQ, payload: id });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         EVENTS */
+/********************************************************************************************* */
+export const fetchEvents = () => async (dispatch: any) => {
+  dispatch({ type: eventActionTypes.FETCH_EVENTS__REQUEST });
+  await vifTech.get('/events')
+  .then((response) => {
+    console.log('response_fetchEvents:', response);
+    dispatch({ type: eventActionTypes.FETCH_EVENTS__SUCCESS, payload: Event.createEvents(response.data.events) });
+    dispatch({ type: eventActionTypes.SET_EVENTS_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchEvents:', response);
+    dispatch({ type: eventActionTypes.FETCH_EVENTS__FAILURE, payload: {error: 'ERROR: Failed to fetch events data'} });
+  });
 }
 
 
