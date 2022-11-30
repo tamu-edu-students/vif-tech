@@ -108,3 +108,13 @@ end
 Then("user meeting {int} should not exist") do |id|
   expect(UserMeeting.find_by_id(id)).to eq(nil)
 end
+
+Then("creating an availability with the following should return status {int}") do |code, table|
+  ret = page.driver.post("/availabilities", { "availability": table.rows_hash })
+  expect(ret.status).to eq(code)
+end
+
+Then("updating an availability {int} with the following should return status {int}") do |id, code, table|
+  ret = page.driver.put("/availabilities/#{id}", { "availability": table.rows_hash })
+  expect(ret.status).to eq(code)
+end

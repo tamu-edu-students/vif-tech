@@ -1,6 +1,6 @@
 class MeetingsController < ApplicationController
   before_action :confirm_user_logged_in
-  before_action :confirm_meeting_exists, only: [:show, :update, :delete]
+  before_action :confirm_meeting_exists, only: [:show, :update, :destroy]
 
   def confirm_user_logged_in
     if !(logged_in? && current_user)
@@ -16,6 +16,16 @@ class MeetingsController < ApplicationController
         errors: ["Meeting with id #{params[:id]} not found"],
       }, status: :not_found
     end
+  end
+
+  def confirm_event_exists(event_id)
+    if !Event.find_by_id(event_id)
+      render json: {
+        errors: ["Event with id #{event_id} not found"],
+      }, status: :not_found
+      return false
+    end
+    return true
   end
 
   def confirm_requester_is_owner_or_admin(owner_id)
@@ -62,6 +72,9 @@ class MeetingsController < ApplicationController
     if !params.key?("owner_id")
       params["owner_id"] = current_user.id
     end
+    if params.key?("event_id") and !confirm_event_exists(params["event_id"])
+      return # If event id is provided but the event doesn't exist terminate
+    end
 
     @meeting = Meeting.new(params)
     if @meeting.save
@@ -86,6 +99,9 @@ class MeetingsController < ApplicationController
     end
     if !confirm_requester_is_owner_or_admin(@meeting.owner.id)
       return
+    end
+    if meeting_params.key?("event_id") and !confirm_event_exists(params["event_id"])
+      return # If event id is provided but the event doesn't exist terminate
     end
     if @meeting.update(meeting_params)
       render json: {
@@ -221,7 +237,7 @@ class MeetingsController < ApplicationController
   private
 
   def meeting_params
-    params.require(:meeting).permit(:title, :start_time, :end_time, :owner_id)
+    params.require(:meeting).permit(:title, :start_time, :end_time, :owner_id, :event_id)
   end
 
   def invitee_params
