@@ -15,6 +15,7 @@ import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
+import VolunteerTimesheet from './VolunteerTimesheet/VolunteerTimesheet';
 
 
 
@@ -102,6 +103,9 @@ class ProfilePage extends React.Component<Props, OwnState> {
         ] :
         []
       ),
+      <Route exact path={`${parentPath}/time-sheet`} key={`${parentPath}/time-sheet`}>
+        <VolunteerTimesheet />
+      </Route>
     ]);
   }
 
@@ -113,6 +117,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
           this.props.amPrimaryContact &&
           <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
         }
+        <li><Link to={`${parentPath}/time-sheet`}>Time Sheet</Link></li>
       </>
     );
   }

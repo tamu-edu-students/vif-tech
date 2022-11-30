@@ -1,0 +1,76 @@
+.Volunteer-Timesheet {
+  //TODO: Remove
+  background-color: $color-violet;
+  padding: 3rem;
+  width: 50%;
+  
+  .table {
+    .table__rows {
+      display: flex;
+      flex-direction: column;
+
+      .table__row {
+        display: flex;
+
+        &:not(:last-child):not(.table__row--header) {
+          border-bottom: 1px solid $color-white;
+        }
+
+        &:not(.table__row--header) {
+          &:nth-child(even) {
+            .table__cell:not(.table__cell--time) {
+              background-color: $color-gray-light;
+            }
+          }
+  
+          &:nth-child(odd) {
+            .table__cell:not(.table__cell--time) {
+              background-color: $color-white;
+            }
+          }
+        }
+
+        &--header {
+          font-size: 1.4rem;
+
+          .table__cell {
+            &--header {
+              background-color: $color-violet-darkest;
+              color: $color-white !important;
+            }
+          }
+        }
+
+        .table__cell {
+          padding: 1rem;
+          color: $color-black;
+
+          &:not(:last-child) {
+            border-right: 1px solid $color-violet-darkest;
+          }
+
+          &--time {
+            flex: 16;
+            background-color: $color-violet-darkest;
+            color: $color-white;
+          }
+
+          &--name {
+            flex: 28;
+            color: $color-black;
+          }
+
+          &--portfolio {
+            flex: 28;
+            color: $color-black;
+          }
+
+          &--resume {
+            flex: 28;
+            color: $color-black;
+          }
+        }
+      }
+    }
+  }
+}
