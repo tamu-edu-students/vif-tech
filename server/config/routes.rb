@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   delete "/users/:id/meetings/:meeting_id", to: "users#delete_from_meeting"
 
   resources :meetings, only: [:create, :show, :index, :update, :destroy]
+  get "meetings/:id/invitees", to: "meetings#get_invitees"
+  put "meetings/:id/invitees", to: "meetings#swap_invitees"
   resources :user_meetings, only: [:show, :index]
 
   get "/companies", to: "companies#index"
@@ -48,7 +50,7 @@ Rails.application.routes.draw do
   delete "/companies/:id", to: "companies#destroy"
   # post "/users/:id/companies/:company_id", to: "users#add_to_company"
   # delete "users/:id/companies/:company_id", to: "users#delete_from_company"
-  get "/companies/public", to: "companies#public_index", as: 'public_index'
+  get "/companies/public", to: "companies#public_index", as: "public_index"
 
   resources :availabilities, only: [:create, :show, :index, :update, :destroy]
   get "users/:id/availabilities", to: "users#get_availabilies"

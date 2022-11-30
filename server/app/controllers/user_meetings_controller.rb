@@ -20,14 +20,12 @@ class UserMeetingsController < ApplicationController
   end
 
   def index
-    confirm_requester_is_admin
     render json: {
              user_meetings: UserMeeting.all,
            }, status: :ok
   end
 
   def show
-    confirm_requester_is_admin
     @user_meeting = UserMeeting.find_by_id(params[:id])
     if @user_meeting
       render json: {
