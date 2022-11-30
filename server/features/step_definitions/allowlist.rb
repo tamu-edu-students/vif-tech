@@ -12,27 +12,27 @@ Then('the company with id {int} should have {int} reps') do |id, int|
   end
 
 Given /^I allow a new domain ([^\']*) for usertype ([^\']*)$/ do |domain, usertype|
-  ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype}})
+  ret = page.driver.post('/allowlist_domains', {"allowlist_domain":{"domain":domain,"usertype":usertype}})
   ret_body = JSON.parse ret.body
   expect(ret.status).to eq(201)
 end
 
 Given /^I fail to allow a new domain ([^\']*) for usertype ([^\']*)$/ do |domain, usertype|
-    ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype}})
+    ret = page.driver.post('/allowlist_domains', {"allowlist_domain":{"domain":domain,"usertype":usertype}})
     ret_body = JSON.parse ret.body
-    expect(ret.status).to eq(500)
+    expect(ret.status).to eq(403)
   end
 
 Given /^I allow a new company domain ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |domain, usertype, int|
-    ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype, "company_id":int}})
+    ret = page.driver.post('/allowlist_domains', {"allowlist_domain":{"domain":domain,"usertype":usertype, "company_id":int}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
 end
 
 Given /^I fail to allow a new company domain ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |domain, usertype, int|
-    ret = page.driver.post('/allowlist_domains', {"domain":{"email_domain":domain,"usertype":usertype, "company_id":int}})
+    ret = page.driver.post('/allowlist_domains', {"allowlist_domain":{"domain":domain,"usertype":usertype, "company_id":int}})
     ret_body = JSON.parse ret.body
-    expect(ret.status).to eq(500)
+    expect(ret.status).to eq(403)
 end
 
 Given /^I delete the allowed domain with index 4$/ do 
@@ -44,19 +44,19 @@ end
 Then('I should see {int} domain in the database') do |int|
   ret = page.driver.get('/allowlist_domains')
   ret_body = JSON.parse ret.body
-  expect(ret_body['domains'].size).to eq(int)
+  expect(ret_body['allowlist_domains'].size).to eq(int)
 end
 
 Then("I should see {int} domain with usertype: student in the database") do |int|
     ret = page.driver.get("/allowlist_domains/?usertype=student")
     ret_body = JSON.parse ret.body
-    expect(ret_body['domains'].size).to eq(int)
+    expect(ret_body['allowlist_domains'].size).to eq(int)
 end
 
 Then("I should see {int} domain with company_id: 1 in the database") do |int|
     ret = page.driver.get("/allowlist_domains/?company_id=1")
     ret_body = JSON.parse ret.body
-    expect(ret_body['domains'].size).to eq(int)
+    expect(ret_body['allowlist_domains'].size).to eq(int)
 end
 
 Then('I should see a domain with index {int} in the database') do |int|
@@ -66,33 +66,33 @@ Then('I should see a domain with index {int} in the database') do |int|
   end
 
 Given /^I allow a new email ([^\']*) for usertype ([^\']*)$/ do |email, usertype|
-    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
 end
 
 Given /^I allow a new company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
-    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
 end
 
 Given /^I fail to allow a new company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
-    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int}})
     ret_body = JSON.parse ret.body
-    expect(ret.status).to eq(500)
+    expect(ret.status).to eq(403)
 end
 
 Given /^I allow a new primary contact company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
-    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int, "isPrimaryContact":1}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int, "is_primary_contact":1}})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(201)
 end
 
 Given /^I fail to allow a new primary contact company email ([^\']*) for usertype ([^\']*) for company id ([0-9]*)$/ do |email, usertype, int|
-    ret = page.driver.post('/allowlist_emails', {"email":{"email":email,"usertype":usertype, "company_id":int, "isPrimaryContact":1}})
+    ret = page.driver.post('/allowlist_emails', {"allowlist_email":{"email":email,"usertype":usertype, "company_id":int, "is_primary_contact":1}})
     ret_body = JSON.parse ret.body
-    expect(ret.status).to eq(500)
+    expect(ret.status).to eq(403)
 end
 
 Given /^I delete the allowed email with index 1$/ do 
@@ -104,19 +104,19 @@ end
 Then('I should see {int} new email in the database') do |int|
 ret = page.driver.get('/allowlist_emails')
 ret_body = JSON.parse ret.body
-expect(ret_body['emails'].size).to eq(int)
+expect(ret_body['allowlist_emails'].size).to eq(int)
 end
 
 Then('I should see {int} email with usertype: student in the database') do |int|
     ret = page.driver.get('/allowlist_emails/?usertype=student')
     ret_body = JSON.parse ret.body
-    expect(ret_body['emails'].size).to eq(int)
+    expect(ret_body['allowlist_emails'].size).to eq(int)
 end
 
 Then('I should see {int} email with company_id: 1 in the database') do |int|
     ret = page.driver.get('/allowlist_emails/?company_id=1')
     ret_body = JSON.parse ret.body
-    expect(ret_body['emails'].size).to eq(int)
+    expect(ret_body['allowlist_emails'].size).to eq(int)
 end
 
 Then('I should see an email with index {int} in the database') do |int|
@@ -143,8 +143,8 @@ Given('I transfer my primary contact role to user with id {int}') do |int|
     expect(ret.status).to eq(200)
 end
 
-Given('I transfer primary contact role to user with id {int} from user with id {int}') do |int1, int2|
-    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1, "from":int2})
+Given('I transfer primary contact role to user with id {int}') do |int1|
+    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(200)
 end
@@ -155,10 +155,18 @@ Given('I fail to transfer my primary contact role to user with id {int}') do |in
     expect(ret.status).to eq(403)
 end
 
-Given('I fail to transfer primary contact role to user with id {int} from user with id {int}') do |int1, int2|
-    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1, "from":int2})
+Given('I fail to transfer primary contact role to user with id {int}') do |int1|
+    ret = page.driver.post('/allowlist_emails/transfer_primary_contact', {"to":int1})
     ret_body = JSON.parse ret.body
     expect(ret.status).to eq(403)
+end
+
+Then /^the primary contact for the company with id ([0-9]*) should have email ([^\']*)$/ do |cid, email|
+    ret = page.driver.get("/companies")
+    ret_body = JSON.parse ret.body
+    ae = ret_body["companies"][0]["allowlist_emails"].select { |u| u["is_primary_contact"] == true }
+    expect(ae.size == 1).to eq(true)
+    expect(ae[0]["email"]).to eq(email)
 end
 
 Then("I should see allowlist emails and domains in company 1 when indexing") do
@@ -166,7 +174,6 @@ Then("I should see allowlist emails and domains in company 1 when indexing") do
     ret_body = JSON.parse ret.body
     ae = ret_body["companies"][0]["allowlist_emails"]
     ad = ret_body["companies"][0]["allowlist_domains"]
-    p ret_body
     expect(ae.size > 0).to eq(true)
     expect(ad.size > 0).to eq(true)
 end
@@ -176,7 +183,6 @@ Then("I should not see allowlist emails and domains in company 1 when indexing")
     ret_body = JSON.parse ret.body
     ae = ret_body["companies"][0]["allowlist_emails"]
     ad = ret_body["companies"][0]["allowlist_domains"]
-    p ret_body
     expect(ae).to eq(nil)
     expect(ad).to eq(nil)
 end

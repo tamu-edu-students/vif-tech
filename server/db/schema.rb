@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_18_021729) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
   create_table "allowlist_domains", force: :cascade do |t|
-    t.string "email_domain"
+    t.string "domain"
     t.string "usertype"
     t.integer "company_id"
     t.index ["company_id"], name: "index_allowlist_domains_on_company_id"
-    t.index ["email_domain", "usertype", "company_id"], name: "domain_usertype_company", unique: true
+    t.index ["domain", "usertype", "company_id"], name: "domain_usertype_company", unique: true
   end
 
   create_table "allowlist_emails", force: :cascade do |t|
@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_021729) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "company_id"
-    t.boolean "isPrimaryContact", default: false
+    t.boolean "is_primary_contact", default: false
     t.index ["company_id"], name: "index_allowlist_emails_on_company_id"
     t.index ["email", "usertype", "company_id"], name: "email_usertype_company", unique: true
   end

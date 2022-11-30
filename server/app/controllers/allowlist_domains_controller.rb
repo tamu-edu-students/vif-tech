@@ -1,6 +1,7 @@
 class AllowlistDomainsController < ApplicationController
   before_action :confirm_user_logged_in
   before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show]
+  before_action :confirm_uniquness, only: [:create]
 
   def index
     @domains = AllowlistDomain.all
@@ -19,7 +20,7 @@ class AllowlistDomainsController < ApplicationController
 
     if @domains
       render json: {
-               domains: @domains,
+               allowlist_domains: @domains,
              }, status: :ok
     else
       render json: {
@@ -35,7 +36,7 @@ class AllowlistDomainsController < ApplicationController
     end
     if @domain
       render json: {
-               domain: @domain,
+                allowlist_domain: @domain,
              }, status: :ok
     else
       render json: {
@@ -47,8 +48,8 @@ class AllowlistDomainsController < ApplicationController
   def create
     if current_user.usertype == "company representative"
       company = current_user.company
-    elsif params[:domain][:company_id] != nil and current_user.usertype == "admin"
-      company = Company.find_by_id(params[:domain][:company_id])
+    elsif params[:allowlist_domain][:company_id] != nil and current_user.usertype == "admin"
+      company = Company.find_by_id(params[:allowlist_domain][:company_id])
     else
       company = nil
     end
@@ -61,7 +62,7 @@ class AllowlistDomainsController < ApplicationController
       end
 
       us = User.where(usertype: @domain.usertype)
-      filter = Regexp.new("@" + @domain.email_domain)
+      filter = Regexp.new("@" + @domain.domain)
       for u in us
         if u != nil && @domain.usertype == u.usertype && u.company == @domain.company && (u.email =~ filter) != nil
           @domain.users << u
@@ -69,7 +70,7 @@ class AllowlistDomainsController < ApplicationController
       end
 
       render json: {
-               domain: @domain,
+                allowlist_domain: @domain,
              }, status: :created
     else
       render json: {
@@ -113,7 +114,7 @@ class AllowlistDomainsController < ApplicationController
          (current_user.usertype == "company representative" &&
           current_user.company != nil &&
           current_user.allowlist_email != nil &&
-          current_user.allowlist_email.isPrimaryContact == true))
+          current_user.allowlist_email.is_primary_contact == true))
       render json: {
                errors: ["User does not have previleges for requested action"],
              }, status: :forbidden
@@ -123,12 +124,27 @@ class AllowlistDomainsController < ApplicationController
   end
 
   def domain_params
-    if params[:domain] != nil && params[:domain][:email_domain] != nil
-      params[:domain][:email_domain] = params[:domain][:email_domain].downcase
-    end
     if @current_user.usertype != "admin"
-      params[:domain][:usertype] = "company representative"
+      params[:allowlist_domain][:usertype] = "company representative"
     end
-    params.require(:domain).permit(:email_domain, :usertype)
+    params.require(:allowlist_domain).permit(:domain, :usertype)
+  end
+
+  def confirm_uniquness
+
+    dp = domain_params
+    
+    domain = AllowlistDomain.where(usertype: params[:allowlist_domain][:usertype]).where.like(domain: params[:allowlist_domain][:domain])
+    if params[:allowlist_domain][:company_id]
+      domain = domain.where(company_id: params[:allowlist_domain][:company_id])
+    end
+
+    if domain.first 
+      render json: {
+        errors: ["Allowlist entry already exists"],
+      }, status: :forbidden
+      return false
+    end
+    return true
   end
 end

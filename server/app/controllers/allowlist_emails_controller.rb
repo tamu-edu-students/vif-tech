@@ -1,6 +1,7 @@
 class AllowlistEmailsController < ApplicationController
   before_action :confirm_user_logged_in
   before_action :confirm_requester_is_rep_or_admin, only: [:create, :delete, :index, :show, :transferPrimaryContact]
+  before_action :confirm_uniquness, only: [:create]
 
   def index
     @emails = AllowlistEmail.all
@@ -19,7 +20,7 @@ class AllowlistEmailsController < ApplicationController
 
     if @emails
       render json: {
-               emails: @emails,
+                allowlist_emails: @emails,
              }, status: :ok
     else
       render json: {
@@ -36,7 +37,7 @@ class AllowlistEmailsController < ApplicationController
 
     if @email
       render json: {
-               email: @email,
+                allowlist_email: @email,
              }, status: :ok
     else
       render json: {
@@ -48,8 +49,8 @@ class AllowlistEmailsController < ApplicationController
   def create
     if current_user.usertype == "company representative"
       company = current_user.company
-    elsif params[:email][:company_id] != nil and current_user.usertype == "admin"
-      company = Company.find_by_id(params[:email][:company_id])
+    elsif params[:allowlist_email][:company_id] != nil and current_user.usertype == "admin"
+      company = Company.find_by_id(params[:allowlist_email][:company_id])
     else
       company = nil
     end
@@ -67,7 +68,7 @@ class AllowlistEmailsController < ApplicationController
       end
 
       render json: {
-               email: @email,
+                allowlist_email: @email,
              }, status: :created
     else
       render json: {
@@ -101,27 +102,29 @@ class AllowlistEmailsController < ApplicationController
     if current_user.usertype == "admin"
       info = admin_transfer_params
       to_user = User.find(info[:to])
-      from_user = User.find(info[:from])
     else
       info = rep_transfer_params
       to_user = User.find(info[:to])
-      from_user = current_user
+      if current_user.allowlist_email.is_primary_contact == false || current_user.company_id != to_user.company_id
+        render json: {
+          errors: ["User does not have previleges for requested action"],
+        }, status: :forbidden
+        return
+      end
     end
 
     if (to_user == nil ||
-        from_user == nil ||
         to_user.allowlist_email == nil ||
-        from_user.allowlist_email == nil ||
-        from_user.allowlist_email.isPrimaryContact == false ||
-        to_user.company_id != from_user.company_id ||
-        to_user.usertype != "company representative" ||
-        from_user.usertype != "company representative")
+        to_user.usertype != "company representative")
       render json: {
                errors: ["User does not have previleges for requested action"],
              }, status: :forbidden
     else
-      to_user.allowlist_email.update(isPrimaryContact: 1)
-      from_user.allowlist_email.update(isPrimaryContact: 0)
+      from_users = to_user.company.users.where.not(allowlist_email_id: nil)
+      for fu in from_users
+        fu.allowlist_email.update(is_primary_contact: 0)
+      end
+      to_user.allowlist_email.update(is_primary_contact: 1)
 
       render json: {
                message: "transfer success",
@@ -144,7 +147,7 @@ class AllowlistEmailsController < ApplicationController
          (current_user.usertype == "company representative" &&
           current_user.company != nil &&
           current_user.allowlist_email != nil &&
-          current_user.allowlist_email.isPrimaryContact == true))
+          current_user.allowlist_email.is_primary_contact == true))
       render json: {
                errors: ["User does not have previleges for requested action"],
              }, status: :forbidden
@@ -154,18 +157,33 @@ class AllowlistEmailsController < ApplicationController
   end
 
   def email_params
-    if params[:email] != nil && params[:email][:email] != nil
-      params[:email][:email] = params[:email][:email].downcase
-    end
     if @current_user.usertype != "admin"
-      params[:email][:isPrimaryContact] = false
-      params[:email][:usertype] = "company representative"
+      params[:allowlist_email][:is_primary_contact] = false
+      params[:allowlist_email][:usertype] = "company representative"
     end
-    params.require(:email).permit(:email, :usertype, :isPrimaryContact)
+    params.require(:allowlist_email).permit(:email, :usertype, :is_primary_contact)
+  end
+
+  def confirm_uniquness
+
+    ep = email_params
+    
+    email = AllowlistEmail.where(usertype: params[:allowlist_email][:usertype]).where.like(email: params[:allowlist_email][:email])
+    if params[:allowlist_email][:company_id]
+      email = email.where(company_id: params[:allowlist_email][:company_id])
+    end
+
+    if email.first 
+      render json: {
+        errors: ["Allowlist entry already exists"],
+      }, status: :forbidden
+      return false
+    end
+    return true
   end
 
   def admin_transfer_params
-    params.permit(:to, :from)
+    params.permit(:to)
   end
 
   def rep_transfer_params
