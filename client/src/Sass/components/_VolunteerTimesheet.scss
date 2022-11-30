@@ -6,11 +6,13 @@
   
   .table {
     .table__rows {
+      color: $color-black;
       display: flex;
       flex-direction: column;
 
       .table__row {
-        display: flex;
+        display: grid;
+        grid-template-columns: 16fr repeat(3, 28fr);
 
         &:not(:last-child):not(.table__row--header) {
           border-bottom: 1px solid $color-white;
@@ -32,42 +34,32 @@
 
         &--header {
           font-size: 1.4rem;
+          color: $color-white;
 
           .table__cell {
-            &--header {
-              background-color: $color-violet-darkest;
-              color: $color-white !important;
-            }
+            background-color: $color-violet-darkest;
           }
         }
 
         .table__cell {
           padding: 1rem;
-          color: $color-black;
 
           &:not(:last-child) {
             border-right: 1px solid $color-violet-darkest;
           }
 
           &--time {
-            flex: 16;
             background-color: $color-violet-darkest;
             color: $color-white;
           }
 
           &--name {
-            flex: 28;
-            color: $color-black;
           }
 
           &--portfolio {
-            flex: 28;
-            color: $color-black;
           }
 
           &--resume {
-            flex: 28;
-            color: $color-black;
           }
         }
       }

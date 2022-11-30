@@ -33,10 +33,10 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
           <div className="table__rows">
 
             <div className="table__row table__row--header">
-              <div className="table__cell table__cell--time table__cell--header">Time</div>
-              <div className="table__cell table__cell--name table__cell--header">Name</div>
-              <div className="table__cell table__cell--portfolio table__cell--header">Portfolio</div>
-              <div className="table__cell table__cell--resume table__cell--header">Resume</div>
+              <div className="table__cell table__cell--header">Time</div>
+              <div className="table__cell table__cell--header">Name</div>
+              <div className="table__cell table__cell--header">Portfolio</div>
+              <div className="table__cell table__cell--header">Resume</div>
             </div>
 
             <div className="table__row">
