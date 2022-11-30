@@ -3,7 +3,7 @@ import { availabilityActionTypes } from "Store/actions/types";
 import Availability from "Shared/entityClasses/Availability";
 
 export interface Store_AvailabilityData {
- availabilities: Availability[];
+  availabilities: Availability[];
   isStale: boolean;
 }
 
