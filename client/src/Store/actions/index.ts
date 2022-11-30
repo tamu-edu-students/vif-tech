@@ -4,6 +4,7 @@ import {
   companyActionTypes,
   allowlistActionTypes,
   eventActionTypes,
+  availabilityActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -23,6 +24,7 @@ import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEma
 import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 import Event from 'Shared/entityClasses/Event';
+import Availability from 'Shared/entityClasses/Availability';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -351,6 +353,40 @@ export const fetchEvents = () => async (dispatch: any) => {
   .catch((response) => {
     console.log('response_fetchEvents:', response);
     dispatch({ type: eventActionTypes.FETCH_EVENTS__FAILURE, payload: {error: 'ERROR: Failed to fetch events data'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         AVAILABILITIES */
+/********************************************************************************************* */
+export const fetchAvailabilities = () => async (dispatch: any) => {
+  dispatch({ type: availabilityActionTypes.FETCH_AVAILABILITIES__REQUEST });
+  await vifTech.get('/availabilities')
+  .then((response) => {
+    console.log('response_fetchAvailabilities:', response);
+    dispatch({ type: availabilityActionTypes.FETCH_AVAILABILITIES__SUCCESS, payload: Availability.createAvailabilities(response.data.availabilities) });
+    dispatch({ type: availabilityActionTypes.SET_AVAILABILITIES_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchAvailabilities:', response);
+    dispatch({ type: availabilityActionTypes.FETCH_AVAILABILITIES__FAILURE, payload: {error: 'ERROR: Failed to fetch availabilities data'} });
+  });
+}
+
+
+
+export const createAvailability = (formValues: any) => async (dispatch: any) => {
+  dispatch({ type: availabilityActionTypes.CREATE_AVAILABILITY__REQUEST });
+  await vifTech.post(`/availabilities`, { availability: { ...formValues } })
+  .then((response) => {
+    console.log('createAvailability response:', response);
+    dispatch({ type: availabilityActionTypes.CREATE_AVAILABILITY__SUCCESS, payload: new Availability(response.data.availability) });
+  })
+  .catch((response) => {
+    console.log('createAvailability response:', response);
+    dispatch({ type: availabilityActionTypes.CREATE_AVAILABILITY__FAILURE, payload: {error: `ERROR: Failed to fetch availabilities data`} });
   });
 }
 

@@ -124,6 +124,30 @@ export const eventActionTypes = {
 
 
 /********************************************************************************************* */
+/**************************************************************************         AVAILABILITIES */
+/********************************************************************************************* */
+export const availabilityActionTypes = {
+  FETCH_AVAILABILITIES: 'FETCH_AVAILABILITIES',
+  FETCH_AVAILABILITIES__REQUEST: 'FETCH_AVAILABILITIES__REQUEST',
+  FETCH_AVAILABILITIES__SUCCESS: 'FETCH_AVAILABILITIES__SUCCESS',
+  FETCH_AVAILABILITIES__FAILURE: 'FETCH_AVAILABILITIES__FAILURE',
+  
+  CREATE_AVAILABILITY: 'CREATE_AVAILABILITY',
+  CREATE_AVAILABILITY__REQUEST: 'CREATE_AVAILABILITY__REQUEST',
+  CREATE_AVAILABILITY__SUCCESS: 'CREATE_AVAILABILITY__SUCCESS',
+  CREATE_AVAILABILITY__FAILURE: 'CREATE_AVAILABILITY__FAILURE',
+
+  DELETE_AVAILABILITY: 'DELETE_AVAILABILITY',
+  DELETE_AVAILABILITY__REQUEST: 'DELETE_AVAILABILITY__REQUEST',
+  DELETE_AVAILABILITY__SUCCESS: 'DELETE_AVAILABILITY__SUCCESS',
+  DELETE_AVAILABILITY__FAILURE: 'DELETE_AVAILABILITY__FAILURE',
+  
+  SET_AVAILABILITIES_STALENESS: 'SET_AVAILABILITIES_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
 /**************************************************************************         MODAL */
 /********************************************************************************************* */
 export const SHOW_MODAL = 'SHOW_MODAL';
