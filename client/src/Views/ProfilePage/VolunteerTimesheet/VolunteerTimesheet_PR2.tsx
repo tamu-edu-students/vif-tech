@@ -8,6 +8,8 @@ import { fetchEvents, fetchAvailabilities } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 import Event from 'Shared/entityClasses/Event';
 
+import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
+
 
 interface OwnProps {
 
@@ -45,18 +47,14 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
 
   private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
-      const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
       return (
-        <div key={startTimeShort} className="table__row">
-          <div className="table__cell table__cell--time">
-            {`${startTimeShort}—${endTimeShort}`}
-          </div>
-          <div className="table__cell table__cell--name">Firstname Lastname</div>
-          <div className="table__cell table__cell--portfolio">someportfolio.myportfolio.com</div>
-          <div className="table__cell table__cell--resume">someresume.somewebsite.com</div>
-        </div>
-      )
+        <React.Fragment key={start_time}>
+          <VolunteerTimesheetRow
+            start_time={start_time}
+            end_time={end_time}
+          />
+        </React.Fragment>
+      );
     });
   }
 
