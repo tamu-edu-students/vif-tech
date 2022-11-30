@@ -5,6 +5,7 @@ import authReducer, { Store_Auth } from './authReducer';
 import allowlistReducer, { Store_Allowlist } from './allowlistReducer';
 import companyReducer, { Store_CompanyData } from './companyReducer';
 import eventReducer, { Store_EventData } from "./eventReducer";
+import availabilityReducer, { Store_AvailabilityData } from "./availabilityReducer";
 import modalReducer, { Store_Modal } from './modalReducer';
 import faqReducer from "./faqReducer";
 import loadingReducer from "./loadingReducer";
@@ -19,6 +20,7 @@ export interface IRootState {
   allowlist: Store_Allowlist;
   companyData: Store_CompanyData;
   eventData: Store_EventData;
+  availabilityData: Store_AvailabilityData;
   modal: Store_Modal;
   faqs: FAQ[];
   loading: any;
@@ -32,6 +34,7 @@ const rootReducer = combineReducers<IRootState> ({
   allowlist: allowlistReducer,
   companyData: companyReducer,
   eventData: eventReducer,
+  availabilityData: availabilityReducer,
   modal: modalReducer,
   faqs: faqReducer,
   loading: loadingReducer,
