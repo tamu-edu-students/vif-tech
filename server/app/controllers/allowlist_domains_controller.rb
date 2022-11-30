@@ -55,6 +55,9 @@ class AllowlistDomainsController < ApplicationController
       company = nil
     end
 
+    p current_user
+    p company
+
     @domain = AllowlistDomain.new(domain_params)
     @domain.company_id = company ? company.id : nil
     if @domain.save

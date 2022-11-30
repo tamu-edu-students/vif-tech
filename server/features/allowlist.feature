@@ -89,6 +89,7 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | company representative |
             | company_id | 1 |
+        And that the user verified their email test@test.com
         And that I log in with email test@test.com and password password1!
         And I allow a new domain test2.com for usertype company representative
         And that I log in as admin
