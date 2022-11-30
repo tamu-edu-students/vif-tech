@@ -548,6 +548,37 @@ Feature: Allowlist Management
         And that I log in as admin
         Then the primary contact for the company with id 1 should have email test@test.com
 
+    Scenario: A rep transfers primary contact to a user allowed by domain
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I allow a new company domain test2.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test2@test2.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that I log in as admin
+        Then the primary contact for the company with id 1 should have email test@test.com
+        And I should see 1 new email in the database
+        And that the user verified their email test@test.com
+        And that I log in with email test@test.com and password password1!
+        And I transfer my primary contact role to user with id 3
+        And that I log in as admin
+        Then the primary contact for the company with id 1 should have email test2@test2.com
+        And I should see 2 new email in the database
+
     Scenario: A student signs up to a newly allowed email and email, which is then deleted, but he remains
         Given that I log in as admin
         And I allow a new domain test.com for usertype student

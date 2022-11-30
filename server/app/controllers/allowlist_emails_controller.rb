@@ -93,7 +93,6 @@ class AllowlistEmailsController < ApplicationController
              }, status: :ok
     else
       render json: {
-               status: 500,
                errors: ["email not found"],
              }, status: :not_found
     end
@@ -115,12 +114,26 @@ class AllowlistEmailsController < ApplicationController
     end
 
     if (to_user == nil ||
-        to_user.allowlist_email == nil ||
         to_user.usertype != "company representative")
       render json: {
                errors: ["User does not have previleges for requested action"],
              }, status: :forbidden
     else
+
+      
+      if to_user.allowlist_email == nil
+        @email = AllowlistEmail.new(email: to_user.email, is_primary_contact:  false, usertype: "company representative")
+        if @email.save
+          to_user.company.allowlist_emails << @email
+          @email.users << to_user
+          to_user = User.find(info[:to])
+        else
+          render json: {
+            errors: ["failed to create allowlist entry"],
+          }, status: :internal_server_error
+        end
+      end
+      
       from_users = to_user.company.users.where.not(allowlist_email_id: nil)
       for fu in from_users
         fu.allowlist_email.update(is_primary_contact: false)
