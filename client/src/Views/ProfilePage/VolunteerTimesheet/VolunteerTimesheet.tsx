@@ -23,9 +23,9 @@ type TimeOption = {
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
     timeSlots: [
-      {start: '2023-02-16 10:00:00', end: '2023-02-16 10:20:00'},
-      {start: '2023-02-16 10:25:00', end: '2023-02-16 10:45:00'},
-      {start: '2023-02-16 10:50:00', end: '2023-02-16 11:10:00'},
+      {start: '2023-02-16T16:00:00.000Z', end: '2023-02-16T16:20:00.000Z'},
+      {start: '2023-02-16T16:25:00.000Z', end: '2023-02-16T16:45:00.000Z'},
+      {start: '2023-02-16T16:50:00.000Z', end: '2023-02-16T17:10:00.000Z'},
     ],
   };
 };
@@ -37,8 +37,8 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 class VolunteerTimesheet extends React.Component<Props, OwnState> {
   private _renderTimeOptions(): JSX.Element[] {
     return this.props.timeSlots.map(({start, end}: TimeOption) => {
-      const startTimeShort = msToTimeString(Date.parse(start));
-      const endTimeShort = msToTimeString(Date.parse(end));
+      const startTimeShort = msToTimeString(Date.parse(start), 'CST');
+      const endTimeShort = msToTimeString(Date.parse(end), 'CST');
       return (
         <div key={startTimeShort} className="table__row">
           <div className="table__cell table__cell--time">
