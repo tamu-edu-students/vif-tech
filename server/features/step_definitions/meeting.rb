@@ -61,6 +61,18 @@ Then("creating meetings should result in not authenticated error") do
   expect(ret_body["errors"]).to eq(["User not logged in"])
 end
 
+Then("creating meeting with the following should return http code {int}") do |code, table|
+  ret = page.driver.post("/meetings", { "meeting": table.rows_hash })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(code)
+end
+
+Then("updating meeting {int} with the following should return http code {int}") do |meeting_id, code, table|
+  ret = page.driver.put("/meetings/#{meeting_id}", { "meeting": table.rows_hash })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(code)
+end
+
 Given("that I create a meeting with the following") do |table|
   ret = page.driver.post("/meetings", { 'meeting': table.rows_hash })
 end

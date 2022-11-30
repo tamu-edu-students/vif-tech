@@ -344,3 +344,40 @@ Feature: User availability
             | end_time | 2022-11-19 14:01:00 |
         And I should see 3 availabilities for user with id 2 for company with id 1
         And I should see 2 availabilities for user with id 3 for company with id 1
+
+    Scenario: Create availabilities with ghost event
+        Given that I log in as admin
+        And I allow a new domain test.com for usertype volunteer
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | volunteer |
+        And that I log in as admin
+        Then creating an availability with the following should return status 404
+            | user_id | 2 |
+            | start_time | 2022-11-18 14:00:00 |
+            | end_time | 2022-11-18 14:01:00 |
+            | event_id | 100 |
+    
+    Scenario: Assign user availability to a ghost event
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that the user verified their email test@test.com
+        And that I log in with email test@test.com and password password1!
+        And I want to create an availability with the following and get return status 201
+            | start_time | 2022-11-18 14:00:00 |
+            | end_time | 2022-11-18 14:01:00 |
+        Then updating an availability 1 with the following should return status 404
+            | event_id | 100 |

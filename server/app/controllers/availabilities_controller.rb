@@ -2,6 +2,16 @@ class AvailabilitiesController < ApplicationController
   before_action :confirm_user_logged_in
   before_action :confirm_availability_exists, only: [:show, :update, :delete]
 
+  def confirm_event_exists(event_id)
+    if !Event.find_by_id(event_id)
+      render json: {
+        errors: ["Event with id #{event_id} not found"],
+      }, status: :not_found
+      return false
+    end
+    return true
+  end
+
   # GET /availabilities
   def index
     if current_user.usertype == "admin"
@@ -43,6 +53,10 @@ class AvailabilitiesController < ApplicationController
       params["user_id"] = current_user.id
     end
 
+    if params.key?("event_id") and !confirm_event_exists(params["event_id"])
+      return # If event id is provided but the event doesn't exist terminate
+    end
+
     @availability = Availability.new(params)
     if @availability.save
       render json: {
@@ -61,6 +75,11 @@ class AvailabilitiesController < ApplicationController
     if !confirm_requester_is_owner_or_admin(@availability.user.id)
       return
     end
+
+    if availability_params.key?("event_id") and !confirm_event_exists(availability_params["event_id"])
+      return # If event id is provided but the event doesn't exist terminate
+    end
+
     if @availability.update(availability_params)
       render json: {
                availability: @availability,
@@ -138,6 +157,6 @@ class AvailabilitiesController < ApplicationController
   end
 
   def availability_params
-    params.require(:availability).permit(:user_id, :start_time, :end_time)
+    params.require(:availability).permit(:user_id, :start_time, :end_time, :event_id)
   end
 end
