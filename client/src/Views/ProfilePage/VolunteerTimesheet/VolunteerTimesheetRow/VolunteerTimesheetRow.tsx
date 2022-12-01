@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import {eventActionTypes } from 'Store/actions/types';
-import { createMeeting } from 'Store/actions';
+import { createMeeting, deleteMeeting } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
 import Event from 'Shared/entityClasses/Event';
@@ -31,7 +31,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
     owner_id: state.auth.user?.id ?? -1,
   };
 };
-const mapDispatchToProps = { createMeeting, };
+const mapDispatchToProps = { createMeeting, deleteMeeting };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -43,14 +43,12 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
   private _createMeeting = () => {
     const {start_time, end_time, owner_id, event_id} = this.props;
     this.props.createMeeting({
-      meeting: {
-        start_time, end_time, owner_id, event_id
-      }
+      start_time, end_time, owner_id, event_id
     });
   }
 
   private _deleteMeeting = () => {
-
+    this.props.deleteMeeting(this.props.meeting?.id ?? -1);
   }
 
   public render(): React.ReactElement<Props> {
