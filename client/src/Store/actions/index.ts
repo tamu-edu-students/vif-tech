@@ -355,15 +355,14 @@ export const createMeeting = (formValues: any) => async (dispatch: any) => {
 
 export const deleteMeeting = (id: number) => async (dispatch: any, getState: any) => {
   dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__REQUEST });
-  await vifTech.delete(`/allowlist_emails/${id}`)
+  await vifTech.delete(`/meetings/${id}`)
   .then((response_delete) => {
-    console.log('deletedeleteMeeting response_delete:', response_delete);
+    console.log('deleteMeeting response_delete:', response_delete);
     dispatch({ type: meetingActionTypes.DELETE_MEETING__SUCCESS, payload: id });
     dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__SUCCESS });
-    dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
-    console.log('deleteAllowlistEmail response_delete:', response_delete);
+    console.log('deleteMeeting response_delete:', response_delete);
     dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__FAILURE, payload: {error: `ERROR: Failed to delete meeting`} });
   });
 }
