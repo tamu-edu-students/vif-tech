@@ -123,7 +123,7 @@ Feature: Meeting
         Given that I sign up and log in as a valid student
         Then 0 meetings should be in meeting DB
     
-    Scenario: Trying to create a meeting as non-admin
+    Scenario: Trying to create a meeting as student
         Given that I sign up and log in as a valid student
         And that I create a meeting with the following
             | title | A meeting |

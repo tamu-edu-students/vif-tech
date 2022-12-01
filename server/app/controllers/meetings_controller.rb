@@ -2,52 +2,6 @@ class MeetingsController < ApplicationController
   before_action :confirm_user_logged_in
   before_action :confirm_meeting_exists, only: [:show, :update, :destroy]
 
-  def confirm_user_logged_in
-    if !(logged_in? && current_user)
-      render json: {
-               errors: ["User not logged in"],
-             }, status: :unauthorized
-    end
-  end
-
-  def confirm_meeting_exists
-    if !Meeting.find_by_id(params[:id])
-      render json: {
-        errors: ["Meeting with id #{params[:id]} not found"],
-      }, status: :not_found
-    end
-  end
-
-  def confirm_event_exists(event_id)
-    if !Event.find_by_id(event_id)
-      render json: {
-        errors: ["Event with id #{event_id} not found"],
-      }, status: :not_found
-      return false
-    end
-    return true
-  end
-
-  def confirm_requester_is_owner_or_admin(owner_id)
-    if !(current_user.id == owner_id or current_user.usertype == "admin")
-      render json: {
-               errors: ["User does not have previleges for requested action"],
-             }, status: :forbidden
-      return false
-    end
-    return true
-  end
-
-  def confirm_requester_is_admin
-    if current_user.usertype != "admin"
-      render json: {
-               errors: ["User does not have previleges for requested action"],
-             }, status: :forbidden
-      return false
-    end
-    return true
-  end
-
   # GET /meetings
   def index
     render json: {
@@ -64,7 +18,7 @@ class MeetingsController < ApplicationController
 
   # POST /meetings/
   def create
-    if !confirm_requester_is_admin
+    if !confirm_requester_is_admin_or_rep_or_volunteer
       return
     end
     params = meeting_params.to_h
@@ -242,5 +196,61 @@ class MeetingsController < ApplicationController
 
   def invitee_params
     params.require(:meeting).permit(invitees: [:user_id, :status])
+  end
+
+  def confirm_user_logged_in
+    if !(logged_in? && current_user)
+      render json: {
+               errors: ["User not logged in"],
+             }, status: :unauthorized
+    end
+  end
+
+  def confirm_meeting_exists
+    if !Meeting.find_by_id(params[:id])
+      render json: {
+        errors: ["Meeting with id #{params[:id]} not found"],
+      }, status: :not_found
+    end
+  end
+
+  def confirm_event_exists(event_id)
+    if !Event.find_by_id(event_id)
+      render json: {
+        errors: ["Event with id #{event_id} not found"],
+      }, status: :not_found
+      return false
+    end
+    return true
+  end
+
+  def confirm_requester_is_owner_or_admin(owner_id)
+    if !(current_user.id == owner_id or current_user.usertype == "admin")
+      render json: {
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
+      return false
+    end
+    return true
+  end
+
+  def confirm_requester_is_admin
+    if current_user.usertype != "admin"
+      render json: {
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
+      return false
+    end
+    return true
+  end
+
+  def confirm_requester_is_admin_or_rep_or_volunteer
+    if current_user.usertype != "company representative" and current_user.usertype != "volunteer" and current_user.usertype != "admin"
+      render json: {
+               errors: ["User should be one of the following types for requested action: admin, company representative, or volunteer", "User type: #{current_user.usertype}"],
+             }, status: :forbidden
+      return false
+    end
+    return true
   end
 end
