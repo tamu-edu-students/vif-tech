@@ -695,3 +695,16 @@ Feature: Allowlist Management
         And that I log in with email test@test.com and password password1!
         Then I should not see allowlist emails and domains in company 1 when indexing
         And that I log out
+
+    Scenario: Company deletion cascades to allowlists     
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new company email test@test1.com for usertype company representative for company id 1
+        And I allow a new company email test@test2.com for usertype company representative for company id 1
+        And I allow a new company domain test3.com for usertype company representative for company id 1
+        Then I should see allowlist emails and domains in company 1 when indexing
+        And I should see 2 new email in the database
+        And I should see 4 domain in the database
+        And I delete company with id 1
+        And I should see 0 new email in the database
+        And I should see 3 domain in the database
