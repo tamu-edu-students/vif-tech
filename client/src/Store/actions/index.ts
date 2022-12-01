@@ -4,7 +4,7 @@ import {
   companyActionTypes,
   allowlistActionTypes,
   eventActionTypes,
-  availabilityActionTypes,
+  meetingActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -24,7 +24,7 @@ import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEma
 import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 import Event from 'Shared/entityClasses/Event';
-import Availability from 'Shared/entityClasses/Availability';
+import Meeting from 'Shared/entityClasses/Meeting';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -359,34 +359,34 @@ export const fetchEvents = () => async (dispatch: any) => {
 
 
 /********************************************************************************************* */
-/**************************************************************************         AVAILABILITIES */
+/**************************************************************************         MEETINGS */
 /********************************************************************************************* */
-export const fetchAvailabilities = () => async (dispatch: any) => {
-  dispatch({ type: availabilityActionTypes.FETCH_AVAILABILITIES__REQUEST });
-  await vifTech.get('/availabilities')
+export const fetchMeetings = () => async (dispatch: any) => {
+  dispatch({ type: meetingActionTypes.FETCH_MEETINGS__REQUEST });
+  await vifTech.get('/meetings')
   .then((response) => {
-    console.log('response_fetchAvailabilities:', response);
-    dispatch({ type: availabilityActionTypes.FETCH_AVAILABILITIES__SUCCESS, payload: Availability.createAvailabilities(response.data.availabilities) });
-    dispatch({ type: availabilityActionTypes.SET_AVAILABILITIES_STALENESS, payload: false });
+    console.log('response_fetchMeetings:', response);
+    dispatch({ type: meetingActionTypes.FETCH_MEETINGS__SUCCESS, payload: Meeting.createMeetings(response.data.meetings) });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: false });
   })
   .catch((response) => {
-    console.log('response_fetchAvailabilities:', response);
-    dispatch({ type: availabilityActionTypes.FETCH_AVAILABILITIES__FAILURE, payload: {error: 'ERROR: Failed to fetch availabilities data'} });
+    console.log('response_fetchMeetings:', response);
+    dispatch({ type: meetingActionTypes.FETCH_MEETINGS__FAILURE, payload: {error: 'ERROR: Failed to fetch meetings data'} });
   });
 }
 
 
 
-export const createAvailability = (formValues: any) => async (dispatch: any) => {
-  dispatch({ type: availabilityActionTypes.CREATE_AVAILABILITY__REQUEST });
-  await vifTech.post(`/availabilities`, { availability: { ...formValues } })
+export const createMeeting = (formValues: any) => async (dispatch: any) => {
+  dispatch({ type: meetingActionTypes.CREATE_MEETING__REQUEST });
+  await vifTech.post(`/meetings`, { meeting: { ...formValues } })
   .then((response) => {
-    console.log('createAvailability response:', response);
-    dispatch({ type: availabilityActionTypes.CREATE_AVAILABILITY__SUCCESS, payload: new Availability(response.data.availability) });
+    console.log('createMeeting response:', response);
+    dispatch({ type: meetingActionTypes.CREATE_MEETING__SUCCESS, payload: new Meeting(response.data.meeting) });
   })
   .catch((response) => {
-    console.log('createAvailability response:', response);
-    dispatch({ type: availabilityActionTypes.CREATE_AVAILABILITY__FAILURE, payload: {error: `ERROR: Failed to fetch availabilities data`} });
+    console.log('createMeeting response:', response);
+    dispatch({ type: meetingActionTypes.CREATE_MEETING__FAILURE, payload: {error: `ERROR: Failed to fetch meetings data`} });
   });
 }
 

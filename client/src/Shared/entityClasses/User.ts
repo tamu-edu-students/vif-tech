@@ -1,6 +1,6 @@
 import { Usertype } from "Shared/enums";
 import AllowlistEmail from "./AllowlistEmail";
-import Availability from "./Availability";
+import Meeting from "./Meeting";
 import Company from "./Company";
 import Event from "./Event";
 
@@ -51,12 +51,12 @@ export default class User implements IUser {
     ?? null;
   }
 
-  public findAvailabilities(availabilities: Availability[]): Availability[] {
-    return availabilities.filter((availability: Availability) => availability.user_id === this.id);
+  public findMeetings(meetings: Meeting[]): Meeting[] {
+    return meetings.filter((meeting: Meeting) => meeting.owner_id === this.id);
   }
 
-  public findAvailabilitiesByEvent(availabilities: Availability[], event: Event): Availability[] {
-    return this.findAvailabilities(availabilities).filter((availability: Availability) => availability.event_id === event.id);
+  public findMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
+    return this.findMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
   }
 
   public static createNewUsers(userData: IUser[]): User[] {

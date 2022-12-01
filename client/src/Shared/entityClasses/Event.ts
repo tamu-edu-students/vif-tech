@@ -1,5 +1,5 @@
 import { minToMs } from "Shared/utils";
-import Availability from "./Availability";
+import Meeting from "./Meeting";
 
 export interface IEvent {
   id: number;
@@ -48,8 +48,8 @@ export default class Event implements IEvent {
     return timeSlots;
   }
 
-  public findAvailabilities(availabilities: Availability[]): Availability[] {
-    return availabilities.filter((availability: Availability) => availability.event_id === this.id);
+  public findMeetings(meetings: Meeting[]): Meeting[] {
+    return meetings.filter((meeting: Meeting) => meeting.event_id === this.id);
   }
 
   public static createEvents(eventData: IEvent[]): Event[] {

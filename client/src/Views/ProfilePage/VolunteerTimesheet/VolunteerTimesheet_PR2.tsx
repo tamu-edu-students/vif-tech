@@ -2,12 +2,12 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import {eventActionTypes, availabilityActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchAvailabilities } from 'Store/actions';
+import {eventActionTypes, meetingActionTypes } from 'Store/actions/types';
+import { fetchEvents, fetchMeetings } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
 import Event from 'Shared/entityClasses/Event';
-import Availability from 'Shared/entityClasses/Availability';
+import Meeting from 'Shared/entityClasses/Meeting';
 
 import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
 
@@ -29,24 +29,24 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const eventsAreStale: boolean = state.eventData.isStale;
   const isLoading_fetchEvents: boolean = createLoadingSelector([eventActionTypes.FETCH_EVENTS])(state);
 
-  const availabilitiesAreStale: boolean = state.availabilityData.isStale;
-  const isLoading_fetchAvailabilities: boolean = createLoadingSelector([availabilityActionTypes.FETCH_AVAILABILITIES])(state);
+  const meetingsAreStale: boolean = state.meetingData.isStale;
+  const isLoading_fetchMeetings: boolean = createLoadingSelector([meetingActionTypes.FETCH_MEETINGS])(state);
 
   return {
     event,
-    availabilities: state.auth.user?.findAvailabilities(event?.findAvailabilities(state.availabilityData.availabilities) ?? []) ?? [],
+    meetings: state.auth.user?.findMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
     eventsAreStale,
     isLoading_fetchEvents,
 
-    availabilitiesAreStale,
-    isLoading_fetchAvailabilities,
+    meetingsAreStale,
+    isLoading_fetchMeetings,
     
-    isLoading: eventsAreStale || isLoading_fetchEvents || availabilitiesAreStale || isLoading_fetchAvailabilities,
-    errors: createErrorMessageSelector([eventActionTypes.FETCH_EVENTS, availabilityActionTypes.FETCH_AVAILABILITIES])(state),
+    isLoading: eventsAreStale || isLoading_fetchEvents || meetingsAreStale || isLoading_fetchMeetings,
+    errors: createErrorMessageSelector([eventActionTypes.FETCH_EVENTS, meetingActionTypes.FETCH_MEETINGS])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchAvailabilities, };
+const mapDispatchToProps = { fetchEvents, fetchMeetings, };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -56,21 +56,21 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
     }
-    if (this.props.availabilitiesAreStale && !this.props.isLoading_fetchAvailabilities) {
-      this.props.fetchAvailabilities();
+    if (this.props.meetingsAreStale && !this.props.isLoading_fetchMeetings) {
+      this.props.fetchMeetings();
     }
   }
 
   private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const { availabilities, event } = this.props;
+      const { meetings, event } = this.props;
       return (
         <React.Fragment key={start_time}>
           <VolunteerTimesheetRow
             start_time={start_time}
             end_time={end_time}
-            availability={availabilities.find((availability: Availability) =>
-              availability.start_time === start_time && availability.end_time === end_time
+            meeting={meetings.find((meeting: Meeting) =>
+              meeting.start_time === start_time && meeting.end_time === end_time
             )}
           />
         </React.Fragment>

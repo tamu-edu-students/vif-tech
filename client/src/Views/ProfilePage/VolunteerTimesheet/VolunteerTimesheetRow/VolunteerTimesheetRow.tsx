@@ -3,17 +3,17 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import {eventActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchAvailabilities } from 'Store/actions';
+import { fetchEvents, fetchMeetings } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
 import Event from 'Shared/entityClasses/Event';
-import Availability from 'Shared/entityClasses/Availability';
+import Meeting from 'Shared/entityClasses/Meeting';
 
 
 interface OwnProps {
   start_time: string;
   end_time: string;
-  availability: Availability;
+  meeting: Meeting;
 }
 
 interface OwnState {
@@ -28,7 +28,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchAvailabilities, };
+const mapDispatchToProps = { fetchEvents, fetchMeetings, };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
