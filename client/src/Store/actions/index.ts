@@ -303,43 +303,6 @@ export const transferPrimaryContact = (userId_to: number, userId_from: number, i
 
 
 /********************************************************************************************* */
-/**************************************************************************         FAQ */
-/********************************************************************************************* */
-export const fetchFAQs = () => async (dispatch: any) => {
-  const response_fetchFAQs = await vifTech.get('/faq');
-
-  console.log('response_fetchFAQs:', response_fetchFAQs);
-
-  dispatch({ type: FETCH_FAQS, payload: FAQ.createFAQs(response_fetchFAQs.data.faqs) });
-}
-
-export const createFAQ = (formValues: any) => async (dispatch: any) => {
-  const response_createFAQ = await vifTech.post('/faq', { faq: {...formValues} });
-
-  console.log('response_createFAQ:', response_createFAQ);
-
-  dispatch({ type: CREATE_FAQ, payload: new FAQ(response_createFAQ.data.faq) });
-}
-
-export const updateFAQ = (id: number, formValues: any) => async (dispatch: any) => {
-  const response_updateFAQ = await vifTech.put(`/faq/${id}`, { faq: {...formValues} });
-
-  console.log('response_updateFAQ:', response_updateFAQ);
-
-  dispatch({ type: UPDATE_FAQ, payload: new FAQ(response_updateFAQ.data.faq) });
-}
-
-export const deleteFAQ = (id: number) => async (dispatch: any) => {
-  const response_deleteFAQ = await vifTech.delete(`/faq/${id}`);
-
-  console.log('response_deleteFAQ:', response_deleteFAQ);
-
-  dispatch({ type: DELETE_FAQ, payload: id });
-}
-
-
-
-/********************************************************************************************* */
 /**************************************************************************         EVENTS */
 /********************************************************************************************* */
 export const fetchEvents = () => async (dispatch: any) => {
@@ -375,8 +338,6 @@ export const fetchMeetings = () => async (dispatch: any) => {
   });
 }
 
-
-
 export const createMeeting = (formValues: any) => async (dispatch: any) => {
   dispatch({ type: meetingActionTypes.CREATE_MEETING__REQUEST });
   await vifTech.post(`/meetings`, { meeting: { ...formValues } })
@@ -388,6 +349,60 @@ export const createMeeting = (formValues: any) => async (dispatch: any) => {
     console.log('createMeeting response:', response);
     dispatch({ type: meetingActionTypes.CREATE_MEETING__FAILURE, payload: {error: `ERROR: Failed to fetch meetings data`} });
   });
+}
+
+
+
+export const deleteMeeting = (id: number) => async (dispatch: any, getState: any) => {
+  dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__REQUEST });
+  await vifTech.delete(`/allowlist_emails/${id}`)
+  .then((response_delete) => {
+    console.log('deletedeleteMeeting response_delete:', response_delete);
+    dispatch({ type: meetingActionTypes.DELETE_MEETING__SUCCESS, payload: id });
+    dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__SUCCESS });
+    dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
+  })
+  .catch((response_delete) => {
+    console.log('deleteAllowlistEmail response_delete:', response_delete);
+    dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__FAILURE, payload: {error: `ERROR: Failed to delete meeting`} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         FAQ */
+/********************************************************************************************* */
+export const fetchFAQs = () => async (dispatch: any) => {
+  const response_fetchFAQs = await vifTech.get('/faq');
+
+  console.log('response_fetchFAQs:', response_fetchFAQs);
+
+  dispatch({ type: FETCH_FAQS, payload: FAQ.createFAQs(response_fetchFAQs.data.faqs) });
+}
+
+export const createFAQ = (formValues: any) => async (dispatch: any) => {
+  const response_createFAQ = await vifTech.post('/faq', { faq: {...formValues} });
+
+  console.log('response_createFAQ:', response_createFAQ);
+
+  dispatch({ type: CREATE_FAQ, payload: new FAQ(response_createFAQ.data.faq) });
+}
+
+export const updateFAQ = (id: number, formValues: any) => async (dispatch: any) => {
+  const response_updateFAQ = await vifTech.put(`/faq/${id}`, { faq: {...formValues} });
+
+  console.log('response_updateFAQ:', response_updateFAQ);
+
+  dispatch({ type: UPDATE_FAQ, payload: new FAQ(response_updateFAQ.data.faq) });
+}
+
+export const deleteFAQ = (id: number) => async (dispatch: any) => {
+  const response_deleteFAQ = await vifTech.delete(`/faq/${id}`);
+
+  console.log('response_deleteFAQ:', response_deleteFAQ);
+
+  dispatch({ type: DELETE_FAQ, payload: id });
 }
 
 
