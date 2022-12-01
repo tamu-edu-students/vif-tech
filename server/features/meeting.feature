@@ -47,6 +47,24 @@ Feature: Meeting
         And the meeting with id 2 will have 'title': 'Another meeting'
         And the meeting with id 2 will have 'owner_id': 2
     
+    Scenario: Create meeting with non-existant event
+        Given that I log in as admin
+        Then creating meeting with the following should return http code 404
+            | title | A meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+            | event_id | 10 |
+    
+    Scenario: Assign meeting rto non-existant event
+        Given that I log in as admin
+        And that I create a meeting with the following
+            | title | A meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+        Then updating meeting 1 with the following should return http code 404
+            | event_id | 10 |
+        
+    
     Scenario: Edit meeting
         # User created with id 1
         Given that I sign up and log in as a valid student
@@ -105,7 +123,7 @@ Feature: Meeting
         Given that I sign up and log in as a valid student
         Then 0 meetings should be in meeting DB
     
-    Scenario: Trying to create a meeting as non-admin
+    Scenario: Trying to create a meeting as student
         Given that I sign up and log in as a valid student
         And that I create a meeting with the following
             | title | A meeting |
