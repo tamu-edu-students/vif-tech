@@ -11,9 +11,9 @@ Rails.application.routes.draw do
   resources :faq, only: [:create, :new, :show, :index, :update, :destroy]
 
   get "abouts/find", to: "abouts#find"
-  resources :abouts do
-    resources :social_links
-  end
+  resources :abouts 
+  resources :social_links
+  
 
   # English: For each user, make a route to get user/:id/confirm_email
   resources :users do

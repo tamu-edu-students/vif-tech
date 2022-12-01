@@ -3,7 +3,7 @@ class AboutsController < ApplicationController
 
     def index
         render json: {
-                abouts: About.all, 
+                abouts: About.all
                 }, status: :ok
     end
 
@@ -12,7 +12,7 @@ class AboutsController < ApplicationController
         if @about
             render json: {
                 about: @about
-            }.to_json(include: ["social_links"]), status: :ok
+            }.to_json(include: [:social_links]), status: :ok
         else
             render json: {
                 errors: ["Record not found on the Abouts list"],
@@ -22,6 +22,7 @@ class AboutsController < ApplicationController
 
     def new
         @about = About.new
+        
     end
 
 
@@ -39,7 +40,7 @@ class AboutsController < ApplicationController
         if @about
             render json: {
                 about: @about,
-            }, status: :ok
+        }.to_json(include: [:social_links]), status: :ok
         else
             render json: {
                     errors: ["record not found"],
@@ -52,12 +53,18 @@ class AboutsController < ApplicationController
         if params["about"]["rank"] == nil
             params["about"]["rank"] == "normal"
         end
+        if params["about"]["social_links"] == nil
+            params["about"]["social_links"] == []
+        end
+        
         @about = About.new(about_params)
+        @about.save
+       
 
         if @about.save
             render json: {
                 about: @about
-            }.to_json(include: ["social_links"]), status: :created
+        }.to_json(include: [:social_links]), status: :created
         else
             render json: {
                 errors: ["Something went wrong when creating this record"],
@@ -72,10 +79,13 @@ class AboutsController < ApplicationController
 
     def update
         @about = About.find(params[:id])
+        
+        @about.social_links.destroy_all
+        
         if @about.update(about_params)
             render json: {
                 about: @about,
-                }, status: :ok
+                }.to_json(include: [:social_links]), status: :ok
         else
             render json: {
                 errors: @about.errors.full_messages,
@@ -98,6 +108,8 @@ class AboutsController < ApplicationController
 
 
     def about_params
-        params.require(:about).permit(:firstname, :lastname, :imgSrc, :role, :description, :rank, :social_links)
+        params.require(:about).permit(:firstname, :lastname, :imgSrc, :role, :description, :rank, :social_links_attributes => [:id, :facebook, :youtube, :github, :portfolio, :linkedin, :twitter, :about_id])
     end
+
+
 end

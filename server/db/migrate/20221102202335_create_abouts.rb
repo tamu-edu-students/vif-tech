@@ -7,7 +7,7 @@ class CreateAbouts < ActiveRecord::Migration[7.0]
       t.string :role
       t.text :description
       t.string :rank, :default => 'normal'
-      t.text :social_links
+    
 
       t.timestamps
     end

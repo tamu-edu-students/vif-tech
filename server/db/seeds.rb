@@ -11,3 +11,5 @@ AllowlistDomain.create(email_domain: "tamu.edu", usertype: "student")
 AllowlistDomain.create(email_domain: "arch.tamu.edu", usertype: "student")
 AllowlistDomain.create(email_domain: "exchange.tamu.edu", usertype: "student")
 
+about = About.create({firstname: "Testfirst", lastname: "Testlast", role: "Student Member"})
+social_link = SocialLink.create({facebook: "www.facebook.com", youtube: "www.youtube.com", twitter: "www.twitter.com", about_id: about.id})

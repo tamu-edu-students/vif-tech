@@ -7,7 +7,7 @@ class CreateSocialLinks < ActiveRecord::Migration[7.0]
       t.string :twitter
       t.string :linkedin
       t.string :github
-      t.belongs_to :about, null: false, foreign_key: true
+      t.references :about, null: false, foreign_key: true
 
       t.timestamps
     end

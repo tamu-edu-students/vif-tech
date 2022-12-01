@@ -1,6 +1,6 @@
 class About < ApplicationRecord
     has_many :social_links, dependent: :destroy
-    accepts_nested_attributes_for :social_links
+    accepts_nested_attributes_for :social_links, :allow_destroy => true
 
     validates :firstname, presence: true
     validates :firstname, length: { minimum: 1 }
@@ -10,5 +10,5 @@ class About < ApplicationRecord
     validates :rank,
     :inclusion  => { :in => ['director', 'faculty', 'normal', 'vif-tech'],
                      :message    => "%{value} is not a valid rank" }
-
+    
 end

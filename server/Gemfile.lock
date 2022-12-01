@@ -144,9 +144,6 @@ GEM
     ffi (1.15.5-x64-mingw-ucrt)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    httparty (0.20.0)
-      mime-types (~> 3.0)
-      multi_xml (>= 0.5.2)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
@@ -168,7 +165,6 @@ GEM
     minitest (5.16.3)
     msgpack (1.6.0)
     multi_test (1.1.0)
-    multi_xml (0.6.0)
     net-imap (0.3.1)
       net-protocol
     net-pop (0.1.2)
@@ -278,7 +274,6 @@ DEPENDENCIES
   debug
   dotenv-rails
   email_validator
-  httparty
   pg
   puma (~> 5.0)
   rack-cors

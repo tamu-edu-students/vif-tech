@@ -50,7 +50,22 @@ Feature: Manage About Page
         And I should have 1 About content in my DB
 
 
-    Scenario: Creating Ccontents with social_links
+    Scenario: Creating and Editing Contents with social_links
         Given that I log in as admin
-        And I create the following content firstname "Gena" and lastname "Hayman" and role "Faculty Advisor" and social_links {"facebook":"facebook.com"} on the About Page
-        And I see abouts
+        And I create the following content firstname "Gena" and lastname "Hayman" and role "Faculty Advisor" and social_links {"facebook":"www.facebook.com"} on the About Page
+        And I create the following content firstname "Abigail" and lastname "Freeman" and role "Industry Relations" and social_links {"facebook":"www.facebook.com/abigail", "portfolio": "www.checkmeout.com"} on the About Page   
+        When I change role to "Student Officer" and update social_links to {"facebook":"www.facebook.com/genahayman", "twitter": "www.twitter.com/tweetgena", "youtube": "www.youtube.com"} in the content with firstname "Gena" and lastname "Hayman"
+        Then the content with firstname "Gena" and lastname "Hayman" should NOT have social_links {"facebook": "www.facebook.com"} and role "Faculty Advisor"
+        And the content with firstname "Gena" and lastname "Hayman" and role "Student Officer" and social_links {"facebook":"www.facebook.com/genahayman", "twitter": "www.twitter.com/tweetgena", "youtube": "www.youtube.com"} should be found in my DB
+        And I should have 2 About content in my DB
+
+    Scenario: Contents with social_links should delete social_links when deleted
+        Given that I log in as admin
+        And I create the following content firstname "Abigail" and lastname "Freeman" and role "Industry Relations" and social_links {"facebook":"www.facebook.com/abigail", "portfolio": "www.checkmeout.com"} on the About Page
+        And I create the following content firstname "Gena" and lastname "Hayman" and role "Faculty Advisor" and social_links {"facebook":"www.facebook.com"} on the About Page
+        Then I should have 2 About content in my DB
+        And I should have 2 content in my SocialLink DB 
+        When I delete the content firstname "Gena" and lastname "Hayman" and role "Faculty Advisor" on the About Page
+        Then the content with firstname "Gena" and lastname "Hayman" and social_links {"facebook": "www.facebook.com"} should NOT be found in the About DB
+        And I should have 1 About content in my DB
+        And I should have 1 content in my SocialLink DB
