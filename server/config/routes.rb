@@ -60,4 +60,14 @@ Rails.application.routes.draw do
   get "users/:id/user_meetings/not_available", to: "users#get_invitations_na"
   delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
   delete "users/:id/user_meetings/not_available", to: "users#delete_na_invitations"
+
+  resources :events, only: [:index, :create, :show, :update, :destroy]
+  get "events/:id/availabilities", to: "events#get_availabilities"
+  get "events/:id/meetings", to: "events#get_meetings"
+  get "events/:id/users", to: "events#get_users"
+
+  post "events/:id/signup", to: "events#signup"
+  post "events/:id/signup/:user_id", to: "events#signup"
+  delete "events/:id/signout", to: "events#signout"
+  delete "events/:id/signout/:user_id", to: "events#signout"
 end

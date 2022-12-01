@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :confirm_user_logged_in, except: [:new, :create, :confirm_email]
-  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting, :delete]
+  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting]
   before_action :confirm_meeting_exists, only: [:assigned_to_meeting?, :add_to_meeting, :update_meeting, :delete_from_meeting]
 
   def confirm_user_logged_in

@@ -4,6 +4,7 @@ class AllowlistDomainsController < ApplicationController
   before_action :confirm_requester_is_rep_or_admin, only: [:index, :show]
   before_action :confirm_uniquness, only: [:create]
 
+
   def index
     @domains = AllowlistDomain.all
 
