@@ -69,9 +69,11 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
           <VolunteerTimesheetRow
             start_time={start_time}
             end_time={end_time}
-            meeting={meetings.find((meeting: Meeting) =>
-              meeting.start_time === start_time && meeting.end_time === end_time
-            )}
+            event_id={event?.id}
+            meeting={
+              meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time)
+              ?? null
+            }
           />
         </React.Fragment>
       );

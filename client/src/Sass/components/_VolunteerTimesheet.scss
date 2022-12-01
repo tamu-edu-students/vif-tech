@@ -84,6 +84,15 @@
           cursor: pointer;
           transition: all 0.1s;
 
+          &--available {
+            background-color: $color-brand-yellow-dark;
+
+            &:hover {
+              background-color: $color-brand-yellow;
+              color: $color-black;
+            }
+          }
+
           &:hover {
             background-color: $color-gray;
           }
