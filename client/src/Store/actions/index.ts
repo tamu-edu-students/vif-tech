@@ -247,6 +247,7 @@ export const deleteAllowlistEmail = (id: number, allowlistTitle: string) => asyn
     dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS, payload: id });
     dispatch({ type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS });
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistEmail response_delete:', response_delete);
@@ -262,6 +263,7 @@ export const deleteAllowlistDomain = (id: number, allowlistTitle: string) => asy
     dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS, payload: id });
     dispatch({ type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS });
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistDomain response_delete:', response_delete);
