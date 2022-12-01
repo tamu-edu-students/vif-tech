@@ -708,3 +708,36 @@ Feature: Allowlist Management
         And I delete company with id 1
         And I should see 0 new email in the database
         And I should see 3 domain in the database
+
+    Scenario: Company deletion cascades to allowlists and then to users
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I allow a new company domain test2.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james1 |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that I sign up with the following
+            | firstname | james2 |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test2@test2.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that I log in as admin
+        Then the user with firstname james1 and lastname bond should be found in the user DB
+        And the user with firstname james2 and lastname bond should be found in the user DB
+        And I should see allowlist emails and domains in company 1 when indexing
+        And I should see 1 new email in the database
+        And I should see 4 domain in the database
+        Given I delete company with id 1
+        And I should see 0 new email in the database
+        And I should see 3 domain in the database
+        And the user with firstname james1 and lastname bond should NOT be found in the user DB
+        And the user with firstname james2 and lastname bond should NOT be found in the user DB
