@@ -7,11 +7,13 @@ import { fetchEvents, fetchAvailabilities } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
 import Event from 'Shared/entityClasses/Event';
+import Availability from 'Shared/entityClasses/Availability';
 
 
 interface OwnProps {
   start_time: string;
   end_time: string;
+  availability: Availability;
 }
 
 interface OwnState {
