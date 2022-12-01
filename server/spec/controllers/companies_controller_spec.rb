@@ -7,9 +7,9 @@ RSpec.describe CompaniesController, :type => :controller do
         
         Company.create(name: "disney", description: "blah")
         Company.create(id: 3, name: "dreamworks", description: "blah")
-        AllowlistDomain.create(email_domain: "disney.com", usertype: "company representative", company_id: 1)
-        AllowlistDomain.create(email_domain: "waltdisney.com", usertype: "company representative", company_id: 1)
-        AllowlistDomain.create(email_domain: "dreamworks.com", usertype: "company representative", company_id: 3)
+        AllowlistDomain.create(domain: "disney.com", usertype: "company representative", company_id: 1)
+        AllowlistDomain.create(domain: "waltdisney.com", usertype: "company representative", company_id: 1)
+        AllowlistDomain.create(domain: "dreamworks.com", usertype: "company representative", company_id: 3)
         AllowlistEmail.create(email: "a@disney.com", usertype: "company representative", company_id: 1)
         AllowlistEmail.create(email: "b@disney.com", usertype: "company representative", company_id: 1)
         AllowlistEmail.create(email: "a@waltdisney.com", usertype: "company representative", company_id: 1)
@@ -63,12 +63,10 @@ RSpec.describe CompaniesController, :type => :controller do
             session["user_id"] = user.id 
             get :index
             expect(response).to have_http_status(:ok)
-            p 'companies_controller_spec.rb index 1'
             parsed_body = JSON.parse(response.body)
         end
 
         it "should display some fields of 1 or more companies if logged in as student" do
-            p 'companies_controller_spec.rb index 2'
             user=User.find_by email: 'js@student.com' 
             session["user_id"] = user.id 
             expect(user.id).to eq(2)
@@ -83,7 +81,6 @@ RSpec.describe CompaniesController, :type => :controller do
         end
         
         it "should display some fields of 1 or more companies if logged in as representative" do
-            p 'companies_controller_spec.rb index 3'
             user=User.find_by email: 'a@disney.com' 
             session["user_id"] = user.id 
             expect(user.id).to eq(4)
@@ -133,10 +130,10 @@ RSpec.describe CompaniesController, :type => :controller do
             expect(parsed_body["company"]["name"]).to eq('dreamworks')
             expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at"])
             parsed_body["allowlist_domains"].each do |record|
-                expect(record.keys).to eq(["id", "email_domain", "usertype", "company_id"])
+                expect(record.keys).to eq(["id", "domain", "usertype", "company_id"])
             end
             parsed_body["allowlist_emails"].each do |record|
-                expect(record.keys).to match_array(["id", "email", "usertype", "company_id", "created_at", "updated_at", "isPrimaryContact"])
+                expect(record.keys).to match_array(["id", "email", "usertype", "company_id", "created_at", "updated_at", "is_primary_contact"])
             end
         end
 
@@ -216,7 +213,6 @@ RSpec.describe CompaniesController, :type => :controller do
 
         it "should display 'no such company found for editting' if that one company is not found" do
             email = 'admin@admin.com'
-            p 'trying "'+email+'", :params with :company part'
 
             user = User.find_by email: email 
             session["user_id"] = user.id
@@ -231,7 +227,6 @@ RSpec.describe CompaniesController, :type => :controller do
     describe "destroy" do
         it "should let admin to delete that company" do
             email = 'admin@admin.com'
-            p 'trying '+email
 
             AllowlistDomain.where(company_id: 1).destroy_all
             AllowlistEmail.where(company_id: 1).destroy_all
@@ -247,7 +242,6 @@ RSpec.describe CompaniesController, :type => :controller do
 
         it "should not let student to delete that company" do
             email = 'js@student.com'
-            p 'trying '+email
 
             AllowlistDomain.where(company_id: 1).destroy_all
             AllowlistEmail.where(company_id: 1).destroy_all
@@ -262,7 +256,6 @@ RSpec.describe CompaniesController, :type => :controller do
 
         it "should not let representative to delete that company" do
             email = 'a@disney.com'
-            p 'trying '+email
 
             AllowlistDomain.where(company_id: 3).destroy_all
             AllowlistEmail.where(company_id: 3).destroy_all
@@ -277,7 +270,6 @@ RSpec.describe CompaniesController, :type => :controller do
 
         it "should display 'no such company found for deleting' if that one company is not found" do
             email = 'admin@admin.com'
-            p 'trying '+email
 
             AllowlistDomain.where(company_id: 10000).destroy_all
             AllowlistEmail.where(company_id: 10000).destroy_all
@@ -295,8 +287,6 @@ RSpec.describe CompaniesController, :type => :controller do
 
     describe "company count, user count" do
         it "shows current count of companies and users in the test db" do
-            p 'current User table contains '+User.count.to_s+' users:'
-            p 'current Company table contains '+Company.count.to_s+' companies:'
         end
     end
 end
