@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_28_185617) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "email_domain"
     t.string "usertype"
@@ -48,6 +48,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_185617) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "company_interests", force: :cascade do |t|
+    t.integer "company_id", null: false
+    t.integer "interest_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_interests_on_company_id"
+    t.index ["interest_id"], name: "index_company_interests_on_interest_id"
+  end
+
   create_table "event_signups", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "event_id", null: false
@@ -67,8 +76,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_185617) do
   end
 
   create_table "faqs", force: :cascade do |t|
-    t.string "question"
-    t.text "answer"
+    t.string "question", null: false
+    t.text "answer", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "focus", force: :cascade do |t|
+    t.string "focus"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "interests", force: :cascade do |t|
+    t.string "interest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -90,7 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_185617) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status"
+    t.string "status", default: "pending"
     t.index ["meeting_id"], name: "index_user_meetings_on_meeting_id"
     t.index ["user_id"], name: "index_user_meetings_on_user_id"
   end
@@ -119,6 +140,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_28_185617) do
   add_foreign_key "allowlist_emails", "companies"
   add_foreign_key "availabilities", "events"
   add_foreign_key "availabilities", "users"
+  add_foreign_key "company_interests", "companies"
+  add_foreign_key "company_interests", "interests"
   add_foreign_key "event_signups", "events"
   add_foreign_key "event_signups", "users"
   add_foreign_key "meetings", "events"

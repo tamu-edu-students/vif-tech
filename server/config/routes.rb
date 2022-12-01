@@ -70,4 +70,6 @@ Rails.application.routes.draw do
   post "events/:id/signup/:user_id", to: "events#signup"
   delete "events/:id/signout", to: "events#signout"
   delete "events/:id/signout/:user_id", to: "events#signout"
+
+  resources :foci
 end
