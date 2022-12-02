@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     params = CGI.parse(uri.query)
     @user = nil
     if params.key?("email")
-      @user = User.find_by_email(params["email"][0])
+      @user = User.where.like(email: params["email"][0]).first
     elsif params.key?("firstname") and params.key?("lastname")
       # Use this only for testing purposes as firstname-lastname pair is not guarenteed to be unique.
       @user = User.find_by firstname: params["firstname"], lastname: params["lastname"]
@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     end
 
     # Check for email uniqueness
-    existing_user = User.find_by_email(params["user"]["email"]) # TODO 'and usertype == params[usertype]'
+    existing_user = User.where.like(email: params["user"]["email"]).first # TODO 'and usertype == params[usertype]'
     if existing_user != nil # TODO once multiple users, allow email reuse for different account types (eg. I can have an admin and a student account)
       return render json: {
                errors: ["Email already in use"],
@@ -78,8 +78,8 @@ class UsersController < ApplicationController
     end
 
     # Check that the email is allowed
-    exact_match = AllowlistEmail.find_by(email: params["user"]["email"].downcase, usertype: params["user"]["usertype"])
-    domain_match = AllowlistDomain.find_by(email_domain: params["user"]["email"].downcase.split("@").last, usertype: params["user"]["usertype"])
+    exact_match = AllowlistEmail.where(usertype: params["user"]["usertype"]).where.like(email: params["user"]["email"]).first
+    domain_match = AllowlistDomain.where(usertype: params["user"]["usertype"]).where.like(domain: params["user"]["email"].split("@").last).first
     if exact_match == nil && domain_match == nil
       return render json: {
                errors: ["Email not allowed"],

@@ -103,7 +103,7 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
             showsEmails
             showsDomains
             primaryContact={primaryContact}
-            allowlist_emails={allowlist_emails.filter((allowlist_email: AllowlistEmail) => !allowlist_email.isPrimaryContact)}
+            allowlist_emails={allowlist_emails.filter((allowlist_email: AllowlistEmail) => !allowlist_email.is_primary_contact)}
             allowlist_domains={allowlist_domains}
           />
         </React.Fragment>

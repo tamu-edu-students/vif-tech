@@ -82,3 +82,46 @@ Feature: Event
         Then there should be 1 events in the DB
         And I request delete event 1 and recieve code 403
         Then there should be 1 events in the DB
+    
+    Scenario: Update event causes cascade delete
+        Given that I log in as admin
+        Then creating an event with the following should return code 201
+            | title | Mock interview |
+            | description | Something |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:30:00' |
+        And that I create a meeting with the following
+            | title | Meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+            | event_id | 1 |
+        And that I create a meeting with the following
+            | title | Another meeting |
+            | start_time | '2022-10-18 18:20:00' |
+            | end_time | '2022-10-18 18:30:00' |
+            | event_id | 1 |
+        And 2 meetings should be in meeting DB
+        And I request update event 1 with the following and recieve code 200
+            | end_time | '2022-10-18 18:20:00' |
+        And 1 meetings should be in meeting DB
+
+    Scenario: Delete event causes cascade delete
+        Given that I log in as admin
+        Then creating an event with the following should return code 201
+            | title | Mock interview |
+            | description | Something |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:30:00' |
+        And that I create a meeting with the following
+            | title | Meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+            | event_id | 1 |
+        And that I create a meeting with the following
+            | title | Another meeting |
+            | start_time | '2022-10-18 18:20:00' |
+            | end_time | '2022-10-18 18:30:00' |
+            | event_id | 1 |
+        And 2 meetings should be in meeting DB
+        And I request delete event 1 and recieve code 200
+        And 0 meetings should be in meeting DB
