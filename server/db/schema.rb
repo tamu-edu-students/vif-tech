@@ -48,15 +48,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "company_interests", force: :cascade do |t|
-    t.integer "company_id", null: false
-    t.integer "interest_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_company_interests_on_company_id"
-    t.index ["interest_id"], name: "index_company_interests_on_interest_id"
-  end
-
   create_table "event_signups", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "event_id", null: false
@@ -84,12 +75,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
 
   create_table "focus", force: :cascade do |t|
     t.string "focus"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "interests", force: :cascade do |t|
-    t.string "interest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -140,8 +125,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
   add_foreign_key "allowlist_emails", "companies"
   add_foreign_key "availabilities", "events"
   add_foreign_key "availabilities", "users"
-  add_foreign_key "company_interests", "companies"
-  add_foreign_key "company_interests", "interests"
   add_foreign_key "event_signups", "events"
   add_foreign_key "event_signups", "users"
   add_foreign_key "meetings", "events"
