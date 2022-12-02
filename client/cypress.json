@@ -2,5 +2,8 @@
   "baseUrl": "http://localhost:3000",
   "testFiles": "**/*.feature",
   "video": false,
-  "screenshotOnRunFailure": false
+  "screenshotOnRunFailure": false,
+  "env": {
+    "TAGS": "not @ignore"
+  }
 }

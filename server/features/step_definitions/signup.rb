@@ -20,6 +20,35 @@ Given("that an user signs up as a valid student") do
   expect(ret.status).to eq(201)
 end
 
+Given("that an user signs up as a valid volunteer") do
+  firstname = SecureRandom.alphanumeric(8)
+  lastname = SecureRandom.alphanumeric(8)
+  password = SecureRandom.alphanumeric(16)
+  email = SecureRandom.alphanumeric(8) + "@tamu.edu"
+  ret = page.driver.post("/users", { 'user': { 'firstname': firstname, 'lastname': lastname, 'password': password, 'password_confirmation': password, 'email': email, 'usertype': "volunteer" } })
+  expect(ret.status).to eq(201)
+end
+
+Given("I delete my account") do
+  ret = page.driver.delete("/users/")
+  expect(ret.status).to eq(200)
+end
+
+Given("I delete the account for id {int}") do |int|
+  ret = page.driver.delete("/users/" + int.to_s)
+  expect(ret.status).to eq(200)
+end
+
+Given("I fail to delete the account for id {int}") do |int|
+  ret = page.driver.delete("/users/" + int.to_s)
+  expect(ret.status).to eq(403)
+end
+
+Given /^that I update my password to ([^\']*)$/ do |pw|
+  ret = page.driver.put("/users/password", { 'user': { 'password': pw, 'password_confirmation': pw } })
+  expect(ret.status).to eq(200)
+end
+
 Given /^that the user verified their email ([^\']*)$/ do |email|
   @user = User.find_by_email(email)
   ret = page.driver.get("/users/" + @user.confirm_token + "/confirm_email")
@@ -61,6 +90,7 @@ end
 Then /^the user with ([^\'^\ ]*) ([^\'^\ ]*) and ([^\'^\ ]*) ([^\'^\ ]*) should be found in the user DB$/ do |key1, value1, key2, value2|
   ret = page.driver.get("/users/find/?" + key1 + "=" + value1 + "&" + key2 + "=" + value2)
   ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
   expect(ret_body["user"][key1]).to eq(value1)
   expect(ret_body["user"][key2]).to eq(value2)
 end
@@ -106,6 +136,12 @@ Then("I should be logged in") do
   ret = page.driver.get("/logged_in")
   ret_body = JSON.parse ret.body
   expect(ret_body["logged_in"]).to be true
+end
+
+Then("I should not be logged in") do
+  ret = page.driver.get("/logged_in")
+  ret_body = JSON.parse ret.body
+  expect(ret_body["logged_in"]).to be false
 end
 
 Then("the company with id {int} should have user with email {string}") do |company_id, email|

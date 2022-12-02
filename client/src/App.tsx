@@ -1,43 +1,69 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
-import history from "./history";
+import { IRootState } from 'Store/reducers';
+import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+import { authActionTypes } from 'Store/actions/types';
+import { fetchLoginStatus, logOut } from 'Store/actions'
+import history from 'History/history';
 
-import './sass/main.scss';
+import { waitThen } from 'Shared/utils';
 
-import HomePage from './views/HomePage/HomePage';
-import LoginPage from './views/LoginPage/LoginPage';
-import RedirectPrompt from './components/RedirectPrompt';
-import Users from './components/Users';
-import UserCreate from './components/UserCreate';
+import FAQPage from 'Views/FAQPage/FAQPage';
+import HomePage from 'Views/HomePage/HomePage';
+import LoginPage from 'Views/LoginPage/LoginPage';
+import UsersPage from 'Views/UsersPage/UsersPage';
+import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
+import ProfilePage from 'Views/ProfilePage/ProfilePage';
 
-import { fetchLoginStatus, logOut } from './store/actions'
-import ProfilePage from './views/ProfilePage/ProfilePage';
+import RedirectPrompt from 'Components/RedirectPrompt';
+import Modal from 'Components/Modal/Modal';
 
-interface IAppProps {
-  fetchLoginStatus?: any;
-  logOut?: any;
-  user: User;
-  isLoggedIn: boolean;
+import './Sass/main.scss';
+import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+
+interface OwnProps {
 }
 
-class App extends React.Component<IAppProps, {}> {
+const mapStateToProps = (state: IRootState) => {
+  return {
+    user: state.auth.user,
+    isLoggedIn: state.auth.isLoggedIn,
+    shouldShowModal: state.modal.shouldRender,
+
+    loginStatusIsStale: state.auth.isStale,
+    isLoading_fetchLoginStatus: createLoadingSelector([authActionTypes.FETCH_LOGIN_STATUS])(state),
+    errors_fetchLoginStatus: createErrorMessageSelector([authActionTypes.FETCH_LOGIN_STATUS])(state),
+  };
+}
+const mapDispatchToProps = { fetchLoginStatus, logOut };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
+class App extends React.Component<Props, {}> {
   componentDidMount(): void {
-    if (!(window as any).Cypress) {
+    if ((window as any).Cypress) {
+      waitThen(150, () => this.props.fetchLoginStatus());
+    }
+    else {
       this.props.fetchLoginStatus();
     }
   }
 
-  render() {
-    if (this.props.isLoggedIn === null) {
+  render(): React.ReactElement<Props> {
+    if (this.props.isLoggedIn === null || this.props.isLoading_fetchLoginStatus) {
       return (
-        <>
         <div>Checking login status...</div>
-        {
-          (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
-        }
-        </>
       );
+    }
+
+    if (this.props.errors_fetchLoginStatus.length > 0) {
+      this.props.errors_fetchLoginStatus.forEach((error: string) => console.error(error));
+      // return (
+      //   <div>{this.props.errors_fetchLoginStatus}</div>
+      // );
     }
 
     return (
@@ -45,6 +71,7 @@ class App extends React.Component<IAppProps, {}> {
         <Router history={history}>
           <nav className="nav">
             <ul>
+              <li><Link to="/faq" data-testid="faq-page-button">FAQ</Link></li>
               {
                 this.props.user
                 ? (
@@ -65,10 +92,6 @@ class App extends React.Component<IAppProps, {}> {
             </ul>
           </nav>
 
-          {
-            (window as any).Cypress && <button onClick={this.props.fetchLoginStatus} style={{opacity: "0", width: "0", height: "0"}}>fetchLoginStatus</button>
-          }
-
           <Switch>
             <Route exact path="/">
               <HomePage />
@@ -85,11 +108,15 @@ class App extends React.Component<IAppProps, {}> {
             </Route>
 
             <Route exact path="/users">
-              <Users />
+              <UsersPage />
+            </Route>
+
+            <Route exact path="/faq">
+              <FAQPage />
             </Route>
 
             <Route exact path="/users/new">
-              <UserCreate />
+              <RegistrationPage />
             </Route>
 
             <Route exact path="/users/new/success">
@@ -130,17 +157,14 @@ class App extends React.Component<IAppProps, {}> {
               </section>
             </Route>
           </Switch>
+
+          {
+            this.props.shouldShowModal && <Modal />
+          }
         </Router>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    user: state.auth.user,
-    isLoggedIn: state.auth.isLoggedIn
-  };
-}
-
-export default connect(mapStateToProps, {fetchLoginStatus, logOut})(App);
+export default connector(App);

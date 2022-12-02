@@ -11,6 +11,7 @@ Feature: Student signup
             | password_confirmation | password1! |
             | email | test@tamu.edu |
             | usertype | student |
+        And that I log in as admin
         Then the user with email test@tamu.edu should be found in the user DB
         And the user with email test@tamu.edu should be marked as not verified
         And there should be 1 sent emails
@@ -24,6 +25,7 @@ Feature: Student signup
             | email | test@tamu.edu |
             | usertype | student |
         Given that an user signs up as a valid student
+        And that I log in as admin
         Then the user with email test@tamu.edu should NOT be found in the user DB
     
     Scenario: Show students
@@ -101,6 +103,7 @@ Feature: Student signup
             | email | test@tamu.edu |
             | usertype | student |   
         And that the user verified their email test@tamu.edu
+        And that I log in as admin
         Then the user with firstname james and lastname bond should be found in the user DB
         And the user with firstname jane and lastname bond should NOT be found in the user DB
         And the user with email test@tamu.edu should be marked as verified
@@ -139,3 +142,74 @@ Feature: Student signup
             | usertype | student |
             | company_id | 1 |
         Then the user with email test@test.com should NOT be found in the user DB
+
+    Scenario: Signup as student and delete account
+        Given that I sign up with the following
+            | firstname | john |
+            | lastname | doe |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should be found in the user DB
+        And that the user verified their email test@tamu.edu
+        And that I log in with email test@tamu.edu and password password1!
+        And I delete my account
+        And that I log in as admin
+        Then the user with email test@tamu.edu should NOT be found in the user DB
+
+    Scenario: Signup as student and delete account
+        Given that I sign up with the following
+            | firstname | john |
+            | lastname | doe |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should be found in the user DB
+        And that the user verified their email test@tamu.edu
+        And that I log in with email test@tamu.edu and password password1!
+        And I delete the account for id 2
+        And that I log in as admin
+        Then the user with email test@tamu.edu should NOT be found in the user DB
+
+    Scenario: Signup as student and admin deletes account
+        Given that I sign up with the following
+            | firstname | john |
+            | lastname | doe |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should be found in the user DB
+        And that the user verified their email test@tamu.edu
+        And that I log in as admin
+        And I delete the account for id 2
+        Then the user with email test@tamu.edu should NOT be found in the user DB
+
+    Scenario: Non-admin cannot delete another person's account
+        Given that I sign up with the following
+            | firstname | john |
+            | lastname | doe |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should be found in the user DB
+        And that the user verified their email test@tamu.edu
+        And that I log in with email test@tamu.edu and password password1!
+        And I fail to delete the account for id 1
+        And that I log in as admin
+        Then the user with email admin@admin.com should be found in the user DB
+
+    Scenario: Change my password
+        Given that I log in as admin
+        Then I should be logged in
+        And that I update my password to new_pw
+        Then I should not be logged in
+        And that I log in with email admin@admin.com and password new_pw
+        Then I should be logged in
+        And that I log out
+        Then I should not be logged in
+        And that I log in with email admin@admin.com and password pw
+        Then I should not be logged in

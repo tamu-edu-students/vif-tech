@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   get "/logged_in", to: "sessions#is_logged_in?"
 
   get "/users/find", to: "users#find"
-  resources :users, only: [:create, :show, :index, :new]
+  resources :users, only: [:create, :show, :index, :new, :destroy]
+  delete "/users", to: "users#destroy"
+  put "/users/password", to: "users#update_password"
 
   get "/faq/find", to: "faq#find"
   resources :faq, only: [:create, :new, :show, :index, :update, :destroy]
@@ -39,6 +41,8 @@ Rails.application.routes.draw do
   delete "/users/:id/meetings/:meeting_id", to: "users#delete_from_meeting"
 
   resources :meetings, only: [:create, :show, :index, :update, :destroy]
+  get "meetings/:id/invitees", to: "meetings#get_invitees"
+  put "meetings/:id/invitees", to: "meetings#swap_invitees"
   resources :user_meetings, only: [:show, :index]
 
   get "/companies", to: "companies#index"
@@ -46,8 +50,32 @@ Rails.application.routes.draw do
   post "/companies", to: "companies#create"
   get "/companies/:id", to: "companies#show"
   get "/companies/:id/edit", to: "companies#edit"
+  get "/companies/:id/users", to: "companies#reps"
+  get "/companies/:id/availabilities", to: "companies#rep_availabilities"
   put "/companies/:id", to: "companies#update"
   delete "/companies/:id", to: "companies#destroy"
-  post "/users/:id/companies/:id", to: "users#add_to_company"
-  delete "users/:id/companies/:id", to: "users#delete_from_company"
+  # post "/users/:id/companies/:company_id", to: "users#add_to_company"
+  # delete "users/:id/companies/:company_id", to: "users#delete_from_company"
+  get "/companies/public", to: "companies#public_index", as: "public_index"
+
+  resources :availabilities, only: [:create, :show, :index, :update, :destroy]
+  get "users/:id/availabilities", to: "users#get_availabilies"
+  get "users/:id/meetings/owned/available", to: "users#get_owned_and_avail_meetings"
+  get "users/:id/meetings/owned/not_available", to: "users#get_owned_but_na_meetings"
+  get "users/:id/user_meetings/available", to: "users#get_invitations_avail"
+  get "users/:id/user_meetings/not_available", to: "users#get_invitations_na"
+  delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
+  delete "users/:id/user_meetings/not_available", to: "users#delete_na_invitations"
+
+  resources :events, only: [:index, :create, :show, :update, :destroy]
+  get "events/:id/availabilities", to: "events#get_availabilities"
+  get "events/:id/meetings", to: "events#get_meetings"
+  get "events/:id/users", to: "events#get_users"
+
+  post "events/:id/signup", to: "events#signup"
+  post "events/:id/signup/:user_id", to: "events#signup"
+  delete "events/:id/signout", to: "events#signout"
+  delete "events/:id/signout/:user_id", to: "events#signout"
+
+  resources :event_signups, only: [:index, :show]
 end

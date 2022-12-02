@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": ["cypress", "@testing-library/cypress"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,13 +19,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "src"
   },
   "include": [
-    "src"
+    "src",
+    "node_modules/cypress",
+    "cypress/**/*.js"
   ],
   "typeRoots": [
-    "./typings",
+    "./Typings",
     "./node_modules/@types/"
   ]
 }

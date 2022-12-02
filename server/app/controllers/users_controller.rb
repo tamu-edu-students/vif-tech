@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :confirm_user_logged_in, except: [:new, :create, :confirm_email]
-  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting, :delete]
+  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting]
   before_action :confirm_meeting_exists, only: [:assigned_to_meeting?, :add_to_meeting, :update_meeting, :delete_from_meeting]
 
   def confirm_user_logged_in
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     params = CGI.parse(uri.query)
     @user = nil
     if params.key?("email")
-      @user = User.find_by_email(params["email"][0])
+      @user = User.where.like(email: params["email"][0]).first
     elsif params.key?("firstname") and params.key?("lastname")
       # Use this only for testing purposes as firstname-lastname pair is not guarenteed to be unique.
       @user = User.find_by firstname: params["firstname"], lastname: params["lastname"]
@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     end
 
     # Check for email uniqueness
-    existing_user = User.find_by_email(params["user"]["email"]) # TODO 'and usertype == params[usertype]'
+    existing_user = User.where.like(email: params["user"]["email"]).first # TODO 'and usertype == params[usertype]'
     if existing_user != nil # TODO once multiple users, allow email reuse for different account types (eg. I can have an admin and a student account)
       return render json: {
                errors: ["Email already in use"],
@@ -78,8 +78,8 @@ class UsersController < ApplicationController
     end
 
     # Check that the email is allowed
-    exact_match = AllowlistEmail.find_by(email: params["user"]["email"].downcase, usertype: params["user"]["usertype"])
-    domain_match = AllowlistDomain.find_by(email_domain: params["user"]["email"].downcase.split("@").last, usertype: params["user"]["usertype"])
+    exact_match = AllowlistEmail.where(usertype: params["user"]["usertype"]).where.like(email: params["user"]["email"]).first
+    domain_match = AllowlistDomain.where(usertype: params["user"]["usertype"]).where.like(domain: params["user"]["email"].split("@").last).first
     if exact_match == nil && domain_match == nil
       return render json: {
                errors: ["Email not allowed"],
@@ -107,7 +107,6 @@ class UsersController < ApplicationController
 
     @user = User.new(user_params)
     if @user.save
-      login!
       resp = UserMailer.registration_confirmation(@user).deliver_now
       if params["user"]["usertype"] == "company representative"
         company.users << @user
@@ -254,14 +253,138 @@ class UsersController < ApplicationController
     # write this in users_controller or companies_controller?
     # should i use foreign key instead of :id?
     @user = User.find_by_id(params[:id])
-    @company = Company.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:company_id])
     @company.users << @user
   end
 
   def delete_from_company
     @user = User.find_by_id(params[:id])
-    @company = Company.find_by_id(params[:id])
+    @company = Company.find_by_id(params[:company_id])
     @company.users.delete(@user)
+  end
+
+  def destroy
+
+    # Deletes a specific user
+    if params[:id] != nil
+      @user = User.find(params[:id])
+      if !((@current_user == @user) || (@current_user.usertype == "admin"))
+        render json: {
+                 error: "Action not allowed",
+               }, status: :forbidden
+        return
+      end
+    else
+      @user = @current_user
+    end
+
+    if @user.destroy
+      render json: {
+               company: @user,
+             }, status: :ok
+    else
+      render json: {
+               errors: ["something went wrong when deleting this user"],
+             }, status: :internal_server_error
+    end
+  end
+
+  def update_password
+    if @current_user.update(password_params)
+      logout!
+      render json: {
+        user: @user,
+      }, status: :ok
+    else
+      render json: {
+               errors: ["something went wrong when updating your password"],
+             }, status: :internal_server_error
+    end
+  end
+
+  # get "users/:id/availabilities", to: "users#get_availabilies"
+  def get_availabilies
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @availabilities = User.find_by_id(params[:id]).availabilities
+    render json: {
+             availabilities: @availabilities,
+           }, status: :ok
+  end
+
+  # get "users/:id/meetings/owned/available", to: "users#get_owned_and_avail_meetings"
+  def get_owned_and_avail_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             meetings: User.find_by_id(params[:id]).owned_meetings_available_for,
+           }, status: :ok
+  end
+
+  # get "users/:id/meetings/owned/not_available", to: "users#get_owned_but_na_meetings"
+  def get_owned_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             meetings: User.find_by_id(params[:id]).owned_meetings_not_available_for,
+           }, status: :ok
+  end
+
+  # get "users/:id/user_meetings/available", to: "users#get_invitations_avail"
+  def get_invitations_avail
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             user_meetings: User.find_by_id(params[:id]).meeting_invitations_available_for,
+           }, status: :ok
+  end
+
+  # get "users/:id/user_meetings/not_available", to: "users#get_invitations_na"
+  def get_invitations_na
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    render json: {
+             user_meetings: User.find_by_id(params[:id]).meeting_invitations_not_available_for,
+           }, status: :ok
+  end
+
+  # delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
+  def delete_owned_but_na_meetings
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @meetings = User.find_by_id(params[:id]).owned_meetings_not_available_for
+    @meetings.each do |meeting|
+      if !meeting.destroy
+        render json: {
+                 errors: meeting.errors.full_messages,
+               }, status: :bad_request
+        return
+      end
+    end
+    render json: {}, status: :ok
+  end
+
+  # delete "users/:id/user_meetings/not_available", to: "users#delete_na_invitations"
+  def delete_na_invitations
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    @user_meetings = User.find_by_id(params[:id]).meeting_invitations_not_available_for
+    @user_meetings.each do |um|
+      if !um.destroy
+        render json: {
+                 errors: um.errors.full_messages,
+               }, status: :bad_request
+        return
+      end
+    end
+    render json: {}, status: :ok
   end
 
   private
@@ -272,5 +395,19 @@ class UsersController < ApplicationController
 
   def user_meeting_params
     params.require(:user_meeting).permit(:status)
+  end
+
+  def password_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def confirm_requester_is_owner_or_admin(user_id)
+    if !(current_user.id == user_id or current_user.usertype == "admin")
+      render json: {
+               errors: ["User does not have previleges for requested action"],
+             }, status: :forbidden
+      return false
+    end
+    return true
   end
 end

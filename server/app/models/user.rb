@@ -17,6 +17,11 @@ class User < ApplicationRecord
   has_many :user_meetings, dependent: :destroy
   has_many :invited_meetings, through: :user_meetings, source: :meeting
 
+  has_many :availabilities, dependent: :destroy
+
+  has_many :event_signups, dependent: :destroy
+  has_many :events, through: :event_signups, source: :event
+
   belongs_to :allowlist_domain, optional: true
   belongs_to :allowlist_email, optional: true
 
@@ -47,11 +52,38 @@ class User < ApplicationRecord
     return UserMeeting.where(status: :declined, user: self).map { |um| um.meeting }
   end
 
+  def owned_meetings_available_for
+    # NOTE: if we end up with more than 10^4 meetings, this will take a while to return
+    meetings = []
+    availabilities.each { |x| meetings |= x.associated_owned_meetings }
+    return meetings
+  end
+
+  def owned_meetings_not_available_for
+    return owned_meetings - owned_meetings_available_for
+  end
+
+  def meeting_invitations_available_for
+    # NOTE: if we end up with more than 10^4 meetings, this will take a while to return
+    return UserMeeting.where(user: self, meeting: invited_meetings_available_for)
+  end
+
+  def meeting_invitations_not_available_for
+    meetings = invited_meetings - invited_meetings_available_for
+    return UserMeeting.where(user: self, meeting: meetings)
+  end
+
   private
 
   def set_confirm_token
     if self.confirm_token.blank?
       self.confirm_token = SecureRandom.urlsafe_base64.to_s
     end
+  end
+
+  def invited_meetings_available_for
+    meetings = []
+    availabilities.each { |x| meetings |= x.associated_invited_meetings }
+    return meetings
   end
 end
