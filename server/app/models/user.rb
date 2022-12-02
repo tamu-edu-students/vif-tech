@@ -22,6 +22,9 @@ class User < ApplicationRecord
   has_many :event_signups, dependent: :destroy
   has_many :events, through: :event_signups, source: :event
 
+  has_many :user_focuses, dependent: :destroy, class_name: "UserFocus"
+  has_many :focuses, through: :user_focuses, source: :focus
+
   belongs_to :allowlist_domain, optional: true
   belongs_to :allowlist_email, optional: true
 
