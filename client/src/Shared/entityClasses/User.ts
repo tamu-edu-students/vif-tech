@@ -35,7 +35,7 @@ export default class User implements IUser {
 
   public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
     const user_allowlist_email: AllowlistEmail | null = this.findAllowlistEmail(allowlist_emails);
-    return user_allowlist_email?.isPrimaryContact ?? false;
+    return user_allowlist_email?.is_primary_contact ?? false;
   }
 
   public findCompany(companies: Company[]): Company | null {

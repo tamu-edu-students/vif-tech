@@ -84,20 +84,20 @@ Before(function() {
   }).as('Fetch Allowlist Domains');
 
   cy.intercept('POST', "http://localhost:3001/allowlist_emails", req => {
-    const { email } = req.body;
-    const newAllowlistEmail = createAllowlistEmail(email);
+    const { allowlist_email } = req.body;
+    const newAllowlistEmail = createAllowlistEmail(allowlist_email);
     req.reply(
       200,
-      { email: newAllowlistEmail }
+      { allowlist_email: newAllowlistEmail }
     );
   }).as('Create Allowlist Email');
 
   cy.intercept('POST', "http://localhost:3001/allowlist_domains", req => {
-    const { domain } = req.body;
-    const newAllowlistDomain = createAllowlistDomain(domain);
+    const { allowlist_domain } = req.body;
+    const newAllowlistDomain = createAllowlistDomain(allowlist_domain);
     req.reply(
       200,
-      { domain: newAllowlistDomain }
+      { allowlist_domain: newAllowlistDomain }
     );
   }).as('Create Allowlist Domain');
 

@@ -11,6 +11,7 @@ Feature: Student signup
             | password_confirmation | password1! |
             | email | test@tamu.edu |
             | usertype | student |
+        And that I log in as admin
         Then the user with email test@tamu.edu should be found in the user DB
         And the user with email test@tamu.edu should be marked as not verified
         And there should be 1 sent emails
@@ -24,6 +25,7 @@ Feature: Student signup
             | email | test@tamu.edu |
             | usertype | student |
         Given that an user signs up as a valid student
+        And that I log in as admin
         Then the user with email test@tamu.edu should NOT be found in the user DB
     
     Scenario: Show students

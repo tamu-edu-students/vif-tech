@@ -24,7 +24,7 @@ export default class Company implements ICompany {
   }
   
   public findPrimaryContact(allowlist_emails: AllowlistEmail[]): AllowlistEmail | null {
-    return this.findAllowlistEmails(allowlist_emails).find((allowlist_email: AllowlistEmail) => allowlist_email.isPrimaryContact === true) ?? null;
+    return this.findAllowlistEmails(allowlist_emails).find((allowlist_email: AllowlistEmail) => allowlist_email.is_primary_contact === true) ?? null;
   }
 
   public findAllowlistDomains(allowlist_domains: AllowlistDomain[]): AllowlistDomain[] {
