@@ -1,4 +1,4 @@
-class FociController < ApplicationController
+class FocusesController < ApplicationController
 
   def create
     if logged_in? && current_user && current_user.usertype == "admin"
@@ -35,8 +35,8 @@ class FociController < ApplicationController
 
   def index
       if logged_in? && current_user
-          @foci = Focus.all
-          render json: {foci: @foci}, status: :ok
+          @focuses = Focus.all
+          render json: {focuses: @focuses}, status: :ok
       else
           render json: {errors: ["User does not have previleges for requested action"]}, status: :forbidden
       end
