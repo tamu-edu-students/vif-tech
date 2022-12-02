@@ -15,9 +15,11 @@ interface OwnProps {
   end_time: string;
   event_id: number;
   meeting: Meeting | null;
+  // setReaction: Function;
 }
 
 interface OwnState {
+  isChanged: boolean;
 }
 
 type TimeOption = {
@@ -37,18 +39,29 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
+  state = { isChanged: false };
+
   public componentDidMount(): void {
   }
 
   private _createMeeting = () => {
     const {start_time, end_time, owner_id, event_id} = this.props;
-    this.props.createMeeting({
-      start_time, end_time, owner_id, event_id
-    });
+    // const key = `${start_time}${end_time}`;
+    // const reaction: any = this.props.hadMeeting
+    //   ? {[key]: () => Promise.resolve()}
+    //   : {[key]: () => this.props.createMeeting({start_time, end_time, owner_id, event_id})};
+    // this.props.setReaction(reaction);
+    this.props.createMeeting({start_time, end_time, owner_id, event_id})
   }
 
   private _deleteMeeting = () => {
-    this.props.deleteMeeting(this.props.meeting?.id ?? -1);
+    const {start_time, end_time} = this.props;
+    // const key = `${start_time}${end_time}`;
+    // const reaction: any = this.props.hadMeeting
+    //   ? {[key]: () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)}
+    //   : {[key]: () => Promise.resolve()};
+    // this.props.setReaction(reaction);
+    this.props.deleteMeeting(this.props.meeting?.id ?? -1)
   }
 
   public render(): React.ReactElement<Props> {
