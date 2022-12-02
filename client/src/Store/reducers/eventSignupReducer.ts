@@ -21,7 +21,7 @@ const eventSignupReducer = (state: Store_EventSignupData = INITIAL_STATE, action
       return {...state, eventSignups: [...state.eventSignups, action.payload]};
 
     case eventSignupActionTypes.DELETE_EVENT_SIGNUP__SUCCESS:
-      return {...state, eventSignups: state.eventSignups.filter((eventSignup: EventSignup) => eventSignup.id === action.payload)};
+      return {...state, eventSignups: state.eventSignups.filter((eventSignup: EventSignup) => eventSignup.id !== action.payload)};
 
     case eventSignupActionTypes.SET_EVENT_SIGNUPS_STALENESS:
       return {...state, isStale: action.payload};
