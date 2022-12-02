@@ -42,15 +42,42 @@ class EventsController < ApplicationController
       return
     end
 
-    if @event.update(event_params)
-      render json: {
-               event: @event,
-             }, status: :ok
-    else
-      render json: {
-               errors: @event.errors.full_messages,
-             }, status: :internal_server_error
+    ActiveRecord::Base.transaction do
+      if !@event.update(event_params)
+        render json: {
+                 errors: @event.errors.full_messages,
+               }, status: :internal_server_error
+        raise ActiveRecord::RollBack
+      end
+      for meeting in @event.meetings
+        if !(@event.start_time <= meeting.start_time and @event.end_time >= meeting.end_time)
+          # If a meeting fall outside of event's time span destroy them
+          if !meeting.destroy
+            render json: {
+                     errors: meeting.errors.full_messages,
+                   }, status: :internal_server_error
+            raise ActiveRecord::RollBack
+          end
+        end
+      end
+      for availability in @event.availabilities
+        if !(@event.start_time <= availability.start_time and @event.end_time >= availability.end_time)
+          # If an availability fall outside of event's time span destroy them
+          if !availability.destroy
+            render json: {
+                     errors: availability.errors.full_messages,
+                   }, status: :internal_server_error
+            raise ActiveRecord::RollBack
+          end
+        end
+      end
+    rescue
+      return
     end
+
+    render json: {
+             event: @event,
+           }, status: :ok
   end
 
   # DELETE /events/1/
