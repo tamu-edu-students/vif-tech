@@ -7,7 +7,10 @@ class Event < ApplicationRecord
 
   def as_json(options = {})
     ret = super(options)
-    ret["users"] = self.users.as_json
+    ret["user_ids"] = []
+    for user in self.users
+      ret["user_ids"] << user.id
+    end
     return ret
   end
 end
