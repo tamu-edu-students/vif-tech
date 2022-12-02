@@ -3,6 +3,7 @@ class AllowlistEmailsController < ApplicationController
   before_action :confirm_requester_is_primary_contact_or_admin, only: [:create, :delete, :transferPrimaryContact]
   before_action :confirm_requester_is_rep_or_admin, only: [:index, :show]
   before_action :confirm_uniquness, only: [:create]
+  before_action :confirm_single_pc, only: [:create]
 
   def index
     @emails = AllowlistEmail.all
@@ -134,10 +135,7 @@ class AllowlistEmailsController < ApplicationController
         end
       end
       
-      from_users = to_user.company.users.where.not(allowlist_email_id: nil)
-      for fu in from_users
-        fu.allowlist_email.update(is_primary_contact: false)
-      end
+      from_users = to_user.company.allowlist_emails.update_all(is_primary_contact: false)
       to_user.allowlist_email.update(is_primary_contact: true)
 
       render json: {
@@ -204,6 +202,24 @@ class AllowlistEmailsController < ApplicationController
         errors: ["Allowlist entry already exists"],
       }, status: :forbidden
       return false
+    end
+
+    return true
+  end
+
+  def confirm_single_pc
+
+    ep = email_params
+
+    if params[:allowlist_email][:company_id] && params[:allowlist_email][:is_primary_contact]
+      company = Company.find_by_id(params[:allowlist_email][:company_id])
+      exiting_pc = company.allowlist_emails.find_by(is_primary_contact: true)
+      if exiting_pc
+        render json: {
+          errors: ["Primary Contact already exists"],
+        }, status: :forbidden
+        return false
+      end
     end
     return true
   end

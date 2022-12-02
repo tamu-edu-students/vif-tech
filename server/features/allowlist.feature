@@ -134,6 +134,20 @@ Feature: Allowlist Management
         And I fail to allow a new primary contact company email tEsT@tEsT.cOm for usertype company representative for company id 1
         Then I should see 1 new email in the database
 
+    Scenario: An admin allows the same email for a the same company
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I fail to allow a new primary contact company email test2@test.com for usertype company representative for company id 1
+        Then I should see 1 new email in the database
+
+    Scenario: An admin allows the same email for a the same company with funny casing
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I fail to allow a new primary contact company email tEsT2@tEsT.cOm for usertype company representative for company id 1
+        Then I should see 1 new email in the database
+
     Scenario: An admin allows the same email for a multiple company
         Given that I log in as admin
         And there is a company with id 1
@@ -236,6 +250,17 @@ Feature: Allowlist Management
             | email | test@test.com |
             | usertype | admin |
         Then the user with firstname james and lastname bond should NOT be found in the user DB
+
+    Scenario: Log in with funny casing
+        Given that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        And that the user verified their email test@tamu.edu
+        And that I log in with email tEsT@TamU.edU and password password1!
 
     Scenario: A company rep adds an allowed email
         Given that I log in as admin
@@ -446,6 +471,28 @@ Feature: Allowlist Management
         And I should get a 200 code from the email database
         And that I log in with email test@test.com and password password1!
         And I transfer my primary contact role to user with id 3
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
+        And that I log in with email test2@test.com and password password1!
+        Then I should see 2 new email in the database
+        And that I log in as admin
+        Then the primary contact for the company with id 1 should have email test2@test.com
+
+    Scenario: A rep transfers primary contact correctly from a nonexisting user
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And I allow a new company email test2@test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test2@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that I log in as admin
+        And I transfer my primary contact role to user with id 2
         Then I should get a 200 code from the domain database
         And I should get a 200 code from the email database
         And that I log in with email test2@test.com and password password1!
