@@ -14,11 +14,11 @@ import {
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
-import { Usertype } from "Shared/enums";
+// import { Usertype } from "Shared/enums";
 import Company from 'Shared/entityClasses/Company';
 import User from 'Shared/entityClasses/User';
-import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEmail';
-import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain  from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 
 /********************************************************************************************* */
@@ -112,7 +112,7 @@ export const fetchCompanies = () => async (dispatch: any) => {
   await vifTech.get(`/companies`)
   .then((response) => {
     console.log('fetchCompanies response:', response);
-    dispatch({ type: companyActionTypes.FETCH_COMPANIES__SUCCESS, payload:  Company.createCompanies(response.data.companies) })
+    dispatch({ type: companyActionTypes.FETCH_COMPANIES__SUCCESS, payload: Company.createCompanies(response.data.companies) })
     dispatch({ type: companyActionTypes.SET_COMPANIES_STALENESS, payload: false })
   })
   .catch((response) => {

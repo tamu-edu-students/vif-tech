@@ -42,7 +42,6 @@ const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): 
         ...state,
         allowlist_domains: state.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.id !== action.payload)
       }
-    case allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS:
       // const { newTo, newFrom } = action.payload;
       // return {
       //   ...state,
@@ -52,7 +51,8 @@ const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): 
       //   ]
       // }
     case allowlistActionTypes.SET_ALLOWLIST_STALENESS:
-      return { ...state, isStale: action.payload }
+      return { ...state, isStale: action.payload };
+    case allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS:
     default:
       return state;
   }
