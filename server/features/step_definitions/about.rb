@@ -79,7 +79,7 @@ Then /^the content with firstname ([^\'^\ ]*) and lastname ([^\'^\ ]*) and rank 
 end
 
 Given('I create the following content firstname {string} and lastname {string} and role {string} and social_links \{{string}:{string}} on the About Page') do |string, string2, string3, string4, string5|
-    params = {about: {firstname: string, lastname: string2, role: string3, social_links_attributes: [{facebook: "www.facebook.com"}]}}
+    params = {about: {firstname: string, lastname: string2, role: string3, social_links_attributes: [{"#{string4}": string5}]}}
     ret = page.driver.post("/abouts", params)
     ret_body = JSON.parse ret.body
     puts ret_body
@@ -87,19 +87,19 @@ Given('I create the following content firstname {string} and lastname {string} a
 end
 
   
-Given('I create the following content firstname {string} and lastname {string} and role {string} and social_links \{{string}:{string}, {string}: {string}} on the About Page') do |string, string2, string3, string4, string5, string6, string7|
-    params = {about: {firstname: string, lastname: string2, role: string3, social_links_attributes: [{facebook: "www.facebook.com"}]}}
+Given('I create the following content firstname {string} and lastname {string} and role {string} and social_links \{{string}:{string}, {string}: {string}} on the About Page') do |firstname, lastname, role, string4, string5, string6, string7|
+    params = {about: {firstname: firstname, lastname: lastname, role: role, social_links_attributes: [{"#{string4}": string5, "#{string6}": string7}]}}
     ret = page.driver.post("/abouts", params)
     ret_body = JSON.parse ret.body
     puts ret_body
     expect(ret.status).to eq(201)    
 end
 
-When('I change role to {string} and update social_links to \{{string}:{string}, {string}: {string}, {string}: {string}} in the content with firstname {string} and lastname {string}') do |role, string2, string3, string4, string5, string6, string7, firstname, lastname|
+When('I change role from {string} to {string} and update social_links to \{{string}:{string}, {string}: {string}, {string}: {string}} in the content with firstname {string} and lastname {string}') do |intialrole, finalrole, string2, string3, string4, string5, string6, string7, firstname, lastname|
     @about = About.where("firstname": firstname, "lastname": lastname)
-    if @about.exists? and @about.to_json.include? "Faculty Advisor"
+    if @about.exists? and @about.to_json.include? "#{intialrole}"
         @id = @about.pick(:id)
-        update = {about: {role: role, social_links_attributes: [{facebook: "www.facebook.com/genahayman", twitter: "www.twitter.com/tweetgena", youtube: "www.youtube.com"}]}}
+        update = {about: {role: finalrole, social_links_attributes: [{"#{string2}": string3, "#{string4}": string5, "#{string6}": string7}]}}
         ret = page.driver.put("/abouts/" + @id.to_s, update)
         ret_body = JSON.parse ret.body
         expect(ret.status).to eq(200)

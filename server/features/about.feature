@@ -54,7 +54,7 @@ Feature: Manage About Page
         Given that I log in as admin
         And I create the following content firstname "Gena" and lastname "Hayman" and role "Faculty Advisor" and social_links {"facebook":"www.facebook.com"} on the About Page
         And I create the following content firstname "Abigail" and lastname "Freeman" and role "Industry Relations" and social_links {"facebook":"www.facebook.com/abigail", "portfolio": "www.checkmeout.com"} on the About Page   
-        When I change role to "Student Officer" and update social_links to {"facebook":"www.facebook.com/genahayman", "twitter": "www.twitter.com/tweetgena", "youtube": "www.youtube.com"} in the content with firstname "Gena" and lastname "Hayman"
+        When I change role from "Faculty Advisor" to "Student Officer" and update social_links to {"facebook":"www.facebook.com/genahayman", "twitter": "www.twitter.com/tweetgena", "youtube": "www.youtube.com"} in the content with firstname "Gena" and lastname "Hayman"
         Then the content with firstname "Gena" and lastname "Hayman" should NOT have social_links {"facebook": "www.facebook.com"} and role "Faculty Advisor"
         And the content with firstname "Gena" and lastname "Hayman" and role "Student Officer" and social_links {"facebook":"www.facebook.com/genahayman", "twitter": "www.twitter.com/tweetgena", "youtube": "www.youtube.com"} should be found in my DB
         And I should have 2 About content in my DB
