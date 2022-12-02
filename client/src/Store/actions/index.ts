@@ -14,11 +14,11 @@ import {
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
-import { Usertype } from "Shared/enums";
+// import { Usertype } from "Shared/enums";
 import Company from 'Shared/entityClasses/Company';
 import User from 'Shared/entityClasses/User';
-import AllowlistEmail, {IAllowlistEmail} from 'Shared/entityClasses/AllowlistEmail';
-import AllowlistDomain, {IAllowlistDomain} from 'Shared/entityClasses/AllowlistDomain';
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
+import AllowlistDomain  from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 
 /********************************************************************************************* */
@@ -112,7 +112,7 @@ export const fetchCompanies = () => async (dispatch: any) => {
   await vifTech.get(`/companies`)
   .then((response) => {
     console.log('fetchCompanies response:', response);
-    dispatch({ type: companyActionTypes.FETCH_COMPANIES__SUCCESS, payload:  Company.createCompanies(response.data.companies) })
+    dispatch({ type: companyActionTypes.FETCH_COMPANIES__SUCCESS, payload: Company.createCompanies(response.data.companies) })
     dispatch({ type: companyActionTypes.SET_COMPANIES_STALENESS, payload: false })
   })
   .catch((response) => {
@@ -138,7 +138,7 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
 /********************************************************************************************* */
 /**************************************************************************         ALLOWLIST */
 /********************************************************************************************* */
-export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => {
+export const fetchAllowlist = () => async (dispatch: any) => {
   //TODO: Clean
   dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__REQUEST });
   let success: boolean = true;
@@ -182,16 +182,8 @@ export const fetchAllowlist = (usertype?: Usertype) => async (dispatch: any) => 
     return;
   }
 
-  const allowlist_emails: AllowlistEmail[] = AllowlistEmail.createAllowlistEmails(
-    usertype ?
-    response_emails.data.emails.filter((allowlist_email: IAllowlistEmail) => allowlist_email.usertype === usertype) :
-    response_emails.data.emails
-  );
-  const allowlist_domains: AllowlistDomain[] = AllowlistDomain.createAllowlistDomains(
-    usertype ?
-    response_domains.data.domains.filter((allowlist_domain: IAllowlistDomain) => allowlist_domain.usertype === usertype) :
-    response_domains.data.domains
-  );
+  const allowlist_emails: AllowlistEmail[] = AllowlistEmail.createAllowlistEmails(response_emails.data.allowlist_emails);
+  const allowlist_domains: AllowlistDomain[] = AllowlistDomain.createAllowlistDomains(response_domains.data.allowlist_domains);
 
   dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails, allowlist_domains} });
   dispatch({ type: allowlistActionTypes.SET_ALLOWLIST_STALENESS, payload: false });
@@ -203,10 +195,10 @@ export const createAllowlistEmail = (formValues: any, allowlistTitle: string) =>
   const allowlist_email: AllowlistEmail = {...formValues};
   
   await vifTech.post('/allowlist_emails', {
-    email: { ...allowlist_email, isPrimaryContact: allowlist_email.isPrimaryContact ? 1 : 0 }
+    allowlist_email: { ...allowlist_email, is_primary_contact: allowlist_email.is_primary_contact ? 1 : 0 }
   })
   .then((response_create) => {
-    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.email) });
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.allowlist_email) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS });
     console.log('createAllowlistEmail response_create:', response_create);
   })
@@ -221,15 +213,15 @@ export const createAllowlistDomain = (formValues: any, allowlistTitle: string) =
   const allowlist_domain: AllowlistDomain = {...formValues};
 
   await vifTech.post('/allowlist_domains', {
-    domain: { ...allowlist_domain }
+    allowlist_domain: { ...allowlist_domain }
   })
   .then((response_create) => {
-    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS, payload: new AllowlistDomain(response_create.data.domain) });
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS, payload: new AllowlistDomain(response_create.data.allowlist_domain) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS });
     console.log('createAllowlistDomain response_create:', response_create);
   })
   .catch((response_create) => {
-    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist domain for ${formValues.email_domain} in the ${allowlistTitle} allowlist` } });
+    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist domain for ${formValues.domain} in the ${allowlistTitle} allowlist` } });
     console.log('createAllowlistDomain response_create:', response_create);
   });
 }
@@ -264,23 +256,15 @@ export const deleteAllowlistDomain = (id: number, allowlistTitle: string) => asy
   });
 }
 
-export const transferPrimaryContact = (userId_to: number, userId_from: number, isAdmin: boolean, allowlistTitle: string) => async (dispatch: any, getState: any) => {
+export const transferPrimaryContact = (userId_to: number, isAdmin: boolean, allowlistTitle: string) => async (dispatch: any, getState: any) => {
   dispatch({ type: allowlistTitle+allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__REQUEST });
-  const userTo: User | null = User.findById(userId_to, getState().userData.users);
-  console.log(userTo);
-  const userFrom: User = User.findById(userId_from, getState().userData.users) as User;
-  await vifTech.post(`/allowlist_emails/transfer_primary_contact`, {to: userId_to, from: userId_from})
+  await vifTech.post(`/allowlist_emails/transfer_primary_contact`, {to: userId_to})
   .then((response_transfer) => {
-    console.log('response_transfer:', response_transfer); 
+    console.log('response_transfer:', response_transfer);
 
-    // TODO: Handle case where userTo's allowlist_email doesn't exist
-    const allowlist_email_to: AllowlistEmail | null = userTo?.findAllowlistEmail(getState().allowlist.allowlist_emails) ?? null;
-    const allowlist_email_from: AllowlistEmail | null = userFrom?.findAllowlistEmail(getState().allowlist.allowlist_emails) ?? null;
-    const newTo = new AllowlistEmail({...allowlist_email_to as AllowlistEmail, isPrimaryContact: true});
-    const newFrom = new AllowlistEmail({...allowlist_email_from as AllowlistEmail, isPrimaryContact: false});
-
-    dispatch({ type: allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS, payload: {newTo, newFrom} });
+    dispatch({ type: allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS, payload: {} });
     dispatch({ type: allowlistTitle+allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS });
+    dispatch({ type: allowlistActionTypes.SET_ALLOWLIST_STALENESS, payload: true });
     
     if (!isAdmin) {
       history.push('/');
@@ -289,8 +273,9 @@ export const transferPrimaryContact = (userId_to: number, userId_from: number, i
   .catch((response_transfer) => {
     console.log('response_transfer:', response_transfer); 
     dispatch({
-      type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__FAILURE,
-      payload: {error: `ERROR: Failed to transfer primary contact privilege from ${userFrom?.email} to ${userTo?.email}`}
+      type: allowlistTitle+allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__FAILURE,
+      // TODO: Make more specific
+      payload: {error: `ERROR: Failed to transfer primary contact privilege`}
     });
   });
 }

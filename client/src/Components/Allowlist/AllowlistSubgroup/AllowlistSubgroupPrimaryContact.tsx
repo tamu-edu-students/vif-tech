@@ -24,7 +24,6 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const transferFromId: number | undefined = ownProps.entry?.findUser(state.userData.users)?.id ?? undefined;
   const colleagues: User[] = Company.findById(ownProps.company_id, state.companyData.companies)?.findRepresentatives(state.userData.users).filter((rep: User) => rep.id !== transferFromId) ?? [];
   return {
-    transferFromId,
     colleagues,
     usertype: state.auth.user?.usertype,
   };
@@ -39,14 +38,14 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     this.props.createAllowlistEmail({
       email: formValues.email,
       usertype: this.props.entryUsertype,
-      isPrimaryContact: true,
+      is_primary_contact: true,
       ...(this.props.company_id && {company_id: this.props.company_id})
     }, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 
   private _onTransfer = (formValues: any): void => {
-    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.transferFromId ?? -1, this.props.usertype === Usertype.ADMIN, this.props.parentTitle)
+    this.props.transferPrimaryContact(Number.parseInt(formValues.to), this.props.usertype === Usertype.ADMIN, this.props.parentTitle)
       .then(() => this.props.hideModal());
   }
 

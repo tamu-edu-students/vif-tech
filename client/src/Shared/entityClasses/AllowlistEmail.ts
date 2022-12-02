@@ -7,7 +7,7 @@ export interface IAllowlistEmail {
   company_id?: number;
   email: string;
   usertype: Usertype;
-  isPrimaryContact?: boolean;
+  is_primary_contact?: boolean;
 }
 
 export default class AllowlistEmail implements IAllowlistEmail {
@@ -15,14 +15,14 @@ export default class AllowlistEmail implements IAllowlistEmail {
   public readonly email: string;
   public readonly company_id?: number;
   public readonly usertype: Usertype;
-  public readonly isPrimaryContact?: boolean;
+  public readonly is_primary_contact?: boolean;
 
-  public constructor({ id, email, company_id, usertype, isPrimaryContact}: IAllowlistEmail) {
+  public constructor({ id, email, company_id, usertype, is_primary_contact}: IAllowlistEmail) {
     this.id = id;
     this.email = email;
     this.company_id = company_id;
     this.usertype = usertype;
-    this.isPrimaryContact = isPrimaryContact;
+    this.is_primary_contact = is_primary_contact;
   }
 
   public findCompany(companies: Company[]): Company | null {

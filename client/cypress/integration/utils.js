@@ -60,10 +60,10 @@ export const createAllowlistEmail = (() => {
 
 export const createAllowlistDomain = (() => {
   let id = 1;
-  const createAllowlistDomainWithIdClosure = ({email_domain, company_id, usertype}) => {
+  const createAllowlistDomainWithIdClosure = ({domain, company_id, usertype}) => {
     const newAllowlistDomain = {
       id: id++,
-      email_domain,
+      domain,
       ...(company_id && {company_id: company_id}),
       usertype,
     };

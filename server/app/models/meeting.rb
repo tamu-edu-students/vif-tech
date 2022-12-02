@@ -5,6 +5,15 @@ class Meeting < ApplicationRecord
   has_many :invitees, through: :user_meetings, source: :user
   validates :start_time, comparison: { less_than: :end_time }
 
+  def as_json(options = {})
+    ret = super(options)
+    ret["invitees"] = {}
+    for status in UserMeeting.valid_status
+      ret["invitees"][status] = self.invites_by_status(status).as_json
+    end
+    return ret
+  end
+
   def attendees
     ret = []
     for user_meeting in user_meetings

@@ -72,4 +72,6 @@ Rails.application.routes.draw do
   delete "events/:id/signout/:user_id", to: "events#signout"
 
   resources :foci
+  
+  resources :event_signups, only: [:index, :show]
 end
