@@ -304,7 +304,7 @@ export const fetchEvents = () => async (dispatch: any) => {
 /********************************************************************************************* */
 export const fetchEventSignups = () => async (dispatch: any) => {
   dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__REQUEST });
-  await vifTech.get('/events/4/users')
+  await vifTech.get('/event_signups')
   .then((response) => {
     console.log('response_fetchEventSignups:', response);
     dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__SUCCESS, payload: EventSignup.createEventSignups(response.data.event_signups) });
@@ -321,7 +321,7 @@ export const createEventSignup = (event_id: number, user_id?: number) => async (
   await vifTech.post(`/events/${event_id}/signup/${user_id ?? ''}`)
   .then((response) => {
     console.log('response addEventAttendee:', response);
-    dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup });
+    dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__SUCCESS, payload: EventSignup.createEventSignup(response.data.event_signup) });
   })
   .catch((response) => {
     console.log('response_addEventAttendee', response);
@@ -331,7 +331,7 @@ export const createEventSignup = (event_id: number, user_id?: number) => async (
 
 export const deleteEventSignup = (event_id: number, user_id?: number) => async (dispatch: any) => {
   dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__REQUEST });
-  await vifTech.delete(`/events/${event_id}/signup/${user_id ?? ''}`)
+  await vifTech.delete(`/events/${event_id}/signout/${user_id ?? ''}`)
   .then((response) => {
     console.log('response removeEventAttendee:', response);
     dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup.id });

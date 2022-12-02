@@ -28,8 +28,12 @@ export default class EventSignup implements IEventSignup {
     ?? null;
   }
 
+  public static createEventSignup(eventSignupDatum: IEventSignup): EventSignup {
+    return new EventSignup(eventSignupDatum);
+  }
+
   public static createEventSignups(eventSignupData: IEventSignup[]): EventSignup[] {
-    return eventSignupData.map((eventSignupDatum: IEventSignup) => new EventSignup(eventSignupDatum));
+    return eventSignupData.map((eventSignupDatum: IEventSignup) => EventSignup.createEventSignup(eventSignupDatum));
   }
 
   public static findById(id: number, eventSignups: EventSignup[]): EventSignup | null {
