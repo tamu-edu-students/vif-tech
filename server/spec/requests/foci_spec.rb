@@ -25,8 +25,8 @@ RSpec.describe "Foci", type: :request do
 
   describe "GET /foci --index" do
     it "lets admin see all foci in the db" do
-      p '===============foci_spec.rb index 1'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -37,8 +37,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "lets student see all foci in the db" do
-      p '===============foci_spec.rb index 2'
-      p 'trying student'
+      
+      
       post "/login", :params=>{:user=>{:email=>'js@student.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -49,8 +49,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "lets representative see all foci in the db" do
-      p '===============foci_spec.rb index 3'
-      p 'trying rep'
+      
+      
       post "/login", :params=>{:user=>{:email=>'a@disney.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -61,8 +61,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "no data" do
-      p '===============foci_spec.rb index 4'
-      p 'trying admin'
+      
+      
       Focus.destroy_all
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
@@ -76,8 +76,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "if not signed up and logged in no access" do
-      p '===============foci_spec.rb index 5'
-      p 'trying guest'
+      
+      
       get '/foci'
       expect(response).to have_http_status(:forbidden)
       parsed_body = JSON.parse(response.body)
@@ -87,8 +87,8 @@ RSpec.describe "Foci", type: :request do
 
   describe "POST /foci --create" do
     it "lets admin create an " do
-      p '===============foci_spec.rb create 1'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       post '/foci', :params=>{:focus=>{:focus=>'ganme design'}}
       expect(response).to have_http_status(:created)
@@ -96,8 +96,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "does not let admin if focus name not given" do
-      p '===============foci_spec.rb create 2'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       post '/foci', :params=>{:focus=>{:focus=>nil}}
       expect(session["user_id"]).to eq(1)
@@ -108,8 +108,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "does not let if focus name already taken" do
-      p '===============foci_spec.rb create 3'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       post '/foci', :params=>{:focus=>{:focus=>'anime design'}}
       expect(session["user_id"]).to eq(1)
@@ -120,8 +120,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "does not let student" do
-      p '===============foci_spec.rb create 4'
-      p 'trying student'
+      
+      
       post "/login", :params=>{:user=>{:email=>'js@student.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       
@@ -135,8 +135,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "does not let rep" do
-      p '===============foci_spec.rb create 5'
-      p 'trying rep'
+      
+      
       post "/login", :params=>{:user=>{:email=>'a@disney.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       
@@ -152,8 +152,8 @@ RSpec.describe "Foci", type: :request do
 
   describe "GET /foci/:id --show" do
     it "lets admin" do
-      p '===============foci_spec.rb show 1'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -166,8 +166,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "lets student" do
-      p '===============foci_spec.rb show 2'
-      p 'trying student'
+      
+      
       post "/login", :params=>{:user=>{:email=>'js@student.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -179,8 +179,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "lets rep" do
-      p '===============foci_spec.rb show 3'
-      p 'trying rep'
+      
+      
       post "/login", :params=>{:user=>{:email=>'a@disney.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -192,8 +192,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not found" do
-      p '===============foci_spec.rb show 4'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -206,8 +206,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "if not registered and logged in" do 
-      p '===============foci_spec.rb show 5'
-      p 'trying guest'
+      
+      
       get '/foci/1'
       expect(response).to have_http_status(:forbidden)
       parsed_body = JSON.parse(response.body)
@@ -218,8 +218,8 @@ RSpec.describe "Foci", type: :request do
 
   describe "PUT /foci/:id --update" do
     it "lets admin" do
-      p '===============foci_spec.rb update 1'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -232,8 +232,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not let student" do
-      p '===============foci_spec.rb update 2'
-      p 'trying student'
+      
+      
       post "/login", :params=>{:user=>{:email=>'js@student.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -246,8 +246,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not let rep" do
-      p '===============foci_spec.rb update 3'
-      p 'trying rep'
+      
+      
       post "/login", :params=>{:user=>{:email=>'a@disney.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -260,8 +260,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not found" do
-      p '===============foci_spec.rb update 4'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -276,8 +276,8 @@ RSpec.describe "Foci", type: :request do
 
   describe "DELETE /foci/:id --destroy" do
     it "lets admin" do
-      p '==============foci_spec.rb delete 1'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -293,8 +293,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not let student" do
-      p '==============foci_spec.rb delete 2'
-      p 'trying student'
+      
+      
       post "/login", :params=>{:user=>{:email=>'js@student.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -310,8 +310,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not let rep" do
-      p '==============foci_spec.rb delete 3'
-      p 'trying rep'
+      
+      
       post "/login", :params=>{:user=>{:email=>'a@disney.com',:password=>'pw'} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
@@ -327,8 +327,8 @@ RSpec.describe "Foci", type: :request do
     end
 
     it "not found" do
-      p '===================foci_spec.rb delete 4'
-      p 'trying admin'
+      
+      
       post "/login", :params=>{:user=>{:email=>'admin@admin.com',:password=>ENV["ADMIN_PW"]} }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
