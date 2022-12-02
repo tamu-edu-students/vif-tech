@@ -194,15 +194,10 @@ export const fetchAllowlist = () => async (dispatch: any) => {
 }
 
 export const createAllowlistEmail = (formValues: any, allowlistTitle: string) => async (dispatch: any, getState: any) => {
-  console.log(formValues)
   dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__REQUEST });
-  const allowlist_email: AllowlistEmail = {...formValues};
-  
-  await vifTech.post('/allowlist_emails', {
-    allowlist_email: { ...allowlist_email, is_primary_contact: allowlist_email.is_primary_contact ? 1 : 0 }
-  })
+  await vifTech.post('/allowlist_emails', {allowlist_email: { ...formValues }})
   .then((response_create) => {
-    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.email) });
+    dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.allowlist_email) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS });
   })
   .catch((response_create) => {
@@ -213,11 +208,7 @@ export const createAllowlistEmail = (formValues: any, allowlistTitle: string) =>
 
 export const createAllowlistDomain = (formValues: any, allowlistTitle: string) => async (dispatch: any, getState: any) => {
   dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__REQUEST });
-  const allowlist_domain: AllowlistDomain = {...formValues};
-
-  await vifTech.post('/allowlist_domains', {
-    allowlist_domain: { ...allowlist_domain }
-  })
+  await vifTech.post('/allowlist_domains', {allowlist_domain: { ...formValues }})
   .then((response_create) => {
     console.log('createAllowlistDomain response_create:', response_create);
     dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS, payload: new AllowlistDomain(response_create.data.allowlist_domain) });
