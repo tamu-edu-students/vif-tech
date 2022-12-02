@@ -213,6 +213,26 @@ Feature: Allowlist Management
             | usertype | student |
         Then the user with firstname james and lastname bond should be found in the user DB
 
+    Scenario: Duplicate emails with funny casing are prevented
+        Given that I log in as admin
+        And I allow a new email test@test.com for usertype student
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | tEsT@tEsT.cOm |
+            | usertype | student |
+        Given that I sign up with the following and fail with code 400
+            | firstname | james2 |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | student |
+        Then the user with firstname james and lastname bond should be found in the user DB
+        Then the user with firstname james2 and lastname bond should NOT be found in the user DB
+
     Scenario: A student signs up to a newly allowed email, which is then deleted
         Given that I log in as admin
         And I allow a new email test@test.com for usertype student
@@ -497,6 +517,27 @@ Feature: Allowlist Management
         And I should get a 200 code from the email database
         And that I log in with email test2@test.com and password password1!
         Then I should see 2 new email in the database
+        And that I log in as admin
+        Then the primary contact for the company with id 1 should have email test2@test.com
+
+    Scenario: A rep transfers primary contact correctly from a no user
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new company domain test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test2@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that I log in as admin
+        And I transfer my primary contact role to user with id 2
+        Then I should get a 200 code from the domain database
+        And I should get a 200 code from the email database
+        And that I log in with email test2@test.com and password password1!
+        Then I should see 1 new email in the database
         And that I log in as admin
         Then the primary contact for the company with id 1 should have email test2@test.com
 

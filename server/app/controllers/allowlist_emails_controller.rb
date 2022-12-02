@@ -135,11 +135,21 @@ class AllowlistEmailsController < ApplicationController
         end
       end
       
-      from_users = to_user.company.allowlist_emails.update_all(is_primary_contact: false)
+      from_user = to_user.company.allowlist_emails.find_by(is_primary_contact: true)
+      from_user_email = nil
+      if from_user
+        from_user_email = from_user.email
+      end
+      to_user_email = to_user.email
+
+      from_users = to_user.company.allowlist_emails.update_all(is_primary_contact: false) # revalidate there is a single PC
       to_user.allowlist_email.update(is_primary_contact: true)
 
       render json: {
                message: "transfer success",
+               from_allowlist_email: from_user_email,
+               to_allowlist_email: to_user_email,
+               company_id: to_user.company_id
              }, status: :ok
     end
   end
