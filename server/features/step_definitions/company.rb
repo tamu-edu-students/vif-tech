@@ -43,3 +43,8 @@ Then("I should see {int} reps for company with id {int}") do |int, cid|
   expect(ret.status).to eq(200)
   expect(ret_body["users"].length).to eq(int)
 end
+
+Given("I delete company with id {int}") do |cid|
+  ret = page.driver.delete("/companies/" + cid.to_s)
+  expect(ret.status).to eq(200)
+end
