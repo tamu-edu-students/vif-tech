@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe UserFocus, type: :model do
   before(:each) do
-    @focus1 = Focus.create(focus: "anime design")
-    @focus2 = Focus.create(focus: "visualizations")
+    @focus1 = Focus.create(name: "anime design")
+    @focus2 = Focus.create(name: "visualizations")
     @admin = User.find(1)
     @student = User.create(id: 3, firstname: "j", lastname: "s", email: "js@student.com", password: "pw", usertype: "student")
     @student.email_activate

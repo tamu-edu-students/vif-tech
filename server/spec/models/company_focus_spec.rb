@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe CompanyFocus, type: :model do
   before(:each) do
-    @focus1 = Focus.create(focus: "anime design")
-    @focus2 = Focus.create(focus: "visualizations")
+    @focus1 = Focus.create(name: "anime design")
+    @focus2 = Focus.create(name: "visualizations")
     Company.create(name: "disney", description: "blah")
     Company.create(id: 3, name: "dreamworks", description: "blah")
   end

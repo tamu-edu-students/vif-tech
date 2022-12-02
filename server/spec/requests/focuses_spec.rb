@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Focuses", type: :request do
   before(:each) do
-    @focus1 = Focus.create(focus: "anime design")
-    @focus2 = Focus.create(focus: "visualizations")
+    @focus1 = Focus.create(name: "anime design")
+    @focus2 = Focus.create(name: "visualizations")
     Company.create(name: "disney", description: "blah")
     Company.create(id: 3, name: "dreamworks", description: "blah")
     AllowlistDomain.create(domain: "disney.com", usertype: "company representative", company_id: 1)
@@ -67,13 +67,13 @@ RSpec.describe "Focuses", type: :request do
   describe "POST /focuses --create" do
     it "lets admin create an " do
       post "/login", :params => { :user => { :email => "admin@admin.com", :password => ENV["ADMIN_PW"] } }
-      post "/focuses", :params => { :focus => { :focus => "ganme design" } }
+      post "/focuses", :params => { :focus => { :name => "ganme design" } }
       expect(response).to have_http_status(:created)
     end
 
     it "does not let admin if focus name not given" do
       post "/login", :params => { :user => { :email => "admin@admin.com", :password => ENV["ADMIN_PW"] } }
-      post "/focuses", :params => { :focus => { :focus => nil } }
+      post "/focuses", :params => { :focus => { :name => nil } }
       expect(session["user_id"]).to eq(1)
       expect(response).to have_http_status(:internal_server_error)
       parsed_body = JSON.parse(response.body)
@@ -82,7 +82,7 @@ RSpec.describe "Focuses", type: :request do
 
     it "does not let if focus name already taken" do
       post "/login", :params => { :user => { :email => "admin@admin.com", :password => ENV["ADMIN_PW"] } }
-      post "/focuses", :params => { :focus => { :focus => "anime design" } }
+      post "/focuses", :params => { :focus => { :name => "anime design" } }
       expect(session["user_id"]).to eq(1)
       expect(response).to have_http_status(:internal_server_error)
       parsed_body = JSON.parse(response.body)
@@ -94,7 +94,7 @@ RSpec.describe "Focuses", type: :request do
       parsed_body = JSON.parse(response.body)
 
       expect(parsed_body["logged_in"]).to eq(true)
-      post "/focuses", :params => { :focus => { :focus => "game design" } }
+      post "/focuses", :params => { :focus => { :name => "game design" } }
       expect(session["user_id"]).to eq(3)
       expect(response).to have_http_status(:forbidden)
       parsed_body = JSON.parse(response.body)
@@ -106,7 +106,7 @@ RSpec.describe "Focuses", type: :request do
       parsed_body = JSON.parse(response.body)
 
       expect(parsed_body["logged_in"]).to eq(true)
-      post "/focuses", :params => { :focus => { :focus => "game design" } }
+      post "/focuses", :params => { :focus => { :name => "game design" } }
       expect(session["user_id"]).to eq(2)
       expect(response).to have_http_status(:forbidden)
       parsed_body = JSON.parse(response.body)
@@ -163,18 +163,18 @@ RSpec.describe "Focuses", type: :request do
       post "/login", :params => { :user => { :email => "admin@admin.com", :password => ENV["ADMIN_PW"] } }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
-      put "/focuses/1", :params => { :focus => { :focus => "zgagahy" } }
+      put "/focuses/1", :params => { :focus => { :name => "zgagahy" } }
       expect(session["user_id"]).to eq(1)
       expect(response).to have_http_status(:ok)
       parsed_body = JSON.parse(response.body)
-      expect(parsed_body["focus"]["focus"]).to eq("zgagahy")
+      expect(parsed_body["focus"]["name"]).to eq("zgagahy")
     end
 
     it "not let student" do
       post "/login", :params => { :user => { :email => "js@student.com", :password => "pw" } }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
-      put "/focuses/1", :params => { :focus => { :focus => "zgagahy" } }
+      put "/focuses/1", :params => { :focus => { :name => "zgagahy" } }
       expect(session["user_id"]).to eq(3)
       expect(response).to have_http_status(:forbidden)
       parsed_body = JSON.parse(response.body)
@@ -185,7 +185,7 @@ RSpec.describe "Focuses", type: :request do
       post "/login", :params => { :user => { :email => "a@disney.com", :password => "pw" } }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
-      put "/focuses/1", :params => { :focus => { :focus => "zgagahy" } }
+      put "/focuses/1", :params => { :focus => { :name => "zgagahy" } }
       expect(session["user_id"]).to eq(2)
       expect(response).to have_http_status(:forbidden)
       parsed_body = JSON.parse(response.body)
@@ -196,7 +196,7 @@ RSpec.describe "Focuses", type: :request do
       post "/login", :params => { :user => { :email => "admin@admin.com", :password => ENV["ADMIN_PW"] } }
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["logged_in"]).to eq(true)
-      put "/focuses/10000", :params => { :focus => { :focus => "zgagahy" } }
+      put "/focuses/10000", :params => { :focus => { :name => "zgagahy" } }
       expect(session["user_id"]).to eq(1)
       expect(response).to have_http_status(:not_found)
       parsed_body = JSON.parse(response.body)
@@ -213,7 +213,7 @@ RSpec.describe "Focuses", type: :request do
       expect(session["user_id"]).to eq(1)
       expect(response).to have_http_status(:ok)
       parsed_body = JSON.parse(response.body)
-      expect(parsed_body["focus"]["focus"]).to eq("anime design")
+      expect(parsed_body["focus"]["name"]).to eq("anime design")
 
       get "/focuses"
       parsed_body = JSON.parse(response.body)
