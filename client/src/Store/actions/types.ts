@@ -124,6 +124,30 @@ export const eventActionTypes = {
 
 
 /********************************************************************************************* */
+/**************************************************************************         EVENT SIGNUPS */
+/********************************************************************************************* */
+export const eventSignupActionTypes = {
+  FETCH_EVENT_SIGNUPS: 'FETCH_EVENT_SIGNUPS',
+  FETCH_EVENT_SIGNUPS__REQUEST: 'FETCH_EVENT_SIGNUPS__REQUEST',
+  FETCH_EVENT_SIGNUPS__SUCCESS: 'FETCH_EVENT_SIGNUPS__SUCCESS',
+  FETCH_EVENT_SIGNUPS__FAILURE: 'FETCH_EVENT_SIGNUPS__FAILURE',
+
+  CREATE_EVENT_SIGNUP: 'CREATE_EVENT_SIGNUP',
+  CREATE_EVENT_SIGNUP__REQUEST: 'CREATE_EVENT_SIGNUP__REQUEST',
+  CREATE_EVENT_SIGNUP__SUCCESS: 'CREATE_EVENT_SIGNUP__SUCCESS',
+  CREATE_EVENT_SIGNUP__FAILURE: 'CREATE_EVENT_SIGNUP__FAILURE',
+
+  DELETE_EVENT_SIGNUP: 'DELETE_EVENT_SIGNUP',
+  DELETE_EVENT_SIGNUP__REQUEST: 'DELETE_EVENT_SIGNUP__REQUEST',
+  DELETE_EVENT_SIGNUP__SUCCESS: 'DELETE_EVENT_SIGNUP__SUCCESS',
+  DELETE_EVENT_SIGNUP__FAILURE: 'DELETE_EVENT_SIGNUP__FAILURE',
+  
+  SET_EVENT_SIGNUPS_STALENESS: 'SET_EVENT_SIGNUPS_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
 /**************************************************************************         MEETINGS */
 /********************************************************************************************* */
 export const meetingActionTypes = {

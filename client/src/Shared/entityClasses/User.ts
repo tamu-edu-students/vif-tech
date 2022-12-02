@@ -3,6 +3,7 @@ import AllowlistEmail from "./AllowlistEmail";
 import Meeting from "./Meeting";
 import Company from "./Company";
 import Event from "./Event";
+import EventSignup from "./EventSignup";
 
 export interface IUser {
   id: number;
@@ -36,6 +37,10 @@ export default class User implements IUser {
   public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
     const user_allowlist_email: AllowlistEmail | null = this.findAllowlistEmail(allowlist_emails);
     return user_allowlist_email?.is_primary_contact ?? false;
+  }
+
+  public isAttendingEvent(event: Event, eventSignups: EventSignup[]): boolean {
+    return EventSignup.findAllByEventIdAndUserId(event.id, this.id, eventSignups).length > 0;
   }
 
   public findCompany(companies: Company[]): Company | null {

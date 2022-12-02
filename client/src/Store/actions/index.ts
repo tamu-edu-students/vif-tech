@@ -5,6 +5,7 @@ import {
   allowlistActionTypes,
   eventActionTypes,
   meetingActionTypes,
+  eventSignupActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -24,6 +25,7 @@ import AllowlistDomain  from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
 import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
+import EventSignup from 'Shared/entityClasses/EventSignup';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -294,6 +296,52 @@ export const fetchEvents = () => async (dispatch: any) => {
     dispatch({ type: eventActionTypes.FETCH_EVENTS__FAILURE, payload: {error: 'ERROR: Failed to fetch events data'} });
   });
 }
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         EVENT SIGNUPS */
+/********************************************************************************************* */
+export const fetchEventSignups = () => async (dispatch: any) => {
+  dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__REQUEST });
+  await vifTech.get('/events/4/users')
+  .then((response) => {
+    console.log('response_fetchEventSignups:', response);
+    dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__SUCCESS, payload: EventSignup.createEventSignups(response.data.event_signups) });
+    dispatch({ type: eventSignupActionTypes.SET_EVENT_SIGNUPS_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchEventSignups:', response);
+    dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__FAILURE, payload: {error: 'ERROR: Failed to fetch events data'} });
+  });
+}
+
+export const createEventSignup = (event_id: number, user_id?: number) => async (dispatch: any) => {
+  dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__REQUEST });
+  await vifTech.post(`/events/${event_id}/signup/${user_id ?? ''}`)
+  .then((response) => {
+    console.log('response addEventAttendee:', response);
+    dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup });
+  })
+  .catch((response) => {
+    console.log('response_addEventAttendee', response);
+    dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__FAILURE, payload: { error: 'ERROR: Failed to register for event' } });
+  });
+}
+
+export const deleteEventSignup = (event_id: number, user_id?: number) => async (dispatch: any) => {
+  dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__REQUEST });
+  await vifTech.delete(`/events/${event_id}/signup/${user_id ?? ''}`)
+  .then((response) => {
+    console.log('response removeEventAttendee:', response);
+    dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup.id });
+  })
+  .catch((response) => {
+    console.log('response_removeEventAttendee', response);
+    dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__FAILURE, payload: { error: 'ERROR: Failed to unregister for event' } });
+  });
+}
+
 
 
 
