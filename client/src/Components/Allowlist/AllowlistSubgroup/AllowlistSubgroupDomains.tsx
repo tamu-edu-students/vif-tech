@@ -26,7 +26,7 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 class AllowlistSubgroupDomains extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any): void => {
     this.props.createAllowlistDomain({
-      email_domain: formValues.email_domain,
+      domain: formValues.domain,
       usertype: this.props.entryUsertype,
       ...(this.props.company_id && {company_id: this.props.company_id}),
     }, this.props.parentTitle)
@@ -54,7 +54,7 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
   }
 
   private _renderEntries(allowlist_entries: any): JSX.Element[] {
-    return allowlist_entries.map(({email_domain, id}: AllowlistDomain) => (this._renderEntry(email_domain, id)));
+    return allowlist_entries.map(({domain, id}: AllowlistDomain) => (this._renderEntry(domain, id)));
   }
 
   private _renderConfirmationDialogue = (id: number, entryString: string, parentTitle: string): void => {
@@ -79,8 +79,8 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
     const allowlistEntryFormProps = {
       onSubmit: this._onSubmit,
       onCancel: this._onCancel,
-      name: 'email_domain',
-      id: 'email_domain',
+      name: 'domain',
+      id: 'domain',
       label: 'Domain',
       form: "createAllowlistDomain"
     };

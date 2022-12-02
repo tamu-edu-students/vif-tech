@@ -43,14 +43,14 @@ const allowlistReducer = (state: Store_Allowlist = INITIAL_STATE, action: any): 
         allowlist_domains: state.allowlist_domains.filter((allowlist_domain: AllowlistDomain) => allowlist_domain.id !== action.payload)
       }
     case allowlistActionTypes.TRANSFER_PRIMARY_CONTACT__SUCCESS:
-      const { newTo, newFrom } = action.payload;
-      return {
-        ...state,
-        allowlist_emails: [
-          ...state.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.id !== newTo.id && allowlist_email.id !== newFrom.id),
-          ...[newTo, newFrom]
-        ]
-      }
+      // const { newTo, newFrom } = action.payload;
+      // return {
+      //   ...state,
+      //   allowlist_emails: [
+      //     ...state.allowlist_emails.filter((allowlist_email: AllowlistEmail) => allowlist_email.id !== newTo.id && allowlist_email.id !== newFrom.id),
+      //     ...[newTo, newFrom]
+      //   ]
+      // }
     case allowlistActionTypes.SET_ALLOWLIST_STALENESS:
       return { ...state, isStale: action.payload }
     default:
