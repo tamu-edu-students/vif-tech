@@ -64,3 +64,24 @@ Given("I sign out user {int} from event {int} and receive code {int}") do |user_
   ret = page.driver.delete("/events/#{id}/signout/#{user_id}")
   expect(ret.status).to eq(code)
 end
+
+Then("the following users should be fetched with event {int}") do |id, table|
+  ret = page.driver.get("/events/#{id}")
+  ret_body = JSON.parse ret.body
+  actual = []
+  ret_body["event"]["users"].each { |h| actual << h["id"].to_s }
+  expect(actual).to eq(table.raw[0].each { |id| id.to_i })
+end
+
+Then("there should be {int} event_signups") do |count|
+  ret = page.driver.get("/event_signups")
+  ret_body = JSON.parse ret.body
+  expect(ret_body["event_signups"].length).to eq(count)
+end
+
+Then("event_signup with id {int} should involve event {int} and user {int}") do |id, event_id, user_id|
+  ret = page.driver.get("/event_signups/#{id}")
+  ret_body = JSON.parse ret.body
+  expect(ret_body["event_signup"]["event"]["id"]).to eq(event_id)
+  expect(ret_body["event_signup"]["user"]["id"]).to eq(user_id)
+end

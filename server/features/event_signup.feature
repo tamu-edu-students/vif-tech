@@ -151,3 +151,42 @@ Feature: Event Signup
             | 2 |
         Then the following "volunteer" users should be signed up to event 2
             | 2 |
+    
+    Scenario: Get signed up users
+        # User 1, admin
+        Given that I log in as admin
+        # Event 1-2
+        Then creating an event with the following should return code 201
+            | title | Mock interview |
+            | description | Something |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-31 18:20:00' |
+        Then creating an event with the following should return code 201
+            | title | Another event |
+            | description | Something |
+            | start_time | '2022-11-01 18:10:00' |
+            | end_time | '2022-11-03 18:20:00' |
+        And I allow a new domain tamu.edu for usertype volunteer
+        # User 2
+        And that I sign up and log in as a valid volunteer
+        And I sign up to event 1 and receive code 200
+        And I sign up to event 2 and receive code 200
+        # User 3
+        And that I sign up and log in as a valid student
+        And I sign up to event 1 and receive code 200
+        And I sign up to event 2 and receive code 200
+        # User 4
+        And that I sign up and log in as a valid student
+        And I sign up to event 1 and receive code 200
+        And I sign up to event 2 and receive code 200
+        # User 5
+        And that I sign up and log in as a valid volunteer
+        And I sign up to event 2 and receive code 200
+        # Cannot signup multiple times
+        And I sign up to event 2 and receive code 400
+        Then the following users should be fetched with event 1
+            | 2 | 3 | 4 |
+        Then the following users should be fetched with event 2
+            | 2 | 3 | 4 | 5 |
+        And there should be 7 event_signups
+        And event_signup with id 1 should involve event 1 and user 2
