@@ -5,7 +5,7 @@ Feature: admin can CRUD a company object/account
 
     Scenario: admin can create a new company by providing its name, description
         Given that I log in as admin
-        And name as a string and description as a text
+        And that I create a valid company
         Then 1 company should be in company DB
         
     Scenario: admin can create a new company by just providing its name

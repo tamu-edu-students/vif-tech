@@ -364,12 +364,15 @@ class UsersController < ApplicationController
     render json: {}, status: :ok
   end
 
-  # GET "users/:id/focuses" or GET "users/focuses"
+  # GET "users/:id/focuses" or "users/focuses"
   def get_focuses
     if params[:id] == nil
       params[:id] = current_user.id
     end
     if !confirm_user_exists
+      return
+    end
+    if !confirm_requester_is_owner_or_admin(params[:id])
       return
     end
     render json: {
@@ -385,8 +388,23 @@ class UsersController < ApplicationController
     if !confirm_user_exists
       return
     end
-    user = Users.find(params[:id])
-    focus = Focuses.find(params[:focus_id])
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    user = User.find(params[:id])
+    focus = Focus.find_by_id(params[:focus_id])
+    if !focus
+      render json: {
+        errors: ["Focus with id #{params[:focus_id]} not found"],
+      }, status: :not_found
+      return
+    end
+    if UserFocus.find_by(user: user, focus: focus)
+      render json: {
+        errors: ["User #{user.id} already head #{focus.name} as their focus"],
+      }, status: :bad_request
+      return
+    end
     @user_focus = UserFocus.create(user: user, focus: focus)
     if @user_focus.save
       render json: {
@@ -397,6 +415,129 @@ class UsersController < ApplicationController
         errors: @user_focus.errors.full_messages,
       }, status: :bad_request
     end
+  end
+
+  # DELETE "users/:id/focuses/:focus_id" or "users/focuses/:focus_id"
+  def remove_focus
+    if params[:id] == nil
+      params[:id] = current_user.id
+    end
+    if !confirm_user_exists
+      return
+    end
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    user = User.find(params[:id])
+    focus = Focus.find_by_id(params[:focus_id])
+    if !focus
+      render json: {
+               errors: ["Focus with id #{params[:focus_id]} not found"],
+             }, status: :not_found
+      return
+    end
+    @user_focus = UserFocus.find_by(user: user, focus: focus)
+    if !@user_focus
+      render json: {
+               errors: ["User #{user.id} didn't have #{focus.name} as their focus"],
+             }, status: :bad_request
+      return
+    end
+
+    if @user_focus.destroy
+      render json: {
+               user_focus: @user_focus,
+             }, status: :ok
+    else
+      render json: {
+               errors: @user_focus.errors.full_messages,
+             }, status: :bad_request
+    end
+  end
+
+  # PUT "users/:id/focuses/" or "users/focuses/"
+  def update_focus
+    if params[:id] == nil
+      params[:id] = current_user.id
+    end
+    if !confirm_user_exists
+      return
+    end
+    if !confirm_requester_is_owner_or_admin(params[:id])
+      return
+    end
+    user = User.find(params[:id])
+
+    # Check params is provided
+    focuses = focus_params.to_h["focuses"]
+    if !focuses
+      render json: {
+               errors: ['"focuses" not found in provided parameters.'],
+             }, status: :bad_request
+      return
+    end
+
+    to_update = []
+    to_create = []
+
+    for focus in focuses
+      if focus["id"] == nil
+        render json: {
+                 errors: ["You should provide json in following format:",
+                          '{"user": {"focuses": [{"id": 1}, {"id": 2}, ...]}}'],
+               }, status: :bad_request
+        return
+      end
+      focus["id"] = focus["id"].to_i
+      focus_obj = Focus.find_by_id(focus["id"])
+
+      # Check if all entries in focuses are valid
+      if !focus_obj
+        render json: {
+          errors: ["Focus #{focus["id"]} not found"],
+        }, status: :bad_request
+        return
+      end
+
+      # Either classify as to update / to create
+      if user.focuses.find_by_id(focus_obj.id) != nil
+        to_update << focus_obj
+      else
+        to_create << focus_obj
+      end
+    end
+
+    ActiveRecord::Base.transaction do
+      for user_focus in user.user_focuses
+        if !to_update.include? user_focus.focus
+          if !user_focus.destroy
+            render json: {
+                     errors: ["Previous user-focus deletion failed",
+                              user_focus.errors.full_messages],
+                   }, status: :bad_request
+            raise ActiveRecord::RollBack # Roll back on fail
+          end
+        end
+      end
+
+      # Nothing needs to be done for update for now
+      # Create new ones
+      for focus in to_create
+        user_focus = UserFocus.create(user: user, focus: focus)
+        if !user_focus.save
+          render json: {
+                   errors: user_focus.errors.full_messages,
+                 }, status: :internal_server_error
+          raise ActiveRecord::RollBack # Roll back on fail
+        end
+      end
+    rescue
+      return
+    end
+
+    render json: {
+                   focuses: user.focuses,
+                 }, status: :ok
   end
 
   private
@@ -411,6 +552,10 @@ class UsersController < ApplicationController
 
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def focus_params
+    params.require(:user).permit(focuses: [:id])
   end
 
   def confirm_requester_is_owner_or_admin(user_id)
@@ -431,10 +576,10 @@ class UsersController < ApplicationController
     end
   end
 
-  def confirm_user_exists(id = params[:id])
-    if !User.find_by_id(id)
+  def confirm_user_exists
+    if !User.find_by_id(params[:id])
       render json: {
-        errors: ["User with id #{id} not found"],
+        errors: ["User with id #{params[:id]} not found"],
       }, status: :not_found
       return false
     end

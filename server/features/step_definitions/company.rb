@@ -1,9 +1,9 @@
 require "uri"
 require "net/http"
 
-Given("name as a string and description as a text") do
-  name = "disney"
-  description = "this is a company"
+Given("that I create a valid company") do
+  name = SecureRandom.alphanumeric(8)
+  description = SecureRandom.alphanumeric(16)
   ret = page.driver.post("/companies", { 'company': { 'name': name, 'description': description } })
 end
 

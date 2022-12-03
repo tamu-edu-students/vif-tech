@@ -75,8 +75,23 @@ Rails.application.routes.draw do
 
   resources :focuses, only: [:index, :create, :show, :update, :destroy]
   resources :user_focuses, only: [:index, :show]
+  get "users/focuses", to: "users#get_focuses"
   get "users/:id/focuses", to: "users#get_focuses"
+  post "users/focuses/:focus_id", to: "users#add_focus"
   post "users/:id/focuses/:focus_id", to: "users#add_focus"
+  put "users/:id/focuses/", to: "users#update_focus"
+  put "users/focuses/", to: "users#update_focus"
+  delete "users/focuses/:focus_id", to: "users#remove_focus"
+  delete "users/:id/focuses/:focus_id", to: "users#remove_focus"
+  get "companies/focuses", to: "companies#get_focuses"
   get "companies/:id/focuses", to: "companies#get_focuses"
+  post "companies/focuses/:focus_id", to: "companies#add_focus"
   post "companies/:id/focuses/:focus_id", to: "companies#add_focus"
+  delete "companies/focuses/:focus_id", to: "companies#remove_focus"
+  delete "companies/:id/focuses/:focus_id", to: "companies#remove_focus"
+  put "companies/:id/focuses/", to: "companies#update_focus"
+  put "companies/focuses/", to: "companies#update_focus"
+
+  resources :user_focuses, only: [:index]
+  resources :company_focuses, only: [:index]
 end
