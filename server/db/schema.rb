@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_02_221723) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_02_225736) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "domain"
     t.string "usertype"
@@ -83,7 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_221723) do
   end
 
   create_table "focus", force: :cascade do |t|
-    t.string "focus"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

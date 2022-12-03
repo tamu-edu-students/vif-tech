@@ -30,7 +30,8 @@ class User < ApplicationRecord
 
   def as_json(options = {})
     options[:except] ||= [:password_digest]
-    super(options)
+    res = super(options)
+    return res
   end
 
   def email_activate

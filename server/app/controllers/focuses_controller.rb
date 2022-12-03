@@ -5,9 +5,9 @@ class FocusesController < ApplicationController
       if @focus.save
         render json: { focus: @focus }, status: :created
       else
-        if Focus.find_by(focus: params["focus"]["focus"]) != nil
+        if Focus.find_by(name: params["focus"]["name"]) != nil
           render json: { errors: ["this focus name already taken"] }, status: :internal_server_error
-        elsif params["focus"]["focus"].nil?
+        elsif params["focus"]["name"].nil?
           render json: { errors: ["focus name not provided"] }, status: :internal_server_error
         else
           render json: { errors: ["Something went wrong when saving this focus"] }, status: :internal_server_error
@@ -69,6 +69,6 @@ class FocusesController < ApplicationController
   private
 
   def focus_params
-    params.require(:focus).permit(:focus)
+    params.require(:focus).permit(:name)
   end
 end
