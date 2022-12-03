@@ -3,7 +3,7 @@ require "net/http"
 
 Given('I create a question {string} and answer {string} and id {int}') do |string, string2, int|
   ret = page.driver.post('/faq', {"faq":{"question":string, "answer":string2, "id":int}})
-  expect(ret.status).to eq(200)
+
 end
 
 Then('the faq question {string} with answer {string} and id {int} should be found in my DB') do |string, string2, int|
