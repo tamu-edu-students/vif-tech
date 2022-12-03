@@ -128,6 +128,18 @@ class EventsController < ApplicationController
   # POST /events/1/signup/1
   def signup
     event = Event.find_by_id(params[:id])
+    if event.registration_start_time and Time.now < event.registration_start_time
+      render json: {
+        errors: ["Registration has not yet open."],
+      }, status: :bad_request
+      return
+    end
+    if event.registration_end_time and Time.now > event.registration_end_time
+      render json: {
+        errors: ["Registration is now closed."],
+      }, status: :bad_request
+      return
+    end
     if params[:user_id] != nil
       # Only admin can provide arbitrary user ID for event signup
       if !confirm_requester_is_admin
@@ -216,7 +228,7 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:title, :description, :start_time, :end_time)
+    params.require(:event).permit(:title, :description, :start_time, :end_time, :registration_start_time, :registration_end_time)
   end
 
   def confirm_user_logged_in
