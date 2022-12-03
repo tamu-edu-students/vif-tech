@@ -372,9 +372,6 @@ class UsersController < ApplicationController
     if !confirm_user_exists
       return
     end
-    if !confirm_requester_is_owner_or_admin(params[:id])
-      return
-    end
     render json: {
       user_focuses: Users.find(params[:id]),
     }, status: :ok
