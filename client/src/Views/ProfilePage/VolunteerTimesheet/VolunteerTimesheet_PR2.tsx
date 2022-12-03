@@ -18,7 +18,8 @@ interface OwnProps {
 }
 
 interface OwnState {
-  // dispatchQueue: any;
+  dispatchQueue: any;
+  isLoading: boolean;
 }
 
 type TimeOption = {
@@ -63,7 +64,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
-  // state = {dispatchQueue: {}};
+  state = {dispatchQueue: {}, isLoading: false};
 
   public componentDidMount(): void {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
@@ -77,10 +78,19 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
     }
   }
 
-  // private _setReaction = (reaction: any) => {
-  //   this.setState({  })
-  //   this.state.dispatchQueue[reaction.key] = reaction.key;
-  // }
+  private _onSaveChanges = (): void => {
+    this.setState({ isLoading: true });
+    console.log(Object.values(this.state.dispatchQueue));
+
+    Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
+    .then(() => {
+      this.setState({dispatchQueue: {}, isLoading: false});
+    })
+  }
+
+  private _setReaction = (key: string, reaction: any) => {
+    this.setState({ dispatchQueue: {...this.state.dispatchQueue, [key]: reaction} });
+  }
 
   private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
@@ -95,7 +105,7 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
               meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time)
               ?? null
             }
-            // setReaction={this._setReaction}
+            setReaction={this._setReaction}
           />
         </React.Fragment>
       );
@@ -111,7 +121,13 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
     if (this.props.isLoading) {
       return (
         <div>Loading Volunteer Timesheet for Portfolio Review 2...</div>
-      )
+      );
+    }
+
+    if (this.state.isLoading) {
+      return (
+        <div>Saving changes...</div>
+      );
     }
 
     if (this.props.errors.length > 0) {
@@ -139,20 +155,23 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
 
         {
           isAttendingEvent &&
-          <div className="table">
-            <div className="table__rows">
+          <>
+            <div className="table">
+              <div className="table__rows">
 
-              <div className="table__row table__row--header">
-                <div className="table__cell table__cell--header">Time</div>
-                <div className="table__cell table__cell--header">Name</div>
-                <div className="table__cell table__cell--header">Portfolio</div>
-                <div className="table__cell table__cell--header">Resume</div>
+                <div className="table__row table__row--header">
+                  <div className="table__cell table__cell--header">Time</div>
+                  <div className="table__cell table__cell--header">Name</div>
+                  <div className="table__cell table__cell--header">Portfolio</div>
+                  <div className="table__cell table__cell--header">Resume</div>
+                </div>
+
+                {event && this._renderTimeOptions(event.createTimeSlots(20, 5))}
+
               </div>
-
-              {event && this._renderTimeOptions(event.createTimeSlots(20, 5))}
-
             </div>
-          </div>
+            <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+          </>
         }
       </div>
     )

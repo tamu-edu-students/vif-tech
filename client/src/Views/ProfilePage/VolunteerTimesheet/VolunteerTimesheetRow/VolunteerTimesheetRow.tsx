@@ -15,7 +15,7 @@ interface OwnProps {
   end_time: string;
   event_id: number;
   meeting: Meeting | null;
-  // setReaction: Function;
+  setReaction: Function;
 }
 
 interface OwnState {
@@ -46,22 +46,22 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
 
   private _createMeeting = () => {
     const {start_time, end_time, owner_id, event_id} = this.props;
-    // const key = `${start_time}${end_time}`;
-    // const reaction: any = this.props.hadMeeting
-    //   ? {[key]: () => Promise.resolve()}
-    //   : {[key]: () => this.props.createMeeting({start_time, end_time, owner_id, event_id})};
-    // this.props.setReaction(reaction);
-    this.props.createMeeting({start_time, end_time, owner_id, event_id})
+    const key = `${start_time} ${end_time}`;
+    const reaction: any = this.props.hadMeeting
+      ? () => Promise.resolve()
+      : () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
+    this.props.setReaction(key, reaction);
+    // this.props.createMeeting({start_time, end_time, owner_id, event_id})
   }
 
   private _deleteMeeting = () => {
     const {start_time, end_time} = this.props;
-    // const key = `${start_time}${end_time}`;
-    // const reaction: any = this.props.hadMeeting
-    //   ? {[key]: () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)}
-    //   : {[key]: () => Promise.resolve()};
-    // this.props.setReaction(reaction);
-    this.props.deleteMeeting(this.props.meeting?.id ?? -1)
+    const key = `${start_time}${end_time}`;
+    const reaction: any = this.props.hadMeeting
+      ? () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)
+      : () => Promise.resolve();
+    this.props.setReaction(key, reaction);
+    // this.props.deleteMeeting(this.props.meeting?.id ?? -1)
   }
 
   public render(): React.ReactElement<Props> {
@@ -79,8 +79,15 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       <div className="VolunteerTimesheetRow table__row">
         <div className="table__cell table__cell--time">
           <button
-            onClick={ () => {hadMeeting ? this._deleteMeeting() : this._createMeeting() } }
-            className={`table__time-button ${hadMeeting ? 'table__time-button--available' : ''}`}
+            onClick={() => {
+              hadMeeting ? this._deleteMeeting() : this._createMeeting();
+              this.setState({ isChanged: !this.state.isChanged })
+            }}
+            className={`table__time-button ${
+              hadMeeting
+              ? (this.state.isChanged ? 'table__time-button--deleting' : 'table__time-button--available')
+              : (this.state.isChanged ? 'table__time-button--adding' : '')
+            }`}
           >
               {`${startTimeShort}—${endTimeShort}`}
           </button>

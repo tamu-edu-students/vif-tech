@@ -95,6 +95,22 @@
               background-color: $color-brand-yellow-darker;
             }
           }
+
+          &--adding {
+            background-color: $color-brand-green-dark;
+
+            &:hover {
+              background-color: $color-brand-green-darker;
+            }
+          }
+
+          &--deleting {
+            background-color: $color-brand-red-dark;
+
+            &:hover {
+              background-color: $color-brand-red-darker;
+            }
+          }
         }
       }
     }

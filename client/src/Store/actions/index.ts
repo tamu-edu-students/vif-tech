@@ -371,7 +371,7 @@ export const createMeeting = (formValues: any) => async (dispatch: any) => {
   })
   .catch((response) => {
     console.log('createMeeting response:', response);
-    dispatch({ type: meetingActionTypes.CREATE_MEETING__FAILURE, payload: {error: `ERROR: Failed to fetch meetings data`} });
+    dispatch({ type: meetingActionTypes.CREATE_MEETING__FAILURE, payload: {error: `ERROR: Failed to create meeting`} });
   });
 }
 
