@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+ 
   post "/login", to: "sessions#create"
   post "/logout", to: "sessions#destroy"
   get "/logged_in", to: "sessions#is_logged_in?"
@@ -10,6 +11,11 @@ Rails.application.routes.draw do
 
   get "/faq/find", to: "faq#find"
   resources :faq, only: [:create, :new, :show, :index, :update, :destroy]
+
+  get "abouts/find", to: "abouts#find"
+  resources :abouts 
+  resources :social_links
+  
 
   # English: For each user, make a route to get user/:id/confirm_email
   resources :users do
