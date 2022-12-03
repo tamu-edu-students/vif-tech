@@ -201,7 +201,7 @@ class MeetingsController < ApplicationController
         user_meeting = UserMeeting.new({ user: user, meeting: @meeting, status: status })
         if !user_meeting.save
           render json: {
-                   errors: @user_meeting.errors.full_messages,
+                   errors: user_meeting.errors.full_messages,
                  }, status: :internal_server_error
           raise ActiveRecord::RollBack # Roll back on fail
         end

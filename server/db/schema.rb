@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_02_225736) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "domain"
     t.string "usertype"
@@ -48,6 +48,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "company_focus", force: :cascade do |t|
+    t.integer "company_id", null: false
+    t.integer "focus_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_focus_on_company_id"
+    t.index ["focus_id"], name: "index_company_focus_on_focus_id"
+  end
+
   create_table "event_signups", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "event_id", null: false
@@ -74,7 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
   end
 
   create_table "focus", force: :cascade do |t|
-    t.string "focus"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -89,6 +98,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
     t.integer "event_id"
     t.index ["event_id"], name: "index_meetings_on_event_id"
     t.index ["owner_id"], name: "index_meetings_on_owner_id"
+  end
+
+  create_table "user_focus", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "focus_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["focus_id"], name: "index_user_focus_on_focus_id"
+    t.index ["user_id"], name: "index_user_focus_on_user_id"
   end
 
   create_table "user_meetings", force: :cascade do |t|
@@ -125,10 +143,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
   add_foreign_key "allowlist_emails", "companies"
   add_foreign_key "availabilities", "events"
   add_foreign_key "availabilities", "users"
+  add_foreign_key "company_focus", "companies"
+  add_foreign_key "company_focus", "focus", column: "focus_id"
   add_foreign_key "event_signups", "events"
   add_foreign_key "event_signups", "users"
   add_foreign_key "meetings", "events"
   add_foreign_key "meetings", "users", column: "owner_id"
+  add_foreign_key "user_focus", "focus", column: "focus_id"
+  add_foreign_key "user_focus", "users"
   add_foreign_key "user_meetings", "meetings"
   add_foreign_key "user_meetings", "users"
   add_foreign_key "users", "allowlist_domains"
