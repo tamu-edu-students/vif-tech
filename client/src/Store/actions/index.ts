@@ -3,6 +3,9 @@ import {
   authActionTypes,
   companyActionTypes,
   allowlistActionTypes,
+  eventActionTypes,
+  meetingActionTypes,
+  eventSignupActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -20,6 +23,9 @@ import User from 'Shared/entityClasses/User';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain  from 'Shared/entityClasses/AllowlistDomain';
 import FAQ from 'Shared/entityClasses/FAQ';
+import Event from 'Shared/entityClasses/Event';
+import Meeting from 'Shared/entityClasses/Meeting';
+import EventSignup from 'Shared/entityClasses/EventSignup';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -190,39 +196,29 @@ export const fetchAllowlist = () => async (dispatch: any) => {
 }
 
 export const createAllowlistEmail = (formValues: any, allowlistTitle: string) => async (dispatch: any, getState: any) => {
-  console.log(formValues)
   dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__REQUEST });
-  const allowlist_email: AllowlistEmail = {...formValues};
-  
-  await vifTech.post('/allowlist_emails', {
-    allowlist_email: { ...allowlist_email, is_primary_contact: allowlist_email.is_primary_contact ? 1 : 0 }
-  })
+  await vifTech.post('/allowlist_emails', {allowlist_email: { ...formValues }})
   .then((response_create) => {
     dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS, payload: new AllowlistEmail(response_create.data.allowlist_email) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__SUCCESS });
-    console.log('createAllowlistEmail response_create:', response_create);
   })
   .catch((response_create) => {
-    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__FAILURE, payload: { error: `ERROR: Failed to create allowlist email for ${formValues.email} in the ${allowlistTitle} allowlist` } });
     console.log('createAllowlistEmail response_create:', response_create);
+    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_EMAIL__FAILURE, payload: { error: `ERROR: Failed to create allowlist email for ${formValues.email} in the ${allowlistTitle} allowlist` } });
   });
 }
 
 export const createAllowlistDomain = (formValues: any, allowlistTitle: string) => async (dispatch: any, getState: any) => {
   dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__REQUEST });
-  const allowlist_domain: AllowlistDomain = {...formValues};
-
-  await vifTech.post('/allowlist_domains', {
-    allowlist_domain: { ...allowlist_domain }
-  })
+  await vifTech.post('/allowlist_domains', {allowlist_domain: { ...formValues }})
   .then((response_create) => {
+    console.log('createAllowlistDomain response_create:', response_create);
     dispatch({ type: allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS, payload: new AllowlistDomain(response_create.data.allowlist_domain) });
     dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__SUCCESS });
-    console.log('createAllowlistDomain response_create:', response_create);
   })
   .catch((response_create) => {
-    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist domain for ${formValues.domain} in the ${allowlistTitle} allowlist` } });
     console.log('createAllowlistDomain response_create:', response_create);
+    dispatch({ type: allowlistTitle+allowlistActionTypes.CREATE_ALLOWLIST_DOMAIN__FAILURE, payload: { error: `ERROR: Failed to create allowlist domain for ${formValues.domain} in the ${allowlistTitle} allowlist` } });
   });
 }
 
@@ -234,6 +230,7 @@ export const deleteAllowlistEmail = (id: number, allowlistTitle: string) => asyn
     dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS, payload: id });
     dispatch({ type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS });
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistEmail response_delete:', response_delete);
@@ -249,6 +246,7 @@ export const deleteAllowlistDomain = (id: number, allowlistTitle: string) => asy
     dispatch({ type: allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS, payload: id });
     dispatch({ type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS });
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistDomain response_delete:', response_delete);
@@ -277,6 +275,120 @@ export const transferPrimaryContact = (userId_to: number, isAdmin: boolean, allo
       // TODO: Make more specific
       payload: {error: `ERROR: Failed to transfer primary contact privilege`}
     });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         EVENTS */
+/********************************************************************************************* */
+export const fetchEvents = () => async (dispatch: any) => {
+  dispatch({ type: eventActionTypes.FETCH_EVENTS__REQUEST });
+  await vifTech.get('/events')
+  .then((response) => {
+    console.log('response_fetchEvents:', response);
+    dispatch({ type: eventActionTypes.FETCH_EVENTS__SUCCESS, payload: Event.createEvents(response.data.events) });
+    dispatch({ type: eventActionTypes.SET_EVENTS_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchEvents:', response);
+    dispatch({ type: eventActionTypes.FETCH_EVENTS__FAILURE, payload: {error: 'ERROR: Failed to fetch events data'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         EVENT SIGNUPS */
+/********************************************************************************************* */
+export const fetchEventSignups = () => async (dispatch: any) => {
+  dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__REQUEST });
+  await vifTech.get('/event_signups')
+  .then((response) => {
+    console.log('response_fetchEventSignups:', response);
+    dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__SUCCESS, payload: EventSignup.createEventSignups(response.data.event_signups) });
+    dispatch({ type: eventSignupActionTypes.SET_EVENT_SIGNUPS_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchEventSignups:', response);
+    dispatch({ type: eventSignupActionTypes.FETCH_EVENT_SIGNUPS__FAILURE, payload: {error: 'ERROR: Failed to fetch events data'} });
+  });
+}
+
+export const createEventSignup = (event_id: number, user_id?: number) => async (dispatch: any) => {
+  dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__REQUEST });
+  await vifTech.post(`/events/${event_id}/signup/${user_id ?? ''}`)
+  .then((response) => {
+    console.log('response addEventAttendee:', response);
+    dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__SUCCESS, payload: EventSignup.createEventSignup(response.data.event_signup) });
+  })
+  .catch((response) => {
+    console.log('response_addEventAttendee', response);
+    dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__FAILURE, payload: { error: 'ERROR: Failed to register for event' } });
+  });
+}
+
+export const deleteEventSignup = (event_id: number, user_id?: number) => async (dispatch: any) => {
+  dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__REQUEST });
+  await vifTech.delete(`/events/${event_id}/signout/${user_id ?? ''}`)
+  .then((response) => {
+    console.log('response removeEventAttendee:', response);
+    dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup.id });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
+  })
+  .catch((response) => {
+    console.log('response_removeEventAttendee', response);
+    dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__FAILURE, payload: { error: 'ERROR: Failed to unregister for event' } });
+  });
+}
+
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         MEETINGS */
+/********************************************************************************************* */
+export const fetchMeetings = () => async (dispatch: any) => {
+  dispatch({ type: meetingActionTypes.FETCH_MEETINGS__REQUEST });
+  await vifTech.get('/meetings')
+  .then((response) => {
+    console.log('response_fetchMeetings:', response);
+    dispatch({ type: meetingActionTypes.FETCH_MEETINGS__SUCCESS, payload: Meeting.createMeetings(response.data.meetings) });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchMeetings:', response);
+    dispatch({ type: meetingActionTypes.FETCH_MEETINGS__FAILURE, payload: {error: 'ERROR: Failed to fetch meetings data'} });
+  });
+}
+
+export const createMeeting = (formValues: any) => async (dispatch: any) => {
+  dispatch({ type: meetingActionTypes.CREATE_MEETING__REQUEST });
+  await vifTech.post(`/meetings`, { meeting: { ...formValues } })
+  .then((response) => {
+    console.log('createMeeting response:', response);
+    dispatch({ type: meetingActionTypes.CREATE_MEETING__SUCCESS, payload: new Meeting(response.data.meeting) });
+  })
+  .catch((response) => {
+    console.log('createMeeting response:', response);
+    dispatch({ type: meetingActionTypes.CREATE_MEETING__FAILURE, payload: {error: `ERROR: Failed to create meeting`} });
+  });
+}
+
+
+
+export const deleteMeeting = (id: number) => async (dispatch: any, getState: any) => {
+  dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__REQUEST });
+  await vifTech.delete(`/meetings/${id}`)
+  .then((response_delete) => {
+    console.log('deleteMeeting response_delete:', response_delete);
+    dispatch({ type: meetingActionTypes.DELETE_MEETING__SUCCESS, payload: id });
+    dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__SUCCESS });
+  })
+  .catch((response_delete) => {
+    console.log('deleteMeeting response_delete:', response_delete);
+    dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__FAILURE, payload: {error: `ERROR: Failed to delete meeting`} });
   });
 }
 

@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
     t.datetime "updated_at", null: false
   end
 
+ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "domain"
     t.string "usertype"
@@ -80,6 +81,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
   create_table "faqs", force: :cascade do |t|
     t.string "question", null: false
     t.text "answer", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "focus", force: :cascade do |t|
+    t.string "focus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
