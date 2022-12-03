@@ -176,14 +176,40 @@ class EventsController < ApplicationController
              }, status: :bad_request
       return
     end
+    ActiveRecord::Base.transaction do
+      # Delete user owned meetings that's associated with this event
+      for meeting in user.owned_meetings
+        if meeting.event == event
+          if !meeting.destroy
+            render json: {
+                     errors: meeting.errors.full_messages,
+                   }, status: :internal_server_error
+            raise ActiveRecord::RollBack
+          end
+        end
+      end
+      # Delete user meeting invites that's associated with this event
+      for user_meeting in user.user_meetings
+        if user_meeting.meeting.event == event
+          if !user_meeting.destroy
+            render json: {
+                     errors: user_meeting.errors.full_messages,
+                   }, status: :internal_server_error
+            raise ActiveRecord::RollBack
+          end
+        end
+      end
+    rescue
+      return
+    end
     if @event_signup.destroy
       render json: {
                event_signup: @event_signup,
              }, status: :ok
     else
       render json: {
-        errors: @event_signup.errors.full_messages,
-      }, status: :internal_server_error
+               errors: @event_signup.errors.full_messages,
+             }, status: :internal_server_error
     end
   end
 
