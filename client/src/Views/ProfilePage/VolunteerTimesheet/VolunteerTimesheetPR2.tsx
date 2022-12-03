@@ -76,6 +76,18 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     }
   }
 
+  public componentDidUpdate(): void {
+    if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
+      this.props.fetchEvents();
+    }
+    if (this.props.meetingsAreStale && !this.props.isLoading_fetchMeetings) {
+      this.props.fetchMeetings();
+    }
+    if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
+      this.props.fetchEventSignups();
+    }
+  }
+
   private _onSaveChanges = (): void => {
     this.setState({ isLoading: true });
     console.log(Object.values(this.state.dispatchQueue));
