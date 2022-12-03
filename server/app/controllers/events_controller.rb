@@ -216,7 +216,7 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:title, :description, :start_time, :end_time)
+    params.require(:event).permit(:title, :description, :start_time, :end_time, :registration_start_time, :registration_end_time)
   end
 
   def confirm_user_logged_in
