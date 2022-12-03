@@ -10,18 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
-  create_table "abouts", force: :cascade do |t|
-    t.string "firstname"
-    t.string "lastname"
-    t.text "imgSrc"
-    t.string "role"
-    t.text "description"
-    t.string "rank", default: "normal"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+ActiveRecord::Schema[7.0].define(version: 2022_12_01_144937) do
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "domain"
     t.string "usertype"
@@ -84,6 +73,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "focus", force: :cascade do |t|
+    t.string "focus"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "meetings", force: :cascade do |t|
     t.datetime "start_time", precision: nil, null: false
     t.datetime "end_time", precision: nil, null: false
@@ -94,19 +89,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
     t.integer "event_id"
     t.index ["event_id"], name: "index_meetings_on_event_id"
     t.index ["owner_id"], name: "index_meetings_on_owner_id"
-  end
-
-  create_table "social_links", force: :cascade do |t|
-    t.string "facebook"
-    t.string "youtube"
-    t.string "portfolio"
-    t.string "twitter"
-    t.string "linkedin"
-    t.string "github"
-    t.integer "about_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["about_id"], name: "index_social_links_on_about_id"
   end
 
   create_table "user_meetings", force: :cascade do |t|
@@ -147,7 +129,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_064213) do
   add_foreign_key "event_signups", "users"
   add_foreign_key "meetings", "events"
   add_foreign_key "meetings", "users", column: "owner_id"
-  add_foreign_key "social_links", "abouts"
   add_foreign_key "user_meetings", "meetings"
   add_foreign_key "user_meetings", "users"
   add_foreign_key "users", "allowlist_domains"

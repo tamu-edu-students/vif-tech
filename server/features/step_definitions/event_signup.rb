@@ -85,3 +85,8 @@ Then("event_signup with id {int} should involve event {int} and user {int}") do 
   expect(ret_body["event_signup"]["event"]["id"]).to eq(event_id)
   expect(ret_body["event_signup"]["user"]["id"]).to eq(user_id)
 end
+
+Then("I sign out user {int} of event {int} and receive code {int}") do |user_id, event_id, code|
+  ret = page.driver.delete("/events/#{event_id}/signout/#{user_id}")
+  expect(ret.status).to eq(code)
+end

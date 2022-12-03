@@ -110,6 +110,68 @@ export const DELETE_FAQ = 'DELETE_FAQ';
 
 
 /********************************************************************************************* */
+/**************************************************************************         EVENTS */
+/********************************************************************************************* */
+export const eventActionTypes = {
+  FETCH_EVENTS: 'FETCH_EVENTS',
+  FETCH_EVENTS__REQUEST: 'FETCH_EVENTS__REQUEST',
+  FETCH_EVENTS__SUCCESS: 'FETCH_EVENTS__SUCCESS',
+  FETCH_EVENTS__FAILURE: 'FETCH_EVENTS__FAILURE',
+  
+  SET_EVENTS_STALENESS: 'SET_EVENTS_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         EVENT SIGNUPS */
+/********************************************************************************************* */
+export const eventSignupActionTypes = {
+  FETCH_EVENT_SIGNUPS: 'FETCH_EVENT_SIGNUPS',
+  FETCH_EVENT_SIGNUPS__REQUEST: 'FETCH_EVENT_SIGNUPS__REQUEST',
+  FETCH_EVENT_SIGNUPS__SUCCESS: 'FETCH_EVENT_SIGNUPS__SUCCESS',
+  FETCH_EVENT_SIGNUPS__FAILURE: 'FETCH_EVENT_SIGNUPS__FAILURE',
+
+  CREATE_EVENT_SIGNUP: 'CREATE_EVENT_SIGNUP',
+  CREATE_EVENT_SIGNUP__REQUEST: 'CREATE_EVENT_SIGNUP__REQUEST',
+  CREATE_EVENT_SIGNUP__SUCCESS: 'CREATE_EVENT_SIGNUP__SUCCESS',
+  CREATE_EVENT_SIGNUP__FAILURE: 'CREATE_EVENT_SIGNUP__FAILURE',
+
+  DELETE_EVENT_SIGNUP: 'DELETE_EVENT_SIGNUP',
+  DELETE_EVENT_SIGNUP__REQUEST: 'DELETE_EVENT_SIGNUP__REQUEST',
+  DELETE_EVENT_SIGNUP__SUCCESS: 'DELETE_EVENT_SIGNUP__SUCCESS',
+  DELETE_EVENT_SIGNUP__FAILURE: 'DELETE_EVENT_SIGNUP__FAILURE',
+  
+  SET_EVENT_SIGNUPS_STALENESS: 'SET_EVENT_SIGNUPS_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         MEETINGS */
+/********************************************************************************************* */
+export const meetingActionTypes = {
+  FETCH_MEETINGS: 'FETCH_MEETINGS',
+  FETCH_MEETINGS__REQUEST: 'FETCH_MEETINGS__REQUEST',
+  FETCH_MEETINGS__SUCCESS: 'FETCH_MEETINGS__SUCCESS',
+  FETCH_MEETINGS__FAILURE: 'FETCH_MEETINGS__FAILURE',
+  
+  CREATE_MEETING: 'CREATE_MEETING',
+  CREATE_MEETING__REQUEST: 'CREATE_MEETING__REQUEST',
+  CREATE_MEETING__SUCCESS: 'CREATE_MEETING__SUCCESS',
+  CREATE_MEETING__FAILURE: 'CREATE_MEETING__FAILURE',
+
+  DELETE_MEETING: 'DELETE_MEETING',
+  DELETE_MEETING__REQUEST: 'DELETE_MEETING__REQUEST',
+  DELETE_MEETING__SUCCESS: 'DELETE_MEETING__SUCCESS',
+  DELETE_MEETING__FAILURE: 'DELETE_MEETING__FAILURE',
+  
+  SET_MEETINGS_STALENESS: 'SET_MEETINGS_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
 /**************************************************************************         MODAL */
 /********************************************************************************************* */
 export const SHOW_MODAL = 'SHOW_MODAL';
