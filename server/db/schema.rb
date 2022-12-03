@@ -76,8 +76,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_225736) do
   end
 
   create_table "faqs", force: :cascade do |t|
-    t.string "question"
-    t.text "answer"
+    t.string "question", null: false
+    t.text "answer", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -114,7 +114,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_225736) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status"
+    t.string "status", default: "pending"
     t.index ["meeting_id"], name: "index_user_meetings_on_meeting_id"
     t.index ["user_id"], name: "index_user_meetings_on_user_id"
   end
