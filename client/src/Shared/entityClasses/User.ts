@@ -1,6 +1,9 @@
 import { Usertype } from "Shared/enums";
 import AllowlistEmail from "./AllowlistEmail";
+import Meeting from "./Meeting";
 import Company from "./Company";
+import Event from "./Event";
+import EventSignup from "./EventSignup";
 
 export interface IUser {
   id: number;
@@ -36,6 +39,10 @@ export default class User implements IUser {
     return user_allowlist_email?.is_primary_contact ?? false;
   }
 
+  public isAttendingEvent(event: Event, eventSignups: EventSignup[]): boolean {
+    return EventSignup.findAllByEventIdAndUserId(event.id, this.id, eventSignups).length > 0;
+  }
+
   public findCompany(companies: Company[]): Company | null {
     return companies.find((company: Company) => company.id === this.company_id) ?? null;
   }
@@ -47,6 +54,14 @@ export default class User implements IUser {
       && allowlist_email.usertype === this.usertype
     )
     ?? null;
+  }
+
+  public findMeetings(meetings: Meeting[]): Meeting[] {
+    return meetings.filter((meeting: Meeting) => meeting.owner_id === this.id);
+  }
+
+  public findMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
+    return this.findMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
   }
 
   public static createNewUsers(userData: IUser[]): User[] {
