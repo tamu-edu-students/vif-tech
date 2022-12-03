@@ -17,7 +17,7 @@ import {
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
-import { Usertype } from "Shared/enums";
+// import { Usertype } from "Shared/enums";
 import Company from 'Shared/entityClasses/Company';
 import User from 'Shared/entityClasses/User';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';

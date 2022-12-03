@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
-import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import {eventActionTypes } from 'Store/actions/types';
+// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+// import {eventActionTypes } from 'Store/actions/types';
 import { createMeeting, deleteMeeting } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
-import Event from 'Shared/entityClasses/Event';
+// import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 
 
@@ -22,10 +22,10 @@ interface OwnState {
   isChanged: boolean;
 }
 
-type TimeOption = {
-  start_time: string;
-  end_time: string;
-}
+// type TimeOption = {
+//   start_time: string;
+//   end_time: string;
+// }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
@@ -56,7 +56,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
 
   private _deleteMeeting = () => {
     const {start_time, end_time} = this.props;
-    const key = `${start_time}${end_time}`;
+    const key = `${start_time} ${end_time}`;
     const reaction: any = this.props.hadMeeting
       ? () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)
       : () => Promise.resolve();
@@ -69,7 +69,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       start_time,
       end_time,
       hadMeeting,
-      meeting,
+      // meeting,
     } = this.props;
     
     const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');

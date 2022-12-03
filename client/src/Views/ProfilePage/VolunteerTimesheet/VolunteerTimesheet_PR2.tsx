@@ -6,8 +6,6 @@ import {eventActionTypes, meetingActionTypes, eventSignupActionTypes } from 'Sto
 import { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, deleteEventSignup } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
-import EventSignup from 'Shared/entityClasses/EventSignup';
-import User from 'Shared/entityClasses/User';
 import Meeting from 'Shared/entityClasses/Meeting';
 
 import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
