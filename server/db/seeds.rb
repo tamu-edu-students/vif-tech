@@ -19,6 +19,3 @@ when "production"
   Event.create(title: "Portfolio Review 2", description: "Second portfolio review", start_time: "2023-02-18T10:00:00CST", end_time: "2023-02-18T16:00:00CST")
   Event.create(title: "Virtual Fair", description: "Virtual Visualization Industry Fair (VIF)", start_time: "2023-02-23T10:00:00CST", end_time: "2023-02-23T16:00:00CST")
 end
-
-about = About.create({ firstname: "Testfirst", lastname: "Testlast", role: "Student Member" })
-social_link = SocialLink.create({ facebook: "www.facebook.com", youtube: "www.youtube.com", twitter: "www.twitter.com", about_id: about.id })
