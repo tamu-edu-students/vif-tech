@@ -61,7 +61,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
+class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   state = {dispatchQueue: {}, isLoading: false};
 
   public componentDidMount(): void {
@@ -176,4 +176,4 @@ class VolunteerTimesheet_PR2 extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimesheet_PR2);
+export default connector(VolunteerTimesheetPR2);

@@ -15,7 +15,7 @@ import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
-import VolunteerTimesheet_PR2 from './VolunteerTimesheet/VolunteerTimesheet_PR2';
+import VolunteerTimesheetPR2 from './VolunteerTimesheet/VolunteerTimesheetPR2';
 
 
 interface OwnProps {
@@ -103,7 +103,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
         []
       ),
       <Route exact path={`${parentPath}/time-sheet`} key={`${parentPath}/time-sheet`}>
-        <VolunteerTimesheet_PR2 />
+        <VolunteerTimesheetPR2 />
       </Route>
     ]);
   }
