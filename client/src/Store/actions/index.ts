@@ -335,6 +335,7 @@ export const deleteEventSignup = (event_id: number, user_id?: number) => async (
   .then((response) => {
     console.log('response removeEventAttendee:', response);
     dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup.id });
+    dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
   })
   .catch((response) => {
     console.log('response_removeEventAttendee', response);
