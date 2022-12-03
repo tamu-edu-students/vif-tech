@@ -12,7 +12,6 @@ AllowlistDomain.create(domain: "tamu.edu", usertype: "student")
 AllowlistDomain.create(domain: "arch.tamu.edu", usertype: "student")
 AllowlistDomain.create(domain: "exchange.tamu.edu", usertype: "student")
 case Rails.env
-
 when "production"
   Event.create(title: "Portfolio Review 1", description: "First portfolio review", start_time: "2022-10-22T10:00:00CDT", end_time: "2022-10-22T16:00:00CDT")
   Event.create(title: "Mock Interview 1", description: "First mock interview", start_time: "2023-02-16T10:00:00CST", end_time: "2023-02-16T16:00:00CST")

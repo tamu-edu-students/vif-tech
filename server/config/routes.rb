@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   get "/faq/find", to: "faq#find"
   resources :faq, only: [:create, :new, :show, :index, :update, :destroy]
 
+  get "abouts/find", to: "abouts#find"
+  resources :abouts
+  resources :social_links
+
   # English: For each user, make a route to get user/:id/confirm_email
   resources :users do
     member do
@@ -48,8 +52,6 @@ Rails.application.routes.draw do
   get "/companies/:id/availabilities", to: "companies#rep_availabilities"
   put "/companies/:id", to: "companies#update"
   delete "/companies/:id", to: "companies#destroy"
-  # post "/users/:id/companies/:company_id", to: "users#add_to_company"
-  # delete "users/:id/companies/:company_id", to: "users#delete_from_company"
   get "/companies/public", to: "companies#public_index", as: "public_index"
 
   resources :availabilities, only: [:create, :show, :index, :update, :destroy]
@@ -72,6 +74,6 @@ Rails.application.routes.draw do
   delete "events/:id/signout/:user_id", to: "events#signout"
 
   resources :focuses
-  
+
   resources :event_signups, only: [:index, :show]
 end
