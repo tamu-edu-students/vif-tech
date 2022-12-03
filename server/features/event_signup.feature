@@ -242,3 +242,19 @@ Feature: Event Signup
             | 2 |
         Then meeting 2 should have as "pending" invitees the following users
             | 4 | 5 |
+        
+
+    Scenario: Validate registration time
+        # User 1, admin
+        Given that I log in as admin
+        # Event 1~3
+        And I created an event that we can register now with the following and return code 201
+        And I created an event that whose registration closed with the following and return code 201
+        And I created an event that whose registration has not started with the following and return code 201
+        And I created an event that whose registration time is inverted with the following and return code 500
+        And I allow a new domain tamu.edu for usertype volunteer
+        # User 2
+        And that I sign up and log in as a valid volunteer
+        And I sign up to event 1 and receive code 200
+        And I sign up to event 2 and receive code 400
+        And I sign up to event 3 and receive code 400

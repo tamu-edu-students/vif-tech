@@ -90,3 +90,47 @@ Then("I sign out user {int} of event {int} and receive code {int}") do |user_id,
   ret = page.driver.delete("/events/#{event_id}/signout/#{user_id}")
   expect(ret.status).to eq(code)
 end
+
+Given("I created an event that we can register now with the following and return code {int}") do |code|
+  time_now = Time.now
+  ret = page.driver.post("/events", {
+    'event': {
+      'title': SecureRandom.alphanumeric(8), 'start_time': time_now + 7.days, 'end_time': time_now + 14.days, 'registration_start_time': time_now - 7.days, 'registration_end_time': time_now + 7.days,
+    },
+  })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(code)
+end
+
+Given("I created an event that whose registration closed with the following and return code {int}") do |code|
+  time_now = Time.now
+  ret = page.driver.post("/events", {
+    'event': {
+      'title': SecureRandom.alphanumeric(8), 'start_time': time_now + 7.days, 'end_time': time_now + 14.days, 'registration_start_time': time_now - 7.days, 'registration_end_time': time_now - 2.days,
+    },
+  })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(code)
+end
+
+Given("I created an event that whose registration has not started with the following and return code {int}") do |code|
+  time_now = Time.now
+  ret = page.driver.post("/events", {
+    'event': {
+      'title': SecureRandom.alphanumeric(8), 'start_time': time_now + 7.days, 'end_time': time_now + 14.days, 'registration_start_time': time_now + 2.days, 'registration_end_time': time_now + 4.days,
+    },
+  })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(code)
+end
+
+Given("I created an event that whose registration time is inverted with the following and return code {int}") do |code|
+  time_now = Time.now
+  ret = page.driver.post("/events", {
+    'event': {
+      'title': SecureRandom.alphanumeric(8), 'start_time': time_now + 7.days, 'end_time': time_now + 14.days, 'registration_start_time': time_now + 7.days, 'registration_end_time': time_now - 7.days,
+    },
+  })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(code)
+end
