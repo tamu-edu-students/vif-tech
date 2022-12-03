@@ -74,7 +74,7 @@ Rails.application.routes.draw do
   resources :event_signups, only: [:index, :show]
 
   resources :focuses, only: [:index, :create, :show, :update, :destroy]
-  resources :user_focuses, only: [:index, :show]
+
   get "users/focuses", to: "users#get_focuses"
   get "users/:id/focuses", to: "users#get_focuses"
   post "users/focuses/:focus_id", to: "users#add_focus"
