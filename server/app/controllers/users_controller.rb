@@ -1,31 +1,8 @@
 class UsersController < ApplicationController
   before_action :confirm_user_logged_in, except: [:new, :create, :confirm_email]
-  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings, :get_owned_meetings, :add_to_meeting, :update_meeting]
+  before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings,
+                                             :get_owned_meetings, :add_to_meeting, :update_meeting]
   before_action :confirm_meeting_exists, only: [:assigned_to_meeting?, :add_to_meeting, :update_meeting, :delete_from_meeting]
-
-  def confirm_user_logged_in
-    if !(logged_in? && current_user)
-      render json: {
-               errors: ["User not logged in"],
-             }, status: :unauthorized
-    end
-  end
-
-  def confirm_user_exists
-    if !User.find_by_id(params[:id])
-      render json: {
-        errors: ["User with id #{params[:id]} not found"],
-      }, status: :not_found
-    end
-  end
-
-  def confirm_meeting_exists
-    if !Meeting.find_by_id(params[:meeting_id])
-      render json: {
-        errors: ["Meeting with id #{params[:id]} not found"],
-      }, status: :not_found
-    end
-  end
 
   def index
     render json: {
@@ -387,6 +364,41 @@ class UsersController < ApplicationController
     render json: {}, status: :ok
   end
 
+  # GET "users/:id/focuses" or GET "users/focuses"
+  def get_focuses
+    if params[:id] == nil
+      params[:id] = current_user.id
+    end
+    if !confirm_user_exists
+      return
+    end
+    render json: {
+      user_focuses: Users.find(params[:id]),
+    }, status: :ok
+  end
+
+  # POST "users/:id/focuses/:focus_id" or "users/focuses/:focus_id"
+  def add_focus
+    if params[:id] == nil
+      params[:id] = current_user.id
+    end
+    if !confirm_user_exists
+      return
+    end
+    user = Users.find(params[:id])
+    focus = Focuses.find(params[:focus_id])
+    @user_focus = UserFocus.create(user: user, focus: focus)
+    if @user_focus.save
+      render json: {
+        user_focus: @user_focus,
+      }, status: :ok
+    else
+      render json: {
+        errors: @user_focus.errors.full_messages,
+      }, status: :bad_request
+    end
+  end
+
   private
 
   def user_params
@@ -409,5 +421,31 @@ class UsersController < ApplicationController
       return false
     end
     return true
+  end
+
+  def confirm_user_logged_in
+    if !(logged_in? && current_user)
+      render json: {
+               errors: ["User not logged in"],
+             }, status: :unauthorized
+    end
+  end
+
+  def confirm_user_exists(id = params[:id])
+    if !User.find_by_id(id)
+      render json: {
+        errors: ["User with id #{id} not found"],
+      }, status: :not_found
+      return false
+    end
+    return true
+  end
+
+  def confirm_meeting_exists
+    if !Meeting.find_by_id(params[:meeting_id])
+      render json: {
+        errors: ["Meeting with id #{params[:id]} not found"],
+      }, status: :not_found
+    end
   end
 end

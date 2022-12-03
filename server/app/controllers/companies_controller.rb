@@ -48,7 +48,6 @@ class CompaniesController < ApplicationController
   end
 
   def new
-    
     @company = Company.new
   end
 
@@ -77,10 +76,11 @@ class CompaniesController < ApplicationController
       if logged_in? && current_user && current_user.usertype == "admin"
         render json: {
                  company: @company,
-                allowlist_domains:@company.allowlist_domains, 
-                allowlist_emails:@company.allowlist_emails}, status: :ok
+                 allowlist_domains: @company.allowlist_domains,
+                 allowlist_emails: @company.allowlist_emails,
+               }, status: :ok
       else
-        render json:{company: @company}, status: :ok
+        render json: { company: @company }, status: :ok
       end
     else
       render json: {
@@ -97,7 +97,7 @@ class CompaniesController < ApplicationController
   def update
     @company = Company.find_by_id(params[:id])
     if @company.nil?
-      render json:{errors: ["no such company found for editting"],}, status: :not_found
+      render json: { errors: ["no such company found for editting"] }, status: :not_found
       return
     end
     if logged_in? && current_user && current_user.usertype == "admin"
@@ -112,20 +112,19 @@ class CompaniesController < ApplicationController
       end
     elsif logged_in? && current_user && !current_user.company_id.nil? && current_user.company_id == @company.id && current_user.usertype == "company representative"
       if @company.update(company_params)
-        render json:{company: @company,}, status: :ok
+        render json: { company: @company }, status: :ok
       else
-        render json:{errors: ["something went wrong when updating this company"],}, status: :internal_server_error
+        render json: { errors: ["something went wrong when updating this company"] }, status: :internal_server_error
       end
     else
-      render json:{errors: ["User does not have previleges for requested action"],}, status: :forbidden
+      render json: { errors: ["User does not have previleges for requested action"] }, status: :forbidden
     end
   end
 
   def destroy
-    
     @company = Company.find_by_id(params[:id])
     if @company.nil?
-      render json:{errors: ["no such company found for deleting"],}, status: :not_found
+      render json: { errors: ["no such company found for deleting"] }, status: :not_found
       return
     end
     if logged_in? && current_user && current_user.usertype == "admin"
@@ -139,7 +138,37 @@ class CompaniesController < ApplicationController
                }, status: :internal_server_error
       end
     else
-      render json:{errors: ["User does not have previleges for requested action"],}, status: :forbidden
+      render json: { errors: ["User does not have previleges for requested action"] }, status: :forbidden
+    end
+  end
+
+  # GET "companies/:id/focuses"
+  def get_focuses
+    if !confirm_company_exists
+      return
+    end
+    @company = Company.find(params[:id])
+    render json: {
+      company_focuses: @company.focuses,
+    }, status: :ok
+  end
+
+  # POST "companies/:id/focuses/:focus_id"
+  def add_focus
+    if !confirm_company_exists
+      return
+    end
+    company = Company.find(params[:id])
+    focus = Focus.find(params[:focus_id])
+    @company_focus = CompanyFocus.create(company: company, focus: focus)
+    if @company_focus.save
+      render json: {
+               company_focus: @company_focus,
+             }, status: :ok
+    else
+      render json: {
+               errors: @company_focus.errors.full_messages,
+             }, status: :bad_request
     end
   end
 
@@ -155,5 +184,15 @@ class CompaniesController < ApplicationController
                errors: ["User not logged in"],
              }, status: :unauthorized
     end
+  end
+
+  def confirm_company_exists
+    if !Company.find(params[:id])
+      render json: {
+               errors: ["company not found"],
+             }, status: :not_found
+      return false
+    end
+    return true
   end
 end

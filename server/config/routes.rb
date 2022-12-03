@@ -71,7 +71,12 @@ Rails.application.routes.draw do
   delete "events/:id/signout", to: "events#signout"
   delete "events/:id/signout/:user_id", to: "events#signout"
 
-  resources :focuses
-  
   resources :event_signups, only: [:index, :show]
+
+  resources :focuses, only: [:index, :create, :show, :update, :destroy]
+  resources :user_focuses, only: [:index, :show]
+  get "users/:id/focuses", to: "users#get_focuses"
+  post "users/:id/focuses/:focus_id", to: "users#add_focus"
+  get "companies/:id/focuses", to: "companies#get_focuses"
+  post "companies/:id/focuses/:focus_id", to: "companies#add_focus"
 end
