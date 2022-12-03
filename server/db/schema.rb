@@ -11,6 +11,17 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_12_03_020518) do
+  create_table "abouts", force: :cascade do |t|
+    t.string "firstname"
+    t.string "lastname"
+    t.text "imgSrc"
+    t.string "role"
+    t.text "description"
+    t.string "rank", default: "normal"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "allowlist_domains", force: :cascade do |t|
     t.string "domain"
     t.string "usertype"
@@ -102,6 +113,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_03_020518) do
     t.index ["owner_id"], name: "index_meetings_on_owner_id"
   end
 
+  create_table "social_links", force: :cascade do |t|
+    t.string "facebook"
+    t.string "youtube"
+    t.string "portfolio"
+    t.string "twitter"
+    t.string "linkedin"
+    t.string "github"
+    t.integer "about_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["about_id"], name: "index_social_links_on_about_id"
+  end
+
   create_table "user_focus", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "focus_id", null: false
@@ -151,6 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_03_020518) do
   add_foreign_key "event_signups", "users"
   add_foreign_key "meetings", "events"
   add_foreign_key "meetings", "users", column: "owner_id"
+  add_foreign_key "social_links", "abouts"
   add_foreign_key "user_focus", "focus", column: "focus_id"
   add_foreign_key "user_focus", "users"
   add_foreign_key "user_meetings", "meetings"
