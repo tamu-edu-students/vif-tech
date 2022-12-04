@@ -34,6 +34,11 @@ export default class User implements IUser {
     this.interests = interests;
   }
 
+  public get isStudent(): boolean { return this.usertype === Usertype.STUDENT; }
+  public get isVolunteer(): boolean { return this.usertype === Usertype.VOLUNTEER; }
+  public get isRepresentative(): boolean { return this.usertype === Usertype.REPRESENTATIVE; }
+  public get isAdmin(): boolean { return this.usertype === Usertype.ADMIN; }
+
   public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
     const user_allowlist_email: AllowlistEmail | null = this.findAllowlistEmail(allowlist_emails);
     return user_allowlist_email?.is_primary_contact ?? false;
