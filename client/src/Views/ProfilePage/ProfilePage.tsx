@@ -58,7 +58,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   private _renderAdminRoutes(): JSX.Element[] {
-    const { parentPath} = this.props;
+    const { parentPath } = this.props;
     return ([
       <Route exact path={`${parentPath}/company-allowlists`} key={`${parentPath}/company-allowlists`}>
         <CompanyAllowlists />
@@ -79,7 +79,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   private _renderAdminLinks(): JSX.Element {
-    const { parentPath} = this.props;
+    const { parentPath } = this.props;
     return (
       <>
         <li><Link to={`${parentPath}/company-allowlists`}>Company Allowlist</Link></li>
@@ -91,7 +91,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   private _renderRepresentativeRoutes(): JSX.Element[] {
-    const { parentPath} = this.props;
+    const { parentPath } = this.props;
     return ([
       ...(
         this.props.amPrimaryContact ?
@@ -109,7 +109,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   private _renderRepresentativeLinks(): JSX.Element {
-    const { parentPath} = this.props;
+    const { parentPath } = this.props;
     return (
       <>
         {
@@ -121,12 +121,32 @@ class ProfilePage extends React.Component<Props, OwnState> {
     );
   }
 
+  private _renderVolunteerRoutes(): JSX.Element[] {
+    const { parentPath } = this.props;
+    return ([
+      <Route exact path={`${parentPath}/time-sheet`} key={`${parentPath}/time-sheet`}>
+        <VolunteerTimesheetPR2 />
+      </Route>
+    ]);
+  }
+
+  private _renderVolunteerLinks(): JSX.Element {
+    const { parentPath } = this.props;
+    return (
+      <>
+        <li><Link to={`${parentPath}/time-sheet`}>Time Sheet</Link></li>
+      </>
+    );
+  }
+
   private _renderLinks(): JSX.Element | null {
     switch(this.props.user?.usertype) {
       case Usertype.ADMIN:
         return this._renderAdminLinks();
       case Usertype.REPRESENTATIVE:
         return this._renderRepresentativeLinks();
+      case Usertype.VOLUNTEER:
+        return this._renderVolunteerLinks();
       default:
         return null;
     }
@@ -138,6 +158,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
         return this._renderAdminRoutes();
       case Usertype.REPRESENTATIVE:
         return this._renderRepresentativeRoutes();
+      case Usertype.VOLUNTEER:
+        return this._renderVolunteerRoutes();
       default:
         return [];
     }
