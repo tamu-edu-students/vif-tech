@@ -16,6 +16,7 @@ import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
 import VolunteerTimesheetPR2 from './VolunteerTimesheet/VolunteerTimesheetPR2';
+import MeetingAssignmentSheetPR2 from './MeetingAssignmentSheet/MeetingAssignmentSheetPR2';
 
 
 interface OwnProps {
@@ -75,6 +76,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
       <Route exact path={`${parentPath}/volunteer-allowlist`} key={`${parentPath}/volunteer-allowlist`}>
         <VolunteerAllowlist />
       </Route>,
+
+      <Route exact path={`${parentPath}/admin-portfolio-review-2`} key={`${parentPath}/admin-portfolio-review-2`}>
+        <MeetingAssignmentSheetPR2 />
+      </Route>,
     ]);
   }
 
@@ -86,6 +91,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
         <li><Link to={`${parentPath}/student-allowlist`}>Student Allowlist</Link></li>
         <li><Link to={`${parentPath}/admin-allowlist`}>Admin Allowlist</Link></li>
         <li><Link to={`${parentPath}/volunteer-allowlist`}>Volunteer Allowlist</Link></li>
+        <li><Link to={`${parentPath}/admin-portfolio-review-2`}>Portfolio Review 2</Link></li>
       </>
     );
   }
