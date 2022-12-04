@@ -21,7 +21,7 @@ const getSubgroupOptions = (subgroupType => {
   let aliasDelete;
 
   if (subgroupType === 'primary contact') {
-    subgroupHeading ='Primary Contacts';
+    subgroupHeading ='Primary Contact';
     aliasCreate = '@Create Allowlist Email';
     aliasDelete = '@Delete Allowlist Email';
   }
@@ -50,7 +50,7 @@ Before(function() {
   cy.intercept('GET', "http://localhost:3001/companies", req => {
     req.reply(
       200,
-      { companies  }
+      { companies }
     );
   }).as('Fetch Companies');
 
@@ -63,23 +63,31 @@ Before(function() {
       )
     }
     const newCompany = createCompany(name);
+    companies.push(newCompany);
     req.reply(
       200,
       { company: newCompany }
     );
   }).as('Create Company');
 
+  cy.intercept('GET', "http://localhost:3001/users", req => {
+    req.reply(
+      200,
+      { users }
+    );
+  }).as('Fetch Users');
+
   cy.intercept('GET', "http://localhost:3001/allowlist_emails", req => {
     req.reply(
       200,
-      { emails: allowlist_emails }
+      { allowlist_emails }
     );
   }).as('Fetch Allowlist Emails');
 
   cy.intercept('GET', "http://localhost:3001/allowlist_domains", req => {
     req.reply(
       200,
-      { domains: allowlist_domains }
+      { allowlist_domains }
     );
   }).as('Fetch Allowlist Domains');
 
@@ -120,9 +128,10 @@ Before(function() {
 
 Given(`I visit the companies allowlist page`, () => {
   cy.visit('/profile/company-allowlists')
-  .wait('@Fetch Companies')
-  .wait('@Fetch Allowlist Emails')
-  .wait('@Fetch Allowlist Domains');
+  // .wait('@Fetch Users')
+  // .wait('@Fetch Companies')
+  // .wait('@Fetch Allowlist Emails')
+  // .wait('@Fetch Allowlist Domains')
 });
 
 Given(`I am not logged in`, () => {
@@ -143,11 +152,8 @@ Given(`the following companies are in the allowlist:`, (table) => {
   const companyNames = Object.values(table.hashes()[0]);
   
   companyNames.forEach(companyName => {
-    const newCompany = createCompany(companyName);
-    store.dispatch({ type: 'CREATE_COMPANY', payload: newCompany });
+    companies.push(createCompany(companyName))
   });
-
-  companies = store.getState().companies;
 });
 
 When(`I reload`, () => {
@@ -191,31 +197,18 @@ And('I click the company confirm add button', () => {
   cy.findByRole('button', { name: /confirm/i })
     .click()
     .wait("@Create Company")
-    .then(() => {
-      companies = store.getState().companies;
-    });
 });
 
 And(/I click the (.*) confirm add button/, (subgroupType) => {
   cy.findByRole('button', { name: /confirm/i })
     .click()
-    .wait([getSubgroupOptions(subgroupType).aliasCreate])
-    .then(() => {
-      companies = store.getState().companies;
-      allowlist_emails = store.getState().allowlist.allowlist_emails;
-      allowlist_domains = store.getState().allowlist.allowlist_domains;
-    });
+    .wait([getSubgroupOptions(subgroupType).aliasCreate]);
 });
 
 And(/I click the (.*) confirm delete button/, (subgroupType) => {
   cy.findByRole('button', { name: /confirm/i })
     .click()
-    .wait([getSubgroupOptions(subgroupType).aliasDelete])
-    .then(() => {
-      companies = store.getState().companies;
-      allowlist_emails = store.getState().allowlist.allowlist_emails;
-      allowlist_domains = store.getState().allowlist.allowlist_domains;
-    });
+    .wait([getSubgroupOptions(subgroupType).aliasDelete]);
 });
 
 

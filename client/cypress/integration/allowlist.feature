@@ -27,10 +27,10 @@ Feature: Allowlist
       | Disney | Activision |
 
   Scenario Outline: adding new allowlist entries should work
-    Given I visit the companies allowlist page
-    And the following companies are in the allowlist:
+    Given the following companies are in the allowlist:
       | companyName1 | companyName2 |
       | <name1>      | <name2>      |
+    And I visit the companies allowlist page
     When I click the add <subgroupType> button for the following company name:
       | companyName |
       | <name1>     |
@@ -59,10 +59,10 @@ Feature: Allowlist
       | domain          | Disney  | Activision | disney.com             | activision.com         |
 
   Scenario Outline: deleting allowlist entries should work
-    Given I visit the companies allowlist page
-    And the following companies are in the allowlist:
+    Given the following companies are in the allowlist:
       | companyName1 | companyName2 |
       | <name1>      | <name2>      |
+    And I visit the companies allowlist page
     When I click the add <subgroupType> button for the following company name:
       | companyName |
       | <name1>     |
