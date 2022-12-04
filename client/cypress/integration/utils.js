@@ -29,29 +29,29 @@ export const createCompany = (() => {
   let id = 1;
   const createCompanyWithIdClosure = (name) => {
     const newId = id++;
-    const findAllowlistEmails = () => window.store.getState().allowlist.allowlist_emails.filter(allowlist_email => allowlist_email.company_id === newId);
-    const findAllowlistDomains = () => window.store.getState().allowlist.allowlist_domains.filter(allowlist_domain => allowlist_domain.company_id === newId);
-    const findPrimaryContact = () => findAllowlistEmails().find(allowlist_email => allowlist_email.isPrimaryContact === true) ?? null;
+    // const findAllowlistEmails = () => window.store.getState().allowlist.allowlist_emails.filter(allowlist_email => allowlist_email.company_id === newId);
+    // const findAllowlistDomains = () => window.store.getState().allowlist.allowlist_domains.filter(allowlist_domain => allowlist_domain.company_id === newId);
+    // const findPrimaryContact = () => findAllowlistEmails().find(allowlist_email => allowlist_email.is_primary_contact === true) ?? null;
     return {
       id: newId,
       name,
       description: '',
-      findAllowlistEmails,
-      findAllowlistDomains,
-      findPrimaryContact,
+      // findAllowlistEmails,
+      // findAllowlistDomains,
+      // findPrimaryContact,
   }};
   return createCompanyWithIdClosure;
 })();
 
 export const createAllowlistEmail = (() => {
   let id = 1;
-  const createAllowlistEmailWithIdClosure = ({email, company_id, usertype, isPrimaryContact}) => {
+  const createAllowlistEmailWithIdClosure = ({email, company_id, usertype, is_primary_contact}) => {
     const newAllowlistEmail = {
       id: id++,
       email,
       ...(company_id && {company_id: company_id}),
       usertype,
-      isPrimaryContact: isPrimaryContact === 1 ? true : false,
+      is_primary_contact: is_primary_contact ?? false,
     };
     return newAllowlistEmail;
   };
