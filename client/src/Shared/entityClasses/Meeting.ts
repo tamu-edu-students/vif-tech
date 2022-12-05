@@ -52,6 +52,17 @@ export default class Meeting implements IMeeting {
     ?? null;
   }
 
+  public duplicateWithNewInviteeId(newInviteeId: number): Meeting {
+    return new Meeting({
+      id: this.id,
+      owner_id: this.owner_id,
+      event_id: this.event_id,
+      start_time: this.start_time,
+      end_time: this.end_time,
+      invitees: { accepted: [{id: newInviteeId}] }
+    });
+  }
+
   public static createMeetings(meetingData: IMeetingJSON[]): Meeting[] {
     return meetingData.map((meetingDatum: IMeetingJSON) => new Meeting(meetingDatum));
   }
