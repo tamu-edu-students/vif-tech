@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import {eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes } from 'Store/actions/types';
+import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes } from 'Store/actions/types';
 import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
@@ -10,6 +10,8 @@ import User from 'Shared/entityClasses/User';
 import Meeting from 'Shared/entityClasses/Meeting';
 import EventSignup from 'Shared/entityClasses/EventSignup';
 
+import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
+import { OptionsContext } from './OptionsContext';
 // import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
 
 
@@ -20,6 +22,7 @@ interface OwnProps {
 interface OwnState {
   dispatchQueue: any;
   isLoading: boolean;
+  unassignedStudents: string[];
 }
 
 type TimeOption = {
@@ -83,7 +86,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
-  state = {dispatchQueue: {}, isLoading: false};
+  state = {dispatchQueue: {}, isLoading: false, unassignedStudents: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE']};
 
   public componentDidMount(): void {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
@@ -115,14 +118,28 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
     }
   }
 
-  private _onSaveChanges = (): void => {
-    this.setState({ isLoading: true });
-    console.log(Object.values(this.state.dispatchQueue));
+  // private _reinstateOption = (option: string): void => {
+  //   console.log([...this.state.unassignedStudents, option])
+  //   this.setState({ unassignedStudents: [...this.state.unassignedStudents, option] })
+  // }
 
-    Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
-    .then(() => {
-      this.setState({dispatchQueue: {}, isLoading: false});
-    })
+  // private _stealOption = (option: string): void => {
+  //   this.setState({ unassignedStudents: this.state.unassignedStudents.filter((unassignedStudent: string) => unassignedStudent !== option) })
+  // }
+
+  private _swapOption = (toReinstate: string, toSteal: string): void => {
+    const newArray = [...this.state.unassignedStudents.filter((option: string) => option !== toSteal), ...(toReinstate ? [toReinstate] : [])];
+    this.setState({ unassignedStudents: newArray });
+  }
+
+  private _onSaveChanges = (): void => {
+    // this.setState({ isLoading: true });
+    // console.log(Object.values(this.state.dispatchQueue));
+
+    // Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
+    // .then(() => {
+    //   this.setState({dispatchQueue: {}, isLoading: false});
+    // })
   }
 
   private _setReaction = (key: string, reaction: any) => {
@@ -132,33 +149,10 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   private _renderVolunteerTables(volunteers: User[]): JSX.Element[] {
     return volunteers.map((volunteer: User) => {
       return (
-        <div key={volunteer.id}>
-          <p>{volunteer.firstname}</p>
-          <p>{volunteer.lastname}</p>
-          <p>{volunteer.email}</p>
-          <br />
-        </div>
-      )
-    });
-  }
-
-  private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
-    return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const { meetings, event } = this.props;
-      return (
-        <React.Fragment key={start_time}>
-          {/* <VolunteerTimesheetRow
-            start_time={start_time}
-            end_time={end_time}
-            event_id={event?.id}
-            meeting={
-              meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time)
-              ?? null
-            }
-            setReaction={this._setReaction}
-          /> */}
+        <React.Fragment key={volunteer.id}>
+            <VolunteerTimetable volunteer={volunteer} event={this.props.event} />
         </React.Fragment>
-      );
+      )
     });
   }
 
@@ -189,31 +183,20 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="Meeting-Assignment-Sheet">
-        <h2>Meeting Assignment Sheet</h2>
+      <OptionsContext.Provider value={{
+        // reinstateOption: this._reinstateOption,
+        // stealOption: this._stealOption,
+        swapOption: this._swapOption,
+        options: this.state.unassignedStudents,
+      }}>
+        <div className="Meeting-Assignment-Sheet">
+          <h2>Meeting Assignment Sheet</h2>
 
-        {this._renderVolunteerTables(volunteers ?? [])}
+          {this._renderVolunteerTables(volunteers ?? [])}
 
-        {
-          <>
-            <div className="table">
-              <div className="table__rows">
-
-                <div className="table__row table__row--header">
-                  <div className="table__cell table__cell--header">Time</div>
-                  <div className="table__cell table__cell--header">Name</div>
-                  <div className="table__cell table__cell--header">Portfolio</div>
-                  <div className="table__cell table__cell--header">Resume</div>
-                </div>
-
-                {event && this._renderTimeOptions(event.createTimeSlots(20, 5))}
-
-              </div>
-            </div>
-            <button onClick={() => this._onSaveChanges()}>Save Changes</button>
-          </>
-        }
-      </div>
+          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+        </div>
+      </OptionsContext.Provider>
     )
   }
 }

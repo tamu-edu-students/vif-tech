@@ -8,6 +8,7 @@ import { createMeeting, deleteMeeting } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 // import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
+import StudentSelectForm from './StudentSelectForm/StudentSelectForm';
 
 
 interface OwnProps {
@@ -38,7 +39,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
+class AssignmentRow extends React.Component<Props, OwnState> {
   state = { isChanged: false };
 
   public componentDidMount(): void {
@@ -69,35 +70,34 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       start_time,
       end_time,
       hadMeeting,
-      // meeting,
+      meeting,
     } = this.props;
     
     const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
     const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
 
     return (
-      <div className="VolunteerTimesheetRow table__row">
+      <div className="AssignmentRow table__row">
         <div className="table__cell table__cell--time">
-          <button
-            onClick={() => {
-              hadMeeting ? this._deleteMeeting() : this._createMeeting();
-              this.setState({ isChanged: !this.state.isChanged })
-            }}
-            className={`table__time-button ${
+          <div
+            className={`table__time-block ${
               hadMeeting
-              ? (this.state.isChanged ? 'table__time-button--deleting' : 'table__time-button--available')
-              : (this.state.isChanged ? 'table__time-button--adding' : '')
+              ? (this.state.isChanged ? 'table__time-block--deleting' : 'table__time-block--available')
+              : (this.state.isChanged ? 'table__time-block--adding' : '')
             }`}
           >
               {`${startTimeShort}—${endTimeShort}`}
-          </button>
+          </div>
         </div>
-        <div className="table__cell table__cell--name"></div>
-        <div className="table__cell table__cell--portfolio"></div>
-        <div className="table__cell table__cell--resume"></div>
+        <div className="table__cell table__cell--name">
+          {
+            hadMeeting &&
+            <StudentSelectForm />
+          }
+        </div>
       </div>
     )
   }
 }
 
-export default connector(VolunteerTimesheetRow);
+export default connector(AssignmentRow);

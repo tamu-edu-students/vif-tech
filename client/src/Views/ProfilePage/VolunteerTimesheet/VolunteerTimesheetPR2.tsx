@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import {eventActionTypes, meetingActionTypes, eventSignupActionTypes } from 'Store/actions/types';
+import { eventActionTypes, meetingActionTypes, eventSignupActionTypes } from 'Store/actions/types';
 import { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, deleteEventSignup } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
@@ -103,8 +103,8 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   }
 
   private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
+    const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const { meetings, event } = this.props;
       return (
         <React.Fragment key={start_time}>
           <VolunteerTimesheetRow
