@@ -15,7 +15,8 @@ interface OwnProps {
 }
 
 interface OwnState {
-  value: string;
+  value: number;
+  student: User | null;
 }
 
 const mapStateToProps = null;
@@ -25,26 +26,26 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class StudentSelectForm extends React.Component<Props, OwnState> {
-  state = {value: ''};
+  state = {value: -1, student: null};
   static contextType = OptionsContext;
   context!: React.ContextType<typeof OptionsContext>
 
   private _onChange = (event: any): void => {
     // console.log(event.target.value)
-    if (event.target.value === this.state.value) { return; }
+    this.setState({value: Number.parseInt(event.target.value), student: User.findById(Number.parseInt(event.target.value), this.context.unassignedStudents)});
+    if (Number.parseInt(event.target.value) === this.state.value) { return; }
     // if (!event.target.value) { this.context.reinstateOption(this.state.value); }
     // else if (!this.state.value) { this.context.stealOption(event.target.value); }
     else {
-      this.context.swapOption(this.state.value, event.target.value)
+      this.context.swapOption(this.state.value, Number.parseInt(event.target.value));
     }
-    this.setState({value: event.target.value});
   }
 
   private _renderOptions(): JSX.Element[] {
-    return [...this.context.options, ...(this.state.value ? [this.state.value] : [])]
-    .sort((a: string, b: string) => a.toLowerCase().localeCompare(b.toLowerCase()))
-    .map((option: string) => (
-      <option key={option} value={option}>{option}</option>
+    return [...this.context.unassignedStudents, ...(this.state.student  ? [this.state.student] : [])]
+    .sort((a: User, b: User) => a.email.toLowerCase().localeCompare(b.email.toLowerCase()))
+    .map((student: User) => (
+      <option key={student.id} value={student.id}>{student.email}</option>
     ))
   }
 
@@ -53,7 +54,7 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
     return (
       <>
         <select value={this.state.value} onChange={this._onChange}>
-          <option value={''}>UNASSIGNED</option>
+          <option value={-1}>UNASSIGNED</option>
           {this._renderOptions()}
         </select>
       </>
@@ -61,17 +62,17 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
   }
 }
 
-const validate = (fields: any, formProps: any) => {
-  const errors: any = {};
-  const fieldName: string = formProps.name;
-  const fieldVal: string = fields[fieldName];
+// const validate = (fields: any, formProps: any) => {
+//   const errors: any = {};
+//   const fieldName: string = formProps.name;
+//   const fieldVal: string = fields[fieldName];
 
-  if (!fieldVal) {
-    errors[fieldName] = `You must select a colleague`;
-  }
+//   if (!fieldVal) {
+//     errors[fieldName] = `You must select a colleague`;
+//   }
 
-  return errors;
-};
+//   return errors;
+// };
 
 // const formWrapped = reduxForm<any, Props>({
 //   validate: validate,

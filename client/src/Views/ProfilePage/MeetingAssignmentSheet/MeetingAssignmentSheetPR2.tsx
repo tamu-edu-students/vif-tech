@@ -22,7 +22,7 @@ interface OwnProps {
 interface OwnState {
   dispatchQueue: any;
   isLoading: boolean;
-  unassignedStudents: string[];
+  unassignedStudents: User[];
 }
 
 type TimeOption = {
@@ -33,8 +33,8 @@ type TimeOption = {
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   const event: Event | null = Event.findByTitle('Portfolio Review 2', state.eventData.events);
   const attendees = event?.findAttendees(state.userData.users, state.eventSignupData.eventSignups) ?? [];
-  const volunteers: User[] = attendees.filter((user: User) => user.isVolunteer || user.isRepresentative);
-  const students: User[] = attendees.filter((user: User) => user.isStudent);
+  const volunteerAttendees: User[] = attendees.filter((user: User) => user.isVolunteer || user.isRepresentative);
+  const studentAttendees: User[] = state.userData.users.filter((user: User) => user.isStudent); //TODO: filter attendees instead
 
   const usersAreStale: boolean = state.userData.isStale;
   const isLoading_fetchUsers: boolean = createLoadingSelector([userActionTypes.FETCH_USERS])(state);
@@ -50,8 +50,8 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
   return {
     event,
-    volunteers,
-    students,
+    volunteerAttendees,
+    studentAttendees,
     meetings: event?.findMeetings(state.meetingData.meetings) ?? [],
 
     usersAreStale,
@@ -86,21 +86,36 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
-  state = {dispatchQueue: {}, isLoading: false, unassignedStudents: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE']};
+  state = {dispatchQueue: {}, isLoading: false, unassignedStudents: []};
 
   public componentDidMount(): void {
+    const promises: Promise<void>[] = [];
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
-      this.props.fetchEvents();
+      const promise: Promise<void> = this.props.fetchEvents();
+      promises.push(promise);
     }
     if (this.props.meetingsAreStale && !this.props.isLoading_fetchMeetings) {
-      this.props.fetchMeetings();
+      const promise: Promise<void> = this.props.fetchMeetings();
+      promises.push(promise);
     }
     if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
-      this.props.fetchEventSignups();
+      const promise: Promise<void> = this.props.fetchEventSignups();
+      promises.push(promise);
     }
     if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
-      this.props.fetchUsers();
+      const promise: Promise<void> = this.props.fetchUsers();
+      promises.push(promise);
     }
+    Promise.all(promises).then(() => {
+      this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
+        this.props.event && !student.hasInvitedMeetingsAtEvent(this.props.meetings, this.props.event)
+      )});
+    })
+    // if (!this.props.isLoading) {
+    //   this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
+    //     this.props.event && !student.hasInvitationAtEvent(this.props.meetings, this.props.event)
+    //   )});
+    // }
   }
 
   public componentDidUpdate(): void {
@@ -116,6 +131,11 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
     if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
       this.props.fetchUsers();
     }
+    // if (!this.props.isLoading && !this.state.isLoading) {
+    //   this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
+    //     this.props.event && !student.hasInvitationAtEvent(this.props.meetings, this.props.event)
+    //   )});
+    // }
   }
 
   // private _reinstateOption = (option: string): void => {
@@ -127,8 +147,13 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   //   this.setState({ unassignedStudents: this.state.unassignedStudents.filter((unassignedStudent: string) => unassignedStudent !== option) })
   // }
 
-  private _swapOption = (toReinstate: string, toSteal: string): void => {
-    const newArray = [...this.state.unassignedStudents.filter((option: string) => option !== toSteal), ...(toReinstate ? [toReinstate] : [])];
+  private _swapOption = (toReinstate: number, toSteal: number): void => {
+    console.log(toReinstate, toSteal)
+    const newArray: User[] = this.state.unassignedStudents.filter((student: User) => student.id !== toSteal);
+    if (toReinstate > -1) {
+      const studentToReinstate: User | null = User.findById(toReinstate, this.props.studentAttendees);
+      if (studentToReinstate) { newArray.push(studentToReinstate); }
+    }
     this.setState({ unassignedStudents: newArray });
   }
 
@@ -159,8 +184,8 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     const {
       event,
-      volunteers,
-      students,
+      volunteerAttendees,
+      studentAttendees,
     } = this.props;
 
     if (this.props.isLoading) {
@@ -187,12 +212,12 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
         // reinstateOption: this._reinstateOption,
         // stealOption: this._stealOption,
         swapOption: this._swapOption,
-        options: this.state.unassignedStudents,
+        unassignedStudents: this.state.unassignedStudents,
       }}>
         <div className="Meeting-Assignment-Sheet">
           <h2>Meeting Assignment Sheet</h2>
 
-          {this._renderVolunteerTables(volunteers ?? [])}
+          {this._renderVolunteerTables(volunteerAttendees ?? [])}
 
           <button onClick={() => this._onSaveChanges()}>Save Changes</button>
         </div>

@@ -1,13 +1,16 @@
 import React from 'react';
-type MyContextType = {
+
+import User from 'Shared/entityClasses/User';
+
+type OptionsContextType = {
   // reinstateOption: (option: string) => void,
   // stealOption: (option: string) => void,
-  swapOption: (toReinstate: string, toSteal: string) => void,
-  options: string[],
+  swapOption: (toReinstate: number, toSteal: number) => void,
+  unassignedStudents: User[],
 }
-export const OptionsContext: React.Context<MyContextType> = React.createContext<MyContextType>({
+export const OptionsContext: React.Context<OptionsContextType> = React.createContext<OptionsContextType>({
   // reinstateOption: (option: string): void => {},
   // stealOption: (option: string): void => {},
-  swapOption: (toReinstate: string, toSteal: string) : void => {},
-  options: [],
+  swapOption: (toReinstate: number, toSteal: number) : void => {},
+  unassignedStudents: [],
 });

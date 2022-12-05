@@ -30,7 +30,6 @@ interface OwnState {
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    hadMeeting: ownProps.meeting !== null,
     owner_id: state.auth.user?.id ?? -1,
   };
 };
@@ -48,20 +47,20 @@ class AssignmentRow extends React.Component<Props, OwnState> {
   private _createMeeting = () => {
     const {start_time, end_time, owner_id, event_id} = this.props;
     const key = `${start_time} ${end_time}`;
-    const reaction: any = this.props.hadMeeting
-      ? () => Promise.resolve()
-      : () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
-    this.props.setReaction(key, reaction);
+    // const reaction: any = this.props.isAvailable
+    //   ? () => Promise.resolve()
+    //   : () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
+    // this.props.setReaction(key, reaction);
     // this.props.createMeeting({start_time, end_time, owner_id, event_id})
   }
 
   private _deleteMeeting = () => {
     const {start_time, end_time} = this.props;
     const key = `${start_time} ${end_time}`;
-    const reaction: any = this.props.hadMeeting
-      ? () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)
-      : () => Promise.resolve();
-    this.props.setReaction(key, reaction);
+    // const reaction: any = this.props.isAvailable
+    //   ? () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)
+    //   : () => Promise.resolve();
+    // this.props.setReaction(key, reaction);
     // this.props.deleteMeeting(this.props.meeting?.id ?? -1)
   }
 
@@ -69,7 +68,6 @@ class AssignmentRow extends React.Component<Props, OwnState> {
     const {
       start_time,
       end_time,
-      hadMeeting,
       meeting,
     } = this.props;
     
@@ -81,19 +79,17 @@ class AssignmentRow extends React.Component<Props, OwnState> {
         <div className="table__cell table__cell--time">
           <div
             className={`table__time-block ${
-              hadMeeting
-              ? (this.state.isChanged ? 'table__time-block--deleting' : 'table__time-block--available')
-              : (this.state.isChanged ? 'table__time-block--adding' : '')
+              ''
+              // isAvailable
+              // ? (this.state.isChanged ? 'table__time-block--deleting' : 'table__time-block--available')
+              // : (this.state.isChanged ? 'table__time-block--adding' : '')
             }`}
           >
               {`${startTimeShort}—${endTimeShort}`}
           </div>
         </div>
         <div className="table__cell table__cell--name">
-          {
-            hadMeeting &&
-            <StudentSelectForm />
-          }
+          <StudentSelectForm />
         </div>
       </div>
     )
