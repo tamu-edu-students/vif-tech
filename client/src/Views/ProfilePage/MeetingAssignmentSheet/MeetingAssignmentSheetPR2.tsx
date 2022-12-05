@@ -34,7 +34,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const event: Event | null = Event.findByTitle('Portfolio Review 2', state.eventData.events);
   const attendees = event?.findAttendees(state.userData.users, state.eventSignupData.eventSignups) ?? [];
   const volunteerAttendees: User[] = attendees.filter((user: User) => user.isVolunteer || user.isRepresentative);
-  const studentAttendees: User[] = state.userData.users.filter((user: User) => user.isStudent); //TODO: filter attendees instead
+  const studentAttendees: User[] = attendees.filter((user: User) => user.isStudent);
 
   const usersAreStale: boolean = state.userData.isStale;
   const isLoading_fetchUsers: boolean = createLoadingSelector([userActionTypes.FETCH_USERS])(state);
