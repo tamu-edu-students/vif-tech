@@ -148,7 +148,7 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   // }
 
   private _swapOption = (toReinstate: number, toSteal: number): void => {
-    console.log(toReinstate, toSteal)
+    // console.log(toReinstate, toSteal)
     const newArray: User[] = this.state.unassignedStudents.filter((student: User) => student.id !== toSteal);
     if (toReinstate > -1) {
       const studentToReinstate: User | null = User.findById(toReinstate, this.props.studentAttendees);

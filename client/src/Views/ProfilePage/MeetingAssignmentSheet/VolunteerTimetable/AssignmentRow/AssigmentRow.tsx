@@ -10,6 +10,8 @@ import { msToTimeString } from 'Shared/utils';
 import Meeting from 'Shared/entityClasses/Meeting';
 import StudentSelectForm from './StudentSelectForm/StudentSelectForm';
 
+import { OptionsContext } from '../../OptionsContext';
+
 
 interface OwnProps {
   start_time: string;
@@ -29,8 +31,10 @@ interface OwnState {
 // }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
+  const meeting: Meeting | null = ownProps.meeting;
   return {
     owner_id: state.auth.user?.id ?? -1,
+    initialInvitee: meeting?.findInvitee(state.userData.users) ?? null,
   };
 };
 const mapDispatchToProps = { createMeeting, deleteMeeting };
@@ -40,6 +44,8 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class AssignmentRow extends React.Component<Props, OwnState> {
   state = { isChanged: false };
+  static contextType = OptionsContext;
+  context!: React.ContextType<typeof OptionsContext>;
 
   public componentDidMount(): void {
   }
@@ -69,6 +75,7 @@ class AssignmentRow extends React.Component<Props, OwnState> {
       start_time,
       end_time,
       meeting,
+      initialInvitee,
     } = this.props;
     
     const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
@@ -89,7 +96,7 @@ class AssignmentRow extends React.Component<Props, OwnState> {
           </div>
         </div>
         <div className="table__cell table__cell--name">
-          <StudentSelectForm />
+          <StudentSelectForm initialInvitee={initialInvitee} />
         </div>
       </div>
     )

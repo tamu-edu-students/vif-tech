@@ -12,6 +12,7 @@ interface OwnProps {
   // reinstateOption: any;
   // stealOption: any;
   // options: string[];
+  initialInvitee: User | null;
 }
 
 interface OwnState {
@@ -28,7 +29,14 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 class StudentSelectForm extends React.Component<Props, OwnState> {
   state = {value: -1, student: null};
   static contextType = OptionsContext;
-  context!: React.ContextType<typeof OptionsContext>
+  context!: React.ContextType<typeof OptionsContext>;
+
+  public componentDidMount(): void {
+    const initialInvitee: User | null = this.props.initialInvitee;
+    if (initialInvitee) {
+      this.setState({ student: initialInvitee, value: initialInvitee.id });
+    }
+  }
 
   private _onChange = (event: any): void => {
     // console.log(event.target.value)
