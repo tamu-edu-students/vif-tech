@@ -15,6 +15,7 @@ import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
+import StudentTimesheetPR2 from './StudentTimesheet/StudentTimesheetPR2';
 import VolunteerTimesheetPR2 from './VolunteerTimesheet/VolunteerTimesheetPR2';
 import MeetingAssignmentSheetPR2 from './MeetingAssignmentSheet/MeetingAssignmentSheetPR2';
 
@@ -145,6 +146,24 @@ class ProfilePage extends React.Component<Props, OwnState> {
     );
   }
 
+  private _renderStudentRoutes(): JSX.Element[] {
+    const { parentPath } = this.props;
+    return ([
+      <Route exact path={`${parentPath}/student-timesheet-portfolio-review-2`} key={`${parentPath}/student-timesheet-portfolio-review-2`}>
+        <StudentTimesheetPR2 />
+      </Route>,
+    ]);
+  }
+
+  private _renderStudentLinks(): JSX.Element {
+    const { parentPath } = this.props;
+    return (
+      <>
+        <li><Link to={`${parentPath}/student-timesheet-portfolio-review-2`}>Time Sheet</Link></li>
+      </>
+    );
+  }
+
   private _renderLinks(): JSX.Element | null {
     switch(this.props.user?.usertype) {
       case Usertype.ADMIN:
@@ -153,6 +172,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
         return this._renderRepresentativeLinks();
       case Usertype.VOLUNTEER:
         return this._renderVolunteerLinks();
+      case Usertype.STUDENT:
+        return this._renderStudentLinks();
       default:
         return null;
     }
@@ -166,6 +187,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
         return this._renderRepresentativeRoutes();
       case Usertype.VOLUNTEER:
         return this._renderVolunteerRoutes();
+      case Usertype.STUDENT:
+        return this._renderStudentRoutes();
       default:
         return [];
     }
