@@ -33,7 +33,7 @@ interface OwnState {
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   const meeting: Meeting | null = ownProps.meeting;
   return {
-    owner_id: state.auth.user?.id ?? -1,
+    owner_id: meeting.owner_id,
     initialInvitee: meeting?.findInvitee(state.userData.users) ?? null,
   };
 };
