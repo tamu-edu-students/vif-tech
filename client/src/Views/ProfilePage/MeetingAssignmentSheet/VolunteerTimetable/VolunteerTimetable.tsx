@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
-import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { } from 'Store/actions/types';
 import { } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
 import User from 'Shared/entityClasses/User';
 import Meeting from 'Shared/entityClasses/Meeting';
-import EventSignup from 'Shared/entityClasses/EventSignup';
 
 import AssigmentRow from './AssignmentRow/AssigmentRow';
 // import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
@@ -20,11 +18,6 @@ interface OwnProps {
 }
 
 interface OwnState {
-}
-
-type TimeOption = {
-  start_time: string;
-  end_time: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {

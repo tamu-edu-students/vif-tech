@@ -1,10 +1,8 @@
 import React from 'react';
-import { Field, reduxForm } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 
 import User from 'Shared/entityClasses/User';
 
-import CustomForm from 'Components/CustomForm/CustomForm';
 import { OptionsContext } from 'Views/ProfilePage/MeetingAssignmentSheet/OptionsContext';
 
 
@@ -43,7 +41,6 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
   private _onChange = (event: any): void => {
     const toSteal: number = Number.parseInt(event.target.value);
     const toReinstate: number = this.state.value;
-    const { initialInvitee } = this.props;
 
     this.setState({value: toSteal, student: toSteal > -1 ? User.findById(toSteal, this.context.unassignedStudents) : null});
     if (toSteal === toReinstate) { return; }

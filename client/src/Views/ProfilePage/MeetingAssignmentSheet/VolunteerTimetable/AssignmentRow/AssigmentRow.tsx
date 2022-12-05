@@ -81,7 +81,6 @@ class AssignmentRow extends React.Component<Props, OwnState> {
     const {
       start_time,
       end_time,
-      meeting,
       keyVal: key,
       initialInvitee,
     } = this.props;

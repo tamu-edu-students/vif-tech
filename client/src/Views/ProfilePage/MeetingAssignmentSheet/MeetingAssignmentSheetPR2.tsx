@@ -7,8 +7,6 @@ import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventS
 
 import Event from 'Shared/entityClasses/Event';
 import User from 'Shared/entityClasses/User';
-import Meeting from 'Shared/entityClasses/Meeting';
-import EventSignup from 'Shared/entityClasses/EventSignup';
 
 import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
 import { OptionsContext } from './OptionsContext';
@@ -23,11 +21,6 @@ interface OwnState {
   dispatchQueue: any;
   isLoading: boolean;
   unassignedStudents: User[];
-}
-
-type TimeOption = {
-  start_time: string;
-  end_time: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -183,9 +176,7 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     const {
-      event,
       volunteerAttendees,
-      studentAttendees,
     } = this.props;
 
     if (this.props.isLoading) {
