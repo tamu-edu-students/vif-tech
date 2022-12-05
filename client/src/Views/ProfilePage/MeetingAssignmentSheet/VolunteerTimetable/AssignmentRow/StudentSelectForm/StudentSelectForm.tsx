@@ -13,6 +13,8 @@ interface OwnProps {
   // stealOption: any;
   // options: string[];
   initialInvitee: User | null;
+  onSelectionChange: any;
+  keyVal: string;
 }
 
 interface OwnState {
@@ -39,21 +41,25 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
   }
 
   private _onChange = (event: any): void => {
-    // console.log(event.target.value)
-    this.setState({value: Number.parseInt(event.target.value), student: User.findById(Number.parseInt(event.target.value), this.context.unassignedStudents)});
-    if (Number.parseInt(event.target.value) === this.state.value) { return; }
+    const toSteal: number = Number.parseInt(event.target.value);
+    const toReinstate: number = this.state.value;
+    const { initialInvitee } = this.props;
+
+    this.setState({value: toSteal, student: toSteal > -1 ? User.findById(toSteal, this.context.unassignedStudents) : null});
+    if (toSteal === toReinstate) { return; }
     // if (!event.target.value) { this.context.reinstateOption(this.state.value); }
     // else if (!this.state.value) { this.context.stealOption(event.target.value); }
     else {
-      this.context.swapOption(this.state.value, Number.parseInt(event.target.value));
+      this.context.swapOption(toReinstate, toSteal);
+      this.props.onSelectionChange(toSteal);
     }
   }
 
   private _renderOptions(): JSX.Element[] {
     return [...this.context.unassignedStudents, ...(this.state.student  ? [this.state.student] : [])]
     .sort((a: User, b: User) => a.email.toLowerCase().localeCompare(b.email.toLowerCase()))
-    .map((student: User) => (
-      <option key={student.id} value={student.id}>{student.email}</option>
+    .map((student: User, index: number) => (
+      <option key={`${this.props.keyVal}_${index}`} value={student.id}>{student.email}</option>
     ))
   }
 

@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 // import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 // import {eventActionTypes } from 'Store/actions/types';
-import { createMeeting, deleteMeeting } from 'Store/actions';
+import { updateMeeting } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
 // import Event from 'Shared/entityClasses/Event';
@@ -17,8 +17,7 @@ interface OwnProps {
   start_time: string;
   end_time: string;
   event_id: number;
-  meeting: Meeting | null;
-  setReaction: Function;
+  meeting: Meeting;
 }
 
 interface OwnState {
@@ -31,13 +30,14 @@ interface OwnState {
 // }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const meeting: Meeting | null = ownProps.meeting;
+  const meeting: Meeting = ownProps.meeting;
   return {
     owner_id: meeting.owner_id,
     initialInvitee: meeting?.findInvitee(state.userData.users) ?? null,
+    keyVal: `${ownProps.event_id} ${meeting.id} ${ownProps.owner_id} ${ownProps.start_time} ${ownProps.end_time}`,
   };
 };
-const mapDispatchToProps = { createMeeting, deleteMeeting };
+const mapDispatchToProps = { updateMeeting };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -50,24 +50,31 @@ class AssignmentRow extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
   }
 
-  private _createMeeting = () => {
-    const {start_time, end_time, owner_id, event_id} = this.props;
-    const key = `${start_time} ${end_time}`;
-    // const reaction: any = this.props.isAvailable
-    //   ? () => Promise.resolve()
-    //   : () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
-    // this.props.setReaction(key, reaction);
-    // this.props.createMeeting({start_time, end_time, owner_id, event_id})
-  }
+  private _onSelectionChange = (inviteeId: number): void => {
+    const { keyVal: key } = this.props;
+    let reaction: any = null;
+    const {initialInvitee} = this.props;
+    if (initialInvitee) {
+      if (inviteeId === -1){
+        reaction = () => this.props.updateMeeting(this.props.meeting.id, -1);
+      }
+      else if (initialInvitee.id === inviteeId) {
+        reaction = () => Promise.resolve();
+      }
+      else {
+        reaction = () => this.props.updateMeeting(this.props.meeting.id, inviteeId);
+      }
+    }
+    else {
+      if (inviteeId === -1) {
+        reaction = () => Promise.resolve();
+      }
+      else {
+        reaction = () => this.props.updateMeeting(this.props.meeting.id, inviteeId);
+      }
+    }
 
-  private _deleteMeeting = () => {
-    const {start_time, end_time} = this.props;
-    const key = `${start_time} ${end_time}`;
-    // const reaction: any = this.props.isAvailable
-    //   ? () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)
-    //   : () => Promise.resolve();
-    // this.props.setReaction(key, reaction);
-    // this.props.deleteMeeting(this.props.meeting?.id ?? -1)
+    this.context.setReaction(key, reaction);
   }
 
   public render(): React.ReactElement<Props> {
@@ -75,6 +82,7 @@ class AssignmentRow extends React.Component<Props, OwnState> {
       start_time,
       end_time,
       meeting,
+      keyVal: key,
       initialInvitee,
     } = this.props;
     
@@ -96,7 +104,11 @@ class AssignmentRow extends React.Component<Props, OwnState> {
           </div>
         </div>
         <div className="table__cell table__cell--name">
-          <StudentSelectForm initialInvitee={initialInvitee} />
+          <StudentSelectForm
+            keyVal={key}
+            initialInvitee={initialInvitee}
+            onSelectionChange={this._onSelectionChange}
+          />
         </div>
       </div>
     )

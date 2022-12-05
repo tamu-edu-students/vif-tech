@@ -158,13 +158,13 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   }
 
   private _onSaveChanges = (): void => {
-    // this.setState({ isLoading: true });
-    // console.log(Object.values(this.state.dispatchQueue));
+    this.setState({ isLoading: true });
+    // console.log(this.state.dispatchQueue);
 
-    // Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
-    // .then(() => {
-    //   this.setState({dispatchQueue: {}, isLoading: false});
-    // })
+    Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
+    .then(() => {
+      this.setState({dispatchQueue: {}, isLoading: false});
+    })
   }
 
   private _setReaction = (key: string, reaction: any) => {
@@ -213,6 +213,7 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
         // stealOption: this._stealOption,
         swapOption: this._swapOption,
         unassignedStudents: this.state.unassignedStudents,
+        setReaction: this._setReaction,
       }}>
         <div className="Meeting-Assignment-Sheet">
           <h2>Meeting Assignment Sheet</h2>
