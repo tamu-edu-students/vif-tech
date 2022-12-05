@@ -8,6 +8,7 @@ import { createMeeting, deleteMeeting } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 // import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
+import User from 'Shared/entityClasses/User';
 
 
 interface OwnProps {
@@ -16,6 +17,7 @@ interface OwnProps {
   event_id: number;
   meeting: Meeting | null;
   setReaction: Function;
+  assignedStudent?: User;
 }
 
 interface OwnState {
@@ -69,7 +71,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       start_time,
       end_time,
       hadMeeting,
-      // meeting,
+      assignedStudent,
     } = this.props;
     
     const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
@@ -92,9 +94,9 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
               {`${startTimeShort}—${endTimeShort}`}
           </button>
         </div>
-        <div className="table__cell table__cell--name"></div>
-        <div className="table__cell table__cell--portfolio"></div>
-        <div className="table__cell table__cell--resume"></div>
+        <div className="table__cell table__cell--name">{assignedStudent && `${assignedStudent.firstname} ${assignedStudent.lastname}`}</div>
+        <div className="table__cell table__cell--portfolio">{assignedStudent && `<${assignedStudent.firstname} ${assignedStudent.lastname}'s portfolio link>`}</div>
+        <div className="table__cell table__cell--resume">{assignedStudent && `<${assignedStudent.firstname} ${assignedStudent.lastname}'s resume link>`}</div>
       </div>
     )
   }

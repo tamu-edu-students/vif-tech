@@ -2,11 +2,12 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { eventActionTypes, meetingActionTypes, eventSignupActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, deleteEventSignup } from 'Store/actions';
+import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes } from 'Store/actions/types';
+import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
+import User from 'Shared/entityClasses/User';
 
 import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
 
@@ -37,10 +38,14 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
   const eventSignupsAreStale: boolean = state.eventSignupData.isStale;
   const isLoading_fetchEventSignups: boolean = createLoadingSelector([eventSignupActionTypes.FETCH_EVENT_SIGNUPS])(state);
+  
+  const usersAreStale: boolean = state.userData.isStale;
+  const isLoading_fetchUsers: boolean = createLoadingSelector([userActionTypes.FETCH_USERS])(state);
 
   return {
     event,
     isAttendingEvent,
+    users: state.userData.users,
     meetings: state.auth.user?.findOwnedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
     eventsAreStale,
@@ -51,12 +56,24 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
     eventSignupsAreStale,
     isLoading_fetchEventSignups,
+
+    usersAreStale,
+    isLoading_fetchUsers,
     
-    isLoading: eventsAreStale || isLoading_fetchEvents || meetingsAreStale || isLoading_fetchMeetings || eventSignupsAreStale || isLoading_fetchEventSignups,
-    errors: createErrorMessageSelector([eventActionTypes.FETCH_EVENTS, meetingActionTypes.FETCH_MEETINGS])(state),
+    isLoading:
+      eventsAreStale || isLoading_fetchEvents
+      || meetingsAreStale || isLoading_fetchMeetings
+      || eventSignupsAreStale || isLoading_fetchEventSignups
+      || (isAttendingEvent ? (usersAreStale || isLoading_fetchUsers) : false),
+    errors: createErrorMessageSelector([
+      eventActionTypes.FETCH_EVENTS,
+      meetingActionTypes.FETCH_MEETINGS,
+      eventSignupActionTypes.FETCH_EVENT_SIGNUPS,
+      ...(isAttendingEvent ? [userActionTypes.FETCH_USERS] : []),
+    ])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, deleteEventSignup };
+const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -74,6 +91,9 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
       this.props.fetchEventSignups();
     }
+    if (this.props.isAttendingEvent && this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
+      this.props.fetchUsers();
+    }
   }
 
   public componentDidUpdate(): void {
@@ -85,6 +105,9 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     }
     if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
       this.props.fetchEventSignups();
+    }
+    if (this.props.isAttendingEvent && this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
+      this.props.fetchUsers();
     }
   }
 
@@ -105,16 +128,16 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
+      const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
+      const assignedStudent: User | undefined = meeting?.findInvitee(this.props.users) ?? undefined;
       return (
         <React.Fragment key={start_time}>
           <VolunteerTimesheetRow
             start_time={start_time}
             end_time={end_time}
             event_id={event?.id}
-            meeting={
-              meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time)
-              ?? null
-            }
+            meeting={meeting}
+            assignedStudent={assignedStudent}
             setReaction={this._setReaction}
           />
         </React.Fragment>

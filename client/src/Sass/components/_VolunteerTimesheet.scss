@@ -49,6 +49,8 @@
 
         .table__cell {
           padding: 1rem;
+          font-family: $font-body;
+          font-size: 1.2rem;
 
           &:not(:last-child):not(.table__cell--time) {
             border-right: 1px solid $color-violet-darkest;
@@ -79,7 +81,7 @@
           color: $color-white;
           font: inherit;
           font-family: $font-header;
-          font-size: 1.4rem;
+          font-size: 1.8rem;
           border: none;
           cursor: pointer;
           transition: all 0.1s;
