@@ -376,8 +376,6 @@ export const createMeeting = (formValues: any) => async (dispatch: any) => {
   });
 }
 
-
-
 export const deleteMeeting = (id: number) => async (dispatch: any, getState: any) => {
   dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__REQUEST });
   await vifTech.delete(`/meetings/${id}`)
@@ -389,6 +387,25 @@ export const deleteMeeting = (id: number) => async (dispatch: any, getState: any
   .catch((response_delete) => {
     console.log('deleteMeeting response_delete:', response_delete);
     dispatch({ type: `${id}`+meetingActionTypes.DELETE_MEETING__FAILURE, payload: {error: `ERROR: Failed to delete meeting`} });
+  });
+}
+
+export const updateMeeting = (meetingId: number, newInviteeId: number) => async (dispatch: any) => {
+  dispatch({ type: meetingActionTypes.UPDATE_MEETING__REQUEST });
+  await vifTech.put(`/meetings/${meetingId}/invitees`, {
+    meeting: {
+      invitees: [
+        ...(newInviteeId > -1 ? [{ user_id: newInviteeId, status: 'accepted' }] : [])
+      ]
+    }
+  })
+  .then((response) => {
+    console.log('response_updateMeeting:', response);
+    dispatch({ type: meetingActionTypes.UPDATE_MEETING__SUCCESS, payload: { id: meetingId, newInviteeId } });
+  })
+  .catch((response) => {
+    console.log('response_fetchMeetings:', response);
+    dispatch({ type: meetingActionTypes.UPDATE_MEETING__FAILURE, payload: {error: 'ERROR: Failed to save meeting assignment'} });
   });
 }
 

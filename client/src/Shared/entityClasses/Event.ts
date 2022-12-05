@@ -1,5 +1,7 @@
 import { minToMs } from "Shared/utils";
+import EventSignup from "./EventSignup";
 import Meeting from "./Meeting";
+import User from "./User";
 
 export interface IEvent {
   id: number;
@@ -50,6 +52,14 @@ export default class Event implements IEvent {
 
   public findMeetings(meetings: Meeting[]): Meeting[] {
     return meetings.filter((meeting: Meeting) => meeting.event_id === this.id);
+  }
+
+  public findSignups(eventSignups: EventSignup[]): EventSignup[] {
+    return eventSignups.filter((eventSignup: EventSignup) => eventSignup.event_id === this.id);
+  }
+
+  public findAttendees(users: User[], eventSignups: EventSignup[]): User[] {
+    return users.filter((user: User) => user.isAttendingEvent(this, eventSignups));
   }
 
   public static createEvents(eventData: IEvent[]): Event[] {

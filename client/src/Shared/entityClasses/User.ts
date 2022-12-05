@@ -34,6 +34,11 @@ export default class User implements IUser {
     this.interests = interests;
   }
 
+  public get isStudent(): boolean { return this.usertype === Usertype.STUDENT; }
+  public get isVolunteer(): boolean { return this.usertype === Usertype.VOLUNTEER; }
+  public get isRepresentative(): boolean { return this.usertype === Usertype.REPRESENTATIVE; }
+  public get isAdmin(): boolean { return this.usertype === Usertype.ADMIN; }
+
   public isPrimaryContact(allowlist_emails: AllowlistEmail[]): boolean {
     const user_allowlist_email: AllowlistEmail | null = this.findAllowlistEmail(allowlist_emails);
     return user_allowlist_email?.is_primary_contact ?? false;
@@ -56,12 +61,28 @@ export default class User implements IUser {
     ?? null;
   }
 
-  public findMeetings(meetings: Meeting[]): Meeting[] {
+  public findOwnedMeetings(meetings: Meeting[]): Meeting[] {
     return meetings.filter((meeting: Meeting) => meeting.owner_id === this.id);
   }
 
-  public findMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
-    return this.findMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
+  public findInvitedMeetings(meetings: Meeting[]): Meeting[] {
+    return meetings.filter((meeting: Meeting) => meeting.invitee_id === this.id);
+  }
+
+  public findOwnedMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
+    return this.findOwnedMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
+  }
+
+  public findInvitedMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
+    return this.findInvitedMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
+  }
+
+  public hasOwnedMeetingsAtEvent(meetings: Meeting[], event: Event): boolean {
+    return this.findOwnedMeetingsByEvent(meetings, event).length > 0;
+  }
+
+  public hasInvitedMeetingsAtEvent(meetings: Meeting[], event: Event): boolean {
+    return this.findInvitedMeetingsByEvent(meetings, event).length > 0;
   }
 
   public static createNewUsers(userData: IUser[]): User[] {

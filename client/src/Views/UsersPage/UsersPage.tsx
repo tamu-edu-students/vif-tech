@@ -1,17 +1,20 @@
 import React from 'react';
 import { connect, ConnectedProps } from "react-redux";
+import { IRootState } from 'Store/reducers';
+// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+// import { companyActionTypes, allowlistActionTypes, userActionTypes } from 'Store/actions/types';
 
 import { fetchUsers } from "Store/actions";
 
 interface OwnProps {
-  users: any[];
-  fetchUsers?: any;
 }
 
+interface OwnState {
+}
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IRootState) => {
   return {
-    users: state.users,
+    users: state.userData.users,
   };
 };
 const mapDispatchToProps = { fetchUsers };
@@ -19,7 +22,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class UsersPage extends React.Component<Props, {}> {
+class UsersPage extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     this.props.fetchUsers();
   }
@@ -42,6 +45,7 @@ class UsersPage extends React.Component<Props, {}> {
                 <li>Last name: {user.lastname}</li>
                 <li>User type: {user.usertype}</li>
               </ul>
+              <br />
             </div>
           );
         })}
