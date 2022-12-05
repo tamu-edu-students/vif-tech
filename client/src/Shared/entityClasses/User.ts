@@ -61,12 +61,20 @@ export default class User implements IUser {
     ?? null;
   }
 
-  public findMeetings(meetings: Meeting[]): Meeting[] {
+  public findOwnedMeetings(meetings: Meeting[]): Meeting[] {
     return meetings.filter((meeting: Meeting) => meeting.owner_id === this.id);
   }
 
-  public findMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
-    return this.findMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
+  public findInvitedMeetings(meetings: Meeting[]): Meeting[] {
+    return meetings.filter((meeting: Meeting) => meeting.invitee_id === this.id);
+  }
+
+  public findOwnedMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
+    return this.findOwnedMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
+  }
+
+  public findInvitedMeetingsByEvent(meetings: Meeting[], event: Event): Meeting[] {
+    return this.findInvitedMeetings(meetings).filter((meeting: Meeting) => meeting.event_id === event.id);
   }
 
   public static createNewUsers(userData: IUser[]): User[] {

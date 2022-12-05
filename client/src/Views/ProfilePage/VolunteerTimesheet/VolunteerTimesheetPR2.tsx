@@ -41,7 +41,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
     event,
     isAttendingEvent,
-    meetings: state.auth.user?.findMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
+    meetings: state.auth.user?.findOwnedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
     eventsAreStale,
     isLoading_fetchEvents,

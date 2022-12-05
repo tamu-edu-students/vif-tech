@@ -29,7 +29,7 @@ type TimeOption = {
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   const volunteer: User = ownProps.volunteer;
-  const meetings: Meeting[] = volunteer.findMeetings(state.meetingData.meetings);
+  const meetings: Meeting[] = volunteer.findOwnedMeetings(state.meetingData.meetings);
 
   return {
     meetings,
