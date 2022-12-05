@@ -33,7 +33,7 @@ export default class Meeting implements IMeeting {
     this.event_id = event_id;
     this.start_time = start_time;
     this.end_time = end_time;
-    this.invitee_id = invitees.accepted[0].id;
+    this.invitee_id = invitees.accepted[0]?.id ?? -1;
   }
 
   public findOwner(users: User[]): User | null {
@@ -42,6 +42,7 @@ export default class Meeting implements IMeeting {
   }
 
   public findInvitee(users: User[]): User | null {
+    if (this.invitee_id === -1) { return null; }
     return users.find((user: User) => user.id === this.invitee_id)
     ?? null;
   }
