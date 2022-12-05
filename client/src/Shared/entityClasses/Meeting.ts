@@ -7,7 +7,16 @@ export interface IMeeting {
   event_id: number;
   start_time: string;
   end_time: string;
-  invitees: any[];
+  invitee_id: number;
+}
+
+export interface IMeetingJSON {
+  id: number;
+  owner_id: number;
+  event_id: number;
+  start_time: string;
+  end_time: string;
+  invitees: any;
 }
 
 export default class Meeting implements IMeeting {
@@ -16,19 +25,24 @@ export default class Meeting implements IMeeting {
   public readonly event_id: number;
   public readonly start_time: string;
   public readonly end_time: string;
-  public readonly invitees: any[];
+  public readonly invitee_id: number;
 
-  public constructor({ id, owner_id: user_id, event_id, start_time, end_time, invitees }: IMeeting) {
+  public constructor({ id, owner_id: user_id, event_id, start_time, end_time, invitees }: IMeetingJSON) {
     this.id = id;
     this.owner_id = user_id;
     this.event_id = event_id;
     this.start_time = start_time;
     this.end_time = end_time;
-    this.invitees = invitees;
+    this.invitee_id = invitees.accepted[0].id;
   }
 
-  public findUser(users: User[]): User | null {
+  public findOwner(users: User[]): User | null {
     return users.find((user: User) => user.id === this.owner_id)
+    ?? null;
+  }
+
+  public findInvitee(users: User[]): User | null {
+    return users.find((user: User) => user.id === this.invitee_id)
     ?? null;
   }
 
@@ -37,8 +51,8 @@ export default class Meeting implements IMeeting {
     ?? null;
   }
 
-  public static createMeetings(meetingData: IMeeting[]): Meeting[] {
-    return meetingData.map((meetingDatum: IMeeting) => new Meeting(meetingDatum));
+  public static createMeetings(meetingData: IMeetingJSON[]): Meeting[] {
+    return meetingData.map((meetingDatum: IMeetingJSON) => new Meeting(meetingDatum));
   }
 
   public static findById(id: number, meetings: Meeting[]): Meeting | null {
