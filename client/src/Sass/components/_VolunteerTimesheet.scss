@@ -91,18 +91,18 @@
           }
 
           &--available {
-            background-color: $color-brand-yellow-dark;
-
-            &:hover {
-              background-color: $color-brand-yellow-darker;
-            }
-          }
-
-          &--adding {
             background-color: $color-brand-green-dark;
 
             &:hover {
               background-color: $color-brand-green-darker;
+            }
+          }
+
+          &--adding {
+            background-color: $color-brand-yellow-dark;
+
+            &:hover {
+              background-color: $color-brand-yellow-darker;
             }
           }
 

@@ -83,15 +83,7 @@
           justify-content: center;
 
           &--available {
-            background-color: $color-brand-yellow-dark;
-          }
-
-          &--adding {
             background-color: $color-brand-green-dark;
-          }
-
-          &--deleting {
-            background-color: $color-brand-red-dark;
           }
         }
       }
