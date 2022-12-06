@@ -36,15 +36,6 @@
 
         &--header {
 
-          .table__cell {
-            background-color: $color-violet-darkest;
-            font-size: 1.6rem;
-            color: $color-white;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
         }
 
         .table__cell {
@@ -70,6 +61,17 @@
           }
 
           &--resume {
+          }
+
+          &--header  {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background-color: $color-violet-darkest;
+            color: $color-white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
 
