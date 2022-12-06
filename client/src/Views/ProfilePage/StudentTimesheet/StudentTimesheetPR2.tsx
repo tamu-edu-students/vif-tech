@@ -43,6 +43,9 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
     event,
     isAttendingEvent,
+    registrationIsOpen: event?.registrationIsOpen,
+    isPreRegistration: event?.isPreRegistration,
+    isPostRegistration: event?.isPostRegistration,
     users: state.userData.users,
     meetings: state.auth.user?.findInvitedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
@@ -130,6 +133,9 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     const {
       event,
       isAttendingEvent,
+      registrationIsOpen,
+      isPreRegistration,
+      isPostRegistration,
     } = this.props;
 
     if (this.props.isLoading) {
@@ -148,17 +154,28 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     return (
       <div className="Student-Timesheet">
         <h2>Student Timesheet</h2>
-        <button
-          onClick={() => isAttendingEvent
-            ? this.props.deleteEventSignup(event?.id ?? -1)
-            : this.props.createEventSignup(event?.id ?? -1)
-          }
-        >
-          {`${isAttendingEvent ? 'Unr' : 'R'}egister for ${event?.title}`}
-        </button>
         {
-          !isAttendingEvent &&
-          <div>Timesheet not viewable. Please register for this event!</div>
+          registrationIsOpen &&
+            <button
+              onClick={() => isAttendingEvent
+                ? this.props.deleteEventSignup(event?.id ?? -1)
+                : this.props.createEventSignup(event?.id ?? -1)}
+            >
+              {`${isAttendingEvent ? 'Unr' : 'R'}egister for ${event?.title}`}
+            </button>
+        }
+        {
+          isPreRegistration &&
+          <p>Registration is currently not yet open. No registration changes can be made at this time.</p>
+        }
+        {
+          isPostRegistration &&
+          <p>Registration is currently closed. No registration changes can be made at this time.</p>
+        }
+
+        {
+          !isAttendingEvent && isPostRegistration &&
+          <div>{`Timesheet not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
         }
 
         {

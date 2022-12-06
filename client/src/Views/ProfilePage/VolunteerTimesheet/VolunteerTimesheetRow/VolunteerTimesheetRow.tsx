@@ -18,6 +18,7 @@ interface OwnProps {
   meeting: Meeting | null;
   setReaction: Function;
   assignedStudent?: User;
+  registrationIsOpen: boolean;
 }
 
 interface OwnState {
@@ -72,6 +73,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       end_time,
       hadMeeting,
       assignedStudent,
+      registrationIsOpen
     } = this.props;
     
     const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
@@ -81,10 +83,13 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       <div className="VolunteerTimesheetRow table__row">
         <div className="table__cell table__cell--time">
           <button
-            onClick={() => {
-              hadMeeting ? this._deleteMeeting() : this._createMeeting();
-              this.setState({ isChanged: !this.state.isChanged })
-            }}
+            onClick={registrationIsOpen
+              ? () => {
+                hadMeeting ? this._deleteMeeting() : this._createMeeting();
+                this.setState({ isChanged: !this.state.isChanged })
+              }
+              : () => {}
+              }
             className={`table__time-button ${
               hadMeeting
               ? (this.state.isChanged ? 'table__time-button--deleting' : 'table__time-button--available')
