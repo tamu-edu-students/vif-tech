@@ -27,7 +27,7 @@ AllowlistDomain.create(domain: "exchange.tamu.edu", usertype: "student")
 #TODO: Correct the registration times
 case Rails.env
 when "production"
-  Event.create(title: "Portfolio Review 1", description: "First portfolio review", start_time: "2022-10-22T10:00:00CDT", end_time: "2022-10-22T16:00:00CDT", registration_start_time: "2022-10-11T10:00:00CDT", registration_end_time: "2022-18-15T17:00:00CDT")
+  Event.create(title: "Portfolio Review 1", description: "First portfolio review", start_time: "2022-10-22T10:00:00CDT", end_time: "2022-10-22T16:00:00CDT", registration_start_time: "2022-10-11T10:00:00CDT", registration_end_time: "2022-10-18T17:00:00CDT")
   Event.create(title: "Mock Interview 1", description: "First mock interview", start_time: "2023-02-16T10:00:00CST", end_time: "2023-02-16T16:00:00CST", registration_start_time: "2023-02-02T10:00:00CST", registration_end_time: "2023-02-09T17:00:00CST")
   Event.create(title: "Mock Interview 2", description: "Second mock interview", start_time: "2023-02-17T10:00:00CST", end_time: "2023-02-17T16:00:00CST", registration_start_time: "2020-01-01T10:00:00CST", registration_end_time: "2024-01-01T17:00:00CST")
   Event.create(title: "Portfolio Review 2", description: "Second portfolio review", start_time: "2023-02-18T10:00:00CST", end_time: "2023-02-18T16:00:00CST", registration_start_time: "2020-01-01T10:00:00CST", registration_end_time: "2024-01-01T17:00:00CST")
