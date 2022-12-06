@@ -28,6 +28,7 @@ import StudentTimesheetPR1 from './StudentTimesheet/StudentTimesheetPR1';
 import StudentTimesheetMI1 from './StudentTimesheet/StudentTimesheetMI1';
 import StudentTimesheetMI2 from './StudentTimesheet/StudentTimesheetMI2';
 import StudentTimesheetPR2 from './StudentTimesheet/StudentTimesheetPR2';
+import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
 
 
 interface OwnProps {
@@ -151,6 +152,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
 
       <Route exact path={`${parentPath}/representative-timesheet/portfolio-review-2`} key={`${parentPath}/representative-timesheet/portfolio-review-2`}>
         <VolunteerTimesheetPR2 />
+      </Route>,
+
+      <Route exact path={`${parentPath}/representative-timesheet/virtual-fair`} key={`${parentPath}/representative-timesheet/virtual-fair`}>
+        <RepresentativeFairTimesheetVF />
       </Route>
     ]);
   }
@@ -169,6 +174,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
         <li><Link to={`${parentPath}/representative-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
         <li><Link to={`${parentPath}/representative-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
         <li><Link to={`${parentPath}/representative-timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
+        <li><Link to={`${parentPath}/representative-timesheet/virtual-fair`}>Virtual Fair</Link></li>
       </>
     );
   }
