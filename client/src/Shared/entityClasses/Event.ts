@@ -9,6 +9,8 @@ export interface IEvent {
   description: string;
   start_time: string
   end_time: string;
+  registration_start_time: string;
+  registration_end_time: string;
 }
 
 export default class Event implements IEvent {
@@ -17,13 +19,17 @@ export default class Event implements IEvent {
   public readonly description: string;
   public readonly start_time: string;
   public readonly end_time: string;
+  public readonly registration_start_time: string;
+  public readonly registration_end_time: string;
 
-  public constructor({ id, title, description, start_time, end_time }: IEvent) {
+  public constructor({ id, title, description, start_time, end_time, registration_start_time, registration_end_time }: IEvent) {
     this.id = id;
     this.title = title;
     this.description = description;
     this.start_time = start_time;
     this.end_time = end_time;
+    this.registration_start_time = registration_start_time;
+    this.registration_end_time = registration_end_time;
   }
 
   public createTimeSlots(sessionLengthMins: number, breakLengthMins: number): any[] {
@@ -48,6 +54,24 @@ export default class Event implements IEvent {
     }
 
     return timeSlots;
+  }
+
+  public get isPreRegistration(): boolean {
+    const now: string = new Date().toISOString();
+    return now < this.registration_start_time;
+  }
+
+  public get isPostRegistration(): boolean {
+    const now: string = new Date().toISOString();
+    return now > this.registration_end_time;
+  }
+
+  public get registrationIsClosed(): boolean {
+    return this.isPreRegistration || this.isPostRegistration;
+  }
+
+  public get registrationIsOpen(): boolean {
+    return !this.registrationIsClosed;
   }
 
   public findMeetings(meetings: Meeting[]): Meeting[] {
