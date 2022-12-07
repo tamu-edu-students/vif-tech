@@ -11,8 +11,20 @@ export interface IUser {
   firstname: string;
   lastname: string;
   usertype: Usertype;
+  profile_img_src?: string;
+
+  // REPRESENTATIVE
   company_id?: number;
-  interests?: string[];
+  title?: string;
+  
+  // STUDENT
+  class_year?: number;
+  resume_link?: string;
+  portfolio_link?: string;
+  class_semester?: string;
+  
+  // STUDENT/VOLUNTEER
+  // focuses?: string[]; ???
 }
 
 export default class User implements IUser {
@@ -21,17 +33,36 @@ export default class User implements IUser {
   public readonly firstname: string;
   public readonly lastname: string;
   public readonly usertype: Usertype;
+  public readonly profile_img_src?: string;
+  // REPRESENTATIVE
   public readonly company_id?: number;
-  public readonly interests?: string[];
+  public readonly title?: string;
+  // STUDENT
+  public readonly class_year?: number;
+  public readonly class_semester?: string;
+  public readonly resume_link?: string;
+  public readonly portfolio_link?: string;
+  // STUDENT/VOLUNTEER
 
-  public constructor({ id, email, firstname, lastname, usertype, company_id, interests }: IUser) {
+  public constructor({
+    id, email, firstname, lastname, usertype, profile_img_src,
+    company_id, title,
+    class_year, class_semester, resume_link, portfolio_link
+  }: IUser) {
     this.id = id;
     this.email = email;
     this.firstname = firstname;
     this.lastname = lastname;
     this.usertype = usertype;
+    this.profile_img_src = profile_img_src ?? '';
+
     this.company_id = company_id;
-    this.interests = interests;
+    this.title = title;
+
+    this.class_year = class_year;
+    this.class_semester = class_semester;
+    this.resume_link = resume_link ?? '';
+    this.portfolio_link = portfolio_link ?? '';
   }
 
   public get isStudent(): boolean { return this.usertype === Usertype.STUDENT; }

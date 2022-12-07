@@ -37,14 +37,14 @@ end
 # User.create(email: "vol_1@gmail.com", firstname: "Vol", lastname: "One", password: "pw", email_confirmed: true, usertype: "volunteer", allowlist_email_id: 1); #1
 # User.create(email: "vol_2@yahoo.com", firstname: "Vol", lastname: "Two", password: "pw", email_confirmed: true, usertype: "volunteer", allowlist_email_id: 2); #2
 # User.create(email: "vol_3@aol.com", firstname: "Vol", lastname: "Three", password: "pw", email_confirmed: true, usertype: "volunteer", allowlist_email_id: 3); #3
-# User.create(email: "student_1@tamu.edu", firstname: "Student", lastname: "One", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1); #4
-# User.create(email: "student_2@arch.tamu.edu", firstname: "Student", lastname: "Two", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 2); #5
-# User.create(email: "student_3@exchange.tamu.edu", firstname: "Student", lastname: "Three", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 3); #6
-# User.create(email: "student_4@tamu.edu", firstname: "Student", lastname: "Four", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1); #7
-# User.create(email: "rep_1@disney.com", firstname: "Rep", lastname: "One_Disney", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 4, company_id: 1); #8
-# User.create(email: "rep_2@disney.com", firstname: "Rep", lastname: "Two_Disney", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 5, company_id: 1); #9
-# User.create(email: "rep_3@activision.com", firstname: "Rep", lastname: "Three_Activision", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 6, company_id: 2); #10
-# User.create(email: "rep_4@activision.com", firstname: "Rep", lastname: "Four_Activision", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 7, company_id: 2); #11
+# User.create(email: "student_1@tamu.edu", firstname: "Student", lastname: "One", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2022, class_semester: "spring"); #4
+# User.create(email: "student_2@arch.tamu.edu", firstname: "Student", lastname: "Two", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 2, class_year: 2027, class_semester: "summer"); #5
+# User.create(email: "student_3@exchange.tamu.edu", firstname: "Student", lastname: "Three", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 3, class_year: 2025, class_semester: "fall"); #6
+# User.create(email: "student_4@tamu.edu", firstname: "Student", lastname: "Four", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2022, class_semester: "spring"); #7
+# User.create(email: "rep_1@disney.com", firstname: "Rep", lastname: "One_Disney", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 4, company_id: 1, title: "Recruiter"); #8
+# User.create(email: "rep_2@disney.com", firstname: "Rep", lastname: "Two_Disney", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 5, company_id: 1, title: "Awesome Designer"); #9
+# User.create(email: "rep_3@activision.com", firstname: "Rep", lastname: "Three_Activision", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 6, company_id: 2, title: "Graphics Specialist"); #10
+# User.create(email: "rep_4@activision.com", firstname: "Rep", lastname: "Four_Activision", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 7, company_id: 2, title: "Game QA"); #11
 
 # Focus.create(name: "Animation");
 # Focus.create(name: "Graphic Design");

@@ -49,6 +49,11 @@ class UserForm extends CustomForm<Props, {}> {
       }
       if (this.props.usertype !== Usertype.REPRESENTATIVE) {
         this.props.changeFieldValue('company_id', '');
+        this.props.changeFieldValue('title', '');
+      }
+      if (this.props.usertype !== Usertype.STUDENT) {
+        this.props.changeFieldValue('class_year', '');
+        this.props.changeFieldValue('class_semester', '');
       }
     }
   }
@@ -59,8 +64,23 @@ class UserForm extends CustomForm<Props, {}> {
     ));
   }
 
+  private _renderYearOptions(): JSX.Element[] {
+    return [2022, 2023, 2024, 2025, 2026, 2027].map((year: number) => (
+      <option key={year} value={year}>{year}</option>
+    ));
+  }
+
+  private _renderSemesterOptions(): JSX.Element[] {
+    return ['spring', 'summer', 'fall'].map((semester: string) => (
+      <option key={semester} value={semester}>{semester[0].toUpperCase() + semester.slice(1)}</option>
+    ));
+  }
+
   private _onSubmit = (formValues: any) => {
-    this.props.onSubmit(formValues);
+    this.props.onSubmit({
+      ...formValues,
+      ...(formValues.class_year ? {class_year: Number.parseInt(formValues.class_year)} : {})
+    });
   }
  
   public render() {
@@ -78,24 +98,44 @@ class UserForm extends CustomForm<Props, {}> {
         </fieldset>
         {
           this.props.usertype === Usertype.REPRESENTATIVE &&
-          (
-          <div>
-            {
-              //TODO: add error
-              this.props.isLoading_fetchCompanies
-              ? <div>Loading company options...</div>
-              : (
-                <>
-                <label htmlFor="company_id">Company</label>
-                <Field name="company_id" id="company_id" component={this._renderSelect}>
-                  <option />
-                  {this._renderCompanyOptions()}
-                </Field>
-                </>
-              )
-            }
-          </div>
-          )
+          <>
+            <Field name="title" id="title" type="text" component={this._renderInput} label="Job title" />
+            <div>
+              {
+                //TODO: add error
+                this.props.isLoading_fetchCompanies
+                ? <div>Loading company options...</div>
+                : (
+                  <>
+                    <label htmlFor="company_id">Company</label>
+                    <Field name="company_id" id="company_id" component={this._renderSelect}>
+                      <option />
+                      {this._renderCompanyOptions()}
+                    </Field>
+                  </>
+                )
+              }
+            </div>
+          </>
+        }
+        {
+          this.props.usertype === Usertype.STUDENT &&
+          <>
+            <div>
+              <label htmlFor="class_year">Expected graduation year</label>
+              <Field name="class_year" id="class_year" component={this._renderSelect}>
+                <option />
+                {this._renderYearOptions()}
+              </Field>
+            </div>
+            <div>
+              <label htmlFor="class_semester">Expected graduation term</label>
+              <Field name="class_semester" id="class_semester" component={this._renderSelect}>
+                <option />
+                {this._renderSemesterOptions()}
+              </Field>
+            </div>
+          </>
         }
         <button type='submit' data-testid="sign-up-form-button">Sign Up</button>
       </form>
@@ -103,7 +143,12 @@ class UserForm extends CustomForm<Props, {}> {
   }
 }
 
-const validate = ({firstname, lastname, email, password, password_confirmation, company_id, usertype}: any) => {
+const validate = ({
+  firstname, lastname, email, password, password_confirmation,
+  company_id, title,
+  class_year, class_semester,
+  usertype
+}: any) => {
   const errors: any = {};
 
   if (!firstname) {
@@ -126,8 +171,22 @@ const validate = ({firstname, lastname, email, password, password_confirmation, 
     errors.password_confirmation = "Passwords do not match";
   }
 
-  if (usertype === Usertype.REPRESENTATIVE && !company_id) {
-    errors.company_id = "You must choose your company";
+  if (usertype === Usertype.REPRESENTATIVE) {
+    if (!company_id) {
+      errors.company_id = "You must select your company";
+    }
+    if (!title) {
+      errors.title = "You must enter your job title";
+    }
+  }
+
+  if (usertype === Usertype.STUDENT) {
+    if (!class_year) {
+      errors.class_year = "You must select your expected graduation year";
+    }
+    if (!class_semester) {
+      errors.class_semester = "You must select your expected graduation term";
+    }
   }
 
   return errors;
