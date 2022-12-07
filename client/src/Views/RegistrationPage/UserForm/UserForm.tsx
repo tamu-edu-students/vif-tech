@@ -107,8 +107,7 @@ class UserForm extends CustomForm<Props, {}> {
                 ? <div>Loading company options...</div>
                 : (
                   <>
-                    <label htmlFor="company_id">Company</label>
-                    <Field name="company_id" id="company_id" component={this._renderSelect}>
+                    <Field name="company_id" id="company_id" component={this._renderSelect} label="Company">
                       <option />
                       {this._renderCompanyOptions()}
                     </Field>
@@ -122,15 +121,13 @@ class UserForm extends CustomForm<Props, {}> {
           this.props.usertype === Usertype.STUDENT &&
           <>
             <div>
-              <label htmlFor="class_year">Expected graduation year</label>
-              <Field name="class_year" id="class_year" component={this._renderSelect}>
+              <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
                 <option />
                 {this._renderYearOptions()}
               </Field>
             </div>
             <div>
-              <label htmlFor="class_semester">Expected graduation term</label>
-              <Field name="class_semester" id="class_semester" component={this._renderSelect}>
+              <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
                 <option />
                 {this._renderSemesterOptions()}
               </Field>

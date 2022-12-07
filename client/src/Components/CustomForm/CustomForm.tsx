@@ -13,7 +13,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
     return (
       <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
         <label htmlFor={id}>
-          {label}
+          <p>{label}</p>
           <input {...input} type={type} id={id} autoComplete="off" {...rest} />
           {this._renderError(meta)}
         </label>
@@ -25,7 +25,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
     return (
       <div className={`field ${meta.error && meta.touched ? "error" : ""}`}>
         <label htmlFor={id}>
-          {label}
+          <p>{label}</p>
           <select {...input} id={id}>
             {children}
           </select>
