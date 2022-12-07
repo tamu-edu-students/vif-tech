@@ -45,3 +45,20 @@ end
 # User.create(email: "rep_2@disney.com", firstname: "Rep", lastname: "Two_Disney", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 5, company_id: 1); #9
 # User.create(email: "rep_3@activision.com", firstname: "Rep", lastname: "Three_Activision", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 6, company_id: 2); #10
 # User.create(email: "rep_4@activision.com", firstname: "Rep", lastname: "Four_Activision", password: "pw", email_confirmed: true, usertype: "company representative", allowlist_email_id: 7, company_id: 2); #11
+
+# Focus.create(name: "Animation");
+# Focus.create(name: "Graphic Design");
+# Focus.create(name: "Concept Art/Visual Dev");
+# Focus.create(name: "Character Modeling");
+# Focus.create(name: "Env Modeling");
+# Focus.create(name: "Surface/Look Dev");
+# Focus.create(name: "3D Generalist");
+# Focus.create(name: "Lighting");
+# Focus.create(name: "Rigging");
+# Focus.create(name: "Layout");
+# Focus.create(name: "Character FX");
+# Focus.create(name: "VFX");
+# Focus.create(name: "Game Design");
+# Focus.create(name: "Level Design");
+# Focus.create(name: "Tool Development");
+# Focus.create(name: "Technical Art");

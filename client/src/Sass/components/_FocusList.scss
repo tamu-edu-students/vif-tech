@@ -1,0 +1,41 @@
+.Focus-List {
+  .focus-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150%;
+  
+    .focus-container {
+      width: 100%;
+      margin-bottom: 1rem;
+
+
+      display: flex;
+      // flex-direction: column;
+      align-items: center;
+  
+      .focus {
+        width: 100%;
+        border: 1px solid white;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+    
+        &__name {
+          color: $color-brand-yellow;
+        }
+      }
+  
+      .buttons {
+        align-self: flex-start;
+  
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    
+    &__add-button {
+      margin-top: 1rem;
+    }
+  }
+}

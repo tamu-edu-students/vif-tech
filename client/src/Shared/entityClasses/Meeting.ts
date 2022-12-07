@@ -27,9 +27,9 @@ export default class Meeting implements IMeeting {
   public readonly end_time: string;
   public readonly invitee_id: number;
 
-  public constructor({ id, owner_id: user_id, event_id, start_time, end_time, invitees }: IMeetingJSON) {
+  public constructor({ id, owner_id, event_id, start_time, end_time, invitees }: IMeetingJSON) {
     this.id = id;
-    this.owner_id = user_id;
+    this.owner_id = owner_id;
     this.event_id = event_id;
     this.start_time = start_time;
     this.end_time = end_time;
@@ -68,6 +68,6 @@ export default class Meeting implements IMeeting {
   }
 
   public static findById(id: number, meetings: Meeting[]): Meeting | null {
-    return meetings.find((event: Meeting) => event.id === id) ?? null;
+    return meetings.find((meeting: Meeting) => meeting.id === id) ?? null;
   }
 }

@@ -6,6 +6,7 @@ import {
   eventActionTypes,
   meetingActionTypes,
   eventSignupActionTypes,
+  focusActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -26,6 +27,7 @@ import FAQ from 'Shared/entityClasses/FAQ';
 import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 import EventSignup from 'Shared/entityClasses/EventSignup';
+import Focus from 'Shared/entityClasses/Focus';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -406,6 +408,67 @@ export const updateMeeting = (meetingId: number, newInviteeId: number) => async 
   .catch((response) => {
     console.log('response_fetchMeetings:', response);
     dispatch({ type: meetingActionTypes.UPDATE_MEETING__FAILURE, payload: {error: 'ERROR: Failed to save meeting assignment'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         FOCUSES */
+/********************************************************************************************* */
+export const fetchFocuses = () => async (dispatch: any) => {
+  dispatch({ type: focusActionTypes.FETCH_FOCUSES__REQUEST });
+  await vifTech.get('/focuses')
+  .then((response) => {
+    console.log('response_fetchFocuses:', response);
+    dispatch({ type: focusActionTypes.FETCH_FOCUSES__SUCCESS, payload: Focus.createFocuses(response.data.focuses) });
+    dispatch({ type: focusActionTypes.SET_FOCUSES_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchFocuses:', response);
+    dispatch({ type: focusActionTypes.FETCH_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to fetch focuses data'} });
+  });
+}
+
+export const createFocus = (formValues: any) => async (dispatch: any) => {
+  dispatch({ type: focusActionTypes.CREATE_FOCUS__REQUEST });
+  await vifTech.post(`/focuses`, { focus: { ...formValues } })
+  .then((response) => {
+    console.log('createFocus response:', response);
+    dispatch({ type: focusActionTypes.CREATE_FOCUS__SUCCESS, payload: new Focus(response.data.focus) });
+  })
+  .catch((response) => {
+    console.log('createFocus response:', response);
+    dispatch({ type: focusActionTypes.CREATE_FOCUS__FAILURE, payload: {error: `ERROR: Failed to create focus`} });
+  });
+}
+
+export const deleteFocus = (id: number) => async (dispatch: any, getState: any) => {
+  await vifTech.delete(`/focuses/${id}`)
+  .then((response_delete) => {
+    console.log('deleteFocus response_delete:', response_delete);
+    dispatch({ type: focusActionTypes.DELETE_FOCUS__SUCCESS, payload: id });
+  })
+  .catch((response_delete) => {
+    console.log('deleteFocus response_delete:', response_delete);
+    dispatch({ type: focusActionTypes.DELETE_FOCUS__FAILURE, payload: {error: `ERROR: Failed to delete focus`} });
+  });
+}
+
+export const updateFocus = (focusId: number, newName: string) => async (dispatch: any) => {
+  dispatch({ type: focusActionTypes.UPDATE_FOCUS__REQUEST });
+  await vifTech.put(`/focuses/${focusId}`, {
+    focus: {
+      name: newName
+    }
+  })
+  .then((response) => {
+    console.log('response_updateFocus:', response);
+    dispatch({ type: focusActionTypes.UPDATE_FOCUS__SUCCESS, payload: new Focus(response.data.focus) });
+  })
+  .catch((response) => {
+    console.log('response_fetchFocuses:', response);
+    dispatch({ type: focusActionTypes.UPDATE_FOCUS__FAILURE, payload: {error: 'ERROR: Failed to update focus'} });
   });
 }
 
