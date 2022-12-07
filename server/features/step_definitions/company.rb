@@ -48,3 +48,17 @@ Given("I delete company with id {int}") do |cid|
   ret = page.driver.delete("/companies/" + cid.to_s)
   expect(ret.status).to eq(200)
 end
+
+Given /^I update the company with id ([^\'^\ ]*) to have ([^\'^\ ]*) with value ([^\'^\ ]*)$/ do |id, key_, value|
+  ret = page.driver.put("/companies/" + id.to_s, { "company": { key_ => value } })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+end
+
+Then /^the company with id ([^\'^\ ]*) should have ([^\'^\ ]*) with value ([^\'^\ ]*)$/ do |id, key, value|
+  ret = page.driver.get("/companies/" + id.to_s)
+  ret_body = JSON.parse ret.body
+
+  expect(ret.status).to eq(200)
+  expect(ret_body["company"][key]).to eq(value)
+end

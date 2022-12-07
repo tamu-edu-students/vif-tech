@@ -76,7 +76,7 @@ RSpec.describe CompaniesController, :type => :controller do
             
             
             parsed_body["companies"].each do |record|
-                expect(record.keys).to eq(["id", "name", "description", "created_at", "updated_at"])
+                expect(record.keys).to eq(["id", "name", "description", "created_at", "updated_at", "location", "logo_img_src", "website_link", "hiring_for_fulltime", "hiring_for_parttime", "hiring_for_intern"])
             end
         end
         
@@ -89,7 +89,7 @@ RSpec.describe CompaniesController, :type => :controller do
             parsed_body = JSON.parse(response.body)
             
             parsed_body["companies"].each do |record|
-                expect(record.keys).to eq(["id", "name", "description", "created_at", "updated_at"])
+                expect(record.keys).to eq(["id", "name", "description", "created_at", "updated_at", "location", "logo_img_src", "website_link", "hiring_for_fulltime", "hiring_for_parttime", "hiring_for_intern"])
             end
         end
 
@@ -128,7 +128,7 @@ RSpec.describe CompaniesController, :type => :controller do
             get :show, :params => {:id => 3}
             parsed_body = JSON.parse(response.body)
             expect(parsed_body["company"]["name"]).to eq('dreamworks')
-            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at"])
+            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at", "location", "logo_img_src", "website_link", "hiring_for_fulltime", "hiring_for_parttime", "hiring_for_intern"])
             parsed_body["allowlist_domains"].each do |record|
                 expect(record.keys).to eq(["id", "domain", "usertype", "company_id"])
             end
@@ -143,7 +143,7 @@ RSpec.describe CompaniesController, :type => :controller do
             get :show, :params => {:id => 3}
             parsed_body = JSON.parse(response.body)
             expect(parsed_body["company"].keys).not_to include("allowlist_emails", "allowlist_domains")
-            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at"])
+            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at", "location", "logo_img_src", "website_link", "hiring_for_fulltime", "hiring_for_parttime", "hiring_for_intern"])
 
             parsed_body = JSON.parse(response.body)
         end
@@ -154,7 +154,7 @@ RSpec.describe CompaniesController, :type => :controller do
             get :show, :params => {:id => 3}
             parsed_body = JSON.parse(response.body)
             expect(parsed_body["company"].keys).not_to include("allowlist_emails", "allowlist_domains")
-            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at"])
+            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at", "location", "logo_img_src", "website_link", "hiring_for_fulltime", "hiring_for_parttime", "hiring_for_intern"])
         end
 
         it "should display some fields of the representative's own company" do
@@ -164,7 +164,7 @@ RSpec.describe CompaniesController, :type => :controller do
             get :show, :params => {:id => company_id} 
             parsed_body = JSON.parse(response.body)
             expect(parsed_body["company"].keys).not_to include("allowlist_emails", "allowlist_domains")
-            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at"])
+            expect(parsed_body["company"].keys).to eq(["id", "name", "description", "created_at", "updated_at", "location", "logo_img_src", "website_link", "hiring_for_fulltime", "hiring_for_parttime", "hiring_for_intern"])
         end
 
         it "should display 'company not found' if that one company is not found" do

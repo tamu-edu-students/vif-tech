@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :confirm_user_logged_in, except: [:new, :create, :confirm_email]
   before_action :confirm_user_exists, only: [:show, :assigned_to_meeting?, :get_meetings, :get_accepted_meetings, :get_pending_meetings,
-                                             :get_owned_meetings, :add_to_meeting, :update_meeting]
+                                             :get_owned_meetings, :add_to_meeting, :update_meeting, :update]
   before_action :confirm_meeting_exists, only: [:assigned_to_meeting?, :add_to_meeting, :update_meeting, :delete_from_meeting]
 
   def index
@@ -102,6 +102,29 @@ class UsersController < ApplicationController
       render json: {
                errors: @user.errors.full_messages,
              }, status: :bad_request
+    end
+  end
+
+  def update
+    @user = User.find(params[:id])
+    if !@user
+      render json: {
+        errors: ["User #{params[:id]} not found"],
+      }, status: :not_found
+      return
+    end
+    if !confirm_requester_is_owner_or_admin(params[:id].to_i)
+      return
+    end
+    if @user.update(update_params)
+      @user.save!
+      render json: {
+               user: @user,
+             }, status: :ok
+    else
+      render json: {
+               errors: @user.errors.full_messages,
+             }, status: :internal_server_error
     end
   end
 
@@ -540,7 +563,11 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:usertype, :firstname, :lastname, :email, :password, :password_confirmation)
+    params.require(:user).permit(:usertype, :firstname, :lastname, :email, :password, :password_confirmation, :profile_img_src, :resume_link, :portfolio_link, :class_year, :class_semester, :title)
+  end
+
+  def update_params
+    params.require(:user).permit(:profile_img_src, :resume_link, :portfolio_link, :class_year, :class_semester, :title)
   end
 
   def user_meeting_params

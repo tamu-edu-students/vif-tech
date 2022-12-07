@@ -326,7 +326,7 @@ class CompaniesController < ApplicationController
   private
 
   def company_params
-    params.require(:company).permit(:name, :description)
+    params.require(:company).permit(:name, :description, :location, :logo_img_src, :website_link, :hiring_for_fulltime, :hiring_for_parttime, :hiring_for_intern)
   end
 
   def focus_params

@@ -213,3 +213,33 @@ Feature: Student signup
         Then I should not be logged in
         And that I log in with email admin@admin.com and password pw
         Then I should not be logged in
+
+    Scenario: Signup as student and update some fields
+        Given that I log in as admin
+        Given that I sign up with the following
+            | firstname | john |
+            | lastname | doe |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        Then the user with email test@tamu.edu should be found in the user DB
+        And that the user verified their email test@tamu.edu
+        And that I log in with email test@tamu.edu and password password1!
+        And I update the user with id 2 to have profile_img_src with value https://www.google.com
+        Then the user with id 2 should have profile_img_src with value https://www.google.com
+        And I update the user with id 2 to have class_semester with value winter
+        Then the user with id 2 should have class_semester with value winter
+
+    Scenario: Signup as student and an admin updates some fields
+        Given that I log in as admin
+        Given that I sign up with the following
+            | firstname | john |
+            | lastname | doe |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@tamu.edu |
+            | usertype | student |
+        Given that I log in as admin
+        And I update the user with id 2 to have profile_img_src with value https://www.google.com
+        Then the user with id 2 should have profile_img_src with value https://www.google.com
