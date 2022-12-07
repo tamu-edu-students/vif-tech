@@ -11,6 +11,7 @@ import { Usertype } from 'Shared/enums';
 import RedirectPrompt from 'Components/RedirectPrompt';
 
 import MyProfile from './MyProfile/MyProfile';
+import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
@@ -29,6 +30,7 @@ import StudentTimesheetMI1 from './StudentTimesheet/StudentTimesheetMI1';
 import StudentTimesheetMI2 from './StudentTimesheet/StudentTimesheetMI2';
 import StudentTimesheetPR2 from './StudentTimesheet/StudentTimesheetPR2';
 import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
+
 import FocusList from './FocusList/FocusList';
 
 
@@ -223,6 +225,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderStudentRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
+      <Route exact path={`${parentPath}/student-my-profile`} key={`${parentPath}/my-profile-student`}>
+        <MyProfileStudent />
+      </Route>,
+
       <Route exact path={`${parentPath}/student-timesheet/portfolio-review-1`} key={`${parentPath}/student-timesheet/portfolio-review-1`}>
         <StudentTimesheetPR1 />
       </Route>,
@@ -245,6 +251,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
     return (
       <>
+      <br />
+      <li><Link to={`${parentPath}/student-my-profile`}>My Student Profile</Link></li>
       <br />
       <li><Link to={`${parentPath}/student-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
       <li><Link to={`${parentPath}/student-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>

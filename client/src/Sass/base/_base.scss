@@ -43,6 +43,10 @@ form {
   gap: 1.5rem;
   align-items: flex-start;
 
+  select {
+    width: 100%;
+  }
+
   fieldset {
     display: flex;
     flex-direction: column;
