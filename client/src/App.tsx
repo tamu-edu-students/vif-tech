@@ -15,6 +15,7 @@ import LoginPage from 'Views/LoginPage/LoginPage';
 import UsersPage from 'Views/UsersPage/UsersPage';
 import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
+import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
@@ -72,6 +73,7 @@ class App extends React.Component<Props, {}> {
           <nav className="nav">
             <ul>
               <li><Link to="/faq" data-testid="faq-page-button">FAQ</Link></li>
+              <li><Link to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
               {
                 this.props.user
                 ? (
@@ -113,6 +115,10 @@ class App extends React.Component<Props, {}> {
 
             <Route exact path="/faq">
               <FAQPage />
+            </Route>
+
+            <Route exact path="/virtual-fair-schedule">
+              <VirtualFairSchedule />
             </Route>
 
             <Route exact path="/users/new">

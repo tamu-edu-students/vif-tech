@@ -1,20 +1,8 @@
-.Meeting-Assignment-Sheet {
-  width: 50%;
+.Representative-Fair-Timesheet {
+  //TODO: Remove
   background-color: $color-violet;
   padding: 3rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-
-  button {
-    align-self: flex-start;
-  }
-}
-
-.Volunteer-Timetable {
-  //TODO: Remove
-  width: 100%;
+  width: 50%;
   
   .table {
     .table__rows {
@@ -24,7 +12,7 @@
 
       .table__row {
         display: grid;
-        grid-template-columns: 16fr 84fr;
+        grid-template-columns: 1fr;
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
@@ -47,11 +35,13 @@
         }
 
         &--header {
-          
+
         }
 
         .table__cell {
           padding: 1rem;
+          font-family: $font-body;
+          font-size: 1.2rem;
 
           &:not(:last-child):not(.table__cell--time) {
             border-right: 1px solid $color-violet-darkest;
@@ -64,12 +54,6 @@
             // align-items: center;
           }
 
-          &--name {
-            select {
-              width: 50%;
-            }
-          }
-          
           &--header  {
             font-size: 1.8rem;
             font-weight: 700;
@@ -82,29 +66,45 @@
           }
         }
 
-        .table__time-block {
+        .table__time-button {
           width: 100%;
           height: 100%;
           padding: 1rem;
           background-color: $color-violet-darkest;
           color: $color-white;
+          font: inherit;
           font-family: $font-header;
           font-size: 1.8rem;
+          border: none;
+          cursor: pointer;
+          transition: all 0.1s;
 
-          display: flex;
-          justify-content: center;
-
-          &--swapping,
-          &--adding {
-            background-color: $color-brand-yellow-dark;
+          &:hover {
+            background-color: $color-gray;
           }
 
-          &--filled {
+          &--available {
             background-color: $color-brand-green-dark;
+
+            &:hover {
+              background-color: $color-brand-green-darker;
+            }
+          }
+
+          &--adding {
+            background-color: $color-brand-yellow-dark;
+
+            &:hover {
+              background-color: $color-brand-yellow-darker;
+            }
           }
 
           &--deleting {
             background-color: $color-brand-red-dark;
+
+            &:hover {
+              background-color: $color-brand-red-darker;
+            }
           }
         }
       }

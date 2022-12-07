@@ -1,20 +1,9 @@
-.Meeting-Assignment-Sheet {
-  width: 50%;
+.Virtual-Fair-Schedule {
+  //TODO: Remove
   background-color: $color-violet;
   padding: 3rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-
-  button {
-    align-self: flex-start;
-  }
-}
-
-.Volunteer-Timetable {
-  //TODO: Remove
-  width: 100%;
+  // width: 50%;
+  // width: min-content;
   
   .table {
     .table__rows {
@@ -24,34 +13,41 @@
 
       .table__row {
         display: grid;
-        grid-template-columns: 16fr 84fr;
+        grid-template-columns: 15rem repeat(auto-fill, 10rem);
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
-            border-bottom: 1px solid $color-white;
+            border-bottom: 1px solid $color-violet-darkest;
+
+            &--time {
+              border-bottom: 1px solid $color-white;
+            }
           }
         }
 
         &:not(.table__row--header) {
-          &:nth-child(even) {
-            .table__cell:not(.table__cell--time) {
-              background-color: $color-gray-light;
-            }
-          }
+          // &:nth-child(even) {
+          //   .table__cell:not(.table__cell--time) {
+          //     background-color: $color-gray-light;
+          //   }
+          // }
   
-          &:nth-child(odd) {
-            .table__cell:not(.table__cell--time) {
-              background-color: $color-white;
-            }
-          }
+          // &:nth-child(odd) {
+          //   .table__cell:not(.table__cell--time) {
+          //     background-color: $color-white;
+          //   }
+          // }
         }
 
         &--header {
-          
+          grid-template-columns: 15rem 1fr;
         }
 
         .table__cell {
           padding: 1rem;
+          font-family: $font-body;
+          font-size: 1.2rem;
+          background-color: $color-gray-light;
 
           &:not(:last-child):not(.table__cell--time) {
             border-right: 1px solid $color-violet-darkest;
@@ -64,12 +60,16 @@
             // align-items: center;
           }
 
-          &--name {
-            select {
-              width: 50%;
-            }
+          &--company-block {
+            // background-color: $color-white;
+            color: $color-black;
           }
-          
+
+          &--filled {
+            background-color: $color-brand-green-dark;
+            // color: $color-white;
+          }
+
           &--header  {
             font-size: 1.8rem;
             font-weight: 700;
@@ -94,17 +94,8 @@
           display: flex;
           justify-content: center;
 
-          &--swapping,
-          &--adding {
-            background-color: $color-brand-yellow-dark;
-          }
-
-          &--filled {
+          &--available {
             background-color: $color-brand-green-dark;
-          }
-
-          &--deleting {
-            background-color: $color-brand-red-dark;
           }
         }
       }
