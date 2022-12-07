@@ -563,7 +563,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:usertype, :firstname, :lastname, :email, :password, :password_confirmation)
+    params.require(:user).permit(:usertype, :firstname, :lastname, :email, :password, :password_confirmation, :profile_img_src, :resume_link, :portfolio_link, :class_year, :class_semester, :title)
   end
 
   def update_params
