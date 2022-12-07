@@ -40,11 +40,27 @@ body {
 form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: flex-start;
 
-  input {
-    margin-left: 1rem;
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+  }
+
+  label {
+    p {
+      font-size: 1.1rem;
+      margin-right: 1rem;
+    }
   }
 }
 
