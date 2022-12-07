@@ -3,7 +3,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { updateFocus, showModal, hideModal, deleteFocus } from 'Store/actions'
 
-import { Usertype } from 'Shared/enums';
 import Focus from 'Shared/entityClasses/Focus';
 
 import FocusForm from '../FocusForm/FocusForm';
