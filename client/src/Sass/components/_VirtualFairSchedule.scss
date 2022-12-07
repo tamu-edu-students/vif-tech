@@ -1,0 +1,104 @@
+.Virtual-Fair-Schedule {
+  //TODO: Remove
+  background-color: $color-violet;
+  padding: 3rem;
+  // width: 50%;
+  // width: min-content;
+  
+  .table {
+    .table__rows {
+      color: $color-black;
+      display: flex;
+      flex-direction: column;
+
+      .table__row {
+        display: grid;
+        grid-template-columns: 15rem repeat(auto-fill, 10rem);
+
+        &:not(:last-child):not(.table__row--header) {
+          .table__cell {
+            border-bottom: 1px solid $color-violet-darkest;
+
+            &--time {
+              border-bottom: 1px solid $color-white;
+            }
+          }
+        }
+
+        &:not(.table__row--header) {
+          // &:nth-child(even) {
+          //   .table__cell:not(.table__cell--time) {
+          //     background-color: $color-gray-light;
+          //   }
+          // }
+  
+          // &:nth-child(odd) {
+          //   .table__cell:not(.table__cell--time) {
+          //     background-color: $color-white;
+          //   }
+          // }
+        }
+
+        &--header {
+          grid-template-columns: 15rem 1fr;
+        }
+
+        .table__cell {
+          padding: 1rem;
+          font-family: $font-body;
+          font-size: 1.2rem;
+          background-color: $color-gray-light;
+
+          &:not(:last-child):not(.table__cell--time) {
+            border-right: 1px solid $color-violet-darkest;
+          }
+
+          &--time {
+            padding: 0;
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+          }
+
+          &--company-block {
+            // background-color: $color-white;
+            color: $color-black;
+          }
+
+          &--filled {
+            background-color: $color-brand-green-dark;
+            // color: $color-white;
+          }
+
+          &--header  {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background-color: $color-violet-darkest;
+            color: $color-white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+
+        .table__time-block {
+          width: 100%;
+          height: 100%;
+          padding: 1rem;
+          background-color: $color-violet-darkest;
+          color: $color-white;
+          font-family: $font-header;
+          font-size: 1.8rem;
+
+          display: flex;
+          justify-content: center;
+
+          &--available {
+            background-color: $color-brand-green-dark;
+          }
+        }
+      }
+    }
+  }
+}
