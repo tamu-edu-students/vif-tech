@@ -23,6 +23,11 @@ const focusReducer = (state: Store_FocusData = INITIAL_STATE, action: any): Stor
         ...state,
         focuses: state.focuses.filter((focus: Focus) => focus.id !== action.payload)
       };
+    case focusActionTypes.UPDATE_FOCUS__SUCCESS:
+      return {
+        ...state,
+        focuses: state.focuses.map((focus: Focus) => focus.id === action.payload.id ? action.payload : focus)
+      };
     case focusActionTypes.SET_FOCUSES_STALENESS:
       return {...state, isStale: action.payload};
     default:

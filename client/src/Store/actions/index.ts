@@ -444,20 +444,33 @@ export const createFocus = (formValues: any) => async (dispatch: any) => {
 }
 
 export const deleteFocus = (id: number) => async (dispatch: any, getState: any) => {
-  dispatch({ type: `${id}`+focusActionTypes.DELETE_FOCUS__REQUEST });
   await vifTech.delete(`/focuses/${id}`)
   .then((response_delete) => {
     console.log('deleteFocus response_delete:', response_delete);
     dispatch({ type: focusActionTypes.DELETE_FOCUS__SUCCESS, payload: id });
-    dispatch({ type: `${id}`+focusActionTypes.DELETE_FOCUS__SUCCESS });
   })
   .catch((response_delete) => {
     console.log('deleteFocus response_delete:', response_delete);
-    dispatch({ type: `${id}`+focusActionTypes.DELETE_FOCUS__FAILURE, payload: {error: `ERROR: Failed to delete focus`} });
+    dispatch({ type: focusActionTypes.DELETE_FOCUS__FAILURE, payload: {error: `ERROR: Failed to delete focus`} });
   });
 }
 
-vifTech.get('/focuses').then(response => console.log(response))
+export const updateFocus = (focusId: number, newName: string) => async (dispatch: any) => {
+  dispatch({ type: focusActionTypes.UPDATE_FOCUS__REQUEST });
+  await vifTech.put(`/focuses/${focusId}`, {
+    focus: {
+      name: newName
+    }
+  })
+  .then((response) => {
+    console.log('response_updateFocus:', response);
+    dispatch({ type: focusActionTypes.UPDATE_FOCUS__SUCCESS, payload: new Focus(response.data.focus) });
+  })
+  .catch((response) => {
+    console.log('response_fetchFocuses:', response);
+    dispatch({ type: focusActionTypes.UPDATE_FOCUS__FAILURE, payload: {error: 'ERROR: Failed to update focus'} });
+  });
+}
 
 
 
