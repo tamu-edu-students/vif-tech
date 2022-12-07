@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_03_020518) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_07_031651) do
   create_table "abouts", force: :cascade do |t|
     t.string "firstname"
     t.string "lastname"
@@ -57,6 +57,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_03_020518) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "location"
+    t.string "logo_img_src"
+    t.string "website_link"
+    t.boolean "hiring_for_fulltime", default: false
+    t.boolean "hiring_for_parttime", default: false
+    t.boolean "hiring_for_intern", default: false
   end
 
   create_table "company_focus", force: :cascade do |t|
@@ -159,6 +165,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_03_020518) do
     t.integer "allowlist_email_id"
     t.integer "allowlist_domain_id"
     t.integer "availabilities_id"
+    t.string "profile_img_src"
+    t.string "resume_link"
+    t.string "portfolio_link"
+    t.integer "class_year"
+    t.string "class_semester"
+    t.string "title"
     t.index ["allowlist_domain_id"], name: "index_users_on_allowlist_domain_id"
     t.index ["allowlist_email_id"], name: "index_users_on_allowlist_email_id"
     t.index ["availabilities_id"], name: "index_users_on_availabilities_id"

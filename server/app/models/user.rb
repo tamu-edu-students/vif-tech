@@ -13,6 +13,21 @@ class User < ApplicationRecord
             :inclusion => { :in => ["company representative", "student", "faculty", "admin", "volunteer"],
                             :message => "%{value} is not a valid usertype" }
 
+  validates :class_semester, 
+            :inclusion => { :in => ['fall', 'spring', 'winter'], 
+                            :message => "class_semester must be fall, winter, or spring" }, 
+            :allow_nil => true
+
+  validates :class_year, :inclusion => { :in => 2022..2027, 
+                            :message => "class_year must be in 2022-2027" },
+            :allow_nil => true
+
+  validates :profile_img_src, :format => { with: URI.regexp}, if: :profile_img_src, unless: :profile_img_src.nil?
+  validates :portfolio_link, :format => { with: URI.regexp}, if: :portfolio_link, unless: :portfolio_link.nil?
+  validates :resume_link, :format => { with: URI.regexp}, if: :resume_link, unless: :resume_link.nil?
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
+
+
   has_many :owned_meetings, foreign_key: :owner, class_name: "Meeting", dependent: :destroy
   has_many :user_meetings, dependent: :destroy
   has_many :invited_meetings, through: :user_meetings, source: :meeting

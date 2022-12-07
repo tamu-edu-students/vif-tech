@@ -41,3 +41,26 @@ Feature: admin can CRUD a company object/account
         And that the user verified their email test2@test.com
         And that I log in as admin
         Then I should see 2 reps for company with id 1
+
+    Scenario: I update a company as a company rep
+        Given that I log in as admin
+        And there is a company with id 1
+        And I allow a new primary contact company email test@test.com for usertype company representative for company id 1
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And that the user verified their email test@test.com
+        And that I log in with email test@test.com and password password1!
+        And I update the company with id 1 to have logo_img_src with value https://www.google.com
+        Then the company with id 1 should have logo_img_src with value https://www.google.com
+
+    Scenario: I update a company as an admin
+        Given that I log in as admin
+        And there is a company with id 1
+        And I update the company with id 1 to have location with value blah
+        Then the company with id 1 should have location with value blah

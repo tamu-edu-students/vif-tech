@@ -149,3 +149,17 @@ Then("the company with id {int} should have user with email {string}") do |compa
   company = Company.find(company_id)
   expect(company.users.include? user).to be true
 end
+
+Given /^I update the user with id ([^\'^\ ]*) to have ([^\'^\ ]*) with value ([^\'^\ ]*)$/ do |id, key_, value|
+  ret = page.driver.put("/users/" + id.to_s, { "user": { key_ => value } })
+  ret_body = JSON.parse ret.body
+  expect(ret.status).to eq(200)
+end
+
+Then /^the user with id ([^\'^\ ]*) should have ([^\'^\ ]*) with value ([^\'^\ ]*)$/ do |id, key, value|
+  ret = page.driver.get("/users/" + id.to_s)
+  ret_body = JSON.parse ret.body
+
+  expect(ret.status).to eq(200)
+  expect(ret_body["user"][key]).to eq(value)
+end

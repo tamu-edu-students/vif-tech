@@ -71,4 +71,51 @@ RSpec.describe User, type: :model do
     expect(User.find(2).meeting_invitations_available_for).to match_array([UserMeeting.find(1)])
     expect(User.find(2).meeting_invitations_not_available_for).to match_array([UserMeeting.find(2), UserMeeting.find(3), UserMeeting.find(4)])
   end
+
+  it "is valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(profile_img_src: "http://www.google.com")
+    u.update(resume_link: "http://www.google.com")
+    u.update(portfolio_link: "http://www.google.com")
+    u.update(class_year: 2027)
+    u.update(class_semester: "fall")
+    u.update(title: "m'lady")
+    expect(u).to be_valid
+  end
+
+  it "is valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(profile_img_src: "http://www.google.com")
+    expect(u).to be_valid
+    expect(u.profile_img_src).to eq("http://www.google.com")
+    u.update(profile_img_src: nil)
+    expect(u).to be_valid
+    expect(u.profile_img_src).to be(nil)
+  end
+
+  it "is not valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(profile_img_src: "gfesgresgr")
+    expect(u).to_not be_valid
+  end
+  it "is not valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(resume_link: "gfesgresgr")
+    expect(u).to_not be_valid
+  end
+  it "is not valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(portfolio_link: "gfesgresgr")
+    expect(u).to_not be_valid
+  end
+  it "is not valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(class_semester: "gfesgresgr")
+    expect(u).to_not be_valid
+  end
+  it "is not valid with valid attributes added via update" do
+    u = User.create(firstname: "John", lastname: "Doe", email: "hello@hello.com", password: "something")
+    u.update(class_year: 1997)
+    expect(u).to_not be_valid
+  end
 end
