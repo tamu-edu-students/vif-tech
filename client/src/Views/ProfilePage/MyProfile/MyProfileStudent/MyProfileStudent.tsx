@@ -18,8 +18,6 @@ interface OwnState {
 }
 
 const mapStateToProps = (state: IRootState) => {
-
-
   return {
     user: state.auth.user,
 
@@ -36,21 +34,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   state = { basicFields: {} };
 
   public componentDidMount(): void {
-    // const user: User = this.props.user as User;
-    // const {
-    //   profile_img_src,
-    //   class_year,
-    //   class_semester,
-    //   portfolio_link,
-    //   resume_link
-    // } = user;
-    // this.setState({ basicFields: {
-    //   profile_img_src,
-    //   class_year,
-    //   class_semester,
-    //   portfolio_link,
-    //   resume_link
-    // } })
+    
   }
 
   public componentDidUpdate(): void {
@@ -68,9 +52,19 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
   }
 
+  private _renderImg = (profileImgSrc: string): JSX.Element => {
+    return (
+      <div className="my-profile__img-container">
+        <img className='my-profile__img' src={profileImgSrc} />
+      </div>
+    );
+  }
+
   public render(): React.ReactElement<Props> {
     const user: User = this.props.user as User;
     const {
+      firstname,
+      lastname,
       profile_img_src,
       class_year,
       class_semester,
@@ -89,8 +83,16 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div>
+      <div className="My-Profile my-profile">
         <h2 className="heading-secondary">{`My Profile (Student)`}</h2>
+        <h3 className="heading-tertiary">{firstname} {lastname}</h3>
+        {
+          profile_img_src && 
+          <>
+            <br />
+            {this._renderImg(profile_img_src)}
+          </>
+        }
         <br />
         <div>
           <MyProfileStudentForm
