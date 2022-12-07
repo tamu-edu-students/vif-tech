@@ -68,7 +68,9 @@ class FocusList extends React.Component<Props, OwnState> {
   }
 
   private _renderFocuses = (): JSX.Element[] => {
-    return this.props.focuses.map((focus: Focus) => (
+    return this.props.focuses
+    .sort((a: Focus, b: Focus) => a.name.toLowerCase().localeCompare(b.name))
+    .map((focus: Focus) => (
       <React.Fragment key={focus.id}>
         <FocusEntry focus={focus} />
       </React.Fragment>

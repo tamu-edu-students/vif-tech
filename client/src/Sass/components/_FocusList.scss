@@ -17,12 +17,13 @@
       .focus {
         width: 100%;
         border: 1px solid white;
-        padding: 1rem;
+        padding: 0.75rem;
         display: flex;
         align-items: center;
     
         &__name {
           color: $color-brand-yellow;
+          font-size: 1.2rem;
         }
       }
   
@@ -31,6 +32,7 @@
   
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
       }
     }
     
