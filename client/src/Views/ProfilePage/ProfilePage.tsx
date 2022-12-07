@@ -29,6 +29,7 @@ import StudentTimesheetMI1 from './StudentTimesheet/StudentTimesheetMI1';
 import StudentTimesheetMI2 from './StudentTimesheet/StudentTimesheetMI2';
 import StudentTimesheetPR2 from './StudentTimesheet/StudentTimesheetPR2';
 import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
+import FocusList from './FocusList/FocusList';
 
 
 interface OwnProps {
@@ -103,6 +104,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
 
       <Route exact path={`${parentPath}/admin-assignment-sheet/portfolio-review-2`} key={`${parentPath}/admin-assignment-sheet/portfolio-review-2`}>
         <MeetingAssignmentSheetPR2 />
+      </Route>,
+
+      <Route exact path={`${parentPath}/focus-list`} key={`${parentPath}/focus-list`}>
+        <FocusList />
       </Route>
     ]);
   }
@@ -121,6 +126,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
         <li><Link to={`${parentPath}/admin-assignment-sheet/mock-interview-1`}>Mock Interview 1</Link></li>
         <li><Link to={`${parentPath}/admin-assignment-sheet/mock-interview-2`}>Mock Interview 2</Link></li>
         <li><Link to={`${parentPath}/admin-assignment-sheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
+        <br />
+        <li><Link to={`${parentPath}/focus-list`}>Manage Focus List</Link></li>
       </>
     );
   }
