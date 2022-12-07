@@ -12,11 +12,6 @@ interface OwnProps {
 }
 
 interface OwnState {
-  profile_img_src: string;
-  class_year: number;
-  class_semester: string;
-  resume_link: string;
-  portfolio_link: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -51,19 +46,7 @@ class MyProfileStudentForm extends CustomForm<Props, OwnState> {
     ));
   }
 
-  // private _updateBasicField = (event: any) => {
-  //   this.props.updateBasicField({ [event.target.name]: event.target.value });
-  // }
-
   public render(): React.ReactElement<Props> {
-    const {
-      profile_img_src,
-      class_year,
-      class_semester,
-      resume_link,
-      portfolio_link,
-    } = this.state;
-
     return (
       <form id="student-profile-form">
         <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile Picture URL" />
@@ -83,27 +66,6 @@ class MyProfileStudentForm extends CustomForm<Props, OwnState> {
     );
   }
 }
-
-const handleOnFormChange = () => {
-  // const { studentStatus: newStudentStatus } = newValues;
-  // const {
-  //   studentStatus: prevStudentStatus,
-  //   creditValue: prevCreditValue,
-  // } = previousValues;
-  // const { change: changeField } = props;
-
-  // /*
-  //   if the user sets the participant as a "no show",
-  //   then their credit value should be automatically set to zero
-  // */
-  // if (
-  //   newStudentStatus !== prevStudentStatus && // to prevent dispatching every time
-  //   newStudentStatus === 'noShow' &&
-  //   prevCreditValue > 0
-  // ) {
-  //   dispatch(changeField('creditValue', 0));
-  // }
-};
 
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
