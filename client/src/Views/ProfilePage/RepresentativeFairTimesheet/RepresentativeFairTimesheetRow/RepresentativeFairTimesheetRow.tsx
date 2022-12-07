@@ -8,7 +8,6 @@ import { createMeeting, deleteMeeting } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 // import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
-import User from 'Shared/entityClasses/User';
 
 
 interface OwnProps {

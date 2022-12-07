@@ -6,8 +6,7 @@ import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActio
 import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, fetchCompanies } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
-import Meeting from 'Shared/entityClasses/Meeting';
-import User from 'Shared/entityClasses/User';
+// import Meeting from 'Shared/entityClasses/Meeting';
 import Company from 'Shared/entityClasses/Company';
 
 import VirtualFairScheduleRow from './VirtualFairScheduleRow/VirtualFairScheduleRow';
@@ -124,9 +123,8 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
   }
 
   private _renderTimeSlots(timeSlots: any[]): JSX.Element[] {
-    const { meetings, event } = this.props;
+    const { event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
       return (
         <React.Fragment key={start_time}>
           <VirtualFairScheduleRow
