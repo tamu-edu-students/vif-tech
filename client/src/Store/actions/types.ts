@@ -176,6 +176,27 @@ export const meetingActionTypes = {
 
 
 
+export const focusActionTypes = {
+  FETCH_FOCUSES: 'FETCH_FOCUSES',
+  FETCH_FOCUSES__REQUEST: 'FETCH_FOCUSES__REQUEST',
+  FETCH_FOCUSES__SUCCESS: 'FETCH_FOCUSES__SUCCESS',
+  FETCH_FOCUSES__FAILURE: 'FETCH_FOCUSES__FAILURE',
+  
+  CREATE_FOCUS: 'CREATE_FOCUS',
+  CREATE_FOCUS__REQUEST: 'CREATE_FOCUS__REQUEST',
+  CREATE_FOCUS__SUCCESS: 'CREATE_FOCUS__SUCCESS',
+  CREATE_FOCUS__FAILURE: 'CREATE_FOCUS__FAILURE',
+
+  DELETE_FOCUS: 'DELETE_FOCUS',
+  DELETE_FOCUS__REQUEST: 'DELETE_FOCUS__REQUEST',
+  DELETE_FOCUS__SUCCESS: 'DELETE_FOCUS__SUCCESS',
+  DELETE_FOCUS__FAILURE: 'DELETE_FOCUS__FAILURE',
+  
+  SET_FOCUSES_STALENESS: 'SET_FOCUSES_STALENESS',
+};
+
+
+
 /********************************************************************************************* */
 /**************************************************************************         MODAL */
 /********************************************************************************************* */
