@@ -60,6 +60,26 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   });
 }
 
+export const updateUser = (userId: number, formValues: any) => async (dispatch: any) => {
+  Object.entries(formValues).forEach(([key, value]) => {
+    if (value === '') { formValues[key] = null; }
+  });
+  dispatch({ type: userActionTypes.UPDATE_USER__REQUEST });
+  await vifTech.put(`/users/${userId}`, {
+    user: {
+      ...formValues,
+    }
+  })
+  .then((response) => {
+    console.log('response_updateUser:', response);
+    dispatch({ type: userActionTypes.UPDATE_USER__SUCCESS, payload: new User(response.data.user) });
+  })
+  .catch((response) => {
+    console.log('response_updateUser:', response);
+    dispatch({ type: userActionTypes.UPDATE_USER__FAILURE, payload: {error: 'ERROR: Failed to update user'} });
+  });
+}
+
 
 
 /********************************************************************************************* */
@@ -467,7 +487,7 @@ export const updateFocus = (focusId: number, newName: string) => async (dispatch
     dispatch({ type: focusActionTypes.UPDATE_FOCUS__SUCCESS, payload: new Focus(response.data.focus) });
   })
   .catch((response) => {
-    console.log('response_fetchFocuses:', response);
+    console.log('response_updateFocus:', response);
     dispatch({ type: focusActionTypes.UPDATE_FOCUS__FAILURE, payload: {error: 'ERROR: Failed to update focus'} });
   });
 }

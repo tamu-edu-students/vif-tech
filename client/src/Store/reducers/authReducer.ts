@@ -1,5 +1,5 @@
 import User from "Shared/entityClasses/User";
-import { authActionTypes } from "Store/actions/types";
+import { authActionTypes, userActionTypes } from "Store/actions/types";
 
 export interface Store_Auth {
   isLoggedIn: boolean | null;
@@ -23,6 +23,13 @@ const authReducer = (state: Store_Auth = INITIAL_STATE, action: any): Store_Auth
       return { ...state, isLoggedIn: false, user: null };
     case authActionTypes.SET_AUTH_STALENESS:
       return { ...state, isStale: action.payload };
+    case userActionTypes.UPDATE_USER__SUCCESS:
+      if (action.payload.id === state.user?.id) {
+        return { ...state, user: action.payload }
+      }
+      else {
+        return state;
+      }
     default:
       return state;
   }

@@ -17,6 +17,14 @@ const userReducer = (state: Store_UserData = INITIAL_STATE, action: any): Store_
       return {...state, users: action.payload};
     case userActionTypes.CREATE_USER__SUCCESS:
       return {...state, users: [...state.users, action.payload]};
+    case userActionTypes.UPDATE_USER__SUCCESS:
+      return {
+        ...state,
+        users: [
+          state.users.map((user: User) => user.id !== action.payload.id),
+          action.payload
+        ] 
+      };
     case userActionTypes.SET_USERS_STALENESS:
       return {...state, isStale: action.payload}
     default:
