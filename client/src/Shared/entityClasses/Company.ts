@@ -1,6 +1,7 @@
 import AllowlistDomain from "./AllowlistDomain";
 import AllowlistEmail from "./AllowlistEmail";
 import Event from "./Event";
+import EventSignup from "./EventSignup";
 import Meeting from "./Meeting";
 import User from "./User";
 
@@ -8,6 +9,11 @@ export interface ICompany {
   id: number;
   name: string;
   description: string;
+}
+
+type TimeOption = {
+  start_time: string;
+  end_time: string;
 }
 
 export default class Company implements ICompany {
@@ -21,17 +27,22 @@ export default class Company implements ICompany {
     this.description = description;
   }
 
-  getRepAvailabilitiesForEvent(users: User[], meetings: Meeting[], event: Event): string[] {
-    const timeSet: Set<string> = new Set<string>();
+  getRepAvailabilitiesForEvent(users: User[], meetings: Meeting[], event: Event): TimeOption[] {
+    const timeSet: Set<TimeOption> = new Set<TimeOption>();
     const representatives: User[] = this.findRepresentatives(users);
 
     representatives.forEach((rep: User) => {
       rep.findOwnedMeetingsByEvent(meetings, event).forEach((meeting: Meeting) => {
-        timeSet.add(`${meeting.start_time}—${meeting.end_time}`);
+        timeSet.add({start_time: meeting.start_time, end_time: meeting.end_time});
       });
     });
     
     return Array.from(timeSet.values());
+  }
+
+  public isAttendingEvent(users: User[], event: Event, eventSignups: EventSignup[]): boolean {
+    const representatives = this.findRepresentatives(users);
+    return representatives.some((rep: User) => rep.isAttendingEvent(event, eventSignups));
   }
 
   public findAllowlistEmails(allowlist_emails: AllowlistEmail[]): AllowlistEmail[] {
