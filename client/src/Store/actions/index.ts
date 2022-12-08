@@ -7,6 +7,7 @@ import {
   meetingActionTypes,
   eventSignupActionTypes,
   focusActionTypes,
+  userFocusActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -28,6 +29,7 @@ import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 import EventSignup from 'Shared/entityClasses/EventSignup';
 import Focus from 'Shared/entityClasses/Focus';
+import UserFocus from 'Shared/entityClasses/UserFocus';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -253,6 +255,7 @@ export const deleteAllowlistEmail = (id: number, allowlistTitle: string) => asyn
     dispatch({ type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_EMAIL__SUCCESS });
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
     dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
+    dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistEmail response_delete:', response_delete);
@@ -269,6 +272,7 @@ export const deleteAllowlistDomain = (id: number, allowlistTitle: string) => asy
     dispatch({ type: allowlistTitle+allowlistActionTypes.DELETE_ALLOWLIST_DOMAIN__SUCCESS });
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
     dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
+    dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistDomain response_delete:', response_delete);
@@ -468,6 +472,7 @@ export const deleteFocus = (id: number) => async (dispatch: any, getState: any) 
   .then((response_delete) => {
     console.log('deleteFocus response_delete:', response_delete);
     dispatch({ type: focusActionTypes.DELETE_FOCUS__SUCCESS, payload: id });
+    dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteFocus response_delete:', response_delete);
@@ -489,6 +494,25 @@ export const updateFocus = (focusId: number, newName: string) => async (dispatch
   .catch((response) => {
     console.log('response_updateFocus:', response);
     dispatch({ type: focusActionTypes.UPDATE_FOCUS__FAILURE, payload: {error: 'ERROR: Failed to update focus'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         USER FOCUSES */
+/********************************************************************************************* */
+export const fetchUserFocuses = () => async (dispatch: any) => {
+  dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__REQUEST });
+  await vifTech.get('/userFocuses')
+  .then((response) => {
+    console.log('response_fetchUserFocuses:', response);
+    dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__SUCCESS, payload: UserFocus.createUserFocuses(response.data.user_focuses) });
+    dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchUserFocuses:', response);
+    dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to fetch user-focus associations'} });
   });
 }
 
