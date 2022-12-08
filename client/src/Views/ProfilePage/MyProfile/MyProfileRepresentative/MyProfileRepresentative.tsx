@@ -25,40 +25,40 @@ const mapStateToProps = (state: IRootState) => {
   const isLoading_updateUser: boolean = createLoadingSelector([userActionTypes.UPDATE_USER])(state);
   const errors_updateUser: string[] = createErrorMessageSelector([userActionTypes.UPDATE_USER])(state);
 
-  const focusesAreStale = state.focusData.isStale;
-  const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
-  const errors_fetchFocuses: string[] = createErrorMessageSelector([focusActionTypes.FETCH_FOCUSES])(state);
+  // const focusesAreStale = state.focusData.isStale;
+  // const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
+  // const errors_fetchFocuses: string[] = createErrorMessageSelector([focusActionTypes.FETCH_FOCUSES])(state);
 
-  const userFocusesAreStale = state.userFocusData.isStale;
-  const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
-  const errors_fetchUserFocuses: string[] = createErrorMessageSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
+  // const userFocusesAreStale = state.userFocusData.isStale;
+  // const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
+  // const errors_fetchUserFocuses: string[] = createErrorMessageSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
 
   const companiesAreStale = state.companyData.isStale;
   const isLoading_fetchCompanies: boolean = createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state);
   const errors_fetchCompanies: string[] = createErrorMessageSelector([companyActionTypes.FETCH_COMPANIES])(state);
 
   const isLoading: boolean =
-    isLoading_fetchFocuses || focusesAreStale ||
-    isLoading_fetchUserFocuses || userFocusesAreStale ||
+    // isLoading_fetchFocuses || focusesAreStale ||
+    // isLoading_fetchUserFocuses || userFocusesAreStale ||
     isLoading_fetchCompanies || companiesAreStale;
-  const errors_breaking: string[] = [...errors_fetchFocuses, ...errors_fetchUserFocuses, ...errors_fetchCompanies];
+  const errors_breaking: string[] = [/*...errors_fetchFocuses, ...errors_fetchUserFocuses,*/ ...errors_fetchCompanies];
 
   return {
     user,
     company,
-    focuses: state.focusData.focuses,
-    focusesOfUser: user.findFocuses(state.focusData.focuses, state.userFocusData.userFocuses),
+    // focuses: state.focusData.focuses,
+    // focusesOfUser: user.findFocuses(state.focusData.focuses, state.userFocusData.userFocuses),
 
     isLoading_updateUser,
     errors_updateUser,
 
-    focusesAreStale,
-    isLoading_fetchFocuses,
-    errors_fetchFocuses,
+    // focusesAreStale,
+    // isLoading_fetchFocuses,
+    // errors_fetchFocuses,
 
-    userFocusesAreStale,
-    isLoading_fetchUserFocuses,
-    errors_fetchUserFocuses,
+    // userFocusesAreStale,
+    // isLoading_fetchUserFocuses,
+    // errors_fetchUserFocuses,
 
     companiesAreStale,
     isLoading_fetchCompanies,
@@ -77,12 +77,12 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
   state = { basicFields: {} };
 
   public componentDidMount(): void {
-    if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
-    }
-    if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
-    }
+    // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
+    //   this.props.fetchFocuses();
+    // }
+    // if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+    //   this.props.fetchUserFocuses();
+    // }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
       this.props.fetchCompanies();
     }
