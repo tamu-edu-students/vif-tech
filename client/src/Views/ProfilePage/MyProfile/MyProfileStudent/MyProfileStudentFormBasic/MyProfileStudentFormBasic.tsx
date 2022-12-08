@@ -1,11 +1,7 @@
 import React from 'react';
-import { Field, reduxForm, InjectedFormProps, change } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
-import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { allowlistActionTypes } from 'Store/actions/types';
-
-import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
 
@@ -51,9 +47,9 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     return (
       <form id="student-profile-form">
-        <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
-
         <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile Picture URL" />
+
+        <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
 
         <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
           {this._renderYearOptions()}

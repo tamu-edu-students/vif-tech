@@ -12,6 +12,8 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 
 import MyProfile from './MyProfile/MyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
+import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
+
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
@@ -191,6 +193,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderVolunteerRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
+      <Route exact path={`${parentPath}/volunteer-my-profile`} key={`${parentPath}/volunteer-my-profile`}>
+        <MyProfileVolunteer />
+      </Route>,
+
       <Route exact path={`${parentPath}/volunteer-timesheet/portfolio-review-1`} key={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>
         <VolunteerTimesheetPR1 />
       </Route>,
@@ -214,6 +220,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
+        <li><Link to={`${parentPath}/volunteer-my-profile`}>My Volunteer Profile</Link></li>
+        <br />
         <li><Link to={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
         <li><Link to={`${parentPath}/volunteer-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
         <li><Link to={`${parentPath}/volunteer-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
@@ -225,7 +233,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderStudentRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/student-my-profile`} key={`${parentPath}/my-profile-student`}>
+      <Route exact path={`${parentPath}/student-my-profile`} key={`${parentPath}/student-my-profile`}>
         <MyProfileStudent />
       </Route>,
 
