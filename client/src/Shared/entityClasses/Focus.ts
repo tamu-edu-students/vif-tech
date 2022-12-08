@@ -20,6 +20,6 @@ export default class Focus implements IFocus {
   }
 
   public static findById(id: number, focuses: Focus[]): Focus | null {
-    return focuses.find((event: Focus) => event.id === id) ?? null;
+    return focuses.find((focus: Focus) => focus.id === id) ?? null;
   }
 }
