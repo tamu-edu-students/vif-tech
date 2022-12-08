@@ -8,6 +8,7 @@ import {
   eventSignupActionTypes,
   focusActionTypes,
   userFocusActionTypes,
+  companyFocusActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -19,7 +20,7 @@ import {
 } from './types';
 import history from "History/history";
 import vifTech from "Apis/vifTech";
-// import { Usertype } from "Shared/enums";
+import { Usertype } from "Shared/enums";
 import Company from 'Shared/entityClasses/Company';
 import User from 'Shared/entityClasses/User';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
@@ -30,6 +31,7 @@ import Meeting from 'Shared/entityClasses/Meeting';
 import EventSignup from 'Shared/entityClasses/EventSignup';
 import Focus from 'Shared/entityClasses/Focus';
 import UserFocus from 'Shared/entityClasses/UserFocus';
+import CompanyFocus from 'Shared/entityClasses/CompanyFocus';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -82,7 +84,7 @@ export const updateUser = (userId: number, formValues: any) => async (dispatch: 
   });
 }
 
-export const updateUserFocuses = (userId: number, focusIds: number[]) => async (dispatch: any) => {
+export const updateUserFocuses = (userId: number, focusIds: number[]) => async (dispatch: any, getState: any) => {
   dispatch({ type: userActionTypes.UPDATE_USER_FOCUSES__REQUEST });
   await vifTech.put(`/users/${userId}/focuses`, {
     user: {
@@ -96,7 +98,10 @@ export const updateUserFocuses = (userId: number, focusIds: number[]) => async (
   })
   .catch((response) => {
     console.log('response_updateUserFocuses:', response);
-    dispatch({ type: userActionTypes.UPDATE_USER_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to update user focuses'} });
+    const usertype: Usertype = User.findById(userId, getState().userData.users)?.usertype ?? Usertype.STUDENT;
+    let focusAlias = 'interests';
+    if (usertype === Usertype.VOLUNTEER) { focusAlias = 'specialties'; } 
+    dispatch({ type: userActionTypes.UPDATE_USER_FOCUSES__FAILURE, payload: {error: `ERROR: Failed to update user ${focusAlias}`} });
   });
 }
 
@@ -181,6 +186,47 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
     dispatch({ type: companyActionTypes.CREATE_COMPANY__FAILURE, payload: {error: `ERROR: Failed to fetch companies data`} });
   });
 }
+
+
+
+export const updateCompany = (company_id: number, formValues: any) => async (dispatch: any) => {
+  Object.entries(formValues).forEach(([key, value]) => {
+    if (value === '') { formValues[key] = null; }
+  });
+  dispatch({ type: companyActionTypes.UPDATE_COMPANY__REQUEST });
+  await vifTech.put(`/companies/${company_id}`, {
+    company: {
+      ...formValues,
+    }
+  })
+  .then((response) => {
+    console.log('response_updateCompany:', response);
+    dispatch({ type: companyActionTypes.UPDATE_COMPANY__SUCCESS, payload: new Company(response.data.company) });
+  })
+  .catch((response) => {
+    console.log('response_updateCompany:', response);
+    dispatch({ type: companyActionTypes.UPDATE_COMPANY__FAILURE, payload: {error: 'ERROR: Failed to update company'} });
+  });
+}
+
+export const updateCompanyFocuses = (companyId: number, focusIds: number[]) => async (dispatch: any) => {
+  dispatch({ type: companyActionTypes.UPDATE_COMPANY_FOCUSES__REQUEST });
+  await vifTech.put(`/companies/${companyId}/focuses`, {
+    company: {
+      focuses: focusIds.map((focusId: number) => { return {id: focusId}; })
+    }
+  })
+  .then((response) => {
+    console.log('response_updateCompanyFocuses:', response);
+    dispatch({ type: companyActionTypes.UPDATE_COMPANY_FOCUSES__SUCCESS });
+    dispatch({ type: companyFocusActionTypes.SET_COMPANY_FOCUSES_STALENESS, payload: true });
+  })
+  .catch((response) => {
+    console.log('response_updateCompanyFocuses:', response);
+    dispatch({ type: companyActionTypes.UPDATE_COMPANY_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to update company focuses'} });
+  });
+}
+
 
 
 /********************************************************************************************* */
@@ -530,6 +576,25 @@ export const fetchUserFocuses = () => async (dispatch: any) => {
   .catch((response) => {
     console.log('response_fetchUserFocuses:', response);
     dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to fetch user-focus associations'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         COMPANY FOCUSES */
+/********************************************************************************************* */
+export const fetchCompanyFocuses = () => async (dispatch: any) => {
+  dispatch({ type: companyFocusActionTypes.FETCH_COMPANY_FOCUSES__REQUEST });
+  await vifTech.get('/company_focuses')
+  .then((response) => {
+    console.log('response_fetchCompanyFocuses:', response);
+    dispatch({ type: companyFocusActionTypes.FETCH_COMPANY_FOCUSES__SUCCESS, payload: CompanyFocus.createCompanyFocuses(response.data.company_focuses) });
+    dispatch({ type: companyFocusActionTypes.SET_COMPANY_FOCUSES_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchCompanyFocuses:', response);
+    dispatch({ type: companyFocusActionTypes.FETCH_COMPANY_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to fetch company-focus associations'} });
   });
 }
 

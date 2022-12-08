@@ -18,6 +18,14 @@ const companyReducer = (state: Store_CompanyData = INITIAL_STATE, action: any): 
       return {...state, companies: action.payload};
     case companyActionTypes.CREATE_COMPANY__SUCCESS:
       return {...state, companies: [...state.companies, action.payload]};
+    case companyActionTypes.UPDATE_COMPANY__SUCCESS:
+      return {
+        ...state,
+        companies: [
+          state.companies.map((company: Company) => company.id !== action.payload.id),
+          action.payload
+        ] 
+      };
     case companyActionTypes.SET_COMPANIES_STALENESS:
       return {...state, isStale: action.payload}
     default:
