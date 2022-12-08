@@ -18,6 +18,7 @@ interface OwnProps {
 interface OwnState {
   basicFields: any;
   focusFields: any;
+  isLoading: boolean;
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -63,7 +64,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MyProfileStudent extends React.Component<Props, OwnState> {
-  state = { basicFields: {}, focusFields: {} };
+  state = { basicFields: {}, focusFields: {}, isLoading: false };
 
   public componentDidMount(): void {
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
@@ -73,14 +74,24 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
       this.props.fetchUserFocuses();
     }
 
-    this.setState({
-      basicFields: this._getInitialBasicFields(),
-      focusFields: this._computeInitialFocusChecks()
-    });
+    this._reloadFieldsState();
   }
 
   public componentDidUpdate(): void {
-    // console.log(this.state.focusFields);
+    if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
+      this.props.fetchFocuses();
+    }
+    if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+      this.props.fetchUserFocuses();
+    }
+  }
+
+  private _reloadFieldsState = (): void => {
+    this.setState({
+      isLoading: false,
+      basicFields: this._getInitialBasicFields(),
+      focusFields: this._computeInitialFocusChecks()
+    });
   }
 
   private _getInitialBasicFields(): any {
@@ -136,11 +147,19 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   }
 
   private _onSaveChanges = (): void => {
-    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
+    this.setState({ isLoading: true });
+
+    const promises: Promise<void>[] = [];
+    promises.push(this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields));
+
     const newFocusIds = Object.entries(this.state.focusFields)
       .filter(([_, isChecked]) => isChecked)
       .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
-    this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds);
+    promises.push(this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds));
+    
+    Promise.all(promises).then(() => {
+      this._reloadFieldsState();
+    });
   }
   
   private _renderImg(profileImgSrc: string): JSX.Element {
@@ -171,7 +190,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
       return <div className="error">{this.props.errors_breaking}</div>
     }
 
-    if (this.props.isLoading_updateUser) {
+    if (this.state.isLoading) {
       return (
         <div>Saving changes...</div>
       );
