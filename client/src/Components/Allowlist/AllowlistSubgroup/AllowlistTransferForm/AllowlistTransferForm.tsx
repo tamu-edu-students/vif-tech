@@ -48,7 +48,7 @@ class AllowlistTransferForm extends CustomForm<Props, {}> {
         <div>
           <p>Note: Primary Contact status can only be transferred to <em>existing</em> users.</p>
           <br />
-          <Field name={name} id={name} component={this._renderSelect} label={label}>
+          <Field name={name} id={id} component={this._renderSelect} label={label}>
             <option />
             {this._renderColleagueOptions()}
           </Field>
