@@ -10,6 +10,7 @@ import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 
+import CompanyProfile from './CompanyProfile/CompanyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
 import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
@@ -140,6 +141,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderRepresentativeRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
+      <Route exact path={`${parentPath}/company-profile`} key={`${parentPath}/company-profile`}>
+        <CompanyProfile />
+      </Route>,
+
       ...(
         this.props.amPrimaryContact ?
         [
@@ -176,6 +181,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
     return (
       <>
+        <li><Link to={`${parentPath}/company-profile`}>Company Profile</Link></li>
         <br />
         {
           this.props.amPrimaryContact &&

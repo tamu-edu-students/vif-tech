@@ -11,6 +11,12 @@ export interface ICompany {
   id: number;
   name: string;
   description: string;
+  location: string;
+  logo_img_src: string;
+  website_link: string;
+  hiring_for_fulltime: boolean;
+  hiring_for_parttime: boolean;
+  hiring_for_intern: boolean;
 }
 
 type TimeOption = {
@@ -22,11 +28,23 @@ export default class Company implements ICompany {
   public readonly id: number;
   public readonly name: string;
   public readonly description: string;
+  public readonly location: string;
+  public readonly logo_img_src: string;
+  public readonly website_link: string;
+  public readonly hiring_for_fulltime: boolean;
+  public readonly hiring_for_parttime: boolean;
+  public readonly hiring_for_intern: boolean;
 
-  public constructor({ id, name, description }: ICompany) {
+  public constructor({ id, name, description, location, logo_img_src, website_link, hiring_for_fulltime, hiring_for_parttime, hiring_for_intern }: ICompany) {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.location = location ?? '';
+    this.logo_img_src = logo_img_src ?? '';
+    this.website_link = website_link ?? '';
+    this.hiring_for_fulltime = hiring_for_fulltime ?? false;
+    this.hiring_for_parttime = hiring_for_parttime ?? false;
+    this.hiring_for_intern = hiring_for_intern ?? false;
   }
 
   getRepAvailabilitiesForEvent(users: User[], meetings: Meeting[], event: Event): TimeOption[] {

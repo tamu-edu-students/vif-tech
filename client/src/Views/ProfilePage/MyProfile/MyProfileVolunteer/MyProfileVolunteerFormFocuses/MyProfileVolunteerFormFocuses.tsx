@@ -36,16 +36,22 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
   private _renderCheckboxGroup(focuses: Focus[]): JSX.Element[] {
     return focuses.map((focus: Focus) => (
-      <Field key={focus.id} name={`focus-${focus.id.toString()}`} id={`focus-${focus.id.toString()}`} component={this._renderInput} type="checkbox" label={focus.name} />
+      <Field
+        key={focus.id}
+        name={`focus-${focus.id.toString()}`}
+        id={`focus-${focus.id.toString()}`}
+        component={this._renderInput}
+        type="checkbox" label={focus.name}
+      />
     ));
   }
 
   public render(): React.ReactElement<Props> {
     return (
-      <form id="student-profile-form-focuses">
+      <form id="volunteer-profile-form-focuses">
 
         <fieldset>
-        <label><p>{`Interests`}</p></label>
+        <label><p>{`Specialties`}</p></label>
           {this._renderCheckboxGroup(this.props.focuses)}
         </fieldset>
       </form>

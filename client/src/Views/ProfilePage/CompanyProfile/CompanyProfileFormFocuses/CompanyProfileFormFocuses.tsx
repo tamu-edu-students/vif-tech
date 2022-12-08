@@ -12,6 +12,7 @@ interface OwnProps {
   initialValues: any;
   focuses: Focus[];
   updateFocusFields: Function;
+  isPrimaryContact: boolean;
 }
 
 interface OwnState {
@@ -27,7 +28,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
+class CompanyProfileFormFocuses extends CustomForm<Props, OwnState> {
   public componentDidMount(): void {
     this.setState({
       ...this.props.initialValues
@@ -42,16 +43,19 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
         id={`focus-${focus.id.toString()}`}
         component={this._renderInput}
         type="checkbox" label={focus.name}
+        disabled={!this.props.isPrimaryContact}
       />
     ));
   }
 
   public render(): React.ReactElement<Props> {
+    const { isPrimaryContact } = this.props;
+
     return (
-      <form id="student-profile-form-focuses">
+      <form id="company-profile-form-focuses">
 
         <fieldset>
-        <label><p>{`Interests`}</p></label>
+        <label><p>{`Focuses`}</p></label>
           {this._renderCheckboxGroup(this.props.focuses)}
         </fieldset>
       </form>
@@ -61,6 +65,6 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
-})(MyProfileStudentFormFocuses);
+})(CompanyProfileFormFocuses);
 
 export default connector(formWrapped);
