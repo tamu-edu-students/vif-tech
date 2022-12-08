@@ -43,19 +43,15 @@ class CompanyProfileFormFocuses extends CustomForm<Props, OwnState> {
         id={`focus-${focus.id.toString()}`}
         component={this._renderInput}
         type="checkbox" label={focus.name}
-        disabled={!this.props.isPrimaryContact}
       />
     ));
   }
 
   public render(): React.ReactElement<Props> {
-    const { isPrimaryContact } = this.props;
-
     return (
       <form id="company-profile-form-focuses">
-
-        <fieldset>
-        <label><p>{`Focuses`}</p></label>
+        <fieldset disabled={!this.props.isPrimaryContact}>
+          <label><p>{`Focuses`}</p></label>
           {this._renderCheckboxGroup(this.props.focuses)}
         </fieldset>
       </form>

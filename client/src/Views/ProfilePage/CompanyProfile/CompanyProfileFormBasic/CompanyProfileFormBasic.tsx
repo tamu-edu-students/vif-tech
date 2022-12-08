@@ -56,6 +56,13 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
 
         <Field name="website_link" id="website_link" type="text" component={this._renderInput} label="Website URL" disabled={!isPrimaryContact} />
 
+        <fieldset disabled={!isPrimaryContact}>
+          <label><p>{`Hiring for...`}</p></label>
+          <Field name="hiring_for_fulltime" id="hiring_for_fulltime" type="checkbox" component={this._renderInput} label="Full-time" />
+          <Field name="hiring_for_parttime" id="hiring_for_parttime" type="checkbox" component={this._renderInput} label="Part-time" />
+          <Field name="hiring_for_intern" id="hiring_for_intern" type="checkbox" component={this._renderInput} label="Interns" />
+        </fieldset>
+
         {/* <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
           {this._renderYearOptions()}
         </Field>
