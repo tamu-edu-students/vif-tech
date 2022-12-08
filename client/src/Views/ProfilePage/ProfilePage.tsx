@@ -10,7 +10,6 @@ import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 
-import MyProfile from './MyProfile/MyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
 import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
@@ -80,10 +79,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderAdminRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/admin-my-profile`} key={`${parentPath}/admin-my-profile`}>
-        <MyProfileAdmin />
-      </Route>,
-
       <Route exact path={`${parentPath}/company-allowlists`} key={`${parentPath}/company-allowlists`}>
         <CompanyAllowlists />
       </Route>,
@@ -127,8 +122,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
-        <li><Link to={`${parentPath}/admin-my-profile`}>My Admin Profile</Link></li>
-        <br />
         <li><Link to={`${parentPath}/company-allowlists`}>Company Allowlist</Link></li>
         <li><Link to={`${parentPath}/student-allowlist`}>Student Allowlist</Link></li>
         <li><Link to={`${parentPath}/admin-allowlist`}>Admin Allowlist</Link></li>
@@ -147,10 +140,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderRepresentativeRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/representative-my-profile`} key={`${parentPath}/representative-my-profile`}>
-        <MyProfileRepresentative />
-      </Route>,
-
       ...(
         this.props.amPrimaryContact ?
         [
@@ -188,8 +177,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
-        <li><Link to={`${parentPath}/representative-my-profile`}>My Representative Profile</Link></li>
-        <br />
         {
           this.props.amPrimaryContact &&
           <>
@@ -209,10 +196,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderVolunteerRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/volunteer-my-profile`} key={`${parentPath}/volunteer-my-profile`}>
-        <MyProfileVolunteer />
-      </Route>,
-
       <Route exact path={`${parentPath}/volunteer-timesheet/portfolio-review-1`} key={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>
         <VolunteerTimesheetPR1 />
       </Route>,
@@ -236,8 +219,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
-        <li><Link to={`${parentPath}/volunteer-my-profile`}>My Volunteer Profile</Link></li>
-        <br />
         <li><Link to={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
         <li><Link to={`${parentPath}/volunteer-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
         <li><Link to={`${parentPath}/volunteer-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
@@ -249,10 +230,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderStudentRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/student-my-profile`} key={`${parentPath}/student-my-profile`}>
-        <MyProfileStudent />
-      </Route>,
-
       <Route exact path={`${parentPath}/student-timesheet/portfolio-review-1`} key={`${parentPath}/student-timesheet/portfolio-review-1`}>
         <StudentTimesheetPR1 />
       </Route>,
@@ -275,8 +252,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
     return (
       <>
-      <br />
-      <li><Link to={`${parentPath}/student-my-profile`}>My Student Profile</Link></li>
       <br />
       <li><Link to={`${parentPath}/student-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
       <li><Link to={`${parentPath}/student-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
@@ -317,7 +292,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   public render(): React.ReactElement<Props> {
-    const { parentPath } = this.props;
+    const { parentPath, user } = this.props;
 
     if (this.props.isLoading_fetchAllowlist || this.props.allowlistIsStale) {
       return (
@@ -341,7 +316,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
             </Route>
 
             <Route exact path={`${parentPath}/my-profile`}>
-              <MyProfile />
+              { user?.isAdmin && <MyProfileAdmin />}
+              { user?.isRepresentative && <MyProfileRepresentative />}
+              { user?.isVolunteer && <MyProfileVolunteer />}
+              { user?.isStudent && <MyProfileStudent />}
             </Route>
 
             {this._renderRoutes()}
