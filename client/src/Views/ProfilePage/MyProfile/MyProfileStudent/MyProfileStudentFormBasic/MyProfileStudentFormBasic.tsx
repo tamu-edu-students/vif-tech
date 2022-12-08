@@ -51,6 +51,8 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     return (
       <form id="student-profile-form">
+        <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
+
         <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile Picture URL" />
 
         <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">

@@ -101,33 +101,14 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     };
   }
 
-  private _updateBasicFieldsState = (newBasicFields: any): void => {
-    const modifiedObj: any = {};
-    Object.entries(this.state.basicFields).forEach(([key, _]) => {
-      modifiedObj[key] = newBasicFields[key] ?? ''
-    });
-    this.setState({basicFields: {...modifiedObj}});
-  }
+  private _getInitialDisabledFields(): any {
+    const {
+      email,
+    } = this.props.user;
 
-  private _updateFocusFieldsState = (newFocusFields: any): void => {
-    console.log(newFocusFields);
-    this.setState({focusFields: {...newFocusFields}});
-  }
-
-  private _onSaveChanges = (): void => {
-    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
-    const newFocusIds = Object.entries(this.state.focusFields)
-      .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
-    this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds);
-  }
-
-  private _renderImg(profileImgSrc: string): JSX.Element {
-    return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} />
-      </div>
-    );
+    return {
+      email,
+    }
   }
 
   private _computeInitialFocusChecks(): any {
@@ -142,11 +123,38 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     return initialFocusChecks;
   }
 
+  private _updateBasicFieldsState = (newBasicFields: any): void => {
+    const modifiedObj: any = {};
+    Object.entries(this.state.basicFields).forEach(([key, _]) => {
+      modifiedObj[key] = newBasicFields[key] ?? ''
+    });
+    this.setState({basicFields: {...modifiedObj}});
+  }
+
+  private _updateFocusFieldsState = (newFocusFields: any): void => {
+    this.setState({focusFields: {...newFocusFields}});
+  }
+
+  private _onSaveChanges = (): void => {
+    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
+    const newFocusIds = Object.entries(this.state.focusFields)
+      .filter(([_, isChecked]) => isChecked)
+      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
+    this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds);
+  }
+  
+  private _renderImg(profileImgSrc: string): JSX.Element {
+    return (
+      <div className="my-profile__img-container">
+        <img className='my-profile__img' src={profileImgSrc} />
+      </div>
+    );
+  }
+
   public render(): React.ReactElement<Props> {
     const {
       user,
       focuses,
-      focusesOfUser,
     } = this.props;
     const {
       firstname,
@@ -190,14 +198,14 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
         <div>
           <MyProfileStudentFormBasic
             form="updateBasicStudentFields"
-            initialValues={this._getInitialBasicFields()}
+            initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
             updateBasicFields={this._updateBasicFieldsState}
           />
         </div>
 
         <div>
           <MyProfileStudentFormFocuses
-            form="updateFocusStudentField"
+            form="updateFocusStudentFields"
             initialValues={this._computeInitialFocusChecks()}
             focuses={focuses}
             updateFocusFields={this._updateFocusFieldsState}
