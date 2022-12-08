@@ -9,6 +9,7 @@ import eventSignupReducer, { Store_EventSignupData } from "./eventSignupReducer"
 import meetingReducer, { Store_MeetingData } from "./meetingReducer";
 import focusReducer, { Store_FocusData } from "./focusReducer";
 import userFocusReducer, { Store_UserFocusData } from "./userFocusReducer";
+import companyFocusReducer, { Store_CompanyFocusData } from "./companyFocusReducer";
 import modalReducer, { Store_Modal } from './modalReducer';
 import faqReducer from "./faqReducer";
 import loadingReducer from "./loadingReducer";
@@ -27,6 +28,7 @@ export interface IRootState {
   meetingData: Store_MeetingData;
   focusData: Store_FocusData;
   userFocusData: Store_UserFocusData;
+  companyFocusData: Store_CompanyFocusData;
   modal: Store_Modal;
   faqs: FAQ[];
   loading: any;
@@ -44,6 +46,7 @@ const rootReducer = combineReducers<IRootState> ({
   meetingData: meetingReducer,
   focusData: focusReducer,
   userFocusData: userFocusReducer,
+  companyFocusData: companyFocusReducer,
   modal: modalReducer,
   faqs: faqReducer,
   loading: loadingReducer,

@@ -8,6 +8,7 @@ import {
   eventSignupActionTypes,
   focusActionTypes,
   userFocusActionTypes,
+  companyFocusActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -30,6 +31,7 @@ import Meeting from 'Shared/entityClasses/Meeting';
 import EventSignup from 'Shared/entityClasses/EventSignup';
 import Focus from 'Shared/entityClasses/Focus';
 import UserFocus from 'Shared/entityClasses/UserFocus';
+import CompanyFocus from 'Shared/entityClasses/CompanyFocus';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -181,6 +183,7 @@ export const createCompany = (formValues: any) => async (dispatch: any) => {
     dispatch({ type: companyActionTypes.CREATE_COMPANY__FAILURE, payload: {error: `ERROR: Failed to fetch companies data`} });
   });
 }
+
 
 
 /********************************************************************************************* */
@@ -530,6 +533,25 @@ export const fetchUserFocuses = () => async (dispatch: any) => {
   .catch((response) => {
     console.log('response_fetchUserFocuses:', response);
     dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to fetch user-focus associations'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         COMPANY FOCUSES */
+/********************************************************************************************* */
+export const fetchCompanyFocuses = () => async (dispatch: any) => {
+  dispatch({ type: companyFocusActionTypes.FETCH_COMPANY_FOCUSES__REQUEST });
+  await vifTech.get('/company_focuses')
+  .then((response) => {
+    console.log('response_fetchCompanyFocuses:', response);
+    dispatch({ type: companyFocusActionTypes.FETCH_COMPANY_FOCUSES__SUCCESS, payload: CompanyFocus.createCompanyFocuses(response.data.company_focuses) });
+    dispatch({ type: companyFocusActionTypes.SET_COMPANY_FOCUSES_STALENESS, payload: false });
+  })
+  .catch((response) => {
+    console.log('response_fetchCompanyFocuses:', response);
+    dispatch({ type: companyFocusActionTypes.FETCH_COMPANY_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to fetch company-focus associations'} });
   });
 }
 

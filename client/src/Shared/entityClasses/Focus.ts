@@ -1,5 +1,7 @@
 import User from "./User";
 import UserFocus from "./UserFocus";
+import Company from "./Company";
+import CompanyFocus from "./CompanyFocus";
 // import Event from "./Event";
 
 export interface IFocus {
@@ -21,6 +23,15 @@ export default class Focus implements IFocus {
       userFocuses.some((userFocus: UserFocus) =>
         userFocus.focus_id === this.id
         && userFocus.user_id === user.id
+      )
+    );
+  }
+
+  public findCompanies(companies: Company[], companyFocuses: CompanyFocus[]): Company[] {
+    return companies.filter((company: Company) =>
+      companyFocuses.some((companyFocus: CompanyFocus) =>
+        companyFocus.focus_id === this.id
+        && companyFocus.company_id === company.id
       )
     );
   }

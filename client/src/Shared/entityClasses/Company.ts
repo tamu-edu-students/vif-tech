@@ -1,7 +1,9 @@
 import AllowlistDomain from "./AllowlistDomain";
 import AllowlistEmail from "./AllowlistEmail";
+import CompanyFocus from "./CompanyFocus";
 import Event from "./Event";
 import EventSignup from "./EventSignup";
+import Focus from "./Focus";
 import Meeting from "./Meeting";
 import User from "./User";
 
@@ -43,6 +45,16 @@ export default class Company implements ICompany {
   public isAttendingEvent(users: User[], event: Event, eventSignups: EventSignup[]): boolean {
     const representatives = this.findRepresentatives(users);
     return representatives.some((rep: User) => rep.isAttendingEvent(event, eventSignups));
+  }
+
+  public findFocuses(focuses: Focus[], companyFocuses: CompanyFocus[]): Focus[] {
+    return focuses.filter((focus: Focus) => this.hasFocus(focus, companyFocuses));
+  }
+
+  public hasFocus(focus: Focus, companyFocuses: CompanyFocus[]): boolean {
+    return companyFocuses.some((companyFocus: CompanyFocus) =>
+      companyFocus.company_id === this.id
+      && companyFocus.focus_id === focus.id);
   }
 
   public findAllowlistEmails(allowlist_emails: AllowlistEmail[]): AllowlistEmail[] {

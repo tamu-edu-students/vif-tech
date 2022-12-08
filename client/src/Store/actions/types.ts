@@ -245,6 +245,35 @@ export const userFocusActionTypes = {
 
 
 /********************************************************************************************* */
+/**************************************************************************         USER FOCUSES */
+/********************************************************************************************* */
+export const companyFocusActionTypes = {
+  FETCH_COMPANY_FOCUSES: 'FETCH_COMPANY_FOCUSES',
+  FETCH_COMPANY_FOCUSES__REQUEST: 'FETCH_COMPANY_FOCUSES__REQUEST',
+  FETCH_COMPANY_FOCUSES__SUCCESS: 'FETCH_COMPANY_FOCUSES__SUCCESS',
+  FETCH_COMPANY_FOCUSES__FAILURE: 'FETCH_COMPANY_FOCUSES__FAILURE',
+  
+  CREATE_COMPANY_FOCUS: 'CREATE_COMPANY_FOCUS',
+  CREATE_COMPANY_FOCUS__REQUEST: 'CREATE_COMPANY_FOCUS__REQUEST',
+  CREATE_COMPANY_FOCUS__SUCCESS: 'CREATE_COMPANY_FOCUS__SUCCESS',
+  CREATE_COMPANY_FOCUS__FAILURE: 'CREATE_COMPANY_FOCUS__FAILURE',
+
+  DELETE_COMPANY_FOCUS: 'DELETE_COMPANY_FOCUS',
+  DELETE_COMPANY_FOCUS__REQUEST: 'DELETE_COMPANY_FOCUS__REQUEST',
+  DELETE_COMPANY_FOCUS__SUCCESS: 'DELETE_COMPANY_FOCUS__SUCCESS',
+  DELETE_COMPANY_FOCUS__FAILURE: 'DELETE_COMPANY_FOCUS__FAILURE',
+
+  UPDATE_COMPANY_FOCUS: 'UPDATE_COMPANY_FOCUS',
+  UPDATE_COMPANY_FOCUS__REQUEST: 'UPDATE_COMPANY_FOCUS__REQUEST',
+  UPDATE_COMPANY_FOCUS__SUCCESS: 'UPDATE_COMPANY_FOCUS__SUCCESS',
+  UPDATE_COMPANY_FOCUS__FAILURE: 'UPDATE_COMPANY_FOCUS__FAILURE',
+  
+  SET_COMPANY_FOCUSES_STALENESS: 'SET_COMPANY_FOCUSES_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
 /**************************************************************************         MODAL */
 /********************************************************************************************* */
 export const SHOW_MODAL = 'SHOW_MODAL';
