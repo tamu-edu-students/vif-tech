@@ -64,7 +64,9 @@ Rails.application.routes.draw do
   delete "users/:id/user_meetings/not_available", to: "users#delete_na_invitations"
 
   get "/events/attending_companies/", to: "events#get_attending_companies"
+  get "/events/company_meetings/", to: "events#get_company_meetings"
   get "/events/:id/attending_companies/", to: "events#get_attending_companies"
+  get "/events/:id/company_meetings/", to: "events#get_company_meetings"
   resources :events, only: [:index, :create, :show, :update, :destroy]
   get "events/:id/availabilities", to: "events#get_availabilities"
   get "events/:id/meetings", to: "events#get_meetings"

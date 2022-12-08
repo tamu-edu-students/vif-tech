@@ -316,3 +316,85 @@ Feature: Event Signup
             | 1 |
         Then event 2 should have following associated companies
             | 2 | 3 |
+
+      Scenario: Get company_meetings
+        # User 1
+        Given that I log in as admin
+        And there is a company with id 1
+        And there is a company with id 2
+        And there is a company with id 3
+        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test2.com for usertype company representative for company id 2
+        And I allow a new company domain test3.com for usertype company representative for company id 3
+        # Event 1, 2
+        Then creating an event with the following should return code 201
+            | title | Physical Event |
+            | description | Something |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-31 18:20:00' |
+        Then creating an event with the following should return code 201
+            | title | Virtual Event |
+            | description | Something |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-31 18:20:00' |
+        # User 2, 3, 4 & Meeting 1, 2, 3
+        Given that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | james@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        And I sign up user 2 to event 1 and receive code 200
+        And that I create a meeting with the following
+            | title | A meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+            | event_id | 1 |
+            | owner_id | 2 |
+        And that I sign up with the following
+            | firstname | jane |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | jane@test2.com |
+            | usertype | company representative |
+            | company_id | 2 |
+        And that I create a meeting with the following
+            | title | Another meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+            | event_id | 2 |
+            | owner_id | 3 |
+        And I sign up user 3 to event 2 and receive code 200
+        And that I sign up with the following
+            | firstname | max |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | max@test3.com |
+            | usertype | company representative |
+            | company_id | 3 |
+        And that I create a meeting with the following
+            | title | Another another meeting |
+            | start_time | '2022-10-18 18:10:00' |
+            | end_time | '2022-10-18 18:20:00' |
+            | event_id | 2 |
+            | owner_id | 4 |
+        And I sign up user 4 to event 2 and receive code 200
+        Given that I log out
+        Then event with title "Physical Event" should have following associated company_meetings
+            | company_id | meeting_id |
+            | 1 | 1 |
+        Then event with title "Virtual Event" should have following associated company_meetings
+            | company_id | meeting_id |
+            | 2 | 2 |
+            | 3 | 3 |
+        Then event 1 should have following associated company_meetings
+            | company_id | meeting_id |
+            | 1 | 1 |
+        Then event 2 should have following associated company_meetings
+            | company_id | meeting_id |
+            | 2 | 2 |
+            | 3 | 3 |

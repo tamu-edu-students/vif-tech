@@ -138,7 +138,6 @@ end
 Then("event with title {string} should have following associated companies") do |title, table|
   ret = page.driver.get("/events/attending_companies/?event_title=#{title}")
   ret_body = JSON.parse ret.body
-  puts ret_body
   actual = []
   ret_body["attending_companies"].each { |h| actual << h.to_s }
   expect(actual).to match_array(table.raw[0].each { |id| id.to_i })
@@ -147,8 +146,23 @@ end
 Then("event {int} should have following associated companies") do |id, table|
   ret = page.driver.get("/events/#{id}/attending_companies")
   ret_body = JSON.parse ret.body
-  puts ret_body
   actual = []
   ret_body["attending_companies"].each { |h| actual << h.to_s }
   expect(actual).to match_array(table.raw[0].each { |id| id.to_i })
+end
+
+Then("event with title {string} should have following associated company_meetings") do |title, table|
+  ret = page.driver.get("/events/company_meetings/?event_title=#{title}")
+  ret_body = JSON.parse ret.body
+  actual = []
+  ret_body["company_meetings"].each { |h| actual << { "meeting_id": h["meeting"]["id"].to_s, "company_id": h["company_id"].to_s }.stringify_keys }
+  expect(actual).to match_array(table.hashes)
+end
+
+Then("event {int} should have following associated company_meetings") do |id, table|
+  ret = page.driver.get("/events/#{id}/company_meetings")
+  ret_body = JSON.parse ret.body
+  actual = []
+  ret_body["company_meetings"].each { |h| actual << { "meeting_id": h["meeting"]["id"].to_s, "company_id": h["company_id"].to_s }.stringify_keys }
+  expect(actual).to match_array(table.hashes)
 end
