@@ -15,6 +15,7 @@ interface OwnProps {
 
 interface OwnState {
   basicFields: any;
+  isLoading: boolean;
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -56,7 +57,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MyProfileAdmin extends React.Component<Props, OwnState> {
-  state = { basicFields: {}, focusFields: {} };
+  state = { basicFields: {}, isLoading: false };
 
   public componentDidMount(): void {
     // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
@@ -66,13 +67,18 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
     //   this.props.fetchUserFocuses();
     // }
 
-    this.setState({
-      basicFields: this._getInitialBasicFields(),
-    });
+    this._reloadFieldsState();
   }
 
   public componentDidUpdate(): void {
     // console.log(this.state.focusFields);
+  }
+  
+  private _reloadFieldsState = (): void => {
+    this.setState({
+      isLoading: false,
+      basicFields: this._getInitialBasicFields()
+    });
   }
 
   private _getInitialBasicFields(): any {
@@ -104,11 +110,9 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
   }
 
   private _onSaveChanges = (): void => {
-    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
-    const newFocusIds = Object.entries(this.state.focusFields)
-      .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
-    this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds);
+    this.setState({ isLoading: true });
+    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields)
+    .then(() => this._reloadFieldsState());
   }
   
   private _renderImg(profileImgSrc: string): JSX.Element {
@@ -138,7 +142,7 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
       return <div className="error">{this.props.errors_breaking}</div>
     }
 
-    if (this.props.isLoading_updateUser) {
+    if (this.state.isLoading) {
       return (
         <div>Saving changes...</div>
       );

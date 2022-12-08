@@ -16,6 +16,7 @@ interface OwnProps {
 
 interface OwnState {
   basicFields: any;
+  isLoading: boolean;
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -74,7 +75,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MyProfileVolunteer extends React.Component<Props, OwnState> {
-  state = { basicFields: {} };
+  state = { basicFields: {}, isLoading: false };
 
   public componentDidMount(): void {
     // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
@@ -87,13 +88,26 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
       this.props.fetchCompanies();
     }
 
-    this.setState({
-      basicFields: this._getInitialBasicFields(),
-    });
+    this._reloadFieldsState();
   }
 
   public componentDidUpdate(): void {
-    // console.log(this.state.focusFields);
+    // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
+    //   this.props.fetchFocuses();
+    // }
+    // if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+    //   this.props.fetchUserFocuses();
+    // }
+    if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
+      this.props.fetchCompanies();
+    }
+  }
+
+  private _reloadFieldsState = (): void => {
+    this.setState({
+      isLoading: false,
+      basicFields: this._getInitialBasicFields()
+    });
   }
 
   private _getInitialBasicFields(): any {
@@ -132,7 +146,11 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
   }
 
   private _onSaveChanges = (): void => {
-    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
+    this.setState({ isLoading: true });
+    this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields)
+    .then(() => {
+      this._reloadFieldsState();
+    });
   }
   
   private _renderImg(profileImgSrc: string): JSX.Element {
@@ -162,7 +180,7 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
       return <div className="error">{this.props.errors_breaking}</div>
     }
 
-    if (this.props.isLoading_updateUser) {
+    if (this.state.isLoading) {
       return (
         <div>Saving changes...</div>
       );
