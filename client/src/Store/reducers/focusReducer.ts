@@ -12,12 +12,14 @@ const INITIAL_STATE: Store_FocusData = {
   isStale: true,
 }
 
+const focusNameComparator = ({name: name1}: Focus, {name: name2}: Focus): number => name1.toLowerCase().localeCompare(name2.toLowerCase());
+
 const focusReducer = (state: Store_FocusData = INITIAL_STATE, action: any): Store_FocusData => {
   switch(action.type) {
     case focusActionTypes.FETCH_FOCUSES__SUCCESS:
-      return {...state, focuses: action.payload};
+      return {...state, focuses: action.payload.sort(focusNameComparator)};
     case focusActionTypes.CREATE_FOCUS__SUCCESS:
-      return {...state, focuses: [...state.focuses, action.payload]};
+      return {...state, focuses: [...state.focuses, action.payload].sort(focusNameComparator)};
     case focusActionTypes.DELETE_FOCUS__SUCCESS:
       return {
         ...state,
@@ -26,7 +28,9 @@ const focusReducer = (state: Store_FocusData = INITIAL_STATE, action: any): Stor
     case focusActionTypes.UPDATE_FOCUS__SUCCESS:
       return {
         ...state,
-        focuses: state.focuses.map((focus: Focus) => focus.id === action.payload.id ? action.payload : focus)
+        focuses: state.focuses
+          .map((focus: Focus) => focus.id === action.payload.id ? action.payload : focus)
+          .sort(focusNameComparator)
       };
     case focusActionTypes.SET_FOCUSES_STALENESS:
       return {...state, isStale: action.payload};
