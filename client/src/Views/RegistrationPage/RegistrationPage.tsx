@@ -38,7 +38,10 @@ class RegistrationPage extends React.Component<Props, {}> {
     }
 
     return (
-      <UserForm form="userCreate" onSubmit={this._onSubmit} />
+      <section className="section section--registration">
+        <h1 className="heading-primary">Registration</h1>
+        <UserForm form="userCreate" onSubmit={this._onSubmit} />
+      </section>
     );
   }
 }

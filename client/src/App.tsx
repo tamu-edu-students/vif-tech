@@ -94,75 +94,77 @@ class App extends React.Component<Props, {}> {
             </ul>
           </nav>
 
-          <Switch>
-            <Route exact path="/">
-              <HomePage />
-            </Route>
+          <main className="main">
+            <Switch>
+              <Route exact path="/">
+                <HomePage />
+              </Route>
 
-            <Route exact path="/under-construction">
-              <section className="section section--redirector">
-                <RedirectPrompt
-                  message={"is under construction"}
-                  buttonText={"Portfolio Review Signup"}
-                  href={"https://linktr.ee/vizindustryfair"}
-                />
-              </section>
-            </Route>
+              <Route exact path="/under-construction">
+                <section className="section section--redirector">
+                  <RedirectPrompt
+                    message={"is under construction"}
+                    buttonText={"Portfolio Review Signup"}
+                    href={"https://linktr.ee/vizindustryfair"}
+                  />
+                </section>
+              </Route>
 
-            <Route exact path="/users">
-              <UsersPage />
-            </Route>
+              <Route exact path="/users">
+                <UsersPage />
+              </Route>
 
-            <Route exact path="/faq">
-              <FAQPage />
-            </Route>
+              <Route exact path="/faq">
+                <FAQPage />
+              </Route>
 
-            <Route exact path="/virtual-fair-schedule">
-              <VirtualFairSchedule />
-            </Route>
+              <Route exact path="/virtual-fair-schedule">
+                <VirtualFairSchedule />
+              </Route>
 
-            <Route exact path="/users/new">
-              <RegistrationPage />
-            </Route>
+              <Route exact path="/users/new">
+                <RegistrationPage />
+              </Route>
 
-            <Route exact path="/users/new/success">
-              <section className="section section--redirector">
-                <RedirectPrompt
-                  message={"Almost done. Click the verification link sent to your email to complete your registration."}
-                  buttonText={"Return Home"}
-                  pathName={"/"}
-                />
-              </section>
-            </Route>
+              <Route exact path="/users/new/success">
+                <section className="section section--redirector">
+                  <RedirectPrompt
+                    message={"Almost done. Click the verification link sent to your email to complete your registration."}
+                    buttonText={"Return Home"}
+                    pathName={"/"}
+                  />
+                </section>
+              </Route>
 
-            <Route exact path={["/login", "/login/success"]}>
-              { this.props.user
-                ? <Redirect to="/" />
-                : <LoginPage />
-              }
-            </Route>
+              <Route exact path={["/login", "/login/success"]}>
+                { this.props.user
+                  ? <Redirect to="/" />
+                  : <LoginPage />
+                }
+              </Route>
 
-            <Route
-              path={"/profile"}
-              render={ (routeProps: any) => {
-                return (
-                  this.props.user
-                  ? <ProfilePage {...routeProps} />
-                  : <Redirect to={'/login'} />
-                )
-              } }
-            />
-            
-            <Route path="*" status={404}>
-              <section className="section section--redirector">
-                <RedirectPrompt
-                  message={"404 Page Not Found"}
-                  buttonText={"Return Home"}
-                  pathName={"/"}
-                />
-              </section>
-            </Route>
-          </Switch>
+              <Route
+                path={"/profile"}
+                render={ (routeProps: any) => {
+                  return (
+                    this.props.user
+                    ? <ProfilePage {...routeProps} />
+                    : <Redirect to={'/login'} />
+                  )
+                } }
+              />
+              
+              <Route path="*" status={404}>
+                <section className="section section--redirector">
+                  <RedirectPrompt
+                    message={"404 Page Not Found"}
+                    buttonText={"Return Home"}
+                    pathName={"/"}
+                  />
+                </section>
+              </Route>
+            </Switch>
+          </main>
 
           {
             this.props.shouldShowModal && <Modal />
