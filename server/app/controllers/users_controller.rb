@@ -480,6 +480,7 @@ class UsersController < ApplicationController
     if params[:id] == nil
       params[:id] = current_user.id
     end
+    params[:id] = params[:id].to_i
     if !confirm_user_exists
       return
     end
