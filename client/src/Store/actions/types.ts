@@ -12,6 +12,16 @@ export const userActionTypes = {
   CREATE_USER__SUCCESS: 'CREATE_USER__SUCCESS',
   CREATE_USER__FAILURE: 'CREATE_USER__FAILURE',
 
+  UPDATE_USER: 'UPDATE_USER',
+  UPDATE_USER__REQUEST: 'UPDATE_USER__REQUEST',
+  UPDATE_USER__SUCCESS: 'UPDATE_USER__SUCCESS',
+  UPDATE_USER__FAILURE: 'UPDATE_USER__FAILURE',
+
+  UPDATE_USER_FOCUSES: 'UPDATE_USER_FOCUSES',
+  UPDATE_USER_FOCUSES__REQUEST: 'UPDATE_USER_FOCUSES__REQUEST',
+  UPDATE_USER_FOCUSES__SUCCESS: 'UPDATE_USER_FOCUSES__SUCCESS',
+  UPDATE_USER_FOCUSES__FAILURE: 'UPDATE_USER_FOCUSES__FAILURE',
+
   SET_USERS_STALENESS: 'SET_USERS_STALENESS',
 }
 
@@ -176,6 +186,9 @@ export const meetingActionTypes = {
 
 
 
+/********************************************************************************************* */
+/**************************************************************************         FOCUSES */
+/********************************************************************************************* */
 export const focusActionTypes = {
   FETCH_FOCUSES: 'FETCH_FOCUSES',
   FETCH_FOCUSES__REQUEST: 'FETCH_FOCUSES__REQUEST',
@@ -198,6 +211,35 @@ export const focusActionTypes = {
   UPDATE_FOCUS__FAILURE: 'UPDATE_FOCUS__FAILURE',
   
   SET_FOCUSES_STALENESS: 'SET_FOCUSES_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         USER FOCUSES */
+/********************************************************************************************* */
+export const userFocusActionTypes = {
+  FETCH_USER_FOCUSES: 'FETCH_USER_FOCUSES',
+  FETCH_USER_FOCUSES__REQUEST: 'FETCH_USER_FOCUSES__REQUEST',
+  FETCH_USER_FOCUSES__SUCCESS: 'FETCH_USER_FOCUSES__SUCCESS',
+  FETCH_USER_FOCUSES__FAILURE: 'FETCH_USER_FOCUSES__FAILURE',
+  
+  CREATE_USER_FOCUS: 'CREATE_USER_FOCUS',
+  CREATE_USER_FOCUS__REQUEST: 'CREATE_USER_FOCUS__REQUEST',
+  CREATE_USER_FOCUS__SUCCESS: 'CREATE_USER_FOCUS__SUCCESS',
+  CREATE_USER_FOCUS__FAILURE: 'CREATE_USER_FOCUS__FAILURE',
+
+  DELETE_USER_FOCUS: 'DELETE_USER_FOCUS',
+  DELETE_USER_FOCUS__REQUEST: 'DELETE_USER_FOCUS__REQUEST',
+  DELETE_USER_FOCUS__SUCCESS: 'DELETE_USER_FOCUS__SUCCESS',
+  DELETE_USER_FOCUS__FAILURE: 'DELETE_USER_FOCUS__FAILURE',
+
+  UPDATE_USER_FOCUS: 'UPDATE_USER_FOCUS',
+  UPDATE_USER_FOCUS__REQUEST: 'UPDATE_USER_FOCUS__REQUEST',
+  UPDATE_USER_FOCUS__SUCCESS: 'UPDATE_USER_FOCUS__SUCCESS',
+  UPDATE_USER_FOCUS__FAILURE: 'UPDATE_USER_FOCUS__FAILURE',
+  
+  SET_USER_FOCUSES_STALENESS: 'SET_USER_FOCUSES_STALENESS',
 };
 
 

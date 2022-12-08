@@ -10,7 +10,11 @@ import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 
-import MyProfile from './MyProfile/MyProfile';
+import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
+import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
+import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
+import MyProfileAdmin from './MyProfile/MyProfileAdmin/MyProfileAdmin';
+
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
@@ -29,6 +33,7 @@ import StudentTimesheetMI1 from './StudentTimesheet/StudentTimesheetMI1';
 import StudentTimesheetMI2 from './StudentTimesheet/StudentTimesheetMI2';
 import StudentTimesheetPR2 from './StudentTimesheet/StudentTimesheetPR2';
 import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
+
 import FocusList from './FocusList/FocusList';
 
 
@@ -174,9 +179,11 @@ class ProfilePage extends React.Component<Props, OwnState> {
         <br />
         {
           this.props.amPrimaryContact &&
-          <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
+          <>
+            <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
+            <br />
+          </>
         }
-        <br />
         <li><Link to={`${parentPath}/representative-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
         <li><Link to={`${parentPath}/representative-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
         <li><Link to={`${parentPath}/representative-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
@@ -285,7 +292,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   public render(): React.ReactElement<Props> {
-    const { parentPath } = this.props;
+    const { parentPath, user } = this.props;
 
     if (this.props.isLoading_fetchAllowlist || this.props.allowlistIsStale) {
       return (
@@ -297,33 +304,39 @@ class ProfilePage extends React.Component<Props, OwnState> {
       <div className="profile-page">
         <h1 className="heading-primary">ProfilePage</h1>
 
-        <div className="split">
-          <ul>
+        <div className="profile-page__split">
+          <ul className='profile-page__nav'>
             <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
             {this._renderLinks()}
           </ul>
 
-          <Switch>
-            <Route exact path={`${parentPath}`}>
-              <Redirect to={`${parentPath}/my-profile`} />
-            </Route>
+          <div className='profile-page__subpage'>
+            <Switch>
+              <Route exact path={`${parentPath}`}>
+                <Redirect to={`${parentPath}/my-profile`} />
+              </Route>
 
-            <Route exact path={`${parentPath}/my-profile`}>
-              <MyProfile />
-            </Route>
+              <Route exact path={`${parentPath}/my-profile`}>
+                { user?.isAdmin && <MyProfileAdmin />}
+                { user?.isRepresentative && <MyProfileRepresentative />}
+                { user?.isVolunteer && <MyProfileVolunteer />}
+                { user?.isStudent && <MyProfileStudent />}
+              </Route>
 
-            {this._renderRoutes()}
+              {this._renderRoutes()}
 
-            <Route path="*"> 
-              <section className="section section--redirector">
-                <RedirectPrompt
-                  message={"404 Page Not Found"}
-                  buttonText={"Return To Profile Page"}
-                  pathName={parentPath}
-                />
-              </section>
-            </Route>
-          </Switch>
+              <Route path="*"> 
+                <section className="section section--redirector">
+                  <RedirectPrompt
+                    message={"404 Page Not Found"}
+                    buttonText={"Return To Profile Page"}
+                    pathName={parentPath}
+                  />
+                </section>
+              </Route>
+            </Switch>
+          </div>
+          
         </div>
       </div>
     );

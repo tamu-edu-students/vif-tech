@@ -1,4 +1,5 @@
-// import User from "./User";
+import User from "./User";
+import UserFocus from "./UserFocus";
 // import Event from "./Event";
 
 export interface IFocus {
@@ -15,11 +16,20 @@ export default class Focus implements IFocus {
     this.name = name;
   }
 
+  public findUsers(users: User[], userFocuses: UserFocus[]): User[] {
+    return users.filter((user: User) =>
+      userFocuses.some((userFocus: UserFocus) =>
+        userFocus.focus_id === this.id
+        && userFocus.user_id === user.id
+      )
+    );
+  }
+
   public static createFocuses(focusData: IFocus[]): Focus[] {
     return focusData.map((focusDatum: IFocus) => new Focus(focusDatum));
   }
 
   public static findById(id: number, focuses: Focus[]): Focus | null {
-    return focuses.find((event: Focus) => event.id === id) ?? null;
+    return focuses.find((focus: Focus) => focus.id === id) ?? null;
   }
 }

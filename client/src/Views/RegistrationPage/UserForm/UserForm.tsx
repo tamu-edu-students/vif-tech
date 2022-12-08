@@ -92,6 +92,7 @@ class UserForm extends CustomForm<Props, {}> {
         <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
         <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
         <fieldset>
+          <label><p>{`I am a:`}</p></label>
           <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value={Usertype.STUDENT} />
           <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderInput} label="Volunteer" value={Usertype.VOLUNTEER} />
           <Field name="usertype" id="usertype--representative" type="radio" component={this._renderInput} label="Company Representative" value={Usertype.REPRESENTATIVE} />
@@ -100,37 +101,32 @@ class UserForm extends CustomForm<Props, {}> {
           this.props.usertype === Usertype.REPRESENTATIVE &&
           <>
             <Field name="title" id="title" type="text" component={this._renderInput} label="Job title" />
-            <div>
               {
                 //TODO: add error
                 this.props.isLoading_fetchCompanies
                 ? <div>Loading company options...</div>
                 : (
-                  <>
-                    <label htmlFor="company_id">Company</label>
-                    <Field name="company_id" id="company_id" component={this._renderSelect}>
+                  <div className="select-container">
+                    <Field name="company_id" id="company_id" component={this._renderSelect} label="Company">
                       <option />
                       {this._renderCompanyOptions()}
                     </Field>
-                  </>
+                  </div>
                 )
               }
-            </div>
           </>
         }
         {
           this.props.usertype === Usertype.STUDENT &&
           <>
-            <div>
-              <label htmlFor="class_year">Expected graduation year</label>
-              <Field name="class_year" id="class_year" component={this._renderSelect}>
+            <div className="select-container">
+              <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
                 <option />
                 {this._renderYearOptions()}
               </Field>
             </div>
-            <div>
-              <label htmlFor="class_semester">Expected graduation term</label>
-              <Field name="class_semester" id="class_semester" component={this._renderSelect}>
+            <div className="select-container">
+              <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
                 <option />
                 {this._renderSemesterOptions()}
               </Field>

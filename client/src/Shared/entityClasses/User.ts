@@ -4,6 +4,8 @@ import Meeting from "./Meeting";
 import Company from "./Company";
 import Event from "./Event";
 import EventSignup from "./EventSignup";
+import Focus from "./Focus";
+import UserFocus from "./UserFocus";
 
 export interface IUser {
   id: number;
@@ -114,6 +116,16 @@ export default class User implements IUser {
 
   public hasInvitedMeetingsAtEvent(meetings: Meeting[], event: Event): boolean {
     return this.findInvitedMeetingsByEvent(meetings, event).length > 0;
+  }
+
+  public findFocuses(focuses: Focus[], userFocuses: UserFocus[]): Focus[] {
+    return focuses.filter((focus: Focus) => this.hasFocus(focus, userFocuses));
+  }
+
+  public hasFocus(focus: Focus, userFocuses: UserFocus[]): boolean {
+    return userFocuses.some((userFocus: UserFocus) =>
+      userFocus.user_id === this.id
+      && userFocus.focus_id === focus.id);
   }
 
   public static createNewUsers(userData: IUser[]): User[] {
