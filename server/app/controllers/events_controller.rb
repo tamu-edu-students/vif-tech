@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :confirm_user_logged_in, except: [:index, :show]
+  before_action :confirm_user_logged_in, except: [:index, :show, :get_attending_companies, :get_company_meetings]
   before_action :confirm_event_exists, only: [:show, :update, :destroy, :get_availabilies, :get_meetings, :get_users, :signup, :signout]
 
   # GET /events
@@ -110,6 +110,80 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
     render json: {
              meetings: @event.meetings,
+           }, status: :ok
+  end
+
+  # GET /events/attending_companies/?event_title=Virtual Fair
+  # GET /events/:id/attending_companies/
+  def get_attending_companies
+    if !params[:event_title] and !params[:id]
+      render json: {
+               errors: ["Neither id or event title provided"],
+             }, status: :bad_request
+      return
+    elsif params[:event_title]
+      @event = Event.find_by(title: CGI.unescape(params[:event_title]))
+      if !@event
+        render json: {
+          errors: ["No event with title #{params[:event_title]}"],
+        }, status: :not_found
+        return
+      end
+    else
+      @event = Event.find_by(id: params[:id])
+      if !@event
+        render json: {
+          errors: ["No event with id #{params[:id]}"],
+        }, status: :not_found
+        return
+      end
+    end
+
+    companies = Set.new
+    for user in @event.users
+      if user.usertype == "company representative"
+        companies << user.company.id
+      end
+    end
+    render json: {
+             attending_companies: companies,
+           }, status: :ok
+  end
+
+  # GET /events/company_meetings/?event_title=Virtual Fair
+  # GET /events/:id/company_meetings/
+  def get_company_meetings
+    if !params[:event_title] and !params[:id]
+      render json: {
+               errors: ["Neither id or event title provided"],
+             }, status: :bad_request
+      return
+    elsif params[:event_title]
+      @event = Event.find_by(title: CGI.unescape(params[:event_title]))
+      if !@event
+        render json: {
+          errors: ["No event with title #{params[:event_title]}"],
+        }, status: :not_found
+        return
+      end
+    else
+      @event = Event.find_by(id: params[:id])
+      if !@event
+        render json: {
+          errors: ["No event with id #{params[:id]}"],
+        }, status: :not_found
+        return
+      end
+    end
+
+    company_meetings = []
+    for meeting in @event.meetings
+      if meeting.owner and meeting.owner.usertype == "company representative"
+        company_meetings << { meeting: meeting, company_id: meeting.owner.company_id }
+      end
+    end
+    render json: {
+             company_meetings: company_meetings,
            }, status: :ok
   end
 

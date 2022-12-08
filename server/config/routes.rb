@@ -63,11 +63,14 @@ Rails.application.routes.draw do
   delete "users/:id/meetings/owned/not_available", to: "users#delete_owned_but_na_meetings"
   delete "users/:id/user_meetings/not_available", to: "users#delete_na_invitations"
 
+  get "/events/attending_companies/", to: "events#get_attending_companies"
+  get "/events/company_meetings/", to: "events#get_company_meetings"
+  get "/events/:id/attending_companies/", to: "events#get_attending_companies"
+  get "/events/:id/company_meetings/", to: "events#get_company_meetings"
   resources :events, only: [:index, :create, :show, :update, :destroy]
   get "events/:id/availabilities", to: "events#get_availabilities"
   get "events/:id/meetings", to: "events#get_meetings"
   get "events/:id/users", to: "events#get_users"
-
   post "events/:id/signup", to: "events#signup"
   post "events/:id/signup/:user_id", to: "events#signup"
   delete "events/:id/signout", to: "events#signout"
@@ -76,28 +79,20 @@ Rails.application.routes.draw do
   resources :event_signups, only: [:index, :show]
 
   resources :focuses, only: [:index, :create, :show, :update, :destroy]
-
   get "users/focuses", to: "users#get_focuses"
   get "users/:id/focuses", to: "users#get_focuses"
-
   post "users/focuses/:focus_id", to: "users#add_focus"
   post "users/:id/focuses/:focus_id", to: "users#add_focus"
-
   put "users/focuses/", to: "users#update_focus"
   put "users/:id/focuses/", to: "users#update_focus"
-
   delete "users/focuses/:focus_id", to: "users#remove_focus"
   delete "users/:id/focuses/:focus_id", to: "users#remove_focus"
-
   get "companies/focuses", to: "companies#get_focuses"
   get "companies/:id/focuses", to: "companies#get_focuses"
-
   post "companies/focuses/:focus_id", to: "companies#add_focus"
   post "companies/:id/focuses/:focus_id", to: "companies#add_focus"
-
   delete "companies/focuses/:focus_id", to: "companies#remove_focus"
   delete "companies/:id/focuses/:focus_id", to: "companies#remove_focus"
-
   put "companies/focuses/", to: "companies#update_focus"
   put "companies/:id/focuses/", to: "companies#update_focus"
 
