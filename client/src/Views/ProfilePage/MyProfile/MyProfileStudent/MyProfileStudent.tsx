@@ -2,8 +2,8 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { userActionTypes } from 'Store/actions/types';
-import { updateUser } from 'Store/actions';
+import { userActionTypes, focusActionTypes, userFocusActionTypes } from 'Store/actions/types';
+import { updateUser, fetchFocuses, fetchUserFocuses } from 'Store/actions';
 
 import User from 'Shared/entityClasses/User';
 
@@ -18,14 +18,39 @@ interface OwnState {
 }
 
 const mapStateToProps = (state: IRootState) => {
+  const isLoading_updateUser: boolean = createLoadingSelector([userActionTypes.UPDATE_USER])(state);
+  const errors_updateUser: string[] = createErrorMessageSelector([userActionTypes.UPDATE_USER])(state);
+
+  const focusesAreStale = state.focusData.isStale;
+  const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
+  const errors_fetchFocuses: string[] = createErrorMessageSelector([focusActionTypes.FETCH_FOCUSES])(state);
+
+  const userFocusesAreStale = state.userFocusData.isStale;
+  const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
+  const errors_fetchUserFocuses: string[] = createErrorMessageSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
+
+  const isLoading: boolean = isLoading_fetchFocuses || focusesAreStale || isLoading_fetchUserFocuses || userFocusesAreStale;
+  const errors_breaking: string[] = [...errors_fetchFocuses, ...errors_fetchUserFocuses];
+
   return {
     user: state.auth.user,
 
-    isLoading_updateUser: createLoadingSelector([userActionTypes.UPDATE_USER])(state),
-    errors_updateUser: createErrorMessageSelector([userActionTypes.UPDATE_USER])(state),
+    isLoading_updateUser,
+    errors_updateUser,
+
+    focusesAreStale,
+    isLoading_fetchFocuses,
+    errors_fetchFocuses,
+
+    userFocusesAreStale,
+    isLoading_fetchUserFocuses,
+    errors_fetchUserFocuses,
+
+    isLoading,
+    errors_breaking,
   };
 };
-const mapDispatchToProps = { updateUser };
+const mapDispatchToProps = { updateUser, fetchFocuses, fetchUserFocuses };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -34,7 +59,12 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   state = { basicFields: {} };
 
   public componentDidMount(): void {
-    
+    if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
+      this.props.fetchFocuses();
+    }
+    if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+      this.props.fetchUserFocuses();
+    }
   }
 
   public componentDidUpdate(): void {
@@ -71,15 +101,26 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
       portfolio_link,
       resume_link
     } = user;
+    
+    if (this.props.errors_updateUser.length > 0) {
+      this.props.errors_updateUser.forEach((error: string) => console.error(error));
+    }
+
+    if (this.props.errors_breaking.length > 0) {
+      this.props.errors_breaking.forEach((error: string) => console.error(error));
+      return <div className="error">{this.props.errors_breaking}</div>
+    }
 
     if (this.props.isLoading_updateUser) {
       return (
-        <div>Updating profile data...</div>
+        <div>Saving changes...</div>
       );
     }
 
-    if (this.props.errors_updateUser) {
-      this.props.errors_updateUser.forEach((error: string) => console.error(error));
+    if (this.props.isLoading) {
+      return (
+        <div>Loading My Profile...</div>
+      );
     }
 
     return (

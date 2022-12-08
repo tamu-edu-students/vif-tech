@@ -82,6 +82,24 @@ export const updateUser = (userId: number, formValues: any) => async (dispatch: 
   });
 }
 
+export const updateUserFocuses = (userId: number, focusIds: number[]) => async (dispatch: any) => {
+  dispatch({ type: userActionTypes.UPDATE_USER_FOCUSES__REQUEST });
+  await vifTech.put(`/users/${userId}/focuses`, {
+    user: {
+      focuses: focusIds.map((focusId: number) => { return {id: focusId}; })
+    }
+  })
+  .then((response) => {
+    console.log('response_updateUserFocuses:', response);
+    dispatch({ type: userActionTypes.UPDATE_USER_FOCUSES__SUCCESS });
+    dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: true });
+  })
+  .catch((response) => {
+    console.log('response_updateUserFocuses:', response);
+    dispatch({ type: userActionTypes.UPDATE_USER_FOCUSES__FAILURE, payload: {error: 'ERROR: Failed to update user focuses'} });
+  });
+}
+
 
 
 /********************************************************************************************* */
@@ -371,7 +389,6 @@ export const deleteEventSignup = (event_id: number, user_id?: number) => async (
 
 
 
-
 /********************************************************************************************* */
 /**************************************************************************         MEETINGS */
 /********************************************************************************************* */
@@ -504,7 +521,7 @@ export const updateFocus = (focusId: number, newName: string) => async (dispatch
 /********************************************************************************************* */
 export const fetchUserFocuses = () => async (dispatch: any) => {
   dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__REQUEST });
-  await vifTech.get('/userFocuses')
+  await vifTech.get('/user_focuses')
   .then((response) => {
     console.log('response_fetchUserFocuses:', response);
     dispatch({ type: userFocusActionTypes.FETCH_USER_FOCUSES__SUCCESS, payload: UserFocus.createUserFocuses(response.data.user_focuses) });
