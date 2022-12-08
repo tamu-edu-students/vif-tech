@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { userActionTypes, focusActionTypes, userFocusActionTypes, companyActionTypes } from 'Store/actions/types';
+import { userActionTypes, companyActionTypes } from 'Store/actions/types';
 import { updateUser, fetchFocuses, fetchUserFocuses, updateUserFocuses, fetchCompanies } from 'Store/actions';
 
 import User from 'Shared/entityClasses/User';
