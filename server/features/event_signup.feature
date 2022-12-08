@@ -307,6 +307,7 @@ Feature: Event Signup
             | usertype | company representative |
             | company_id | 3 |
         And I sign up user 4 to event 2 and receive code 200
+        Given that I log out
         Then event with title "Physical Event" should have following associated companies
             | 1 |
         Then event with title "Virtual Event" should have following associated companies

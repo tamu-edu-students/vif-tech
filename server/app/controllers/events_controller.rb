@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :confirm_user_logged_in, except: [:index, :show, :get_company_meetings]
+  before_action :confirm_user_logged_in, except: [:index, :show, :get_attending_companies]
   before_action :confirm_event_exists, only: [:show, :update, :destroy, :get_availabilies, :get_meetings, :get_users, :signup, :signout]
 
   # GET /events
