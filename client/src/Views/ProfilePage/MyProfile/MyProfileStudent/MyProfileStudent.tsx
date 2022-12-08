@@ -3,11 +3,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { userActionTypes, focusActionTypes, userFocusActionTypes } from 'Store/actions/types';
-import { updateUser, fetchFocuses, fetchUserFocuses } from 'Store/actions';
+import { updateUser, fetchFocuses, fetchUserFocuses, updateUserFocuses } from 'Store/actions';
 
 import User from 'Shared/entityClasses/User';
+import Focus from 'Shared/entityClasses/Focus';
 
-import MyProfileStudentForm from './MyProfileStudentForm/MyProfileStudentForm';
+import MyProfileStudentFormBasic from './MyProfileStudentFormBasic/MyProfileStudentFormBasic';
+import MyProfileStudentFormFocuses from './MyProfileStudentFormFocuses/MyProfileStudentFormFocuses';
 
 
 interface OwnProps {
@@ -15,9 +17,12 @@ interface OwnProps {
 
 interface OwnState {
   basicFields: any;
+  focusFields: any;
 }
 
 const mapStateToProps = (state: IRootState) => {
+  const user: User = state.auth.user as User;
+
   const isLoading_updateUser: boolean = createLoadingSelector([userActionTypes.UPDATE_USER])(state);
   const errors_updateUser: string[] = createErrorMessageSelector([userActionTypes.UPDATE_USER])(state);
 
@@ -33,7 +38,9 @@ const mapStateToProps = (state: IRootState) => {
   const errors_breaking: string[] = [...errors_fetchFocuses, ...errors_fetchUserFocuses];
 
   return {
-    user: state.auth.user,
+    user,
+    focuses: state.focusData.focuses,
+    focusesOfUser: user.findFocuses(state.focusData.focuses, state.userFocusData.userFocuses),
 
     isLoading_updateUser,
     errors_updateUser,
@@ -50,13 +57,13 @@ const mapStateToProps = (state: IRootState) => {
     errors_breaking,
   };
 };
-const mapDispatchToProps = { updateUser, fetchFocuses, fetchUserFocuses };
+const mapDispatchToProps = { updateUser, fetchFocuses, fetchUserFocuses, updateUserFocuses };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MyProfileStudent extends React.Component<Props, OwnState> {
-  state = { basicFields: {} };
+  state = { basicFields: {}, focusFields: {} };
 
   public componentDidMount(): void {
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
@@ -65,24 +72,57 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
       this.props.fetchUserFocuses();
     }
+
+    this.setState({
+      basicFields: this._getInitialBasicFields(),
+      focusFields: this._computeInitialFocusChecks()
+    });
   }
 
   public componentDidUpdate(): void {
+    // console.log(this.state.focusFields);
+  }
+
+  private _getInitialBasicFields(): any {
+    const {
+      profile_img_src,
+      class_year,
+      class_semester,
+      portfolio_link,
+      resume_link,
+    } = this.props.user;
+
+    return {
+      profile_img_src,
+      class_year,
+      class_semester,
+      portfolio_link,
+      resume_link
+    };
   }
 
   private _updateBasicFieldsState = (newBasicFields: any): void => {
     const modifiedObj: any = {};
-    Object.entries(this.state.basicFields).forEach(([key, value]) => {
+    Object.entries(this.state.basicFields).forEach(([key, _]) => {
       modifiedObj[key] = newBasicFields[key] ?? ''
     });
-    this.setState({basicFields: {...newBasicFields}});
+    this.setState({basicFields: {...modifiedObj}});
+  }
+
+  private _updateFocusFieldsState = (newFocusFields: any): void => {
+    console.log(newFocusFields);
+    this.setState({focusFields: {...newFocusFields}});
   }
 
   private _onSaveChanges = (): void => {
     this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields);
+    const newFocusIds = Object.entries(this.state.focusFields)
+      .filter(([_, isChecked]) => isChecked)
+      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
+    this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds);
   }
 
-  private _renderImg = (profileImgSrc: string): JSX.Element => {
+  private _renderImg(profileImgSrc: string): JSX.Element {
     return (
       <div className="my-profile__img-container">
         <img className='my-profile__img' src={profileImgSrc} />
@@ -90,16 +130,28 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     );
   }
 
+  private _computeInitialFocusChecks(): any {
+    const { focuses, focusesOfUser } = this.props;
+    let initialFocusChecks = {};
+    focuses.forEach((focus: Focus) => {
+      if (focusesOfUser.some((focusOfUser: Focus) => focus.id === focusOfUser.id)) {
+        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}`]: true };
+      }
+    });
+
+    return initialFocusChecks;
+  }
+
   public render(): React.ReactElement<Props> {
-    const user: User = this.props.user as User;
+    const {
+      user,
+      focuses,
+      focusesOfUser,
+    } = this.props;
     const {
       firstname,
       lastname,
       profile_img_src,
-      class_year,
-      class_semester,
-      portfolio_link,
-      resume_link
     } = user;
     
     if (this.props.errors_updateUser.length > 0) {
@@ -136,19 +188,23 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
         }
         <br />
         <div>
-          <MyProfileStudentForm
+          <MyProfileStudentFormBasic
             form="updateBasicStudentFields"
-            initialValues={{
-              profile_img_src,
-              class_year,
-              class_semester,
-              portfolio_link,
-              resume_link
-            }}
+            initialValues={this._getInitialBasicFields()}
             updateBasicFields={this._updateBasicFieldsState}
           />
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
         </div>
+
+        <div>
+          <MyProfileStudentFormFocuses
+            form="updateFocusStudentField"
+            initialValues={this._computeInitialFocusChecks()}
+            focuses={focuses}
+            updateFocusFields={this._updateFocusFieldsState}
+          />
+        </div>
+
+          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
     );
   }

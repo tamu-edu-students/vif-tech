@@ -4,7 +4,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { allowlistActionTypes } from 'Store/actions/types';
+
+import Focus from 'Shared/entityClasses/Focus';
+
 import CustomForm from 'Components/CustomForm/CustomForm';
+
 
 interface OwnProps {
   initialValues: any;
@@ -25,9 +29,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
-class MyProfileStudentForm extends CustomForm<Props, OwnState> {
-  state = {profile_img_src: '', class_year: -1, class_semester: '', resume_link: '', portfolio_link: ''};
-
+class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
   public componentDidMount(): void {
     this.setState({
       ...this.props.initialValues
@@ -69,6 +71,6 @@ class MyProfileStudentForm extends CustomForm<Props, OwnState> {
 
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
-})(MyProfileStudentForm);
+})(MyProfileStudentFormBasic);
 
 export default connector(formWrapped);
