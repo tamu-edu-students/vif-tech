@@ -146,7 +146,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   private _renderImg(profileImgSrc: string): JSX.Element {
     return (
       <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} />
+        <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
       </div>
     );
   }
