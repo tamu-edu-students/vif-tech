@@ -25,7 +25,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
-class MyProfileVolunteerFormBasic extends CustomForm<Props, OwnState> {
+class MyProfileRepresentativeFormBasic extends CustomForm<Props, OwnState> {
   public componentDidMount(): void {
     this.setState({
       ...this.props.initialValues
@@ -38,6 +38,10 @@ class MyProfileVolunteerFormBasic extends CustomForm<Props, OwnState> {
         <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile picture URL" />
 
         <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
+
+        <Field name="companyName" id="companyName" type="text" component={this._renderInput} label="Company" disabled />
+
+        <Field name="title" id="title" type="text" component={this._renderInput} label="Job Title" />
       </form>
     );
   }
@@ -45,6 +49,6 @@ class MyProfileVolunteerFormBasic extends CustomForm<Props, OwnState> {
 
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
-})(MyProfileVolunteerFormBasic);
+})(MyProfileRepresentativeFormBasic);
 
 export default connector(formWrapped);

@@ -13,6 +13,7 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 import MyProfile from './MyProfile/MyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
+import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
 
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
@@ -139,6 +140,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderRepresentativeRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
+      <Route exact path={`${parentPath}/representative-my-profile`} key={`${parentPath}/representative-my-profile`}>
+        <MyProfileRepresentative />
+      </Route>,
+
       ...(
         this.props.amPrimaryContact ?
         [
@@ -176,11 +181,15 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
+        <li><Link to={`${parentPath}/representative-my-profile`}>My Representative Profile</Link></li>
+        <br />
         {
           this.props.amPrimaryContact &&
-          <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
+          <>
+            <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
+            <br />
+          </>
         }
-        <br />
         <li><Link to={`${parentPath}/representative-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
         <li><Link to={`${parentPath}/representative-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
         <li><Link to={`${parentPath}/representative-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
