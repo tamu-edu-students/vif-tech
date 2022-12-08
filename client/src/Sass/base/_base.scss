@@ -37,6 +37,15 @@ body {
   color: $color-brand-red-light;
 }
 
+.App {
+  .nav {
+    padding: 1rem 2rem;
+  }
+  .main {
+    padding: 0 2rem;
+  }
+}
+
 form {
   width: 30rem;
 
@@ -111,6 +120,7 @@ a {
   }
 
   &__nav {
+    list-style: none;
     width: min-content;
     white-space: nowrap;
   }

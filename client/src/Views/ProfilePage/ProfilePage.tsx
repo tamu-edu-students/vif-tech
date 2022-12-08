@@ -302,7 +302,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
 
     return (
       <div className="profile-page">
-        <h1 className="heading-primary">ProfilePage</h1>
+        <h1 className="heading-primary">Profile</h1>
 
         <div className="profile-page__split">
           <ul className='profile-page__nav'>

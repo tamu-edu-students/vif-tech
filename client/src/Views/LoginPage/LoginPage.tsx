@@ -43,6 +43,7 @@ class LoginPage extends React.Component<Props, OwnState> {
 
     return (
       <section className="section section--login">
+        <h1 className="heading-primary">Login</h1>
         <LoginForm onSubmit={this._onSubmit} form="login" />
         {
           errors_logIn.map((error: string) => (

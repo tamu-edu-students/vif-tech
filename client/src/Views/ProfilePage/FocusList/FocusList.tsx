@@ -93,7 +93,7 @@ class FocusList extends React.Component<Props, OwnState> {
 
     return (
       <div className="Focus-List">
-        <h1 className="heading-primary">Focus List</h1>
+        <h2 className="heading-secondary">Focus List</h2>
         <div className="focus-list">
           {
             focuses.length > 0
