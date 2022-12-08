@@ -9,6 +9,7 @@ import {
   focusActionTypes,
   userFocusActionTypes,
   companyFocusActionTypes,
+  virtualFairMeetingActionTypes,
 
   FETCH_FAQS,
   CREATE_FAQ,
@@ -495,6 +496,24 @@ export const updateMeeting = (meetingId: number, newInviteeId: number) => async 
   .catch((response) => {
     console.log('response_fetchMeetings:', response);
     dispatch({ type: meetingActionTypes.UPDATE_MEETING__FAILURE, payload: {error: 'ERROR: Failed to save meeting assignment'} });
+  });
+}
+
+
+
+/********************************************************************************************* */
+/**************************************************************************         VIRTUAL FAIR COMPANY MEETINGS */
+/********************************************************************************************* */
+export const fetchVirtualFairMeetings = () => async (dispatch: any) => {
+  dispatch({ type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__REQUEST });
+  await vifTech.get(`/events/company_meetings/?event_title=Virtual Fair`)
+  .then(response => {
+    console.log('response_virtualFairMeetings:', response);
+    dispatch({ type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS, payload: response.data.company_meetings })
+  })
+  .catch(response => {
+    console.log('response_virtualFairMeetings:', response);
+    dispatch({ type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__FAILURE, payload: {error: 'ERROR: Failed to fetch Virtual Fair data'} });
   });
 }
 

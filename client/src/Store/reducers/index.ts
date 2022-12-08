@@ -5,6 +5,7 @@ import authReducer, { Store_Auth } from './authReducer';
 import allowlistReducer, { Store_Allowlist } from './allowlistReducer';
 import companyReducer, { Store_CompanyData } from './companyReducer';
 import eventReducer, { Store_EventData } from "./eventReducer";
+import virtualFairMeetingReducer, { Store_VirtualFairMeetingData } from "./virtualFairMeetingsReducer";
 import eventSignupReducer, { Store_EventSignupData } from "./eventSignupReducer";
 import meetingReducer, { Store_MeetingData } from "./meetingReducer";
 import focusReducer, { Store_FocusData } from "./focusReducer";
@@ -25,6 +26,7 @@ export interface IRootState {
   companyData: Store_CompanyData;
   eventData: Store_EventData;
   eventSignupData: Store_EventSignupData;
+  virtualFairMeetingData: Store_VirtualFairMeetingData;
   meetingData: Store_MeetingData;
   focusData: Store_FocusData;
   userFocusData: Store_UserFocusData;
@@ -43,6 +45,7 @@ const rootReducer = combineReducers<IRootState> ({
   companyData: companyReducer,
   eventData: eventReducer,
   eventSignupData: eventSignupReducer,
+  virtualFairMeetingData: virtualFairMeetingReducer,
   meetingData: meetingReducer,
   focusData: focusReducer,
   userFocusData: userFocusReducer,
