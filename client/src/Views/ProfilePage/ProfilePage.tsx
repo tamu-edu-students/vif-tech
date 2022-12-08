@@ -14,6 +14,7 @@ import MyProfile from './MyProfile/MyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
 import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
+import MyProfileAdmin from './MyProfile/MyProfileAdmin/MyProfileAdmin';
 
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
 import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
@@ -79,6 +80,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderAdminRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
+      <Route exact path={`${parentPath}/admin-my-profile`} key={`${parentPath}/admin-my-profile`}>
+        <MyProfileAdmin />
+      </Route>,
+
       <Route exact path={`${parentPath}/company-allowlists`} key={`${parentPath}/company-allowlists`}>
         <CompanyAllowlists />
       </Route>,
@@ -121,6 +126,8 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
     return (
       <>
+        <br />
+        <li><Link to={`${parentPath}/admin-my-profile`}>My Admin Profile</Link></li>
         <br />
         <li><Link to={`${parentPath}/company-allowlists`}>Company Allowlist</Link></li>
         <li><Link to={`${parentPath}/student-allowlist`}>Student Allowlist</Link></li>
