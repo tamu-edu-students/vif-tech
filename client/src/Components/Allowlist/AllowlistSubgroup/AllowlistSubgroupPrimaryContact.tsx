@@ -118,21 +118,23 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     return (
       <div className={`allowlist__subgroup allowlist__subgroup--primary-contact`}>
         <h3 className="heading-tertiary">{'Primary Contact'}</h3>
-        <ul>
+        <ul className="allowlist__subgroup-entries">
           {
-          entry &&
-          <>
-            {this._renderEntry(entry)}
-            <button onClick={() => this._renderTransferForm()}>
-              Transfer
-            </button>
-          </>
+            entry &&
+            this._renderEntry(entry)
           }
         </ul>
         {
           (!entry && usertype === Usertype.ADMIN) &&
           <button onClick={() => this._renderEntryForm()}>
             Add
+          </button>
+        }
+        
+        {
+          entry &&
+          <button onClick={() => this._renderTransferForm()}>
+            Transfer
           </button>
         }
       </div>

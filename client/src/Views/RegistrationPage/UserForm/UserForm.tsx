@@ -101,33 +101,31 @@ class UserForm extends CustomForm<Props, {}> {
           this.props.usertype === Usertype.REPRESENTATIVE &&
           <>
             <Field name="title" id="title" type="text" component={this._renderInput} label="Job title" />
-            <div>
               {
                 //TODO: add error
                 this.props.isLoading_fetchCompanies
                 ? <div>Loading company options...</div>
                 : (
-                  <>
+                  <div className="select-container">
                     <Field name="company_id" id="company_id" component={this._renderSelect} label="Company">
                       <option />
                       {this._renderCompanyOptions()}
                     </Field>
-                  </>
+                  </div>
                 )
               }
-            </div>
           </>
         }
         {
           this.props.usertype === Usertype.STUDENT &&
           <>
-            <div>
+            <div className="select-container">
               <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
                 <option />
                 {this._renderYearOptions()}
               </Field>
             </div>
-            <div>
+            <div className="select-container">
               <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
                 <option />
                 {this._renderSemesterOptions()}

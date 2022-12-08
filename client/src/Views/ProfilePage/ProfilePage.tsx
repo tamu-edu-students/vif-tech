@@ -304,36 +304,39 @@ class ProfilePage extends React.Component<Props, OwnState> {
       <div className="profile-page">
         <h1 className="heading-primary">ProfilePage</h1>
 
-        <div className="split">
-          <ul>
+        <div className="profile-page__split">
+          <ul className='profile-page__nav'>
             <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
             {this._renderLinks()}
           </ul>
 
-          <Switch>
-            <Route exact path={`${parentPath}`}>
-              <Redirect to={`${parentPath}/my-profile`} />
-            </Route>
+          <div className='profile-page__subpage'>
+            <Switch>
+              <Route exact path={`${parentPath}`}>
+                <Redirect to={`${parentPath}/my-profile`} />
+              </Route>
 
-            <Route exact path={`${parentPath}/my-profile`}>
-              { user?.isAdmin && <MyProfileAdmin />}
-              { user?.isRepresentative && <MyProfileRepresentative />}
-              { user?.isVolunteer && <MyProfileVolunteer />}
-              { user?.isStudent && <MyProfileStudent />}
-            </Route>
+              <Route exact path={`${parentPath}/my-profile`}>
+                { user?.isAdmin && <MyProfileAdmin />}
+                { user?.isRepresentative && <MyProfileRepresentative />}
+                { user?.isVolunteer && <MyProfileVolunteer />}
+                { user?.isStudent && <MyProfileStudent />}
+              </Route>
 
-            {this._renderRoutes()}
+              {this._renderRoutes()}
 
-            <Route path="*"> 
-              <section className="section section--redirector">
-                <RedirectPrompt
-                  message={"404 Page Not Found"}
-                  buttonText={"Return To Profile Page"}
-                  pathName={parentPath}
-                />
-              </section>
-            </Route>
-          </Switch>
+              <Route path="*"> 
+                <section className="section section--redirector">
+                  <RedirectPrompt
+                    message={"404 Page Not Found"}
+                    buttonText={"Return To Profile Page"}
+                    pathName={parentPath}
+                  />
+                </section>
+              </Route>
+            </Switch>
+          </div>
+          
         </div>
       </div>
     );

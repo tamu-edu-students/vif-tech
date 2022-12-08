@@ -88,7 +88,7 @@ class AllowlistSubgroupEmails extends React.Component<Props, {}> {
     return (
       <div className={`allowlist__subgroup allowlist__subgroup--perosnal-emails`}>
         <h3 className="heading-tertiary">{'Personal Emails'}</h3>
-        <ul>
+        <ul className="allowlist__subgroup-entries">
           {this._renderEntries(entries)}
         </ul>
         <button onClick={() => this._renderForm(allowlistEntryFormProps)}>
