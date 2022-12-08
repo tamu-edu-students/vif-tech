@@ -92,6 +92,7 @@ class UserForm extends CustomForm<Props, {}> {
         <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
         <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
         <fieldset>
+          <label><p>{`I am a:`}</p></label>
           <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value={Usertype.STUDENT} />
           <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderInput} label="Volunteer" value={Usertype.VOLUNTEER} />
           <Field name="usertype" id="usertype--representative" type="radio" component={this._renderInput} label="Company Representative" value={Usertype.REPRESENTATIVE} />
