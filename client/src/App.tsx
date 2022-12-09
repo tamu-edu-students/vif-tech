@@ -87,6 +87,10 @@ class App extends React.Component<Props, {}> {
                       (this.props.user.isAdmin || this.props.user.isRepresentative) &&
                       <li><Link to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
                     }
+                    {
+                      this.props.user.isAdmin &&
+                      <li><Link to="/users" data-testid="users-page-button">Users</Link></li>
+                    }
                     <li><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
                     <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
                   </>
