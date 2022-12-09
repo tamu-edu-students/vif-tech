@@ -15,6 +15,22 @@
 .Volunteer-Timetable {
   //TODO: Remove
   width: 100%;
+
+  & > .heading-secondary {
+    background-color: $color-gray-lightest;
+    color: $color-black;
+    font-size: 1.6rem;
+    padding: 1rem 2.6rem;
+    width: max-content;
+  }
+
+  & > details,
+  & > .title {
+    background-color: $color-gray-lightest;
+    color: $color-black;
+    font-size: 1.2rem;
+    padding: 0.5rem 2.6rem;
+  }
   
   .table {
     .table__rows {
@@ -36,12 +52,20 @@
           &:nth-child(even) {
             .table__cell:not(.table__cell--time) {
               background-color: $color-gray-light;
+              
+              .student-select-form {
+                background-color: $color-gray-light;
+              }
             }
           }
   
           &:nth-child(odd) {
             .table__cell:not(.table__cell--time) {
               background-color: $color-white;
+
+              .student-select-form {
+                background-color: $color-white;
+              }
             }
           }
         }
@@ -51,7 +75,7 @@
         }
 
         .table__cell {
-          padding: 1rem;
+          // padding: 1rem;
 
           &:not(:last-child):not(.table__cell--time) {
             border-right: 1px solid $color-violet-darkest;
@@ -65,12 +89,10 @@
           }
 
           &--name {
-            select {
-              width: 50%;
-            }
           }
           
           &--header  {
+            padding: 1rem;
             font-size: 1.8rem;
             font-weight: 700;
             background-color: $color-violet-darkest;
@@ -79,6 +101,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
+          }
+
+          .student-select-form {
+            font-size: 1.4rem;
+            width: 100%;
+            border: none;
+            padding: 1rem;
+          }
+
+          .student-focuses {
+            padding: 0 1rem 1rem 1.4rem;
+            font-size: 1.2rem
           }
         }
 
@@ -93,6 +127,7 @@
 
           display: flex;
           justify-content: center;
+          align-items: center;
 
           &--swapping,
           &--adding {
