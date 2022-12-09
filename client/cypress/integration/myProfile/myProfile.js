@@ -24,7 +24,8 @@ const reset = () => {
 
 Before(function() {
   cy.wrap({ reset }).invoke('reset');
-  cy.fixture('users').then(data => { users = data.users; loggedInUser = users[0] });
+  cy.fixture('users').then(data => { users = data.users });
+  cy.fixture('companies').then(data => { companies = data.companies });
 
   cy.intercept('GET', "http://localhost:3001/companies", req => {
     req.reply(
@@ -68,7 +69,14 @@ Before(function() {
 
 Given(`I am logged in as an admin`, () => {
   const adminEmail = users.find(user => user.usertype === 'admin').email;
+  loggedInUser = users.find(user => user.usertype === 'admin');
   setSession(true, adminEmail, users);
+});
+
+Given(`I am logged in as a representative`, () => {
+  const repEmail = users.find(user => user.usertype === 'company representative').email;
+  loggedInUser = users.find(user => user.usertype === 'company representative');
+  setSession(true, repEmail, users);
 });
 
 Given(`I visit the My Profile page`, () => {
@@ -80,9 +88,10 @@ Given(`I visit the My Profile page`, () => {
 });
 
 When(`I edit the following details:`, (table) => {
-  const { profile_img_src } = table.hashes()[0];
+  const { profile_img_src, title } = table.hashes()[0];
 
   profile_img_src && cy.findByLabelText(/profile picture url/i).type(profile_img_src);
+  title && cy.findByLabelText(/job title/i).type(title);
 });
 
 And(`I click the save changes button`, () => {

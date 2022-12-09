@@ -22,7 +22,8 @@
       "firstname": "rep1",
       "lastname": "repperton",
       "password": "pw",
-      "usertype": "company representative"
+      "usertype": "company representative",
+      "company_id": 1
     }
   ]
 }
