@@ -104,7 +104,7 @@ class StudentsPage extends React.Component<Props, OwnState> {
   private _renderCompanyCards(): JSX.Element[] {
     const { filteredCompanies } = this.state;
     return filteredCompanies.map((company: Company) => {
-      const { name, logo_img_src } = company;
+      const { name, logo_img_src, website_link } = company;
       const focusStrings: string[] = company.findFocuses(this.props.focuses, this.props.companyFocuses).map((focus: Focus) => focus.name);
       return (
         <div key={company.id} className="company-card-container">
@@ -112,7 +112,11 @@ class StudentsPage extends React.Component<Props, OwnState> {
             <div className="company-card__logo-container">
               <img className='company-card__logo' src={logo_img_src} alt={`${name} logo`} />
             </div>
-            <div className='company-card__name'>{name}</div>
+            {
+              website_link === ''
+              ? <div className='company-card__name'>{name}</div>
+              : <a className='company-card__name' href={website_link} target="_blank">{name}</a>
+            }
             <div className='company-card__focuses'>{`${focusStrings.join(' | ')}`}</div>
           </div>
         </div>
