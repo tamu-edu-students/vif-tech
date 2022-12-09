@@ -80,10 +80,12 @@ class UsersPage extends React.Component<Props, OwnState> {
         <h1 className="heading-primary">Users</h1>
 
         <ul className="user-directory__list">
-          {this.props.students.map((user: User) => {
+          {this.props.students
+          .sort((a: User, b: User) => a.firstname.toLowerCase().localeCompare(b.lastname.toLowerCase()))
+          .map((user: User) => {
             return (
               <div className="user-directory__user" key={user.id}>
-                <h2 className="heading-secondary">{user.email}</h2>
+                <h2 className="heading-secondary">{`${user.firstname} ${user.lastname}`}</h2>
                 <ul className="user-directory__user-info">
                   <li><span className="user-directory__user-info-title">First name:</span> {user.firstname}</li>
                   <li><span className="user-directory__user-info-title">Last name:</span> {user.lastname}</li>

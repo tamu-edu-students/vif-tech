@@ -24,6 +24,51 @@
       "password": "pw",
       "usertype": "company representative",
       "company_id": 1
+    },
+    
+    {
+      "id": 4,
+      "email": "usedEmail2@gmail.com",
+      "firstname": "Oldboy",
+      "lastname": "Senior2",
+      "password": "abcdefg",
+      "usertype": "student"
+    },
+    
+    {
+      "id": 5,
+      "email": "usedEmail3@gmail.com",
+      "firstname": "Oldboy",
+      "lastname": "Senior3",
+      "password": "abcdefg",
+      "usertype": "student"
+    },
+    
+    {
+      "id": 6,
+      "email": "usedEmail4@gmail.com",
+      "firstname": "Oldboy",
+      "lastname": "Senior4",
+      "password": "abcdefg",
+      "usertype": "student"
+    },
+    
+    {
+      "id": 7,
+      "email": "usedEmail5@gmail.com",
+      "firstname": "Oldboy",
+      "lastname": "Senior5",
+      "password": "abcdefg",
+      "usertype": "student"
+    },
+    
+    {
+      "id": 8,
+      "email": "usedEmail6@gmail.com",
+      "firstname": "Oldboy",
+      "lastname": "Senior6",
+      "password": "abcdefg",
+      "usertype": "student"
     }
   ]
 }
