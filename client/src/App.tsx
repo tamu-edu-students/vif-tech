@@ -117,9 +117,12 @@ class App extends React.Component<Props, {}> {
                 </section>
               </Route>
 
-              <Route exact path="/users">
-                <UsersPage />
-              </Route>
+              {
+                this.props.user?.isAdmin &&
+                <Route exact path="/users">
+                  <UsersPage />
+                </Route>
+              }
 
               <Route exact path="/students">
                 <StudentsPage />
