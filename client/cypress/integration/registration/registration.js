@@ -1,15 +1,28 @@
 /// <reference types="cypress" />
 
 import { Before, Given, When, And, Then } from "cypress-cucumber-preprocessor/steps";
-import { setSession } from "../utils";
+import { setSession, createCompany } from "../utils";
 
 let registeredUser;
 let users;
+let companies = [];
+
+const reset = () => {
+  companies = [];
+}
 
 Before(function() {
+  cy.wrap({ reset }).invoke('reset');
   cy.fixture('users').then(data => {
     users = data.users;
   });
+
+  cy.intercept('GET', "http://localhost:3001/companies", req => {
+    req.reply(
+      200,
+      { companies }
+    );
+  }).as('Fetch Companies');
 
   cy.intercept('POST', "http://localhost:3001/users", req => {
     const { user: newUser } = req.body;
@@ -33,12 +46,19 @@ Given(`I am not logged in`, () => {
   setSession(false);
 });
 
+Given(`the following companies are in the allowlist:`, (table) => {
+  const companyNames = Object.values(table.hashes()[0]);
+  
+  companyNames.forEach(companyName => {
+    companies.push(createCompany(companyName))
+  });
+});
+
 Given(`I visit the registration page`, function() {
   cy.visit('/users/new');
 });
 
 Given(`I choose the {word} usertype`, (usertype) => {
-  console.log(usertype);
   cy.findByLabelText(new RegExp(`${usertype}`, 'i')).check();
 });
 
@@ -52,15 +72,19 @@ Given(`I am about to submit invalid data`, () => {
 });
 
 When(`I provide the following details:`, (table) => {
-  const { email, firstname, lastname, password, password_confirmation, class_year, class_semester} = table.hashes()[0];
+  const { email, firstname, lastname, password, password_confirmation, class_year, class_semester, title, company_id} = table.hashes()[0];
 
   email && cy.findByLabelText(/email/i).type(email);
   firstname && cy.findByLabelText(/first name/i).type(firstname);
   lastname && cy.findByLabelText(/last name/i).type(lastname);
   password && cy.findByLabelText(/^password$/i).type(password);
   password_confirmation && cy.findByLabelText(/confirm password/i).type(password_confirmation);
+  
   class_year && cy.findByLabelText(/expected graduation year/i).select(class_year);
   class_semester && cy.findByLabelText(/expected graduation term/i).select(class_semester);
+
+  title && cy.findByLabelText(/job title/i).type(title);
+  company_id && cy.findByLabelText(/^company$/i).select(company_id);
 });
 
 When(`I choose the following usertype:`, (table) => {
