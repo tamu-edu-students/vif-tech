@@ -24,7 +24,7 @@ class HomePage extends React.Component<Props, {}> {
         <div className="home-page">
           {/* <h1 className="heading-primary">Home Page</h1> */}
           <div className='banner-container'>
-            <img src={image} />
+            <img src={image} alt="Home Banner" />
           </div>
         </div>
       );
