@@ -29,29 +29,29 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const eventsAreStale: boolean = state.eventData.isStale;
   const isLoading_fetchEvents: boolean = createLoadingSelector([eventActionTypes.FETCH_EVENTS])(state);
 
-  const virtualFairMeetingsAreStale: boolean = state.virtualFairMeetingData.isStale;
-  const isLoading_fetchVirtualFairMeetings: boolean = createLoadingSelector([virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE])(state);
+  const virtualFairAttendanceIsStale: boolean = state.virtualFairAttendanceData.isStale;
+  const isLoading_fetchVirtualFairAttendance: boolean = createLoadingSelector([virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE])(state);
 
   const companiesAreStale: boolean = state.companyData.isStale;
   const isLoading_fetchCompanies: boolean = createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state);
 
   return {
     event,
-    virtualFairMeetings: state.virtualFairMeetingData.virtualFairMeetings,
-    attendingCompanies: Company.findByIds(state.virtualFairMeetingData.attendingCompanyIds, state.companyData.companies),
+    virtualFairMeetings: state.virtualFairAttendanceData.virtualFairMeetings,
+    attendingCompanies: Company.findByIds(state.virtualFairAttendanceData.attendingCompanyIds, state.companyData.companies),
 
     eventsAreStale,
     isLoading_fetchEvents,
 
-    virtualFairMeetingsAreStale,
-    isLoading_fetchVirtualFairMeetings,
+    virtualFairAttendanceIsStale,
+    isLoading_fetchVirtualFairAttendance,
 
     companiesAreStale,
     isLoading_fetchCompanies,
     
     isLoading:
       eventsAreStale || isLoading_fetchEvents
-      || virtualFairMeetingsAreStale || isLoading_fetchVirtualFairMeetings
+      || virtualFairAttendanceIsStale || isLoading_fetchVirtualFairAttendance
       || companiesAreStale || isLoading_fetchCompanies,
     errors: createErrorMessageSelector([
       eventActionTypes.FETCH_EVENTS,
@@ -60,7 +60,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
     ])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchCompanies, fetchVirtualFairMeetings: fetchVirtualFairAttendance };
+const mapDispatchToProps = { fetchEvents, fetchCompanies, fetchVirtualFairAttendance: fetchVirtualFairAttendance };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -70,8 +70,8 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
     }
-    if (this.props.virtualFairMeetingsAreStale && !this.props.isLoading_fetchVirtualFairMeetings) {
-      this.props.fetchVirtualFairMeetings();
+    if (this.props.virtualFairAttendanceIsStale && !this.props.isLoading_fetchVirtualFairAttendance) {
+      this.props.fetchVirtualFairAttendance();
     }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
       this.props.fetchCompanies();
@@ -82,8 +82,8 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
     }
-    if (this.props.virtualFairMeetingsAreStale && !this.props.isLoading_fetchVirtualFairMeetings) {
-      this.props.fetchVirtualFairMeetings();
+    if (this.props.virtualFairAttendanceIsStale && !this.props.isLoading_fetchVirtualFairAttendance) {
+      this.props.fetchVirtualFairAttendance();
     }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
       this.props.fetchCompanies();
