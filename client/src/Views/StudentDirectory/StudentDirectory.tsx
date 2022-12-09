@@ -87,8 +87,8 @@ class UsersPage extends React.Component<Props, OwnState> {
                 <ul className="user-directory__user-info">
                   <li><span className="user-directory__user-info-title">First name:</span> {user.firstname}</li>
                   <li><span className="user-directory__user-info-title">Last name:</span> {user.lastname}</li>
-                  <li><span className="user-directory__user-info-title">Resume URL:</span> <a href={`${user.resume_link}`} target="_blank">{user.resume_link}</a></li>
-                  <li><span className="user-directory__user-info-title">Portfolio URL:</span> <a href={`${user.portfolio_link}`} target="_blank">{user.portfolio_link}</a></li>
+                  <li><span className="user-directory__user-info-title">Resume URL:</span> <a href={`${user.resume_link}`} target="_blank">{user.resume_link && `<link>`}</a></li>
+                  <li><span className="user-directory__user-info-title">Portfolio URL:</span> <a href={`${user.portfolio_link}`} target="_blank">{user.portfolio_link && `<link>`}</a></li>
                   <li>
                     <span className="user-directory__user-info-title">Interests: </span>
                     {
