@@ -1,12 +1,9 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
-// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-// import {eventActionTypes } from 'Store/actions/types';
 import { updateMeeting } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
-// import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 import StudentSelectForm from './StudentSelectForm/StudentSelectForm';
 import User from 'Shared/entityClasses/User';

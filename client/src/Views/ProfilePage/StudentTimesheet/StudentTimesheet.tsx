@@ -13,7 +13,7 @@ import StudentTimesheetRow from './StudentTimesheetRow/StudentTimesheetRow';
 
 
 interface OwnProps {
-
+  eventTitle: string;
 }
 
 interface OwnState {
@@ -25,7 +25,7 @@ type TimeOption = {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const event: Event | null = Event.findByTitle('Mock Interview 2', state.eventData.events);
+  const event: Event | null = Event.findByTitle(ownProps.eventTitle, state.eventData.events);
   const isAttendingEvent: boolean = event ? (state.auth.user?.isAttendingEvent(event, state.eventSignupData.eventSignups) ?? false) : false;
 
   const eventsAreStale: boolean = state.eventData.isStale;
@@ -138,22 +138,22 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
       isPostRegistration,
     } = this.props;
 
-    if (this.props.isLoading) {
-      return (
-        <div>Loading Student Timesheet for Mock Interview 2...</div>
-      );
-    }
-
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div>Failed to load timesheet</div>
+        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} timesheet`}</div>
+      );
+    }
+
+    if (this.props.isLoading) {
+      return (
+        <div>{`Loading Student Timesheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
       );
     }
 
     return (
       <div className="Student-Timesheet">
-        <h2>Student Timesheet</h2>
+        <h2>{`Student ${event?.title} Timesheet`}</h2>
         {
           registrationIsOpen &&
             <button

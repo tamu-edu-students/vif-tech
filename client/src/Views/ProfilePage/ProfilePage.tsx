@@ -21,18 +21,9 @@ import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
 
-import MeetingAssignmentSheetPR2 from './MeetingAssignmentSheet/MeetingAssignmentSheetPR2';
-import MeetingAssignmentSheetMI2 from './MeetingAssignmentSheet/MeetingAssignmentSheetMI2';
-import MeetingAssignmentSheetMI1 from './MeetingAssignmentSheet/MeetingAssignmentSheetMI1';
-import MeetingAssignmentSheetPR1 from './MeetingAssignmentSheet/MeetingAssignmentSheetPR1';
-import VolunteerTimesheetPR2 from './VolunteerTimesheet/VolunteerTimesheetPR2';
-import VolunteerTimesheetPR1 from './VolunteerTimesheet/VolunteerTimesheetPR1';
-import VolunteerTimesheetMI1 from './VolunteerTimesheet/VolunteerTimesheetMI1';
-import VolunteerTimesheetMI2 from './VolunteerTimesheet/VolunteerTimesheetMI2';
-import StudentTimesheetPR1 from './StudentTimesheet/StudentTimesheetPR1';
-import StudentTimesheetMI1 from './StudentTimesheet/StudentTimesheetMI1';
-import StudentTimesheetMI2 from './StudentTimesheet/StudentTimesheetMI2';
-import StudentTimesheetPR2 from './StudentTimesheet/StudentTimesheetPR2';
+import MeetingAssignmentSheet from './MeetingAssignmentSheet/MeetingAssignmentSheet';
+import VolunteerTimesheet from './VolunteerTimesheet/VolunteerTimesheet';
+import StudentTimesheet from './StudentTimesheet/StudentTimesheet';
 import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
 
 import FocusList from './FocusList/FocusList';
@@ -97,19 +88,19 @@ class ProfilePage extends React.Component<Props, OwnState> {
       </Route>,
 
       <Route exact path={`${parentPath}/admin-assignment-sheet/portfolio-review-1`} key={`${parentPath}/admin-assignment-sheet/portfolio-review-1`}>
-        <MeetingAssignmentSheetPR1 />
+        <MeetingAssignmentSheet eventTitle="Portfolio Review 1"  />
       </Route>,
 
       <Route exact path={`${parentPath}/admin-assignment-sheet/mock-interview-1`} key={`${parentPath}/admin-assignment-sheet/mock-interview-1`}>
-        <MeetingAssignmentSheetMI1 />
+        <MeetingAssignmentSheet eventTitle="Mock Interview 1"  />
       </Route>,
 
       <Route exact path={`${parentPath}/admin-assignment-sheet/mock-interview-2`} key={`${parentPath}/admin-assignment-sheet/mock-interview-2`}>
-        <MeetingAssignmentSheetMI2 />
+        <MeetingAssignmentSheet eventTitle="Mock Interview 2"  />
       </Route>,
 
       <Route exact path={`${parentPath}/admin-assignment-sheet/portfolio-review-2`} key={`${parentPath}/admin-assignment-sheet/portfolio-review-2`}>
-        <MeetingAssignmentSheetPR2 />
+        <MeetingAssignmentSheet eventTitle="Portfolio Review 2"  />
       </Route>,
 
       <Route exact path={`${parentPath}/focus-list`} key={`${parentPath}/focus-list`}>
@@ -156,19 +147,19 @@ class ProfilePage extends React.Component<Props, OwnState> {
       ),
       
       <Route exact path={`${parentPath}/representative-timesheet/portfolio-review-1`} key={`${parentPath}/representative-timesheet/portfolio-review-1`}>
-        <VolunteerTimesheetPR1 />
+        <VolunteerTimesheet eventTitle="Portfolio Review 1" />
       </Route>,
 
       <Route exact path={`${parentPath}/representative-timesheet/mock-interview-1`} key={`${parentPath}/representative-timesheet/mock-interview-1`}>
-        <VolunteerTimesheetMI1 />
+        <VolunteerTimesheet eventTitle="Mock Interview 1" />
       </Route>,
 
       <Route exact path={`${parentPath}/representative-timesheet/mock-interview-2`} key={`${parentPath}/representative-timesheet/mock-interview-2`}>
-        <VolunteerTimesheetMI2 />
+        <VolunteerTimesheet eventTitle="Mock Interview 2" />
       </Route>,
 
       <Route exact path={`${parentPath}/representative-timesheet/portfolio-review-2`} key={`${parentPath}/representative-timesheet/portfolio-review-2`}>
-        <VolunteerTimesheetPR2 />
+        <VolunteerTimesheet eventTitle="Portfolio Review 2" />
       </Route>,
 
       <Route exact path={`${parentPath}/representative-timesheet/virtual-fair`} key={`${parentPath}/representative-timesheet/virtual-fair`}>
@@ -203,19 +194,19 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
     return ([
       <Route exact path={`${parentPath}/volunteer-timesheet/portfolio-review-1`} key={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>
-        <VolunteerTimesheetPR1 />
+        <VolunteerTimesheet eventTitle="Portfolio Review 1" />
       </Route>,
 
       <Route exact path={`${parentPath}/volunteer-timesheet/mock-interview-1`} key={`${parentPath}/volunteer-timesheet/mock-interview-1`}>
-        <VolunteerTimesheetMI1 />
+        <VolunteerTimesheet eventTitle="Mock Interview 1" />
       </Route>,
 
       <Route exact path={`${parentPath}/volunteer-timesheet/mock-interview-2`} key={`${parentPath}/volunteer-timesheet/mock-interview-2`}>
-        <VolunteerTimesheetMI2 />
+        <VolunteerTimesheet eventTitle="Mock Interview 2" />
       </Route>,
 
       <Route exact path={`${parentPath}/volunteer-timesheet/portfolio-review-2`} key={`${parentPath}/volunteer-timesheet/portfolio-review-2`}>
-        <VolunteerTimesheetPR2 />
+        <VolunteerTimesheet eventTitle="Portfolio Review 2" />
       </Route>
     ]);
   }
@@ -237,19 +228,19 @@ class ProfilePage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
     return ([
       <Route exact path={`${parentPath}/student-timesheet/portfolio-review-1`} key={`${parentPath}/student-timesheet/portfolio-review-1`}>
-        <StudentTimesheetPR1 />
+        <StudentTimesheet eventTitle="Portfolio Review 1" />
       </Route>,
 
       <Route exact path={`${parentPath}/student-timesheet/mock-interview-1`} key={`${parentPath}/student-timesheet/mock-interview-1`}>
-        <StudentTimesheetMI1 />
+        <StudentTimesheet eventTitle="Mock Interview 1" />
       </Route>,
 
       <Route exact path={`${parentPath}/student-timesheet/mock-interview-2`} key={`${parentPath}/student-timesheet/mock-interview-2`}>
-        <StudentTimesheetMI2 />
+        <StudentTimesheet eventTitle="Mock Interview 2" />
       </Route>,
 
       <Route exact path={`${parentPath}/student-timesheet/portfolio-review-2`} key={`${parentPath}/student-timesheet/portfolio-review-2`}>
-        <StudentTimesheetPR2 />
+        <StudentTimesheet eventTitle="Portfolio Review 2" />
       </Route>
     ]);
   }

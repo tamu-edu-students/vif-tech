@@ -10,11 +10,10 @@ import User from 'Shared/entityClasses/User';
 
 import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
 import { OptionsContext } from './OptionsContext';
-// import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
 
 
 interface OwnProps {
-
+  eventTitle: string;
 }
 
 interface OwnState {
@@ -24,7 +23,7 @@ interface OwnState {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const event: Event | null = Event.findByTitle('Portfolio Review 2', state.eventData.events);
+  const event: Event | null = Event.findByTitle(ownProps.eventTitle, state.eventData.events);
   const attendees = event?.findAttendees(state.userData.users, state.eventSignupData.eventSignups) ?? [];
   const volunteerAttendees: User[] = attendees.filter((user: User) => user.isVolunteer || user.isRepresentative);
   const studentAttendees: User[] = attendees.filter((user: User) => user.isStudent);
@@ -78,7 +77,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
+class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
   state = {dispatchQueue: {}, isLoading: false, unassignedStudents: []};
 
   public componentDidMount(): void {
@@ -103,12 +102,7 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
       this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
         this.props.event && !student.hasInvitedMeetingsAtEvent(this.props.meetings, this.props.event)
       )});
-    })
-    // if (!this.props.isLoading) {
-    //   this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
-    //     this.props.event && !student.hasInvitationAtEvent(this.props.meetings, this.props.event)
-    //   )});
-    // }
+    });
   }
 
   public componentDidUpdate(): void {
@@ -124,24 +118,9 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
     if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
       this.props.fetchUsers();
     }
-    // if (!this.props.isLoading && !this.state.isLoading) {
-    //   this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
-    //     this.props.event && !student.hasInvitationAtEvent(this.props.meetings, this.props.event)
-    //   )});
-    // }
   }
 
-  // private _reinstateOption = (option: string): void => {
-  //   console.log([...this.state.unassignedStudents, option])
-  //   this.setState({ unassignedStudents: [...this.state.unassignedStudents, option] })
-  // }
-
-  // private _stealOption = (option: string): void => {
-  //   this.setState({ unassignedStudents: this.state.unassignedStudents.filter((unassignedStudent: string) => unassignedStudent !== option) })
-  // }
-
   private _swapOption = (toReinstate: number, toSteal: number): void => {
-    // console.log(toReinstate, toSteal)
     const newArray: User[] = this.state.unassignedStudents.filter((student: User) => student.id !== toSteal);
     if (toReinstate > -1) {
       const studentToReinstate: User | null = User.findById(toReinstate, this.props.studentAttendees);
@@ -152,7 +131,6 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
 
   private _onSaveChanges = (): void => {
     this.setState({ isLoading: true });
-    // console.log(this.state.dispatchQueue);
 
     Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
     .then(() => {
@@ -177,11 +155,19 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     const {
       volunteerAttendees,
+      event
     } = this.props;
+
+    if (this.props.errors.length > 0) {
+      this.props.errors.forEach((error: string) => console.error(error));
+      return (
+        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} assignment sheet`}</div>
+      );
+    }
 
     if (this.props.isLoading) {
       return (
-        <div>Loading Volunteer Timesheet for Portfolio Review 2...</div>
+        <div>{`Loading Meeting Assignment Sheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
       );
     }
 
@@ -191,23 +177,14 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
       );
     }
 
-    if (this.props.errors.length > 0) {
-      this.props.errors.forEach((error: string) => console.error(error));
-      return (
-        <div>Failed to load timesheet</div>
-      );
-    }
-
     return (
       <OptionsContext.Provider value={{
-        // reinstateOption: this._reinstateOption,
-        // stealOption: this._stealOption,
         swapOption: this._swapOption,
         unassignedStudents: this.state.unassignedStudents,
         setReaction: this._setReaction,
       }}>
         <div className="Meeting-Assignment-Sheet">
-          <h2>Meeting Assignment Sheet</h2>
+          <h2>{`${event?.title} Meeting Assignment Sheet`}</h2>
 
           {this._renderVolunteerTables(volunteerAttendees ?? [])}
 
@@ -218,4 +195,4 @@ class MeetingAssignmentSheetPR2 extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(MeetingAssignmentSheetPR2);
+export default connector(MeetingAssignmentSheet);

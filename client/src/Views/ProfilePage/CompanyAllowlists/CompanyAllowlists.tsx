@@ -85,7 +85,9 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
   }
 
   private _renderAllowlists(): JSX.Element[] {
-    return this.props.companies.map((company: Company) => {
+    return this.props.companies
+    .sort((a: Company, b: Company) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+    .map((company: Company) => {
       const { id: company_id, name, } = company;
       const [primaryContact, allowlist_emails, allowlist_domains] = [
         company.findPrimaryContact(this.props.allowlist_emails),

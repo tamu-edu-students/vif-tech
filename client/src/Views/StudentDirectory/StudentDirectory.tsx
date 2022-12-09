@@ -81,7 +81,7 @@ class UsersPage extends React.Component<Props, OwnState> {
 
         <ul className="user-directory__list">
           {this.props.students
-          .sort((a: User, b: User) => a.firstname.toLowerCase().localeCompare(b.lastname.toLowerCase()))
+          .sort((a: User, b: User) => a.lastname.toLowerCase().localeCompare(b.lastname.toLowerCase()))
           .map((user: User) => {
             return (
               <div className="user-directory__user" key={user.id}>

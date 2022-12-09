@@ -9,7 +9,6 @@ import User from 'Shared/entityClasses/User';
 import Meeting from 'Shared/entityClasses/Meeting';
 
 import AssigmentRow from './AssignmentRow/AssigmentRow';
-// import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
 
 
 interface OwnProps {
@@ -45,7 +44,6 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
     return meetings
     .sort((a: Meeting, b: Meeting) => a.start_time.toLowerCase().localeCompare(b.start_time.toLowerCase()))
     .map((meeting: Meeting) => {
-      // const meeting: Meeting | null = 
       return (
         <React.Fragment key={meeting.start_time}>
           <AssigmentRow
