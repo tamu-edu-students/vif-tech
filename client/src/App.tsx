@@ -18,6 +18,7 @@ import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
 import StudentsPage from 'Views/StudentsPage/StudentsPage';
 
+import { VifLogoMark } from 'Components/iconComponents';
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
 
@@ -74,6 +75,7 @@ class App extends React.Component<Props, {}> {
         <Router history={history}>
           <nav className="nav">
             <ul>
+              <Link to="/" className="nav__logo-container"><VifLogoMark className="nav__logo" /></Link>
               <li><Link to="/students" data-testid="student-page-button">Students</Link></li>
               <li><Link to="/faq" data-testid="faq-page-button">FAQ</Link></li>
               <li><Link to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
