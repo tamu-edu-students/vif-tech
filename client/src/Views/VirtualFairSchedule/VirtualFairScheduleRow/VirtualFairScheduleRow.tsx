@@ -1,8 +1,5 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from 'Store/reducers';
-// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-// import {eventActionTypes } from 'Store/actions/types';
 import { } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
@@ -71,8 +68,6 @@ class VirtualFairScheduleRow extends React.Component<Props, OwnState> {
           <div className="table__time-block">{`${startTimeShort}—${endTimeShort}`}</div>
         </div>
         {this._renderCompanyCells()}
-        {/* <div className="table__cell table__cell--name">{assignedVolunteer && `${assignedVolunteer.firstname} ${assignedVolunteer.lastname}`}</div>
-        <div className="table__cell table__cell--email">{assignedVolunteer && assignedVolunteer.email}</div> */}
       </div>
     )
   }
