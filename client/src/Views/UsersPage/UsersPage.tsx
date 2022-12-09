@@ -34,21 +34,23 @@ class UsersPage extends React.Component<Props, OwnState> {
       <div>
         <h1 className="heading-primary">Users</h1>
 
-        {this.props.users.map((user: any) => {
-          return (
-            <div key={user.id}>
-              <h2 className="heading-secondary">{user.email}</h2>
-              <ul>
-                <li>id: {user.id}</li>
-                <li>Email: {user.email}</li>
-                <li>First name: {user.firstname}</li>
-                <li>Last name: {user.lastname}</li>
-                <li>User type: {user.usertype}</li>
-              </ul>
-              <br />
-            </div>
-          );
-        })}
+        <ul className="user-directory__list">
+          {this.props.users.map((user: any) => {
+            return (
+              <div className="user-directory__user" key={user.id}>
+                <h2 className="heading-secondary">{user.email}</h2>
+                <ul className="user-directory__user-info">
+                  <li><span className="user-directory__user-info-title">id:</span> {user.id}</li>
+                  <li><span className="user-directory__user-info-title">Email:</span> <a href={`mailto:${user.email}`}>{user.email}</a></li>
+                  <li><span className="user-directory__user-info-title">First name:</span> {user.firstname}</li>
+                  <li><span className="user-directory__user-info-title">Last name:</span> {user.lastname}</li>
+                  <li><span className="user-directory__user-info-title">User type:</span> {user.usertype}</li>
+                </ul>
+                <br />
+              </div>
+            );
+          })}
+        </ul>
       </div>
     )
   }
