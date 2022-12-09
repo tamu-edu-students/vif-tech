@@ -9,6 +9,8 @@ import User from 'Shared/entityClasses/User';
 import Meeting from 'Shared/entityClasses/Meeting';
 
 import AssigmentRow from './AssignmentRow/AssigmentRow';
+import Focus from 'Shared/entityClasses/Focus';
+import UserFocus from 'Shared/entityClasses/UserFocus';
 
 
 interface OwnProps {
@@ -22,9 +24,14 @@ interface OwnState {
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   const volunteer: User = ownProps.volunteer;
   const meetings: Meeting[] = volunteer.findOwnedMeetings(state.meetingData.meetings);
+  const focusString: string = volunteer
+    .findFocuses(state.focusData.focuses, state.userFocusData.userFocuses)
+    .map((focus: Focus) => focus.name)
+    .join(' | ');
 
   return {
     meetings,
+    focusString,
   };
 };
 const mapDispatchToProps = { };
@@ -60,13 +67,24 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
   public render(): React.ReactElement<Props> {
     const {
       volunteer,
+      volunteer: {title},
       event,
+      focusString
     } = this.props;
 
     return (
-      <div className="Volunteer-Timetable">
-        <h2>{volunteer.firstname} {volunteer.lastname}</h2>
-
+      <div className="Volunteer-Timetable volunteer-timetable">
+        <h2 className='heading-secondary'>{volunteer.firstname} {volunteer.lastname}</h2>
+        {
+          focusString &&
+          <details className="focuses">
+            <summary>Focuses</summary>
+            {focusString}
+          </details>
+        }
+        {
+          title && <div className="title">{title}</div>
+        }
         {
           <>
             <div className="table">

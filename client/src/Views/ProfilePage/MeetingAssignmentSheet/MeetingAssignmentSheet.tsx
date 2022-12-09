@@ -2,8 +2,8 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup } from 'Store/actions';
+import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes, focusActionTypes, userFocusActionTypes } from 'Store/actions/types';
+import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup, fetchFocuses, fetchUserFocuses } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
 import User from 'Shared/entityClasses/User';
@@ -40,6 +40,12 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const eventSignupsAreStale: boolean = state.eventSignupData.isStale;
   const isLoading_fetchEventSignups: boolean = createLoadingSelector([eventSignupActionTypes.FETCH_EVENT_SIGNUPS])(state);
 
+  const focusesAreStale: boolean = state.focusData.isStale;
+  const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
+
+  const userFocusesAreStale: boolean = state.userFocusData.isStale;
+  const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
+
   return {
     event,
     volunteerAttendees,
@@ -57,22 +63,32 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
     eventSignupsAreStale,
     isLoading_fetchEventSignups,
+
+    focusesAreStale,
+    isLoading_fetchFocuses,
+
+    userFocusesAreStale,
+    isLoading_fetchUserFocuses,
     
     isLoading:
       eventsAreStale || isLoading_fetchEvents
       || meetingsAreStale || isLoading_fetchMeetings
       || eventSignupsAreStale || isLoading_fetchEventSignups
-      || usersAreStale || isLoading_fetchUsers,
+      || usersAreStale || isLoading_fetchUsers
+      || focusesAreStale || isLoading_fetchFocuses
+      || userFocusesAreStale || isLoading_fetchUserFocuses,
 
     errors: createErrorMessageSelector([
       eventActionTypes.FETCH_EVENTS,
       meetingActionTypes.FETCH_MEETINGS,
       eventSignupActionTypes.FETCH_EVENT_SIGNUPS,
-      userActionTypes.FETCH_USERS
+      userActionTypes.FETCH_USERS,
+      focusActionTypes.FETCH_FOCUSES,
+      userFocusActionTypes.FETCH_USER_FOCUSES,
     ])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup };
+const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup, fetchFocuses, fetchUserFocuses };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -98,6 +114,15 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
       const promise: Promise<void> = this.props.fetchUsers();
       promises.push(promise);
     }
+    if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
+      const promise: Promise<void> = this.props.fetchFocuses();
+      promises.push(promise);
+    }
+    
+    if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+      const promise: Promise<void> = this.props.fetchUserFocuses();
+      promises.push(promise);
+    }
     Promise.all(promises).then(() => {
       this.setState({ unassignedStudents: this.props.studentAttendees.filter((student: User) =>
         this.props.event && !student.hasInvitedMeetingsAtEvent(this.props.meetings, this.props.event)
@@ -117,6 +142,12 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
     }
     if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
       this.props.fetchUsers();
+    }
+    if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
+      this.props.fetchFocuses();
+    }
+    if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+      this.props.fetchUserFocuses();
     }
   }
 
@@ -146,7 +177,9 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
     return volunteers.map((volunteer: User) => {
       return (
         <React.Fragment key={volunteer.id}>
-            <VolunteerTimetable volunteer={volunteer} event={this.props.event} />
+            <VolunteerTimetable
+              volunteer={volunteer} event={this.props.event}
+            />
         </React.Fragment>
       )
     });
