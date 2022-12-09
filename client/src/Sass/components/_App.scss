@@ -1,8 +1,42 @@
 .App {
   position: relative;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
 
   .logo-mark {
     width: 5rem;
     height: auto;
+  }
+
+  .nav {
+    padding: 1.2rem 2rem;
+
+    ul {
+      font-size: 1.2rem;
+
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    &__name,
+    &__profile-button {
+      background-color: $color-brand-green-darker;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+
+  .main {
+    padding: 0 2rem;
+    flex: 1;
+  }
+
+  .footer {
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    height: 3rem;
+    background-color: $color-violet;
   }
 }

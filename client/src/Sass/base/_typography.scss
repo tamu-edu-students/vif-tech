@@ -6,6 +6,12 @@
   text-align: center;
   margin-bottom: 1rem;
   font-size: 2.2rem;
+  background-color: $color-violet;
+  position: relative;
+  left: -2rem;
+  width: calc(100% + 4rem);
+  padding: 1rem 0;
+  // margin-top: -1rem;;
 }
 
 .heading-secondary {
