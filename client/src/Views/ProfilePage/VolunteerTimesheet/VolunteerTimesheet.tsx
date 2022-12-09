@@ -9,14 +9,16 @@ import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
-import StudentTimesheetRow from './StudentTimesheetRow/StudentTimesheetRow';
+import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
 
 
 interface OwnProps {
-
+  eventTitle: string;
 }
 
 interface OwnState {
+  dispatchQueue: any;
+  isLoading: boolean;
 }
 
 type TimeOption = {
@@ -25,7 +27,7 @@ type TimeOption = {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const event: Event | null = Event.findByTitle('Portfolio Review 2', state.eventData.events);
+  const event: Event | null = Event.findByTitle(ownProps.eventTitle, state.eventData.events);
   const isAttendingEvent: boolean = event ? (state.auth.user?.isAttendingEvent(event, state.eventSignupData.eventSignups) ?? false) : false;
 
   const eventsAreStale: boolean = state.eventData.isStale;
@@ -42,12 +44,12 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
   return {
     event,
-    isAttendingEvent,
     registrationIsOpen: event?.registrationIsOpen,
     isPreRegistration: event?.isPreRegistration,
     isPostRegistration: event?.isPostRegistration,
+    isAttendingEvent,
     users: state.userData.users,
-    meetings: state.auth.user?.findInvitedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
+    meetings: state.auth.user?.findOwnedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
     eventsAreStale,
     isLoading_fetchEvents,
@@ -79,7 +81,9 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
+class VolunteerTimesheet extends React.Component<Props, OwnState> {
+  state = {dispatchQueue: {}, isLoading: false};
+
   public componentDidMount(): void {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
@@ -110,19 +114,35 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     }
   }
 
-  private _renderTimeSlots(timeSlots: any[]): JSX.Element[] {
+  private _onSaveChanges = (): void => {
+    this.setState({ isLoading: true });
+    console.log(Object.values(this.state.dispatchQueue));
+
+    Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
+    .then(() => {
+      this.setState({dispatchQueue: {}, isLoading: false});
+    })
+  }
+
+  private _setReaction = (key: string, reaction: any) => {
+    this.setState({ dispatchQueue: {...this.state.dispatchQueue, [key]: reaction} });
+  }
+
+  private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
       const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
-      const assignedVolunteer: User | undefined = meeting?.findOwner(this.props.users) ?? undefined;
+      const assignedStudent: User | undefined = meeting?.findInvitee(this.props.users) ?? undefined;
       return (
         <React.Fragment key={start_time}>
-          <StudentTimesheetRow
+          <VolunteerTimesheetRow
             start_time={start_time}
             end_time={end_time}
             event_id={event?.id}
             meeting={meeting}
-            assignedVolunteer={assignedVolunteer}
+            assignedStudent={assignedStudent}
+            setReaction={this._setReaction}
+            registrationIsOpen={this.props.registrationIsOpen}
           />
         </React.Fragment>
       );
@@ -138,22 +158,29 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
       isPostRegistration,
     } = this.props;
 
-    if (this.props.isLoading) {
-      return (
-        <div>Loading Student Timesheet for Portfolio Review 2...</div>
-      );
-    }
-
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div>Failed to load timesheet</div>
+        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} timesheet`}</div>
+      );
+    }
+
+    if (this.props.isLoading) {
+      return (
+        <div>{`Loading Volunteer Timesheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
+      );
+    }
+
+    if (this.state.isLoading) {
+      return (
+        <div>Saving changes...</div>
       );
     }
 
     return (
-      <div className="Student-Timesheet">
-        <h2>Student Timesheet</h2>
+      <div className="Volunteer-Timesheet">
+        <h2>{`Volunteer ${event?.title} Timesheet`}</h2>
+
         {
           registrationIsOpen &&
             <button
@@ -166,11 +193,11 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
         }
         {
           isPreRegistration &&
-          <p>Registration is currently not yet open. No registration changes can be made at this time.</p>
+          <p>Registration is currently not yet open. No registration changes or timeslot modifications can be made at this time.</p>
         }
         {
           isPostRegistration &&
-          <p>Registration is currently closed. No registration changes can be made at this time.</p>
+          <p>Registration is currently closed. No registration changes or timeslot modifications can be made at this time.</p>
         }
 
         {
@@ -187,13 +214,18 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
                 <div className="table__row table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
-                  <div className="table__cell table__cell--header">Email</div>
+                  <div className="table__cell table__cell--header">Portfolio</div>
+                  <div className="table__cell table__cell--header">Resume</div>
                 </div>
 
-                {event && this._renderTimeSlots(event.createTimeSlots(20, 5))}
+                {event && this._renderTimeOptions(event.createTimeSlots(20, 5))}
 
               </div>
             </div>
+            {
+              registrationIsOpen && 
+              <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+            }
           </>
         }
       </div>
@@ -201,4 +233,4 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimesheetPR2);
+export default connector(VolunteerTimesheet);
