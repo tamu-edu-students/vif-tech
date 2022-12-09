@@ -6,6 +6,7 @@ import EventSignup from "./EventSignup";
 import Focus from "./Focus";
 import Meeting from "./Meeting";
 import User from "./User";
+import VirtualFairMeeting from "./VirtualFairMeeting";
 
 export interface ICompany {
   id: number;
@@ -60,6 +61,18 @@ export default class Company implements ICompany {
     return Array.from(timeSet.values());
   }
 
+  getAvailabilitiesForVirtualFair(virtualFairMeetings: VirtualFairMeeting[]): TimeOption[] {
+    const timeSet: Set<TimeOption> = new Set<TimeOption>();
+
+    virtualFairMeetings
+      .filter(({company_id}: VirtualFairMeeting) => company_id === this.id)
+      .forEach(({meeting}: VirtualFairMeeting) => {
+        timeSet.add({start_time: meeting.start_time, end_time: meeting.end_time});
+      });
+    
+    return Array.from(timeSet.values());
+  }
+
   public isAttendingEvent(users: User[], event: Event, eventSignups: EventSignup[]): boolean {
     const representatives = this.findRepresentatives(users);
     return representatives.some((rep: User) => rep.isAttendingEvent(event, eventSignups));
@@ -105,5 +118,11 @@ export default class Company implements ICompany {
 
   public static findById(id: number, companies: Company[]): Company | null {
     return companies.find((company: Company) => company.id === id) ?? null;
+  }
+
+  public static findByIds(ids: number[], companies: Company[]): Company[] {
+    return companies.filter((company: Company) =>
+      ids.some((id: number) => id === company.id)
+    );
   }
 }

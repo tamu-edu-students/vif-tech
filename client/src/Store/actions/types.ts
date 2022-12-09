@@ -197,6 +197,20 @@ export const meetingActionTypes = {
 
 
 /********************************************************************************************* */
+/**************************************************************************         VIRTUAL FAIR COMPANY ATTENDANCE */
+/********************************************************************************************* */
+export const virtualFairAttendanceActionTypes = {
+  FETCH_VIRTUAL_FAIR_ATTENDANCE: 'FETCH_VIRTUAL_FAIR_ATTENDANCE',
+  FETCH_VIRTUAL_FAIR_ATTENDANCE__REQUEST: 'FETCH_VIRTUAL_FAIR_ATTENDANCE__REQUEST',
+  FETCH_VIRTUAL_FAIR_ATTENDANCE__SUCCESS: 'FETCH_VIRTUAL_FAIR_ATTENDANCE__SUCCESS',
+  FETCH_VIRTUAL_FAIR_ATTENDANCE__FAILURE: 'FETCH_VIRTUAL_FAIR_ATTENDANCE__FAILURE',
+  
+  SET_VIRTUAL_FAIR_ATTENDANCE_STALENESS: 'SET_VIRTUAL_FAIR_ATTENDANCE_STALENESS',
+};
+
+
+
+/********************************************************************************************* */
 /**************************************************************************         FOCUSES */
 /********************************************************************************************* */
 export const focusActionTypes = {
