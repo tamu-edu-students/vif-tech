@@ -37,15 +37,6 @@ body {
   color: $color-brand-red-light;
 }
 
-.App {
-  .nav {
-    padding: 1rem 2rem;
-  }
-  .main {
-    padding: 0 2rem;
-  }
-}
-
 form {
   width: 30rem;
 
@@ -207,6 +198,33 @@ a {
       display: flex;
     }
   }
+}
+
+.FAQ-Form {
+  width: 100%;
+  max-width: 80rem;
+  
+  textarea {
+    width: 100%;
+  }
+
+  .toolbar {
+    background-color: rgba($color-black, 0.2);
+    padding: 1rem 0;
+    border: none;
+    border-bottom: 1px solid white;
+
+    .rdw-option-wrapper,
+    .rdw-dropdown-wrapper {
+      border: none;
+      background-color: $color-brand-yellow;
+    }
+  }
+
+  button {
+    margin-top: 2rem;
+    margin-right: 1rem;
+  } 
 }
 
 .editor-wrapper {

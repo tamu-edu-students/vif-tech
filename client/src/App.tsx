@@ -81,8 +81,6 @@ class App extends React.Component<Props, {}> {
                 this.props.user
                 ? (
                   <>
-                    <li>firstname: {this.props.user.firstname}</li>
-                    <li>lastname: {this.props.user.lastname}</li>
                     {
                       (this.props.user.isAdmin || this.props.user.isRepresentative) &&
                       <li><Link to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
@@ -91,7 +89,9 @@ class App extends React.Component<Props, {}> {
                       this.props.user.isAdmin &&
                       <li><Link to="/users" data-testid="users-page-button">Users</Link></li>
                     }
-                    <li><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
+                    <li className="nav__name">firstname: {this.props.user.firstname}</li>
+                    <li className="nav__name">lastname: {this.props.user.lastname}</li>
+                    <li className="nav__profile-button"><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
                     <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
                   </>
                 )
@@ -193,6 +193,8 @@ class App extends React.Component<Props, {}> {
               </Route>
             </Switch>
           </main>
+
+          <footer className="footer"></footer>
 
           {
             this.props.shouldShowModal && <Modal />
