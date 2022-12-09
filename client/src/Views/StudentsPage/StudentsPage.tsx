@@ -79,23 +79,26 @@ class StudentsPage extends React.Component<Props, OwnState> {
   state = { companyFilterString: '', filteredCompanies: [] };
 
   public componentDidMount(): void {
+    const promises: Promise<void>[] = [];
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
-      this.props.fetchEvents();
+      promises.push(this.props.fetchEvents());
     }
     if (this.props.virtualFairAttendanceIsStale && !this.props.isLoading_fetchVirtualFairAttendance) {
-      this.props.fetchVirtualFairAttendance();
+      promises.push(this.props.fetchVirtualFairAttendance());
     }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
-      this.props.fetchCompanies();
+      promises.push(this.props.fetchCompanies());
     }
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.companyFocusesAreStale && !this.props.isLoading_fetchCompanyFocuses) {
-      this.props.fetchCompanyFocuses();
+      promises.push(this.props.fetchCompanyFocuses());
     }
 
-    this.setState({ filteredCompanies: this.props.attendingCompanies });
+    Promise.all(promises).then(() => {
+      this.setState({ filteredCompanies: this.props.attendingCompanies });
+    });
   }
 
   private _renderCompanyCards(): JSX.Element[] {
@@ -117,6 +120,24 @@ class StudentsPage extends React.Component<Props, OwnState> {
     });
   }
 
+  private _renderCompanySearch(): JSX.Element {
+    return (
+      <>
+        <input
+          className="company-search-bar"
+          type="text"
+          name="company-filter"
+          id="company-filter"
+          value={this.state.companyFilterString}
+          onChange={this._onFilterChange}
+        />
+        <div className="attending-companies-grid">
+          {this._renderCompanyCards()}
+        </div>
+      </>
+    );
+  }
+
   private _onFilterChange = (event: any) => {
     const newFilterString = event.target.value;
 
@@ -136,17 +157,8 @@ class StudentsPage extends React.Component<Props, OwnState> {
   }
 
   public render(): React.ReactElement<Props> {
-    if (this.props.isLoading) {
-      return (
-        <div>Loading Company Search...</div>
-      );
-    }
-
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
-      return (
-        <div className="error">Failed to load attending companies</div>
-      );
     }
 
     return (
@@ -154,17 +166,15 @@ class StudentsPage extends React.Component<Props, OwnState> {
         <h1 className="heading-primary">Students</h1>
         <section className="section section--attending-companies">
           <h2 className="heading-secondary">Attending Companies</h2>
-          <div className="attending-companies-grid">
-            <input
-              className="company-search-bar"
-              type="text"
-              name="company-filter"
-              id="company-filter"
-              value={this.state.companyFilterString}
-              onChange={this._onFilterChange}
-            />
-            {this._renderCompanyCards()}
-          </div>
+          {
+            this.props.errors.length > 0
+            ? <div className="error">Failed to load attending companies</div>
+            : (
+              this.props.isLoading
+              ? <div>Loading Company Search...</div>
+              : this._renderCompanySearch()
+            )
+          }
         </section>
       </div>
     );
