@@ -115,7 +115,7 @@ class StudentsPage extends React.Component<Props, OwnState> {
             {
               website_link === ''
               ? <div className='company-card__name'>{name}</div>
-              : <a className='company-card__name' href={website_link} target="_blank">{name}</a>
+              : <a className='company-card__name' href={website_link} target="_blank" rel="noreferrer">{name}</a>
             }
             <div className='company-card__focuses'>{`${focusStrings.join(' | ')}`}</div>
           </div>
