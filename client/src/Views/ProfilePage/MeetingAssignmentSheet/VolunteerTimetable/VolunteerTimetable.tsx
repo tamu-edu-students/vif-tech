@@ -10,7 +10,6 @@ import Meeting from 'Shared/entityClasses/Meeting';
 
 import AssigmentRow from './AssignmentRow/AssigmentRow';
 import Focus from 'Shared/entityClasses/Focus';
-import UserFocus from 'Shared/entityClasses/UserFocus';
 
 
 interface OwnProps {
