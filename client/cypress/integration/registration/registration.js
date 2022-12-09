@@ -52,13 +52,15 @@ Given(`I am about to submit invalid data`, () => {
 });
 
 When(`I provide the following details:`, (table) => {
-  const { email, firstname, lastname, password, password_confirmation} = table.hashes()[0];
+  const { email, firstname, lastname, password, password_confirmation, class_year, class_semester} = table.hashes()[0];
 
   email && cy.findByLabelText(/email/i).type(email);
   firstname && cy.findByLabelText(/first name/i).type(firstname);
   lastname && cy.findByLabelText(/last name/i).type(lastname);
   password && cy.findByLabelText(/^password$/i).type(password);
   password_confirmation && cy.findByLabelText(/confirm password/i).type(password_confirmation);
+  class_year && cy.findByLabelText(/expected graduation year/i).select(class_year);
+  class_semester && cy.findByLabelText(/expected graduation term/i).select(class_semester);
 });
 
 When(`I choose the following usertype:`, (table) => {
@@ -80,7 +82,7 @@ And(`I click the sign up button --no waiting--`, () => {
 And(`the provided credentials should match the resulting user`, table => {
   const fields = table.hashes()[0];
   // compare each value in the table to each corresponding field in the user object
-    Object.entries(fields).forEach(([key, value]) => expect(registeredUser[key]).to.eq(value));
+    Object.entries(fields).forEach(([key, value]) => expect(registeredUser[key]).to.eq(typeof registeredUser[key] === 'number' ? Number.parseInt(value) : value));
 });
 
 Then(`I should see an error`, () => {
