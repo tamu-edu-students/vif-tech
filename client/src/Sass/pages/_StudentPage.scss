@@ -1,5 +1,10 @@
 .student-page {
   .section--attending-companies {
+    .heading-secondary {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
     .attending-companies-grid {
       width: 100rem;
       margin: 0 auto;
@@ -7,6 +12,11 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8rem;
+
+      .company-search-bar {
+        grid-column: 1 / -1;
+        margin-bottom: -4rem;
+      }
       
       .company-card-container {
         // padding: 5rem;
@@ -45,6 +55,7 @@
           font-family: $font-body;
           font-size: 2rem;
           font-weight: 700;
+          margin-bottom: 1rem;
         }
 
         &__focuses {

@@ -13,7 +13,8 @@ interface OwnProps {
 }
 
 interface OwnState {
-  
+  companyFilterString: string;
+  filteredCompanies: Company[];
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -75,6 +76,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class StudentsPage extends React.Component<Props, OwnState> {
+  state = { companyFilterString: '', filteredCompanies: [] };
+
   public componentDidMount(): void {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
@@ -91,11 +94,13 @@ class StudentsPage extends React.Component<Props, OwnState> {
     if (this.props.companyFocusesAreStale && !this.props.isLoading_fetchCompanyFocuses) {
       this.props.fetchCompanyFocuses();
     }
+
+    this.setState({ filteredCompanies: this.props.attendingCompanies });
   }
 
   private _renderCompanyCards(): JSX.Element[] {
-    const { attendingCompanies } = this.props;
-    return attendingCompanies.map((company: Company) => {
+    const { filteredCompanies } = this.state;
+    return filteredCompanies.map((company: Company) => {
       const { name, logo_img_src } = company;
       const focusStrings: string[] = company.findFocuses(this.props.focuses, this.props.companyFocuses).map((focus: Focus) => focus.name);
       return (
@@ -110,6 +115,24 @@ class StudentsPage extends React.Component<Props, OwnState> {
         </div>
       );
     });
+  }
+
+  private _onFilterChange = (event: any) => {
+    const newFilterString = event.target.value;
+
+    this.setState({ companyFilterString: newFilterString });
+    
+    if (newFilterString) {
+      this.setState({ filteredCompanies: this.props.attendingCompanies.filter((company: Company) => {
+        return company.name.toLowerCase().includes(newFilterString.trim().toLowerCase())
+        || company
+          .findFocuses(this.props.focuses, this.props.companyFocuses)
+          .some((focus: Focus) => focus.name.toLowerCase().includes(newFilterString.trim().toLowerCase()))
+      })})
+    }
+    else {
+      this.setState({ filteredCompanies: this.props.attendingCompanies });
+    }
   }
 
   public render(): React.ReactElement<Props> {
@@ -132,6 +155,14 @@ class StudentsPage extends React.Component<Props, OwnState> {
         <section className="section section--attending-companies">
           <h2 className="heading-secondary">Attending Companies</h2>
           <div className="attending-companies-grid">
+            <input
+              className="company-search-bar"
+              type="text"
+              name="company-filter"
+              id="company-filter"
+              value={this.state.companyFilterString}
+              onChange={this._onFilterChange}
+            />
             {this._renderCompanyCards()}
           </div>
         </section>
