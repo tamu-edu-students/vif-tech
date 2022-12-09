@@ -1,7 +1,10 @@
 import React from 'react';
+import { IRootState } from 'Store/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 
 import User from 'Shared/entityClasses/User';
+import Focus from 'Shared/entityClasses/Focus';
+import UserFocus from 'Shared/entityClasses/UserFocus';
 
 import { OptionsContext } from 'Views/ProfilePage/MeetingAssignmentSheet/OptionsContext';
 
@@ -17,7 +20,12 @@ interface OwnState {
   student: User | null;
 }
 
-const mapStateToProps = null;
+const mapStateToProps = (state: IRootState) => {
+  return {
+    focuses: state.focusData.focuses,
+    userFocuses: state.userFocusData.userFocuses
+  }
+};
 const mapDispatchToProps = { };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -51,17 +59,31 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
     return [...this.context.unassignedStudents, ...(this.state.student  ? [this.state.student] : [])]
     .sort((a: User, b: User) => a.email.toLowerCase().localeCompare(b.email.toLowerCase()))
     .map((student: User, index: number) => (
-      <option key={`${this.props.keyVal}_${index}`} value={student.id}>{student.email}</option>
-    ))
+      <option key={`${this.props.keyVal}_${index}`} value={student.id}>{`${student.firstname} ${student.lastname} (${student.email})`}</option>
+    ));
   }
 
   render() {
+    const {
+      focuses,
+      userFocuses
+    } = this.props;
+
+    const focusString: string = this.state.student
+      ? (this.state.student as User).findFocuses(focuses, userFocuses)
+        .map((focus: Focus) => focus.name)
+        .join(' | ')
+      : '';
+
     return (
       <>
-        <select value={this.state.value} onChange={this._onChange}>
+        <select className="student-select-form" value={this.state.value} onChange={this._onChange}>
           <option value={-1}>UNASSIGNED</option>
           {this._renderOptions()}
         </select>
+        {
+          focusString && <div className="student-focuses">{focusString}</div>
+        }
       </>
     );
   }

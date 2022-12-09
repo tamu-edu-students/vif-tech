@@ -77,7 +77,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
         <h2 className='heading-secondary'>{volunteer.firstname} {volunteer.lastname}</h2>
         {
           focusString &&
-          <details className="focuses">
+          <details className="focuses" open>
             <summary>Focuses</summary>
             {focusString}
           </details>
