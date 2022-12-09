@@ -23,6 +23,7 @@ import Modal from 'Components/Modal/Modal';
 
 import './Sass/main.scss';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import StudentDirectory from 'Views/StudentDirectory/StudentDirectory';
 
 
 interface OwnProps {
@@ -82,6 +83,10 @@ class App extends React.Component<Props, {}> {
                   <>
                     <li>firstname: {this.props.user.firstname}</li>
                     <li>lastname: {this.props.user.lastname}</li>
+                    {
+                      (this.props.user.isAdmin || this.props.user.isRepresentative) &&
+                      <li><Link to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
+                    }
                     <li><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
                     <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
                   </>
@@ -129,7 +134,10 @@ class App extends React.Component<Props, {}> {
               </Route>
 
               <Route exact path="/users/new">
-                <RegistrationPage />
+                { this.props.user
+                  ? <Redirect to="/" />
+                  : <RegistrationPage />
+                }
               </Route>
 
               <Route exact path="/users/new/success">
@@ -148,6 +156,13 @@ class App extends React.Component<Props, {}> {
                   : <LoginPage />
                 }
               </Route>
+
+              {
+                (this.props.user?.isAdmin || this.props.user?.isRepresentative) &&
+                <Route exact path="/student-directory">
+                  <StudentDirectory />
+                </Route>
+              }
 
               <Route
                 path={"/profile"}
