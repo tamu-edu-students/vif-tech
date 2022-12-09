@@ -6,10 +6,8 @@ import { IRootState } from 'Store/reducers';
 import { } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
-import Event from 'Shared/entityClasses/Event';
-import Meeting from 'Shared/entityClasses/Meeting';
-import User from 'Shared/entityClasses/User';
 import Company from 'Shared/entityClasses/Company';
+import VirtualFairMeeting from 'Shared/entityClasses/VirtualFairMeeting';
 
 type TimeOption = {
   start_time: string;
@@ -19,19 +17,14 @@ type TimeOption = {
 interface OwnProps {
   start_time: string;
   end_time: string;
-  event: Event;
-  users: User[];
-  meetings: Meeting[];
+  virtualFairMeetings: VirtualFairMeeting[];
   attendingCompanies: Company[];
 }
 
 interface OwnState {
 }
 
-const mapStateToProps = (state: IRootState, ownProps: any) => {
-  return {
-  };
-};
+const mapStateToProps = null
 const mapDispatchToProps = { };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -43,9 +36,9 @@ class VirtualFairScheduleRow extends React.Component<Props, OwnState> {
   }
 
   private _renderCompanyCells(): JSX.Element[] {
-    const { users, meetings, event, start_time, end_time } = this.props;
+    const { virtualFairMeetings, start_time, end_time } = this.props;
     return this.props.attendingCompanies.map((company: Company) => {
-      const matchesTimeBlock: boolean = company.getRepAvailabilitiesForEvent(users, meetings, event)
+      const matchesTimeBlock: boolean = company.getAvailabilitiesForVirtualFair(virtualFairMeetings)
         .some((timeOption: TimeOption) => {
           return timeOption.start_time === start_time && timeOption.end_time === end_time;
         });

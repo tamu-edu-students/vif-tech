@@ -31,8 +31,8 @@ export default class VirtualFairMeeting implements IVirtualFairMeeting {
     this.id = id;
     this.company_id = company_id;
     this.meeting = new Meeting(meetingJSON);
-    this.start_time = this.meeting.start_time;
-    this.end_time = this.meeting.end_time;
+    this.start_time = meetingJSON.start_time;
+    this.end_time = meetingJSON.end_time;
   }
   
   public findCompany(companies: Company[]): Company | null {

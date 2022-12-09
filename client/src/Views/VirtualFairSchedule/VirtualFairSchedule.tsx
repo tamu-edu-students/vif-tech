@@ -2,11 +2,10 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes, companyActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, fetchCompanies } from 'Store/actions';
+import { eventActionTypes, companyActionTypes, virtualFairMeetingActionTypes } from 'Store/actions/types';
+import { fetchEvents, fetchCompanies, fetchVirtualFairMeetings } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
-// import Meeting from 'Shared/entityClasses/Meeting';
 import Company from 'Shared/entityClasses/Company';
 
 import VirtualFairScheduleRow from './VirtualFairScheduleRow/VirtualFairScheduleRow';
@@ -30,57 +29,38 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const eventsAreStale: boolean = state.eventData.isStale;
   const isLoading_fetchEvents: boolean = createLoadingSelector([eventActionTypes.FETCH_EVENTS])(state);
 
-  const meetingsAreStale: boolean = state.meetingData.isStale;
-  const isLoading_fetchMeetings: boolean = createLoadingSelector([meetingActionTypes.FETCH_MEETINGS])(state);
-
-  const eventSignupsAreStale: boolean = state.eventSignupData.isStale;
-  const isLoading_fetchEventSignups: boolean = createLoadingSelector([eventSignupActionTypes.FETCH_EVENT_SIGNUPS])(state);
-  
-  const usersAreStale: boolean = state.userData.isStale;
-  const isLoading_fetchUsers: boolean = createLoadingSelector([userActionTypes.FETCH_USERS])(state);
+  const virtualFairMeetingsAreStale: boolean = state.virtualFairMeetingData.isStale;
+  const isLoading_fetchVirtualFairMeetings: boolean = createLoadingSelector([virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS])(state);
 
   const companiesAreStale: boolean = state.companyData.isStale;
   const isLoading_fetchCompanies: boolean = createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state);
 
   return {
     event,
-    users: state.userData.users,
-    meetings: state.meetingData.meetings,
-    attendingCompanies: event
-     ? state.companyData.companies.filter((company: Company) => company.isAttendingEvent(state.userData.users, event, state.eventSignupData.eventSignups))
-     : [],
+    virtualFairMeetings: state.virtualFairMeetingData.virtualFairMeetings,
+    attendingCompanies: Company.findByIds(state.virtualFairMeetingData.attendingCompanyIds, state.companyData.companies),
 
     eventsAreStale,
     isLoading_fetchEvents,
 
-    meetingsAreStale,
-    isLoading_fetchMeetings,
-
-    eventSignupsAreStale,
-    isLoading_fetchEventSignups,
-
-    usersAreStale,
-    isLoading_fetchUsers,
+    virtualFairMeetingsAreStale,
+    isLoading_fetchVirtualFairMeetings,
 
     companiesAreStale,
     isLoading_fetchCompanies,
     
     isLoading:
       eventsAreStale || isLoading_fetchEvents
-      || meetingsAreStale || isLoading_fetchMeetings
-      || eventSignupsAreStale || isLoading_fetchEventSignups
-      || usersAreStale || isLoading_fetchUsers
+      || virtualFairMeetingsAreStale || isLoading_fetchVirtualFairMeetings
       || companiesAreStale || isLoading_fetchCompanies,
     errors: createErrorMessageSelector([
       eventActionTypes.FETCH_EVENTS,
-      meetingActionTypes.FETCH_MEETINGS,
-      eventSignupActionTypes.FETCH_EVENT_SIGNUPS,
-      userActionTypes.FETCH_USERS,
+      virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS,
       companyActionTypes.FETCH_COMPANIES,
     ])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, fetchCompanies };
+const mapDispatchToProps = { fetchEvents, fetchCompanies, fetchVirtualFairMeetings };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
@@ -90,14 +70,8 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
     }
-    if (this.props.meetingsAreStale && !this.props.isLoading_fetchMeetings) {
-      this.props.fetchMeetings();
-    }
-    if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
-      this.props.fetchEventSignups();
-    }
-    if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
-      this.props.fetchUsers();
+    if (this.props.virtualFairMeetingsAreStale && !this.props.isLoading_fetchVirtualFairMeetings) {
+      this.props.fetchVirtualFairMeetings();
     }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
       this.props.fetchCompanies();
@@ -108,14 +82,8 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
     }
-    if (this.props.meetingsAreStale && !this.props.isLoading_fetchMeetings) {
-      this.props.fetchMeetings();
-    }
-    if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
-      this.props.fetchEventSignups();
-    }
-    if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
-      this.props.fetchUsers();
+    if (this.props.virtualFairMeetingsAreStale && !this.props.isLoading_fetchVirtualFairMeetings) {
+      this.props.fetchVirtualFairMeetings();
     }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
       this.props.fetchCompanies();
@@ -123,16 +91,13 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
   }
 
   private _renderTimeSlots(timeSlots: any[]): JSX.Element[] {
-    const { event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
       return (
         <React.Fragment key={start_time}>
           <VirtualFairScheduleRow
             start_time={start_time}
             end_time={end_time}
-            event={event}
-            users={this.props.users}
-            meetings={this.props.meetings}
+            virtualFairMeetings={this.props.virtualFairMeetings}
             attendingCompanies={this.props.attendingCompanies}
           />
         </React.Fragment>
@@ -162,7 +127,7 @@ class VirtualFairSchedule extends React.Component<Props, OwnState> {
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div>Failed to load schedule</div>
+        <div className="error">Failed to load schedule</div>
       );
     }
 

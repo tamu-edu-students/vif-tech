@@ -33,6 +33,7 @@ import EventSignup from 'Shared/entityClasses/EventSignup';
 import Focus from 'Shared/entityClasses/Focus';
 import UserFocus from 'Shared/entityClasses/UserFocus';
 import CompanyFocus from 'Shared/entityClasses/CompanyFocus';
+import VirtualFairMeeting from 'Shared/entityClasses/VirtualFairMeeting';
 
 /********************************************************************************************* */
 /**************************************************************************         USERS */
@@ -321,6 +322,7 @@ export const deleteAllowlistEmail = (id: number, allowlistTitle: string) => asyn
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
     dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
     dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: true });
+    dispatch({ type: virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistEmail response_delete:', response_delete);
@@ -338,6 +340,7 @@ export const deleteAllowlistDomain = (id: number, allowlistTitle: string) => asy
     dispatch({ type: userActionTypes.SET_USERS_STALENESS, payload: true });
     dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
     dispatch({ type: userFocusActionTypes.SET_USER_FOCUSES_STALENESS, payload: true });
+    dispatch({ type: virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS, payload: true });
   })
   .catch((response_delete) => {
     console.log('deleteAllowlistDomain response_delete:', response_delete);
@@ -413,6 +416,7 @@ export const createEventSignup = (event_id: number, user_id?: number) => async (
   .then((response) => {
     console.log('response addEventAttendee:', response);
     dispatch({ type: eventSignupActionTypes.CREATE_EVENT_SIGNUP__SUCCESS, payload: EventSignup.createEventSignup(response.data.event_signup) });
+    dispatch({ type: virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS, payload: true });
   })
   .catch((response) => {
     console.log('response_addEventAttendee', response);
@@ -427,6 +431,7 @@ export const deleteEventSignup = (event_id: number, user_id?: number) => async (
     console.log('response removeEventAttendee:', response);
     dispatch({ type: eventSignupActionTypes.DELETE_EVENT_SIGNUP__SUCCESS, payload: response.data.event_signup.id });
     dispatch({ type: meetingActionTypes.SET_MEETINGS_STALENESS, payload: true });
+    dispatch({ type: virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS, payload: true });
   })
   .catch((response) => {
     console.log('response_removeEventAttendee', response);
@@ -506,13 +511,24 @@ export const updateMeeting = (meetingId: number, newInviteeId: number) => async 
 /********************************************************************************************* */
 export const fetchVirtualFairMeetings = () => async (dispatch: any) => {
   dispatch({ type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__REQUEST });
-  await vifTech.get(`/events/company_meetings/?event_title=Virtual Fair`)
-  .then(response => {
-    console.log('response_virtualFairMeetings:', response);
-    dispatch({ type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS, payload: response.data.company_meetings })
+  await Promise.all([
+    vifTech.get(`/events/company_meetings/?event_title=Virtual Fair`),
+    vifTech.get(`/events/attending_companies/?event_title=Virtual Fair`)
+  ])
+  .then(([response_virtualFairMeetings, response_company_ids]) => {
+    console.log('response_virtualFairMeetings:', response_virtualFairMeetings);
+    console.log('response_attendingCompanyIds:', response_company_ids);
+    dispatch({
+      type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS,
+      payload: {
+        virtualFairMeetings: VirtualFairMeeting.createVirtualFairMeetings(response_virtualFairMeetings.data.company_meetings),
+        attendingCompanyIds: response_company_ids.data.attending_companies,
+      }
+    });
+    dispatch({ type: virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS, payload: false });
   })
-  .catch(response => {
-    console.log('response_virtualFairMeetings:', response);
+  .catch((response) => {
+    console.log('response_fetchVirtualFairMeetings:', response);
     dispatch({ type: virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__FAILURE, payload: {error: 'ERROR: Failed to fetch Virtual Fair data'} });
   });
 }

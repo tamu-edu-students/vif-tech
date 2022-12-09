@@ -3,18 +3,21 @@ import { virtualFairMeetingActionTypes } from "Store/actions/types";
 
 export interface Store_VirtualFairMeetingData {
   virtualFairMeetings: VirtualFairMeeting[];
+  attendingCompanyIds: number[];
   isStale: boolean;
 }
 
 const INITIAL_STATE: Store_VirtualFairMeetingData = {
   virtualFairMeetings: [],
+  attendingCompanyIds: [],
   isStale: true,
 }
 
 const virtualFairMeetingReducer = (state: Store_VirtualFairMeetingData = INITIAL_STATE, action: any): Store_VirtualFairMeetingData => {
   switch(action.type) {
     case virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS:
-      return {...state, virtualFairMeetings: action.payload};
+      console.log(action.payload)
+      return {...state, ...action.payload};
     case virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS:
       return {...state, isStale: action.payload}
     default:
