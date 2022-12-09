@@ -78,7 +78,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
         {
           focusString &&
           <details className="focuses" open>
-            <summary>Focuses</summary>
+            <summary>Specialties</summary>
             {focusString}
           </details>
         }
