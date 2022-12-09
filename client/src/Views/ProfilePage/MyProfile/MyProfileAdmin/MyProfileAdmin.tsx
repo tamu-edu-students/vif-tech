@@ -33,7 +33,7 @@ const mapStateToProps = (state: IRootState) => {
   // const errors_fetchUserFocuses: string[] = createErrorMessageSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
 
   const isLoading: boolean = /*isLoading_fetchFocuses || focusesAreStale || isLoading_fetchUserFocuses || userFocusesAreStale*/ false;
-  const errors_breaking: string[] = [/*...errors_fetchFocuses, ...errors_fetchUserFocuses*/];
+  // const errors_breaking: string[] = [/*...errors_fetchFocuses, ...errors_fetchUserFocuses*/];
 
   return {
     user,
@@ -48,7 +48,7 @@ const mapStateToProps = (state: IRootState) => {
     // userFocusesAreStale,
 
     isLoading,
-    errors_breaking,
+    // errors_breaking,
   };
 };
 const mapDispatchToProps = { updateUser, fetchFocuses, fetchUserFocuses, updateUserFocuses };
@@ -137,10 +137,10 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
       this.props.errors_updateUser.forEach((error: string) => console.error(error));
     }
 
-    if (this.props.errors_breaking.length > 0) {
-      this.props.errors_breaking.forEach((error: string) => console.error(error));
-      return <div className="error">{this.props.errors_breaking}</div>
-    }
+    // if (this.props.errors_breaking.length > 0) {
+    //   this.props.errors_breaking.forEach((error: string) => console.error(error));
+    //   return <div className="error">{this.props.errors_breaking}</div>
+    // }
 
     if (this.state.isLoading) {
       return (

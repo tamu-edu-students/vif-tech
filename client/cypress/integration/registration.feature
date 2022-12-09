@@ -1,6 +1,6 @@
 Feature: Registration
 
-  Background: visit registration page
+  Background: not logged in
   Given I am not logged in
 
   Scenario Outline: valid student registration

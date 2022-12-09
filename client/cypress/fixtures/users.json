@@ -15,6 +15,14 @@
       "lastname": "admin",
       "password": "pw",
       "usertype": "admin"
+    },
+    {
+      "id": 3,
+      "email": "rep1@rep1.com",
+      "firstname": "rep1",
+      "lastname": "repperton",
+      "password": "pw",
+      "usertype": "company representative"
     }
   ]
 }
