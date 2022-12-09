@@ -1,5 +1,5 @@
 import VirtualFairMeeting from "Shared/entityClasses/VirtualFairMeeting";
-import { virtualFairMeetingActionTypes } from "Store/actions/types";
+import { virtualFairAttendanceActionTypes } from "Store/actions/types";
 
 export interface Store_VirtualFairMeetingData {
   virtualFairMeetings: VirtualFairMeeting[];
@@ -15,10 +15,9 @@ const INITIAL_STATE: Store_VirtualFairMeetingData = {
 
 const virtualFairMeetingReducer = (state: Store_VirtualFairMeetingData = INITIAL_STATE, action: any): Store_VirtualFairMeetingData => {
   switch(action.type) {
-    case virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS:
-      console.log(action.payload)
+    case virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE__SUCCESS:
       return {...state, ...action.payload};
-    case virtualFairMeetingActionTypes.SET_VIRTUAL_FAIR_MEETINGS_STALENESS:
+    case virtualFairAttendanceActionTypes.SET_VIRTUAL_FAIR_ATTENDANCE_STALENESS:
       return {...state, isStale: action.payload}
     default:
       return state;

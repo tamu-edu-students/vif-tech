@@ -197,15 +197,15 @@ export const meetingActionTypes = {
 
 
 /********************************************************************************************* */
-/**************************************************************************         VIRTUAL FAIR COMPANY MEETINGS */
+/**************************************************************************         VIRTUAL FAIR COMPANY ATTENDANCE */
 /********************************************************************************************* */
-export const virtualFairMeetingActionTypes = {
-  FETCH_VIRTUAL_FAIR_MEETINGS: 'FETCH_VIRTUAL_FAIR_MEETINGS',
-  FETCH_VIRTUAL_FAIR_MEETINGS__REQUEST: 'FETCH_VIRTUAL_FAIR_MEETINGS__REQUEST',
-  FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS: 'FETCH_VIRTUAL_FAIR_MEETINGS__SUCCESS',
-  FETCH_VIRTUAL_FAIR_MEETINGS__FAILURE: 'FETCH_VIRTUAL_FAIR_MEETINGS__FAILURE',
+export const virtualFairAttendanceActionTypes = {
+  FETCH_VIRTUAL_FAIR_ATTENDANCE: 'FETCH_VIRTUAL_FAIR_ATTENDANCE',
+  FETCH_VIRTUAL_FAIR_ATTENDANCE__REQUEST: 'FETCH_VIRTUAL_FAIR_ATTENDANCE__REQUEST',
+  FETCH_VIRTUAL_FAIR_ATTENDANCE__SUCCESS: 'FETCH_VIRTUAL_FAIR_ATTENDANCE__SUCCESS',
+  FETCH_VIRTUAL_FAIR_ATTENDANCE__FAILURE: 'FETCH_VIRTUAL_FAIR_ATTENDANCE__FAILURE',
   
-  SET_VIRTUAL_FAIR_MEETINGS_STALENESS: 'SET_VIRTUAL_FAIR_MEETINGS_STALENESS',
+  SET_VIRTUAL_FAIR_ATTENDANCE_STALENESS: 'SET_VIRTUAL_FAIR_ATTENDANCE_STALENESS',
 };
 
 

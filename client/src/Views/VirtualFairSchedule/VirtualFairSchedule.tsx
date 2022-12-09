@@ -2,8 +2,8 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { eventActionTypes, companyActionTypes, virtualFairMeetingActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchCompanies, fetchVirtualFairMeetings } from 'Store/actions';
+import { eventActionTypes, companyActionTypes, virtualFairAttendanceActionTypes } from 'Store/actions/types';
+import { fetchEvents, fetchCompanies, fetchVirtualFairAttendance } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
 import Company from 'Shared/entityClasses/Company';
@@ -30,7 +30,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const isLoading_fetchEvents: boolean = createLoadingSelector([eventActionTypes.FETCH_EVENTS])(state);
 
   const virtualFairMeetingsAreStale: boolean = state.virtualFairMeetingData.isStale;
-  const isLoading_fetchVirtualFairMeetings: boolean = createLoadingSelector([virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS])(state);
+  const isLoading_fetchVirtualFairMeetings: boolean = createLoadingSelector([virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE])(state);
 
   const companiesAreStale: boolean = state.companyData.isStale;
   const isLoading_fetchCompanies: boolean = createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state);
@@ -55,12 +55,12 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
       || companiesAreStale || isLoading_fetchCompanies,
     errors: createErrorMessageSelector([
       eventActionTypes.FETCH_EVENTS,
-      virtualFairMeetingActionTypes.FETCH_VIRTUAL_FAIR_MEETINGS,
+      virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE,
       companyActionTypes.FETCH_COMPANIES,
     ])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchCompanies, fetchVirtualFairMeetings };
+const mapDispatchToProps = { fetchEvents, fetchCompanies, fetchVirtualFairMeetings: fetchVirtualFairAttendance };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
