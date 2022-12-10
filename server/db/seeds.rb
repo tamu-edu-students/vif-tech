@@ -179,3 +179,17 @@ answer3 = "<p>Absolutely! Student volunteers are essential for the Industry Fair
 FAQ.create(question: "<p>Do I need to register to attend the fair?</p>\n", answer: answer1);
 FAQ.create(question: "<p>What is the dress code?</p>\n", answer: answer2);
 FAQ.create(question: "<p>Can I volunteer to help with the Industries Fair?</p>\n", answer: answer3);
+
+EventSignup.create(user_id: 9, event_id: 5);
+EventSignup.create(user_id: 10, event_id: 5);
+EventSignup.create(user_id: 11, event_id: 5);
+EventSignup.create(user_id: 12, event_id: 5);
+EventSignup.create(user_id: 13, event_id: 5);
+EventSignup.create(user_id: 14, event_id: 5);
+EventSignup.create(user_id: 15, event_id: 5);
+EventSignup.create(user_id: 16, event_id: 5);
+EventSignup.create(user_id: 17, event_id: 5);
+EventSignup.create(user_id: 18, event_id: 5);
+EventSignup.create(user_id: 19, event_id: 5);
+EventSignup.create(user_id: 20, event_id: 5);
+EventSignup.create(user_id: 21, event_id: 5);
