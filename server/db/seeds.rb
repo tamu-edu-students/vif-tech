@@ -176,9 +176,9 @@ CompanyFocus.create(company_id: 7, focus_id: 1);
 answer1 = "<p>YES. You must register <a href=\"https://www.test-vizindustryfair.com/users/new\" target=\"_blank\">HERE</a></p>\n<p><br>For  in-person fairs: You will receive a printed name tag the day of the Industries Fair and your contact information will be made available to company representatives who may need to contact you after the fair.<br><br>For Virtual Fairs: Please make sure your virtual name is your first and last name, and your focus is mentioned afterwards.<br>For example: Mayet Andreassen - Modeling/LookDev, or Mayet Andreassen - UI/UX, ect.<br>&nbsp;</p>\n"
 answer2 = "<p>You should wear clothes that are professionally appropriate for the position for which you are applying.<br>If you’re unsure of what to wear, you should always dress to impress.&nbsp;</p>"
 answer3 = "<p>Absolutely! Student volunteers are essential for the Industry Fair to run smoothly.<br>Please email our student representatives at pvfavizindustryfair@tamu.edu if you are interested in participating.&nbsp;</p>\n"
-FAQ.create(question: "<p>Do I need to register to attend the fair?</p>\n", answer: answer1);
-FAQ.create(question: "<p>What is the dress code?</p>\n", answer: answer2);
-FAQ.create(question: "<p>Can I volunteer to help with the Industries Fair?</p>\n", answer: answer3);
+Faq.create(question: "<p>Do I need to register to attend the fair?</p>\n", answer: answer1);
+Faq.create(question: "<p>What is the dress code?</p>\n", answer: answer2);
+Faq.create(question: "<p>Can I volunteer to help with the Industries Fair?</p>\n", answer: answer3);
 
 EventSignup.create(user_id: 9, event_id: 5);
 EventSignup.create(user_id: 10, event_id: 5);
