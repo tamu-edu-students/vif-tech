@@ -14,7 +14,7 @@ class User < ApplicationRecord
                             :message => "%{value} is not a valid usertype" }
 
   validates :class_semester, 
-            :inclusion => { :in => ['fall', 'spring', 'winter'], 
+            :inclusion => { :in => ['spring','summer','fall'], 
                             :message => "class_semester must be fall, winter, or spring" }, 
             :allow_nil => true
 
