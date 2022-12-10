@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   validates :class_semester, 
             :inclusion => { :in => ['spring','summer','fall'], 
-                            :message => "class_semester must be fall, winter, or spring" }, 
+                            :message => "class_semester must be spring, summer, or fall" }, 
             :allow_nil => true
 
   validates :class_year, :inclusion => { :in => 2022..2027, 
