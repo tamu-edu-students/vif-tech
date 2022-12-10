@@ -174,9 +174,11 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 3rem;
 
   .FAQ-container {
-    width: 80%;
+    width: 100%;
+    max-width: 80rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -187,8 +189,14 @@ a {
       padding: 1rem;
   
       &__question {
+        font-size: 1.6rem;
         margin-bottom: 1rem;
         color: $color-brand-yellow;
+      }
+
+      &__answer {
+        font-size: 1.4rem;
+        line-height: 1.6;
       }
     }
 
