@@ -34,7 +34,7 @@ Company.create(name: "Activision", logo_img_src: "https://www.videogameschronicl
 Company.create(name: "Credera", logo_img_src: "https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/7b21773d1753d687ae0142a4433b7423"); #3
 Company.create(name: "Electronic Arts", logo_img_src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7dKEdXdcXfBHg0Dz6uqfvTeWRIz0oI4FOSQ&usqp=CAU"); #4
 Company.create(name: "Cloud Imperium Games", logo_img_src: "https://pbs.twimg.com/profile_images/1541476790593626115/_QYRYdIY_400x400.jpg"); #5
-Company.create(name: "BonuxXP", logo_img_src: "https://media.glassdoor.com/sqll/1917921/bonusxp-squarelogo-1635938425504.png"); #6
+Company.create(name: "BonusXP", logo_img_src: "https://media.glassdoor.com/sqll/1917921/bonusxp-squarelogo-1635938425504.png"); #6
 Company.create(name: "Blur Studio Inc.", logo_img_src: "https://yt3.ggpht.com/ytc/AMLnZu8cDNjG3G5GEO1yKTOZ4k_QPwrxJ98zUqYr4eeM=s900-c-k-c0x00ffffff-no-rj"); #7
 # Company.create(name: "Mighty Coconut"); #8
 # Company.create(name: "AEM Creation"); #9
