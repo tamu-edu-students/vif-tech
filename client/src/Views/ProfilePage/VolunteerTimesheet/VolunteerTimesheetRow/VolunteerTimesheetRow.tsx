@@ -90,8 +90,9 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
           </button>
         </div>
         <div className="table__cell table__cell--name">{assignedStudent && `${assignedStudent.firstname} ${assignedStudent.lastname}`}</div>
-        <div className="table__cell table__cell--portfolio">{assignedStudent && `<${assignedStudent.firstname} ${assignedStudent.lastname}'s portfolio link>`}</div>
-        <div className="table__cell table__cell--resume">{assignedStudent && `<${assignedStudent.firstname} ${assignedStudent.lastname}'s resume link>`}</div>
+        {/* TODO: Truncate */}
+        <div className="table__cell table__cell--portfolio">{assignedStudent?.portfolio_link && <a href={assignedStudent.portfolio_link} target="_blank">{assignedStudent.portfolio_link}</a>}</div>
+        <div className="table__cell table__cell--resume">{assignedStudent?.resume_link && <a href={assignedStudent.resume_link} target="_blank">{assignedStudent.resume_link}</a>}</div>
       </div>
     )
   }
