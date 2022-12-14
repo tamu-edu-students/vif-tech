@@ -94,8 +94,8 @@ User.create(email: "vol_1@gmail.com", firstname: "Vol", lastname: "One", passwor
 User.create(email: "vol_2@gmail.com", firstname: "Vol", lastname: "Two", password: "pw", email_confirmed: true, usertype: "volunteer", allowlist_email_id: 2); #3
 User.create(email: "vol_3@gmail.com", firstname: "Vol", lastname: "Three", password: "pw", email_confirmed: true, usertype: "volunteer", allowlist_email_id: 3); #4
 
-User.create(email: "student_1@tamu.edu", firstname: "Student", lastname: "One", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2022, class_semester: "spring"); #5
-User.create(email: "student_2@arch.tamu.edu", firstname: "Student", lastname: "Two", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 2, class_year: 2027, class_semester: "summer"); #6
+User.create(email: "student_1@tamu.edu", firstname: "Student", lastname: "One", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2022, class_semester: "spring", resume_link: "https://www.google.com", portfolio_link: "https://www.bing.com/"); #5
+User.create(email: "student_2@arch.tamu.edu", firstname: "Student", lastname: "Two", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 2, class_year: 2027, class_semester: "summer", resume_link: "https://www.youtube.com"); #6
 User.create(email: "student_3@exchange.tamu.edu", firstname: "Student", lastname: "Three", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 3, class_year: 2025, class_semester: "fall"); #7
 User.create(email: "student_4@tamu.edu", firstname: "Student", lastname: "Four", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2022, class_semester: "spring"); #8
 
