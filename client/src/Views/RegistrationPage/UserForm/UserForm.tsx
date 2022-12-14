@@ -79,7 +79,8 @@ class UserForm extends CustomForm<Props, {}> {
   private _onSubmit = (formValues: any) => {
     this.props.onSubmit({
       ...formValues,
-      ...(formValues.class_year ? {class_year: Number.parseInt(formValues.class_year)} : {})
+      ...(formValues.class_year ? {class_year: Number.parseInt(formValues.class_year)} : {}),
+      ...(formValues.company_id ? {company_id: Number.parseInt(formValues.company_id)} : {})
     });
   }
  
