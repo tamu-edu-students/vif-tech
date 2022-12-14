@@ -67,15 +67,19 @@ AllowlistEmail.create(email: "rep-bonus_1@bonus-xp.com", usertype: "company repr
 
 AllowlistEmail.create(email: "rep-blur_1@blur-studio-inc.com", usertype: "company representative", company_id: 7, is_primary_contact: 1); #16
 
-# AllowlistEmail.create(email: "rep-mighty_1@mighty-coconut.com", usertype: "company representative", company_id: 8, is_primary_contact: 1); #17
+AllowlistEmail.create(email: "NkemdiAnyiam@gmail.com", usertype: "company representative", company_id: 1); #17
+AllowlistEmail.create(email: "NkemdiAnyiam@gmail.com", usertype: "company representative", company_id: 2); #18
+AllowlistEmail.create(email: "NkemdiAnyiam@gmail.com", usertype: "company representative", company_id: 3); #19
 
-# AllowlistEmail.create(email: "rep-aem_1@aem-creations.com", usertype: "company representative", company_id: 9, is_primary_contact: 1); #18
+# AllowlistEmail.create(email: "rep-mighty_1@mighty-coconut.com", usertype: "company representative", company_id: 8, is_primary_contact: 1); #20
 
-# AllowlistEmail.create(email: "rep-dream_1@dream-works.com", usertype: "company representative", company_id: 10, is_primary_contact: 1); #19
+# AllowlistEmail.create(email: "rep-aem_1@aem-creations.com", usertype: "company representative", company_id: 9, is_primary_contact: 1); #21
 
-# AllowlistEmail.create(email: "rep-app_1@app-lovin.com", usertype: "company representative", company_id: 11, is_primary_contact: 1); #20
+# AllowlistEmail.create(email: "rep-dream_1@dream-works.com", usertype: "company representative", company_id: 10, is_primary_contact: 1); #22
 
-# AllowlistEmail.create(email: "rep-k2_1@k2-share.com", usertype: "company representative", company_id: 12, is_primary_contact: 1); #21
+# AllowlistEmail.create(email: "rep-app_1@app-lovin.com", usertype: "company representative", company_id: 11, is_primary_contact: 1); #23
+
+# AllowlistEmail.create(email: "rep-k2_1@k2-share.com", usertype: "company representative", company_id: 12, is_primary_contact: 1); #24
 
 
 
@@ -118,7 +122,7 @@ User.create(email: "rep-blur_1@blur-studio-inc.com", firstname: "Rep_One", lastn
 
 
 User.create(email: "student_5@tamu.edu", firstname: "Student", lastname: "Five", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2025, class_semester: "summer"); #22
-User.create(email: "student_6@tamu.edu", firstname: "Student", lastname: "Six", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2024, class_semester: "fall"); #23
+User.create(email: "student_6@exchange.tamu.edu", firstname: "Student", lastname: "Six", password: "pw", email_confirmed: true, usertype: "student", allowlist_domain_id: 1, class_year: 2024, class_semester: "fall"); #23
 
 
 Focus.create(name: "Animation"); #1
