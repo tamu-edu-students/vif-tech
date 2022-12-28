@@ -243,3 +243,37 @@ Feature: Student signup
         Given that I log in as admin
         And I update the user with id 2 to have profile_img_src with value https://www.google.com
         Then the user with id 2 should have profile_img_src with value https://www.google.com
+
+    Scenario: Signup as company representative to a first available company
+        Given that I log in as admin
+        And there is a company with id 1
+        And there is a company with id 2
+        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test.com for usertype company representative for company id 2
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 1 |
+        Then the user with firstname james and lastname bond should be found in the user DB
+        And the company with id 1 should have user with email "test@test.com"
+
+    Scenario: Signup as company representative to a second available company
+        Given that I log in as admin
+        And there is a company with id 1
+        And there is a company with id 2
+        And I allow a new company domain test.com for usertype company representative for company id 1
+        And I allow a new company domain test.com for usertype company representative for company id 2
+        And that I sign up with the following
+            | firstname | james |
+            | lastname | bond |
+            | password | password1! |
+            | password_confirmation | password1! |
+            | email | test@test.com |
+            | usertype | company representative |
+            | company_id | 2 |
+        Then the user with firstname james and lastname bond should be found in the user DB
+        And the company with id 2 should have user with email "test@test.com"

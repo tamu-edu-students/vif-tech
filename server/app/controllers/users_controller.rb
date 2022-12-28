@@ -55,20 +55,26 @@ class UsersController < ApplicationController
     end
 
     # Check that the email is allowed
-    exact_match = AllowlistEmail.where(usertype: params["user"]["usertype"]).where.like(email: params["user"]["email"]).first
-    domain_match = AllowlistDomain.where(usertype: params["user"]["usertype"]).where.like(domain: params["user"]["email"].split("@").last).first
+    if params["user"]["company_id"] != nil
+      exact_match = AllowlistEmail.where(usertype: params["user"]["usertype"], company_id: params["user"]["company_id"]).where.like(email: params["user"]["email"]).first
+      domain_match = AllowlistDomain.where(usertype: params["user"]["usertype"], company_id: params["user"]["company_id"]).where.like(domain: params["user"]["email"].split("@").last).first
+    else
+      exact_match = AllowlistEmail.where(usertype: params["user"]["usertype"]).where.like(email: params["user"]["email"]).first
+      domain_match = AllowlistDomain.where(usertype: params["user"]["usertype"]).where.like(domain: params["user"]["email"].split("@").last).first
+    end
+    
     if exact_match == nil && domain_match == nil
       return render json: {
                errors: ["Email not allowed"],
              }, status: :bad_request
     end
-
+    
     if params["user"]["company_id"] != nil and params["user"]["usertype"] != "company representative"
       return render json: {
-                      errors: ["Company ID cannot be provided to user of type  #{params[:user][:usertype]}"],
-                    }, status: :bad_request
-    end
-
+        errors: ["Company ID cannot be provided to user of type  #{params[:user][:usertype]}"],
+        }, status: :bad_request
+      end
+      
     if exact_match != nil
       company = exact_match.company
     else
