@@ -228,8 +228,8 @@ Feature: Student signup
         And that I log in with email test@tamu.edu and password password1!
         And I update the user with id 2 to have profile_img_src with value https://www.google.com
         Then the user with id 2 should have profile_img_src with value https://www.google.com
-        And I update the user with id 2 to have class_semester with value winter
-        Then the user with id 2 should have class_semester with value winter
+        And I update the user with id 2 to have class_semester with value fall
+        Then the user with id 2 should have class_semester with value fall
 
     Scenario: Signup as student and an admin updates some fields
         Given that I log in as admin
