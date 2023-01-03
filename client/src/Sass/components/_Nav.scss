@@ -1,4 +1,18 @@
 // TODO: Remove garbage styles
+@mixin nav-button($background-color) {
+  color: $color-white;
+  background-color: $background-color;
+
+  &:hover {
+    background-color: darken($background-color, 2.5%);
+    transform: scale(0.99);
+  }
+  &:active {
+    background-color: darken($background-color, 5%);
+    transform: scale(0.98);
+  }
+}
+
 .nav {
   color: white;
   padding: 1.485rem 1.8rem;
@@ -51,70 +65,55 @@
   &__button {
     font-size: 2.5rem;
     font-family: $font-primary;
-    transition: color 0.1s;
+    transition: color 0.15s;
   }
 
-  &__link:link,
-  &__link:visited {
-    color: $color-white;
-  }
+  &__link {
+    $hover-color: $color-brand-green;
 
-  &__link:hover {
-    color: $color-brand-green-light;
-  }
-  &__link:active {
-    color: $color-brand-green;
+    &:link,
+    &:visited {
+      color: $color-white;
+    }
+
+    &:hover {
+      color: lighten($hover-color, 10%);
+    }
+
+    &:active {
+      color: darken($hover-color, 5%);
+    }
   }
 
   &__button {
     color: $color-white;
+    text-shadow: -0.1rem 0.1rem 0.1rem #303030;
     padding: 1rem 1rem;
     width: 13.4rem;
     height: 4.3rem;
     word-break: break-all;
     cursor: pointer;
-    transition: background-color 0.1s;
+    transition: all 0.1s;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    &--login {
-      color: $color-white;
-      background-color: $color-brand-green-dark;
-
-      &:hover {
-        background-color: darken($color-brand-green-dark, 5%);
-      }
-      &:active {
-        background-color: darken($color-brand-green-dark, 10%);
-      }
+    &.nav__button--login,
+    &.nav__button--profile {
+      @include nav-button($color-brand-green-darker);
     }
 
-    &--logout {
-      background-color: $color-brand-red-dark;
-
-      &:hover {
-        background-color: darken($color-brand-red-dark, 5%);
-      }
-      &:active {
-        background-color: darken($color-brand-red-dark, 10%);
-      }
+    &.nav__button--logout {
+      @include nav-button($color-brand-red-dark);
     }
 
-    &--register {
-      background-color: $color-brand-yellow-dark;
+    &.nav__button--register {
+      @include nav-button($color-brand-yellow-darker);
+    }
 
-      &:hover {
-        background-color: darken($color-brand-yellow-dark, 5%);
-      }
-      &:active {
-        background-color: darken($color-brand-yellow-dark, 10%);
-      }
+    &::selection {
+      text-shadow: none;
     }
   }
-
-  // &__item {
-
-  // }
 }

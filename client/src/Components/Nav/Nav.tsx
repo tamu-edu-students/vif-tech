@@ -34,30 +34,30 @@ class Nav extends React.Component<Props, OwnState> {
 
     return (
       <nav className={"nav" + `${className ? ' '+className : ''}`}>
-        <ul className='nav__list'>
-          <li className='nav__item nav__item--logo'>
+        <ul className="nav__list">
+          <li className="nav__item nav__item--logo">
             <Link to="/" className="nav__link nav__link--logo-container">
               <VifLogoWide className="nav__logo" />
             </Link>
           </li>
-          <li className="nav__item"><Link className='nav__link' to="/students" data-testid="student-page-button">Students</Link></li>
-          <li className="nav__item"><Link className='nav__link' to="/faq" data-testid="faq-page-button">FAQ</Link></li>
-          <li className="nav__item"><Link className='nav__link' to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
+          <li className="nav__item"><Link className="nav__link" to="/students" data-testid="student-page-button">Students</Link></li>
+          <li className="nav__item"><Link className="nav__link" to="/faq" data-testid="faq-page-button">FAQ</Link></li>
+          <li className="nav__item"><Link className="nav__link" to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
           {
             user
             ? (
               <>
                 {
                   (user.isAdmin || user.isRepresentative) &&
-                  <li className='nav__item'><Link className='nav__link' to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
+                  <li className="nav__item"><Link className="nav__link" to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
                 }
                 {
                   user.isAdmin &&
-                  <li className='nav__item'><Link className='nav__link' to="/users" data-testid="users-page-button">Users</Link></li>
+                  <li className="nav__item"><Link className="nav__link" to="/users" data-testid="users-page-button">Users</Link></li>
                 }
-                <li className="nav__item nav__item--name">firstname: {user.firstname}</li>
-                <li className="nav__item nav__item--name">lastname: {user.lastname}</li>
-                <li className="nav__item"><Link className='nav__link nav__link--profile-button' to="/profile" data-testid="profile-page-button">Profile</Link></li>
+                {/* <li className="nav__item nav__item--name">firstname: {user.firstname}</li>
+                <li className="nav__item nav__item--name">lastname: {user.lastname}</li> */}
+                <li className="nav__item"><Link className="nav__button nav__button--profile" to="/profile" data-testid="profile-page-button">Profile</Link></li>
                 <li className="nav__item"><button className="nav__button nav__button--logout" onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
               </>
             )

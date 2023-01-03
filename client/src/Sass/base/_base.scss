@@ -29,6 +29,9 @@ body {
 .error {
   color: $color-brand-red-light;
 }
+button {
+  border: none;
+}
 form {
   width: 30rem;
   display: flex;
@@ -69,13 +72,13 @@ form {
     }
   }
 }
-// a {
-//   &:visited,
-//   &:link {
-//     text-decoration: none;
-//     color: #99ffff;
-//   }
-// }
+a {
+  &:visited,
+  &:link {
+    text-decoration: none;
+    color: #99ffff;
+  }
+}
 .profile-page {
   &__split {
     display: flex;
