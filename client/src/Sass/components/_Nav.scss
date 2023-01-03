@@ -1,16 +1,120 @@
 // TODO: Remove garbage styles
 .nav {
   color: white;
-  // background-color: $color-violet;
+  padding: 1.485rem 1.8rem;
+  height: 7.4rem;
 
-  ul {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+
+  &__list {
+    font-size: 1.2rem;
+    font-weight: 400;
     list-style: none;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 5rem;
   }
 
-  a:visited,
-  a:link {
-    color: white;
+  &__item {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    &--logo {
+      margin-right: auto;
+    }
   }
+
+  &__item--name,
+  &__profile-button {
+    background-color: $color-brand-green-darker;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  &__link--logo-container {
+    height: 100%;
+    margin-right: auto;
+    display: inline-block;
+  }
+
+  &__logo {
+    height: 100%;
+    margin-right: auto;
+  }
+
+  &__link,
+  &__button {
+    font-size: 2.5rem;
+    font-family: $font-primary;
+    transition: color 0.1s;
+  }
+
+  &__link:link,
+  &__link:visited {
+    color: $color-white;
+  }
+
+  &__link:hover {
+    color: $color-brand-green-light;
+  }
+  &__link:active {
+    color: $color-brand-green;
+  }
+
+  &__button {
+    color: $color-white;
+    padding: 1rem 1rem;
+    width: 13.4rem;
+    height: 4.3rem;
+    word-break: break-all;
+    cursor: pointer;
+    transition: background-color 0.1s;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--login {
+      color: $color-white;
+      background-color: $color-brand-green-dark;
+
+      &:hover {
+        background-color: darken($color-brand-green-dark, 5%);
+      }
+      &:active {
+        background-color: darken($color-brand-green-dark, 10%);
+      }
+    }
+
+    &--logout {
+      background-color: $color-brand-red-dark;
+
+      &:hover {
+        background-color: darken($color-brand-red-dark, 5%);
+      }
+      &:active {
+        background-color: darken($color-brand-red-dark, 10%);
+      }
+    }
+
+    &--register {
+      background-color: $color-brand-yellow-dark;
+
+      &:hover {
+        background-color: darken($color-brand-yellow-dark, 5%);
+      }
+      &:active {
+        background-color: darken($color-brand-yellow-dark, 10%);
+      }
+    }
+  }
+
+  // &__item {
+
+  // }
 }

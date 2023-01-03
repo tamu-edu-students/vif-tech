@@ -9,6 +9,7 @@ import history from 'History/history';
 
 import { waitThen } from 'Shared/utils';
 
+import Nav from 'Components/Nav/Nav';
 import FAQPage from 'Views/FAQPage/FAQPage';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
@@ -17,14 +18,14 @@ import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
 import StudentsPage from 'Views/StudentsPage/StudentsPage';
+import StudentDirectory from 'Views/StudentDirectory/StudentDirectory';
 
-import { VifLogoMark } from 'Components/iconComponents';
+import { VifLogoMark, VifLogoWide } from 'Components/iconComponents';
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
 
 import './Sass/main.scss';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import StudentDirectory from 'Views/StudentDirectory/StudentDirectory';
 
 
 interface OwnProps {
@@ -71,41 +72,12 @@ class App extends React.Component<Props, {}> {
     }
 
     return (
-      <div className="App">
+      <div className="app">
         <Router history={history}>
-          <nav className="nav">
-            <ul>
-              <Link to="/" className="nav__logo-container"><VifLogoMark className="nav__logo" /></Link>
-              <li><Link to="/students" data-testid="student-page-button">Students</Link></li>
-              <li><Link to="/faq" data-testid="faq-page-button">FAQ</Link></li>
-              <li><Link to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
-              {
-                this.props.user
-                ? (
-                  <>
-                    {
-                      (this.props.user.isAdmin || this.props.user.isRepresentative) &&
-                      <li><Link to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
-                    }
-                    {
-                      this.props.user.isAdmin &&
-                      <li><Link to="/users" data-testid="users-page-button">Users</Link></li>
-                    }
-                    <li className="nav__name">firstname: {this.props.user.firstname}</li>
-                    <li className="nav__name">lastname: {this.props.user.lastname}</li>
-                    <li className="nav__profile-button"><Link to="/profile" data-testid="profile-page-button">Profile</Link></li>
-                    <li><button onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
-                  </>
-                )
-                : (
-                  <>
-                    <li><Link to="/login" data-testid="log-in-page-button">Log In</Link></li>
-                    <li><Link to="/users/new" className="register-button" data-testid="sign-up-page-button">Register!</Link></li>
-                  </>
-                )
-              }
-            </ul>
-          </nav>
+          <Nav
+            {...(this.props.user ? {user: this.props.user} : {})}
+            isLoggedIn={this.props.isLoggedIn}
+          />
 
           <main className="main">
             <Switch>

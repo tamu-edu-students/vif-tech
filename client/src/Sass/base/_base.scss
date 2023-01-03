@@ -14,7 +14,7 @@ html {
 }
 body {
   background-color: $color-violet-darkest;
-  font-family: $font-body;
+  font-family: $font-secondary;
   color: $color-white;
   &.body--modal-open {
     height: 100vh;
@@ -69,22 +69,13 @@ form {
     }
   }
 }
-.register-button {
-  &:link,
-  &:visited {
-    color: white;
-  }
-  &:hover {
-    color: #ddd;
-  }
-}
-a {
-  &:visited,
-  &:link {
-    text-decoration: none;
-    color: #99ffff;
-  }
-}
+// a {
+//   &:visited,
+//   &:link {
+//     text-decoration: none;
+//     color: #99ffff;
+//   }
+// }
 .profile-page {
   &__split {
     display: flex;

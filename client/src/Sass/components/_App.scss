@@ -1,4 +1,4 @@
-.App {
+.app {
   position: relative;
   min-height: 100vh;
 
@@ -8,35 +8,6 @@
   .logo-mark {
     width: 5rem;
     height: auto;
-  }
-
-  .nav {
-    padding: 1.2rem 2rem;
-
-    &__logo-container {
-      height: 3rem;
-      margin-right: auto;
-      display: inline-block;
-    }
-
-    &__logo {
-      height: 100%;
-      margin-right: auto;
-    }
-
-    ul {
-      font-size: 1.2rem;
-
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-    }
-
-    &__name,
-    &__profile-button {
-      background-color: $color-brand-green-darker;
-      padding: 0.2rem 0.4rem;
-    }
   }
 
   .main {

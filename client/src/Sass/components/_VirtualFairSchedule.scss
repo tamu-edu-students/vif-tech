@@ -45,7 +45,7 @@
 
         .table__cell {
           padding: 1rem;
-          font-family: $font-body;
+          font-family: $font-secondary;
           font-size: 1.2rem;
           background-color: $color-gray-light;
 
@@ -88,7 +88,7 @@
           padding: 1rem;
           background-color: $color-violet-darkest;
           color: $color-white;
-          font-family: $font-header;
+          font-family: $font-primary;
           font-size: 1.8rem;
 
           display: flex;

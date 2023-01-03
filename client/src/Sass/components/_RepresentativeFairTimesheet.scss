@@ -40,7 +40,7 @@
 
         .table__cell {
           padding: 1rem;
-          font-family: $font-body;
+          font-family: $font-secondary;
           font-size: 1.2rem;
 
           &:not(:last-child):not(.table__cell--time) {
@@ -73,7 +73,7 @@
           background-color: $color-violet-darkest;
           color: $color-white;
           font: inherit;
-          font-family: $font-header;
+          font-family: $font-primary;
           font-size: 1.8rem;
           border: none;
           cursor: pointer;
