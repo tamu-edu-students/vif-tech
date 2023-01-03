@@ -2,186 +2,112 @@ import React from 'react';
 import { connect, ConnectedProps } from "react-redux";
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { eventActionTypes, companyActionTypes, virtualFairAttendanceActionTypes, focusActionTypes, companyFocusActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchCompanies, fetchVirtualFairAttendance, fetchFocuses, fetchCompanyFocuses } from 'Store/actions';
+import { userActionTypes, focusActionTypes, userFocusActionTypes } from 'Store/actions/types';
+import { fetchUsers, fetchFocuses, fetchUserFocuses } from "Store/actions";
 
-import Event from 'Shared/entityClasses/Event';
-import Company from 'Shared/entityClasses/Company';
+import User from 'Shared/entityClasses/User';
 import Focus from 'Shared/entityClasses/Focus';
+
 
 interface OwnProps {
 }
 
 interface OwnState {
-  companyFilterString: string;
-  filteredCompanies: Company[];
 }
 
 const mapStateToProps = (state: IRootState) => {
-  const event: Event | null = Event.findByTitle('Virtual Fair', state.eventData.events); //TODO: apply to physical fair as well
-
-  const eventsAreStale: boolean = state.eventData.isStale;
-  const isLoading_fetchEvents: boolean = createLoadingSelector([eventActionTypes.FETCH_EVENTS])(state);
-
-  const virtualFairAttendanceIsStale: boolean = state.virtualFairAttendanceData.isStale;
-  const isLoading_fetchVirtualFairAttendance: boolean = createLoadingSelector([virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE])(state);
-
-  const companiesAreStale: boolean = state.companyData.isStale;
-  const isLoading_fetchCompanies: boolean = createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state);
-
+  const usersAreStale: boolean = state.userData.isStale;
+  const isLoading_fetchUsers: boolean = createLoadingSelector([userActionTypes.FETCH_USERS])(state);
+  
   const focusesAreStale: boolean = state.focusData.isStale;
   const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
 
-  const companyFocusesAreStale: boolean = state.companyFocusData.isStale;
-  const isLoading_fetchCompanyFocuses: boolean = createLoadingSelector([companyFocusActionTypes.FETCH_COMPANY_FOCUSES])(state);
+  const userFocusesAreStale: boolean = state.userFocusData.isStale;
+  const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
 
   return {
-    event,
-    virtualFairMeetings: state.virtualFairAttendanceData.virtualFairMeetings,
-    attendingCompanies: Company.findByIds(state.virtualFairAttendanceData.attendingCompanyIds, state.companyData.companies),
-
-    eventsAreStale,
-    isLoading_fetchEvents,
-
-    virtualFairAttendanceIsStale,
-    isLoading_fetchVirtualFairAttendance,
-
-    companiesAreStale,
-    isLoading_fetchCompanies,
-
+    students: state.userData.users.filter((user: User) => user.isStudent),
     focuses: state.focusData.focuses,
+    userFocuses: state.userFocusData.userFocuses,
+
+    usersAreStale,
+    isLoading_fetchUsers,
+
     focusesAreStale,
     isLoading_fetchFocuses,
 
-    companyFocuses: state.companyFocusData.companyFocuses,
-    companyFocusesAreStale,
-    isLoading_fetchCompanyFocuses,
-    
+    userFocusesAreStale,
+    isLoading_fetchUserFocuses,
+
     isLoading:
-      eventsAreStale || isLoading_fetchEvents
-      || virtualFairAttendanceIsStale || isLoading_fetchVirtualFairAttendance
-      || companiesAreStale || isLoading_fetchCompanies
+      usersAreStale || isLoading_fetchUsers
       || focusesAreStale || isLoading_fetchFocuses
-      || companyFocusesAreStale || isLoading_fetchCompanyFocuses,
+      || userFocusesAreStale || isLoading_fetchUserFocuses,
     errors: createErrorMessageSelector([
-      eventActionTypes.FETCH_EVENTS,
-      virtualFairAttendanceActionTypes.FETCH_VIRTUAL_FAIR_ATTENDANCE,
-      companyActionTypes.FETCH_COMPANIES,
-    ])(state),
-  };
+      userActionTypes.FETCH_USERS,
+      focusActionTypes.FETCH_FOCUSES,
+      userFocusActionTypes.FETCH_USER_FOCUSES,
+    ])(state)
+  }
 };
-const mapDispatchToProps = { fetchEvents, fetchCompanies, fetchVirtualFairAttendance, fetchFocuses, fetchCompanyFocuses };
+const mapDispatchToProps = { fetchUsers, fetchFocuses, fetchUserFocuses };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class StudentsPage extends React.Component<Props, OwnState> {
-  state = { companyFilterString: '', filteredCompanies: [] };
-
   public componentDidMount(): void {
     const promises: Promise<void>[] = [];
-    if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
-      promises.push(this.props.fetchEvents());
-    }
-    if (this.props.virtualFairAttendanceIsStale && !this.props.isLoading_fetchVirtualFairAttendance) {
-      promises.push(this.props.fetchVirtualFairAttendance());
-    }
-    if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
-      promises.push(this.props.fetchCompanies());
+    if (this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
+      const promise: Promise<void> = this.props.fetchUsers();
+      promises.push(promise);
     }
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      promises.push(this.props.fetchFocuses());
+      const promise: Promise<void> = this.props.fetchFocuses();
+      promises.push(promise);
     }
-    if (this.props.companyFocusesAreStale && !this.props.isLoading_fetchCompanyFocuses) {
-      promises.push(this.props.fetchCompanyFocuses());
-    }
-
-    Promise.all(promises).then(() => {
-      this.setState({ filteredCompanies: this.props.attendingCompanies });
-    });
-  }
-
-  private _renderCompanyCards(): JSX.Element[] {
-    const { filteredCompanies } = this.state;
-    return filteredCompanies.map((company: Company) => {
-      const { name, logo_img_src, website_link } = company;
-      const focusStrings: string[] = company.findFocuses(this.props.focuses, this.props.companyFocuses).map((focus: Focus) => focus.name);
-      return (
-        <div key={company.id} className="company-card-container">
-          <div className="company-card">
-            <div className="company-card__logo-container">
-              <img className='company-card__logo' src={logo_img_src} alt={`${name} logo`} />
-            </div>
-            {
-              website_link === ''
-              ? <div className='company-card__name'>{name}</div>
-              : <a className='company-card__name' href={website_link} target="_blank" rel="noreferrer">{name}</a>
-            }
-            <div className='company-card__focuses'>{`${focusStrings.join(' | ')}`}</div>
-          </div>
-        </div>
-      );
-    });
-  }
-
-  private _renderCompanySearch(): JSX.Element {
-    return (
-      <>
-        <input
-          className="company-search-bar"
-          type="text"
-          name="company-filter"
-          id="company-filter"
-          value={this.state.companyFilterString}
-          onChange={this._onFilterChange}
-        />
-        <div className="attending-companies-grid">
-          {this._renderCompanyCards()}
-        </div>
-      </>
-    );
-  }
-
-  private _onFilterChange = (event: any) => {
-    const newFilterString = event.target.value;
-
-    this.setState({ companyFilterString: newFilterString });
-    
-    if (newFilterString) {
-      this.setState({ filteredCompanies: this.props.attendingCompanies.filter((company: Company) => {
-        return company.name.toLowerCase().includes(newFilterString.trim().toLowerCase())
-        || company
-          .findFocuses(this.props.focuses, this.props.companyFocuses)
-          .some((focus: Focus) => focus.name.toLowerCase().includes(newFilterString.trim().toLowerCase()))
-      })})
-    }
-    else {
-      this.setState({ filteredCompanies: this.props.attendingCompanies });
+    if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
+      const promise: Promise<void> = this.props.fetchUserFocuses();
+      promises.push(promise);
     }
   }
 
   public render(): React.ReactElement<Props> {
-    if (this.props.errors.length > 0) {
-      this.props.errors.forEach((error: string) => console.error(error));
-    }
+    if (this.props.students.length === 0) { return <div>No students to show yet!</div>; }
 
     return (
-      <div className="student-page">
-        <h1 className="heading-primary">Students</h1>
-        <section className="section section--attending-companies">
-          <h2 className="heading-secondary">Attending Companies</h2>
-          {
-            this.props.errors.length > 0
-            ? <div className="error">Failed to load attending companies</div>
-            : (
-              this.props.isLoading
-              ? <div>Loading Company Search...</div>
-              : this._renderCompanySearch()
-            )
-          }
-        </section>
+      <div>
+        <h1 className="heading-primary">Users</h1>
+
+        <ul className="user-directory__list">
+          {this.props.students
+          .sort((a: User, b: User) => a.lastname.toLowerCase().localeCompare(b.lastname.toLowerCase()))
+          .map((user: User) => {
+            return (
+              <div className="user-directory__user" key={user.id}>
+                <h2 className="heading-secondary">{`${user.firstname} ${user.lastname}`}</h2>
+                <ul className="user-directory__user-info">
+                  <li><span className="user-directory__user-info-title">First name:</span> {user.firstname}</li>
+                  <li><span className="user-directory__user-info-title">Last name:</span> {user.lastname}</li>
+                  <li><span className="user-directory__user-info-title">Resume URL:</span> <a href={`${user.resume_link}`} target="_blank" rel="noreferrer">{user.resume_link && `<link>`}</a></li>
+                  <li><span className="user-directory__user-info-title">Portfolio URL:</span> <a href={`${user.portfolio_link}`} target="_blank" rel="noreferrer">{user.portfolio_link && `<link>`}</a></li>
+                  <li>
+                    <span className="user-directory__user-info-title">Interests: </span>
+                    {
+                      user.findFocuses(this.props.focuses, this.props.userFocuses)
+                      .map((focus: Focus) => focus.name)
+                      .join(' | ')
+                    }
+                  </li>
+                  <li><span className="user-directory__user-info-title">Email:</span> <a href={`mailto:${user.email}`}>{user.email}</a></li>
+                </ul>
+                <br />
+              </div>
+            );
+          })}
+        </ul>
       </div>
-    );
+    )
   }
 }
 

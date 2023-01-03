@@ -40,7 +40,7 @@ class Nav extends React.Component<Props, OwnState> {
               <VifLogoWide className="nav__logo" />
             </Link>
           </li>
-          <li className="nav__item"><Link className="nav__link" to="/students" data-testid="student-page-button">Students</Link></li>
+          <li className="nav__item"><Link className="nav__link" to="/companies" data-testid="companies-page-button">Companies</Link></li>
           <li className="nav__item"><Link className="nav__link" to="/faq" data-testid="faq-page-button">FAQ</Link></li>
           <li className="nav__item"><Link className="nav__link" to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
           {
@@ -49,7 +49,7 @@ class Nav extends React.Component<Props, OwnState> {
               <>
                 {
                   (user.isAdmin || user.isRepresentative) &&
-                  <li className="nav__item"><Link className="nav__link" to="/student-directory" data-testid="student-directory-page-button">Student Directory</Link></li>
+                  <li className="nav__item"><Link className="nav__link" to="/students" data-testid="students-page-button">Students</Link></li>
                 }
                 {
                   user.isAdmin &&

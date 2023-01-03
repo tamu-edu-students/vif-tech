@@ -17,8 +17,8 @@ import UsersPage from 'Views/UsersPage/UsersPage';
 import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
+import CompaniesPage from 'Views/CompaniesPage/CompaniesPage';
 import StudentsPage from 'Views/StudentsPage/StudentsPage';
-import StudentDirectory from 'Views/StudentDirectory/StudentDirectory';
 
 import { VifLogoMark, VifLogoWide } from 'Components/iconComponents';
 import RedirectPrompt from 'Components/RedirectPrompt';
@@ -102,8 +102,8 @@ class App extends React.Component<Props, {}> {
                 </Route>
               }
 
-              <Route exact path="/students">
-                <StudentsPage />
+              <Route exact path="/companies">
+                <CompaniesPage />
               </Route>
 
               <Route exact path="/faq">
@@ -140,8 +140,8 @@ class App extends React.Component<Props, {}> {
 
               {
                 (this.props.user?.isAdmin || this.props.user?.isRepresentative) &&
-                <Route exact path="/student-directory">
-                  <StudentDirectory />
+                <Route exact path="/students">
+                  <StudentsPage />
                 </Route>
               }
 
