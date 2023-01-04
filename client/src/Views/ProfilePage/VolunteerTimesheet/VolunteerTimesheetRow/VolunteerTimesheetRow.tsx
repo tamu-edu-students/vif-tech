@@ -6,6 +6,7 @@ import { createMeeting, deleteMeeting } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
+// import TimesheetRow from 'Components/TimesheetRow/TimesheetRow';
 import TimesheetRowButton from "Components/TimesheetRowButton/TimesheetRowButton";
 
 
@@ -85,8 +86,8 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
         return 'green';
       // case ModStatus.DISABLED:
       //   return 'disabled';
-      // case ModStatus.EMPTY:
-      //   return 'empty';
+      case ModStatus.EMPTY:
+        return 'empty';
       // case ModStatus.PENDING:
       //   return 'pending'
       default:
@@ -145,7 +146,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="VolunteerTimesheetRow table__row">
+      <div className="volunteer-timesheet-row table__row table__row--volunteer">
         <div className="table__cell table__cell--time">
           <TimesheetRowButton
             onClick={this._handleClick}

@@ -1,4 +1,20 @@
-.Volunteer-Timesheet {
+@mixin time-button-hover($background-color, $lighten: false) {
+  background-color: $background-color;
+  text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+
+  &:not(.table__time-button--disabled):hover {
+    @if $lighten == false {
+      &:hover { background-color: darken($background-color, 5%); }
+      &:active { background-color: darken($background-color, 10%); }
+    }
+    @else {
+      &:hover { background-color: lighten($background-color, 10%); }
+      &:active { background-color: lighten($background-color, 15%); }
+    }
+  }
+}
+
+.timesheet {
   //TODO: Remove
   background-color: $color-violet;
   padding: 3rem;
@@ -12,7 +28,9 @@
 
       .table__row {
         display: grid;
-        grid-template-columns: 16fr repeat(3, 28fr);
+
+        &--student { grid-template-columns: 16fr repeat(2, 42fr); }
+        &--volunteer { grid-template-columns: 16fr repeat(3, 28fr); }
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
@@ -32,20 +50,21 @@
               background-color: $color-white;
             }
           }
-
-          a {
-            color: $color-black;
-          }
         }
 
         &--header {
-
         }
 
         .table__cell {
           padding: 1rem;
           font-family: $font-secondary;
           font-size: 1.2rem;
+          //TODO: test on Safari
+          word-break: break-all;
+          hyphens: auto;
+
+          display: flex;
+          align-items: center;
 
           &:not(:last-child):not(.table__cell--time) {
             border-right: 1px solid $color-violet-darkest;
@@ -61,10 +80,7 @@
           &--name {
           }
 
-          &--portfolio {
-          }
-
-          &--resume {
+          &--email {
           }
 
           &--header  {
@@ -76,6 +92,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
+          }
+          
+          a {
+            $color: $color-black;
+
+            &:link,
+            &:visited {
+              color: $color;
+              text-decoration: underline 0.05rem solid currentColor;
+              text-underline-offset: 0.3rem;
+              transition: 0.1s;
+            }
+
+            &:hover {
+              color: lighten($color, 10%);
+            }
+
+            &:active {
+              color: lighten($color, 30%);
+            }
           }
         }
 
@@ -92,32 +128,28 @@
           cursor: pointer;
           transition: all 0.1s;
 
-          &:hover {
-            background-color: $color-gray;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &--disabled {
+            cursor: unset;
+          }
+
+          &--empty {
+            @include time-button-hover($color-violet-darkest, true);
           }
 
           &--green {
-            background-color: $color-brand-green-dark;
-
-            &:hover {
-              background-color: $color-brand-green-darker;
-            }
+            @include time-button-hover($color-brand-green-dark);
           }
 
           &--yellow {
-            background-color: $color-brand-yellow-dark;
-
-            &:hover {
-              background-color: $color-brand-yellow-darker;
+            @include time-button-hover($color-brand-yellow-dark);
             }
-          }
 
           &--red {
-            background-color: $color-brand-red-dark;
-
-            &:hover {
-              background-color: $color-brand-red-darker;
-            }
+            @include time-button-hover($color-brand-red-dark);
           }
         }
       }

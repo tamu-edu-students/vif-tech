@@ -152,7 +152,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="Student-Timesheet">
+      <div className="student-timesheet timesheet timesheet--student">
         <h2>{`Student ${event?.title} Timesheet`}</h2>
         {
           registrationIsOpen &&
@@ -184,7 +184,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--student table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                   <div className="table__cell table__cell--header">Email</div>

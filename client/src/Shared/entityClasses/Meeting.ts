@@ -52,6 +52,7 @@ export default class Meeting implements IMeeting {
     ?? null;
   }
 
+
   public duplicateWithNewInviteeId(newInviteeId: number): Meeting {
     return new Meeting({
       id: this.id,
@@ -69,5 +70,9 @@ export default class Meeting implements IMeeting {
 
   public static findById(id: number, meetings: Meeting[]): Meeting | null {
     return meetings.find((meeting: Meeting) => meeting.id === id) ?? null;
+  }
+
+  public static findByTime(meetings: Meeting[], start_time: string, end_time: string): Meeting | null {
+    return meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
   }
 }

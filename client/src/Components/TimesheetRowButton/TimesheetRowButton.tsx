@@ -23,7 +23,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class TimesheetRowButton extends React.Component<Props, OwnState> {
-  private _onClick = () => {
+  private _onClick = (): void => {
     if (this.props.disabled) { return; }
     this.props.onClick();
   }
@@ -44,7 +44,7 @@ class TimesheetRowButton extends React.Component<Props, OwnState> {
       <button
         disabled={disabled}
         onClick={this._onClick}
-        className={`table__time-button ${this._computeClassName(this.props.modifier)}`}
+        className={`table__time-button ${this._computeClassName(this.props.modifier)} ${disabled ? 'table__time-button--disabled' : ''}`}
       >
         {children}
       </button>

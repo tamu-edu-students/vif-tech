@@ -178,7 +178,7 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="Volunteer-Timesheet">
+      <div className="volunteer-timesheet timesheet timesheet--volunteer">
         <h2>{`Volunteer ${event?.title} Timesheet`}</h2>
 
         {
@@ -211,7 +211,7 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--volunteer table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                   <div className="table__cell table__cell--header">Portfolio</div>

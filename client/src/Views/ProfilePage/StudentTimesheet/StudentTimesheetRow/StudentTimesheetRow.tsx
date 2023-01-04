@@ -53,7 +53,7 @@ class StudentTimesheetRow extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <div className="StudentTimesheetRow table__row">
+      <div className="student-timesheet-row table__row table__row--student">
         <div className="table__cell table__cell--time">
           <TimesheetRowButton
             disabled={true}
@@ -63,7 +63,7 @@ class StudentTimesheetRow extends React.Component<Props, OwnState> {
           </TimesheetRowButton>
         </div>
         <div className="table__cell table__cell--name">{assignee && `${assignee.firstname} ${assignee.lastname}`}</div>
-        <div className="table__cell table__cell--email">{assignee && assignee.email}</div>
+        <div className="table__cell table__cell--email">{assignee && <a href={`mailto:${assignee.email}`}>{assignee.email}</a>}</div>
       </div>
     )
   }
