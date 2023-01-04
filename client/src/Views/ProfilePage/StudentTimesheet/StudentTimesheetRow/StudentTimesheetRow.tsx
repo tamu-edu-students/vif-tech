@@ -7,13 +7,15 @@ import { msToTimeString } from 'Shared/utils';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
+import TimesheetRowButton from './TimesheetRowButton/TimesheetRowButton';
+
 
 interface OwnProps {
   start_time: string;
   end_time: string;
   event_id: number;
   meeting: Meeting | null;
-  assignedVolunteer?: User;
+  assignee?: User;
 }
 
 interface OwnState {
@@ -21,8 +23,7 @@ interface OwnState {
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    hadMeeting: ownProps.meeting !== null,
-    owner_id: state.auth.user?.id ?? -1,
+    // owner_id: state.auth.user?.id ?? -1,
   };
 };
 const mapDispatchToProps = { };
@@ -35,28 +36,34 @@ class StudentTimesheetRow extends React.Component<Props, OwnState> {
 
   }
 
+  private _generateButtonColor(): string {
+    return this.props.meeting ? 'green' : '';
+  }
+
+  private _generateTimeString(): string {
+    const startTimeShort = msToTimeString(Date.parse(this.props.start_time), 'CST');
+    const endTimeShort = msToTimeString(Date.parse(this.props.end_time), 'CST');
+
+    return `${startTimeShort}—${endTimeShort}`;
+  }
+
   public render(): React.ReactElement<Props> {
     const {
-      start_time,
-      end_time,
-      hadMeeting,
-      assignedVolunteer,
+      assignee,
     } = this.props;
-    
-    const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
-    const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
 
     return (
       <div className="StudentTimesheetRow table__row">
         <div className="table__cell table__cell--time">
-          <div
-            className={`table__time-block ${hadMeeting ? 'table__time-block--available' : ''}`}
+          <TimesheetRowButton
+            disabled={true}
+            modifier={this._generateButtonColor()}
           >
-              {`${startTimeShort}—${endTimeShort}`}
-          </div>
+            {this._generateTimeString()}
+          </TimesheetRowButton>
         </div>
-        <div className="table__cell table__cell--name">{assignedVolunteer && `${assignedVolunteer.firstname} ${assignedVolunteer.lastname}`}</div>
-        <div className="table__cell table__cell--email">{assignedVolunteer && assignedVolunteer.email}</div>
+        <div className="table__cell table__cell--name">{assignee && `${assignee.firstname} ${assignee.lastname}`}</div>
+        <div className="table__cell table__cell--email">{assignee && assignee.email}</div>
       </div>
     )
   }

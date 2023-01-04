@@ -6,25 +6,37 @@ import { createMeeting, deleteMeeting } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
+import TimesheetRowButton from "./TimesheetRowButton/TimesheetRowButton";
 
+
+enum ModStatus {
+  PENDING,
+  EMPTY,
+  DISABLED,
+  FILLED,
+  DELETING,
+  ADDING,
+  SWAPPING,
+}
 
 interface OwnProps {
   start_time: string;
   end_time: string;
   event_id: number;
   meeting: Meeting | null;
-  setReaction: Function;
-  assignedStudent?: User;
+  setReaction: (key: string, reaction: any) => void;
+  assignee?: User;
   registrationIsOpen: boolean;
 }
 
 interface OwnState {
-  isChanged: boolean;
+  isChanging: boolean;
+  modStatus: ModStatus;
+  initialModStatus: ModStatus;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    hadMeeting: ownProps.meeting !== null,
     owner_id: state.auth.user?.id ?? -1,
   };
 };
@@ -34,65 +46,119 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
-  state = { isChanged: false };
+  state = {
+    isChanging: false,
+    initialModStatus: ModStatus.PENDING,
+    modStatus: ModStatus.PENDING
+  };
 
   public componentDidMount(): void {
+    let modStatus: ModStatus = ModStatus.PENDING;
+
+    if (!this.props.assignee) { modStatus = ModStatus.EMPTY; }
+    if (!this.props.registrationIsOpen) { modStatus = ModStatus.DISABLED; }
+    if (this.props.assignee || this.props.meeting) { modStatus = ModStatus.FILLED; }
+
+    this.setState({ initialModStatus: modStatus, modStatus });
   }
 
-  private _createMeeting = () => {
+  private _generateKey(): string {
+    const key: string = `${this.props.start_time} ${this.props.end_time}`;
+    return key;
+  }
+
+  private _generateTimeString(): string {
+    const startTimeShort = msToTimeString(Date.parse(this.props.start_time), 'CST');
+    const endTimeShort = msToTimeString(Date.parse(this.props.end_time), 'CST');
+
+    return `${startTimeShort}—${endTimeShort}`;
+  }
+
+  private _generateButtonColor(): string {
+    switch(this.state.modStatus) {
+      case ModStatus.ADDING:
+      case ModStatus.SWAPPING:
+        return 'yellow';
+      case ModStatus.DELETING:
+        return 'red';
+      case ModStatus.FILLED:
+        return 'green';
+      // case ModStatus.DISABLED:
+      //   return 'disabled';
+      // case ModStatus.EMPTY:
+      //   return 'empty';
+      // case ModStatus.PENDING:
+      //   return 'pending'
+      default:
+        return '';
+    }
+  }
+
+  private _createMeeting = (): void => {
     const {start_time, end_time, owner_id, event_id} = this.props;
-    const key = `${start_time} ${end_time}`;
-    const reaction: any = this.props.hadMeeting
-      ? () => Promise.resolve()
-      : () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
-    this.props.setReaction(key, reaction);
+    const reaction: any = () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
+    this.props.setReaction(this._generateKey(), reaction);
   }
 
-  private _deleteMeeting = () => {
-    const {start_time, end_time} = this.props;
-    const key = `${start_time} ${end_time}`;
-    const reaction: any = this.props.hadMeeting
-      ? () => this.props.deleteMeeting(this.props.meeting?.id ?? -1)
-      : () => Promise.resolve();
-    this.props.setReaction(key, reaction);
+  private _deleteMeeting = (): void => {
+    const reaction: any = () => this.props.deleteMeeting(this.props.meeting?.id ?? -1);
+    this.props.setReaction(this._generateKey(), reaction);
+  }
+
+  private _noOpMeeting = (): void => {
+    const reaction: any = () => Promise.resolve();
+    this.props.setReaction(this._generateKey(), reaction);
+  }
+
+  private _detectChange = (): void => {
+    if (!this.props.registrationIsOpen) { return; }
+
+    let newIsChanging: boolean = !this.state.isChanging;
+    let newModStatus: ModStatus = this.state.modStatus;
+
+    if (newIsChanging) {
+      if (this.props.meeting) {
+        this._deleteMeeting();
+        newModStatus = ModStatus.DELETING;
+      }
+      else {
+        this._createMeeting();
+        newModStatus = ModStatus.ADDING;
+      }
+    }
+    else {
+      this._noOpMeeting();
+      newModStatus = this.state.initialModStatus;
+    }
+
+    this.setState({ modStatus: newModStatus, isChanging: newIsChanging });
   }
 
   public render(): React.ReactElement<Props> {
     const {
-      start_time,
-      end_time,
-      hadMeeting,
-      assignedStudent,
+      assignee,
       registrationIsOpen
     } = this.props;
-    
-    const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
-    const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
+
+    if (this.state.modStatus === ModStatus.PENDING) {
+      return <div></div>
+    }
 
     return (
       <div className="VolunteerTimesheetRow table__row">
         <div className="table__cell table__cell--time">
-          <button
-            onClick={registrationIsOpen
-              ? () => {
-                hadMeeting ? this._deleteMeeting() : this._createMeeting();
-                this.setState({ isChanged: !this.state.isChanged })
-              }
-              : () => {}
-              }
-            className={`table__time-button ${
-              hadMeeting
-              ? (this.state.isChanged ? 'table__time-button--deleting' : 'table__time-button--available')
-              : (this.state.isChanged ? 'table__time-button--adding' : '')
-            }`}
+          <TimesheetRowButton
+            onClick={this._detectChange}
+            disabled={!registrationIsOpen}
+            modifier={this._generateButtonColor()}
           >
-              {`${startTimeShort}—${endTimeShort}`}
-          </button>
+            {this._generateTimeString()}
+          </TimesheetRowButton>
         </div>
-        <div className="table__cell table__cell--name">{assignedStudent && `${assignedStudent.firstname} ${assignedStudent.lastname}`}</div>
+        <div className="table__cell table__cell--name">{assignee && `${assignee.firstname} ${assignee.lastname}`}</div>
         {/* TODO: Truncate */}
-        <div className="table__cell table__cell--portfolio">{assignedStudent?.portfolio_link && <a href={assignedStudent.portfolio_link} target="_blank" rel="noreferrer">{assignedStudent.portfolio_link}</a>}</div>
-        <div className="table__cell table__cell--resume">{assignedStudent?.resume_link && <a href={assignedStudent.resume_link} target="_blank" rel="noreferrer">{assignedStudent.resume_link}</a>}</div>
+        <div className="table__cell table__cell--portfolio">{assignee?.portfolio_link && <a href={assignee.portfolio_link} target="_blank" rel="noreferrer">{assignee.portfolio_link}</a>}</div>
+        <div className="table__cell table__cell--resume">{assignee?.resume_link && <a href={assignee.resume_link} target="_blank" rel="noreferrer">{assignee.resume_link}</a>}</div>
       </div>
     )
   }

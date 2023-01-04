@@ -132,7 +132,7 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
       const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
-      const assignedStudent: User | undefined = meeting?.findInvitee(this.props.users) ?? undefined;
+      const assignee: User | undefined = meeting?.findInvitee(this.props.users) ?? undefined;
       return (
         <React.Fragment key={start_time}>
           <VolunteerTimesheetRow
@@ -140,7 +140,7 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
             end_time={end_time}
             event_id={event?.id}
             meeting={meeting}
-            assignedStudent={assignedStudent}
+            assignee={assignee}
             setReaction={this._setReaction}
             registrationIsOpen={this.props.registrationIsOpen}
           />

@@ -96,7 +96,7 @@
             background-color: $color-gray;
           }
 
-          &--available {
+          &--green {
             background-color: $color-brand-green-dark;
 
             &:hover {
@@ -104,7 +104,7 @@
             }
           }
 
-          &--adding {
+          &--yellow {
             background-color: $color-brand-yellow-dark;
 
             &:hover {
@@ -112,7 +112,7 @@
             }
           }
 
-          &--deleting {
+          &--red {
             background-color: $color-brand-red-dark;
 
             &:hover {
