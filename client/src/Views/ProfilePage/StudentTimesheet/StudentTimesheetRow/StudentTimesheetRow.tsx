@@ -7,7 +7,7 @@ import { msToTimeString } from 'Shared/utils';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
-import TimesheetRowButton from './TimesheetRowButton/TimesheetRowButton';
+import TimesheetRowButton from "Components/TimesheetRowButton/TimesheetRowButton";
 
 
 interface OwnProps {

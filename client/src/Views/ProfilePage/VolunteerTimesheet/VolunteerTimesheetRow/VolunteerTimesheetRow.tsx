@@ -6,7 +6,7 @@ import { createMeeting, deleteMeeting } from 'Store/actions';
 import { msToTimeString } from 'Shared/utils';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
-import TimesheetRowButton from "./TimesheetRowButton/TimesheetRowButton";
+import TimesheetRowButton from "Components/TimesheetRowButton/TimesheetRowButton";
 
 
 enum ModStatus {
@@ -94,23 +94,23 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
     }
   }
 
-  private _createMeeting = (): void => {
+  private _queueCreateMeeting = (): void => {
     const {start_time, end_time, owner_id, event_id} = this.props;
     const reaction: any = () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
     this.props.setReaction(this._generateKey(), reaction);
   }
 
-  private _deleteMeeting = (): void => {
+  private _queueDeleteMeeting = (): void => {
     const reaction: any = () => this.props.deleteMeeting(this.props.meeting?.id ?? -1);
     this.props.setReaction(this._generateKey(), reaction);
   }
 
-  private _noOpMeeting = (): void => {
+  private _queueNoOp = (): void => {
     const reaction: any = () => Promise.resolve();
     this.props.setReaction(this._generateKey(), reaction);
   }
 
-  private _detectChange = (): void => {
+  private _handleClick = (): void => {
     if (!this.props.registrationIsOpen) { return; }
 
     let newIsChanging: boolean = !this.state.isChanging;
@@ -118,16 +118,16 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
 
     if (newIsChanging) {
       if (this.props.meeting) {
-        this._deleteMeeting();
+        this._queueDeleteMeeting();
         newModStatus = ModStatus.DELETING;
       }
       else {
-        this._createMeeting();
+        this._queueCreateMeeting();
         newModStatus = ModStatus.ADDING;
       }
     }
     else {
-      this._noOpMeeting();
+      this._queueNoOp();
       newModStatus = this.state.initialModStatus;
     }
 
@@ -148,7 +148,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
       <div className="VolunteerTimesheetRow table__row">
         <div className="table__cell table__cell--time">
           <TimesheetRowButton
-            onClick={this._detectChange}
+            onClick={this._handleClick}
             disabled={!registrationIsOpen}
             modifier={this._generateButtonColor()}
           >
