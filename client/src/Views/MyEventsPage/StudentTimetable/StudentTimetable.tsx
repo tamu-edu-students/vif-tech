@@ -9,7 +9,7 @@ import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
-import StudentTimesheetRow from './StudentTimesheetRow/StudentTimesheetRow';
+import StudentTimetableRow from './StudentTimetableRow/StudentTimetableRow';
 
 
 interface OwnProps {
@@ -79,7 +79,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
+class StudentTimetable extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
@@ -113,16 +113,16 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   private _renderTimeSlots(timeSlots: any[]): JSX.Element[] {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
-      const assignedVolunteer: User | undefined = meeting?.findOwner(this.props.users) ?? undefined;
+      const meeting: Meeting | null = Meeting.findByTime(meetings, start_time, end_time);
+      const assignee: User | undefined = meeting?.findOwner(this.props.users) ?? undefined;
       return (
         <React.Fragment key={start_time}>
-          <StudentTimesheetRow
+          <StudentTimetableRow
             start_time={start_time}
             end_time={end_time}
             event_id={event?.id}
             meeting={meeting}
-            assignedVolunteer={assignedVolunteer}
+            assignee={assignee}
           />
         </React.Fragment>
       );
@@ -141,19 +141,19 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} timesheet`}</div>
+        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} Timetable`}</div>
       );
     }
 
     if (this.props.isLoading) {
       return (
-        <div>{`Loading Student Timesheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
+        <div>{`Loading Student Timetable${event?.title ? ` for ${event.title}` : ''}...`}</div>
       );
     }
 
     return (
-      <div className="Student-Timesheet">
-        <h2>{`Student ${event?.title} Timesheet`}</h2>
+      <div className="student-timetable timetable timetable--student">
+        <h2 className="heading-secondary">{`Student ${event?.title} Timetable`}</h2>
         {
           registrationIsOpen &&
             <button
@@ -175,7 +175,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
 
         {
           !isAttendingEvent && isPostRegistration &&
-          <div>{`Timesheet not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
+          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
         }
 
         {
@@ -184,7 +184,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--student table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                   <div className="table__cell table__cell--header">Email</div>
@@ -201,4 +201,4 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimesheetPR2);
+export default connector(StudentTimetable);

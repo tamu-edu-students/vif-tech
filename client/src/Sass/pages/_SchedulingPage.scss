@@ -1,0 +1,9 @@
+.my-events-page {
+  &__nav {
+  }
+
+  &__subpage {
+    @include subpage;
+    width: 75rem;
+  }
+}

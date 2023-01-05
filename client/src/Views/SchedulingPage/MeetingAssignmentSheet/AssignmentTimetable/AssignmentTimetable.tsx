@@ -38,7 +38,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimetable extends React.Component<Props, OwnState> {
+class AssignmentTimetable extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
   }
 
@@ -72,7 +72,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <div className="Volunteer-Timetable volunteer-timetable">
+      <div className="assignment-timetable timetable timetable--assignment">
         <h2 className='heading-secondary'>{volunteer.firstname} {volunteer.lastname}</h2>
         {
           focusString &&
@@ -85,11 +85,12 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
           title && <div className="title">{title}</div>
         }
         {
+          //TODO: handle case where volunteer/rep has 0 availabile slots
           <>
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--assignment table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                 </div>
@@ -105,4 +106,4 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimetable);
+export default connector(AssignmentTimetable);

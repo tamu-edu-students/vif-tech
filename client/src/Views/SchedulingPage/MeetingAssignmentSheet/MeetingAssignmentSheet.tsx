@@ -8,7 +8,7 @@ import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventS
 import Event from 'Shared/entityClasses/Event';
 import User from 'Shared/entityClasses/User';
 
-import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
+import AssignmentTimetable from './AssignmentTimetable/AssignmentTimetable';
 import { OptionsContext } from './OptionsContext';
 
 
@@ -177,7 +177,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
     return volunteers.map((volunteer: User) => {
       return (
         <React.Fragment key={volunteer.id}>
-            <VolunteerTimetable
+            <AssignmentTimetable
               volunteer={volunteer} event={this.props.event}
             />
         </React.Fragment>
@@ -216,10 +216,13 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
         unassignedStudents: this.state.unassignedStudents,
         setReaction: this._setReaction,
       }}>
-        <div className="Meeting-Assignment-Sheet">
-          <h2>{`${event?.title} Meeting Assignment Sheet`}</h2>
+        <div className="meeting-assignment-sheet">
+          {/* //TODO: Improve header 2 names  */}
+          <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2>
 
-          {this._renderVolunteerTables(volunteerAttendees ?? [])}
+          <div className="timetables">
+            {this._renderVolunteerTables(volunteerAttendees ?? [])}
+          </div>
 
           <button onClick={() => this._onSaveChanges()}>Save Changes</button>
         </div>

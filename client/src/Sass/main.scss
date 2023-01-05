@@ -13,14 +13,14 @@
 @import "components/MyProfile";
 @import "components/Nav";
 @import "components/RedirectPrompt";
-@import "components/RepresentativeFairTimesheet";
-@import "components/StudentTimesheet";
+@import "components/SubNav";
+@import "components/Timetable";
 @import "components/VirtualFairSchedule";
-@import "components/VolunteerTimesheet";
-@import "components/VolunteerTimetable";
 
 @import "components/button";
 
 @import "pages/redirector";
+@import "pages/MyEventsPage";
+@import "pages/SchedulingPage";
 @import "pages/StudentPage";
 @import "pages/UserDirectory";

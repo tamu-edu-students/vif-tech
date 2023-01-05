@@ -9,7 +9,7 @@ import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
-import VolunteerTimesheetRow from './VolunteerTimesheetRow/VolunteerTimesheetRow';
+import VolunteerTimetableRow from './VolunteerTimetableRow/VolunteerTimetableRow';
 
 
 interface OwnProps {
@@ -81,7 +81,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheet extends React.Component<Props, OwnState> {
+class VolunteerTimetable extends React.Component<Props, OwnState> {
   state = {dispatchQueue: {}, isLoading: false};
 
   public componentDidMount(): void {
@@ -131,16 +131,16 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
   private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
-      const assignedStudent: User | undefined = meeting?.findInvitee(this.props.users) ?? undefined;
+      const meeting: Meeting | null = Meeting.findByTime(meetings, start_time, end_time);
+      const assignee: User | undefined = meeting?.findInvitee(this.props.users) ?? undefined;
       return (
         <React.Fragment key={start_time}>
-          <VolunteerTimesheetRow
+          <VolunteerTimetableRow
             start_time={start_time}
             end_time={end_time}
             event_id={event?.id}
             meeting={meeting}
-            assignedStudent={assignedStudent}
+            assignee={assignee}
             setReaction={this._setReaction}
             registrationIsOpen={this.props.registrationIsOpen}
           />
@@ -161,13 +161,13 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} timesheet`}</div>
+        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} Timetable`}</div>
       );
     }
 
     if (this.props.isLoading) {
       return (
-        <div>{`Loading Volunteer Timesheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
+        <div>{`Loading Volunteer Timetable${event?.title ? ` for ${event.title}` : ''}...`}</div>
       );
     }
 
@@ -178,8 +178,8 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="Volunteer-Timesheet">
-        <h2>{`Volunteer ${event?.title} Timesheet`}</h2>
+      <div className="volunteer-timetable timetable timetable--volunteer">
+        <h2 className="heading-secondary">{`Volunteer ${event?.title} Timetable`}</h2>
 
         {
           registrationIsOpen &&
@@ -202,7 +202,7 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
 
         {
           !isAttendingEvent && isPostRegistration &&
-          <div>{`Timesheet not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
+          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
         }
 
         {
@@ -211,7 +211,7 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--volunteer table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                   <div className="table__cell table__cell--header">Portfolio</div>
@@ -233,4 +233,4 @@ class VolunteerTimesheet extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimesheet);
+export default connector(VolunteerTimetable);

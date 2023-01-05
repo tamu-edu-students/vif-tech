@@ -1,17 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
 // TODO: Remove temporary stylings
 .heading-primary {
-  text-align: center;
-  margin-bottom: 1rem;
-  font-size: 2.2rem;
-  background-color: $color-violet;
   position: relative;
   left: -2rem;
+
+  font-family: $font-primary;
+  font-weight: 400;
+  font-size: 7rem;
+  background-color: $color-violet;
+  margin-bottom: 6.6rem;
   width: calc(100% + 4rem);
+  height: 22.2rem;
   padding: 1rem 0;
   // margin-top: -1rem;;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .heading-secondary {

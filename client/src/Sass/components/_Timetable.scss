@@ -1,0 +1,236 @@
+@mixin time-button-hover($background-color, $lighten: false) {
+  background-color: $background-color;
+  text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+
+  &:not(.table__time-button--disabled):hover {
+    @if $lighten == false {
+      &:hover { background-color: darken($background-color, 5%); }
+      &:active { background-color: darken($background-color, 10%); }
+    }
+    @else {
+      &:hover { background-color: lighten($background-color, 10%); }
+      &:active { background-color: lighten($background-color, 15%); }
+    }
+  }
+}
+
+.timetables {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.timetable {
+  //TODO: Remove
+  width:61.2rem;
+
+  &--assignment {
+    width: 65rem;
+
+    & > .heading-secondary {
+      background-color: $color-violet-darkest;
+      color: $color-white;
+      font-size: 1.8rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      font-weight: 400;
+      font-style: italic;
+      padding: 1rem 2.6rem;
+      width: max-content;
+    }
+  
+    & > details,
+    & > .title {
+      background-color: $color-gray-lightest;
+      color: $color-black;
+      font-size: 1.2rem;
+      padding: 0.5rem 2.6rem;
+      border-top-right-radius: 1rem;
+    }
+  }
+  
+  .table {
+    .table__rows {
+      color: $color-black;
+      display: flex;
+      flex-direction: column;
+
+      .table__row {
+        display: grid;
+
+        &--student { grid-template-columns: 16fr repeat(2, 42fr); }
+        &--volunteer{ grid-template-columns: 16fr repeat(3, 28fr); }
+        &--assignment { grid-template-columns: 16fr 84fr; }
+        &--representative-fair { grid-template-columns: 1fr; }
+
+        &--assignment {
+          // &:last-child {
+          //   overflow: hidden;
+          //   border-bottom-left-radius: 1rem;
+          //   border-bottom-right-radius: 1rem;
+          // }
+
+          .student-select-form {
+            font-size: 1.4rem;
+            width: 100%;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+
+            &--unassigned {
+              font-style: italic;
+            }
+
+            &__option--unassigned {
+              font-style: italic;
+            }
+          }
+
+          .student-focuses {
+            padding: 0 1rem 1rem 1.4rem;
+            font-size: 1.2rem
+          }
+        }
+
+        &:not(:last-child):not(.table__row--header) {
+          .table__cell {
+            border-bottom: 1px solid $color-white;
+          }
+        }
+
+        &:not(.table__row--header) {
+          &:nth-child(even) {
+            .table__cell:not(.table__cell--time) {
+              background-color: $color-gray-light;
+
+              .student-select-form {
+                background-color: $color-gray-light;
+              }
+            }
+          }
+  
+          &:nth-child(odd) {
+            .table__cell:not(.table__cell--time) {
+              background-color: $color-white;
+
+              .student-select-form {
+                background-color: $color-white;
+              }
+            }
+          }
+        }
+
+        &--header {
+        }
+
+        .table__cell {
+          padding: 1rem;
+          font-family: $font-secondary;
+          font-size: 1.2rem;
+          //TODO: test on Safari
+          word-break: break-all;
+          hyphens: auto;
+
+          display: flex;
+          align-items: center;
+
+          &:not(:last-child):not(.table__cell--time) {
+            border-right: 1px solid $color-violet-darkest;
+          }
+
+          &--time {
+            padding: 0;
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+          }
+
+          &--name {
+          }
+
+          &--email {
+          }
+
+          &--assignee {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          &--header  {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background-color: $color-violet-darkest;
+            color: $color-white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          
+          a {
+            $color: $color-black;
+
+            &:link,
+            &:visited {
+              color: $color;
+              text-decoration: underline 0.05rem solid currentColor;
+              text-underline-offset: 0.3rem;
+              transition: 0.1s;
+            }
+
+            &:hover {
+              color: lighten($color, 10%);
+            }
+
+            &:active {
+              color: lighten($color, 30%);
+            }
+          }
+        }
+
+        .table__time-button {
+          width: 100%;
+          height: 100%;
+          padding: 1rem;
+          background-color: $color-violet-darkest;
+          color: $color-white;
+          font: inherit;
+          font-family: $font-primary;
+          font-size: 1.8rem;
+          border: none;
+          cursor: pointer;
+          transition: all 0.1s;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &::selection {
+            text-shadow: none;
+          }
+
+          &--disabled {
+            cursor: unset;
+          }
+
+          &--empty {
+            @include time-button-hover($color-violet-darkest, true);
+          }
+
+          &--green {
+            @include time-button-hover($color-brand-green-dark);
+          }
+
+          &--yellow {
+            @include time-button-hover($color-brand-yellow-dark);
+            }
+
+          &--red {
+            @include time-button-hover($color-brand-red-dark);
+          }
+        }
+      }
+    }
+  }
+}

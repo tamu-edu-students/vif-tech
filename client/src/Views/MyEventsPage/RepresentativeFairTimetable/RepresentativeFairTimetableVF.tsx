@@ -8,7 +8,7 @@ import { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, delet
 import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 
-import RepresentativeFairTimesheetRow from './RepresentativeFairTimesheetRow/RepresentativeFairTimesheetRow';
+import RepresentativeFairTimetableRow from './RepresentativeFairTimetableRow/RepresentativeFairTimetableRow';
 
 
 interface OwnProps {
@@ -71,7 +71,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
+class RepresentativeFairTimetable extends React.Component<Props, OwnState> {
   state = {dispatchQueue: {}, isLoading: false};
 
   public componentDidMount(): void {
@@ -118,7 +118,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
       const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
       return (
         <React.Fragment key={start_time}>
-          <RepresentativeFairTimesheetRow
+          <RepresentativeFairTimetableRow
             start_time={start_time}
             end_time={end_time}
             event_id={event?.id}
@@ -142,7 +142,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
 
     if (this.props.isLoading) {
       return (
-        <div>Loading Representative Timesheet for Virtual Fair...</div>
+        <div>Loading Representative Timetable for Virtual Fair...</div>
       );
     }
 
@@ -155,13 +155,13 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div>Failed to load timesheet</div>
+        <div>Failed to load Timetable</div>
       );
     }
 
     return (
-      <div className="Representative-Fair-Timesheet">
-        <h2>Representative Fair Timesheet</h2>
+      <div className="representative-fair-timetable timetable timetable--representative-fair">
+        <h2 className="heading-secondary">Representative Fair Timetable</h2>
 
         {
           registrationIsOpen &&
@@ -184,7 +184,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
 
         {
           !isAttendingEvent && isPostRegistration &&
-          <div>{`Timesheet not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
+          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
         }
 
         {
@@ -193,7 +193,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--representative-fair table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                 </div>
 
@@ -212,4 +212,4 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimesheetPR2);
+export default connector(RepresentativeFairTimetable);

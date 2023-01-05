@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { authActionTypes } from 'Store/actions/types';
@@ -19,8 +19,9 @@ import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
 import CompaniesPage from 'Views/CompaniesPage/CompaniesPage';
 import StudentsPage from 'Views/StudentsPage/StudentsPage';
+import MyEventsPage from 'Views/MyEventsPage/MyEventsPage';
+import SchedulingPage from 'Views/SchedulingPage/SchedulingPage';
 
-import { VifLogoMark, VifLogoWide } from 'Components/iconComponents';
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
 
@@ -113,6 +114,28 @@ class App extends React.Component<Props, {}> {
               <Route exact path="/virtual-fair-schedule">
                 <VirtualFairSchedule />
               </Route>
+
+              <Route
+                path={"/my-events"}
+                render={ (routeProps: any) => {
+                  return (
+                    this.props.user && !this.props.user.isAdmin
+                    ? <MyEventsPage {...routeProps} />
+                    : <Redirect to={'/login'} /> //TODO: Handle My Events path if admin
+                  )
+                } }
+              />
+
+              <Route
+                path={"/scheduling"}
+                render={ (routeProps: any) => {
+                  return (
+                    this.props.user?.isAdmin
+                    ? <SchedulingPage {...routeProps} />
+                    : <Redirect to={'/login'} /> //TODO: Handle My Events path if admin
+                  )
+                } }
+              />
 
               <Route exact path="/users/new">
                 { this.props.user
