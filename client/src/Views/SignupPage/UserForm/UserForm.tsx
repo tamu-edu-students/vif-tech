@@ -87,8 +87,8 @@ class UserForm extends CustomForm<Props, {}> {
  
   public render() {
     return (
-      <form className='signup-form' data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <div className="signup-form__fields">
+      <form className='signup-form form form--signup' data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
+        <div className="form__fields">
           <fieldset className="signup-form__usertypes">
             <legend className='signup-form__usertypes-legend'>{`I am a:`}</legend>
             <div className="signup-form__radio-buttons">

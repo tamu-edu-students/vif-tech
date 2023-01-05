@@ -38,7 +38,7 @@ class SignupPage extends React.Component<Props, {}> {
     }
 
     return (
-      <div className="signup-page">
+      <div className="signup-page page page--signup">
         <h1 className="heading-primary">Sign Up</h1>
         <UserForm form="userCreate" onSubmit={this._onSubmit} />
       </div>

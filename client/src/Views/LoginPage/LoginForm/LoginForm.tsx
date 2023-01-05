@@ -1,5 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from "redux-form";
+import { Link } from "react-router-dom";
 import { connect, ConnectedProps } from 'react-redux';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
@@ -22,10 +23,13 @@ class LoginForm extends CustomForm<Props, {}> {
  
   public render() {
     return (
-      <form data-testid="login-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name="email" id="email" type="text" component={this._renderInput} label="Email" />
-        <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
-        <button type='submit' data-testid="log-in-form-button">Log In</button>
+      <form className='login-form form form--login' data-testid="login-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
+        <div className="form__fields">
+          <Field name="email" id="email" type="text" component={this._renderInput} label="Email" />
+          <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
+        </div>
+        <button className="btn-wire" type='submit' data-testid="log-in-form-button">Log In</button>
+        <Link to="/signup" className="link">Need an account? Sign up here!</Link>
       </form>
     );
   }

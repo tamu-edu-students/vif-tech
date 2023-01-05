@@ -42,15 +42,15 @@ class LoginPage extends React.Component<Props, OwnState> {
     }
 
     return (
-      <section className="section section--login">
-        <h1 className="heading-primary">Login</h1>
+      <div className="login-page page page--login">
+        <h1 className="heading-primary">Log In</h1>
         <LoginForm onSubmit={this._onSubmit} form="login" />
         {
           errors_logIn.map((error: string) => (
             <div className="error" key={error}>{error}</div>
           ))
         }
-      </section>
+      </div>
     );
   }
 }
