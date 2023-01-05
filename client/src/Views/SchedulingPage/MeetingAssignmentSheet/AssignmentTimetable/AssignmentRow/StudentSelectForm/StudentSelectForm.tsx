@@ -42,6 +42,10 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
     }
   }
 
+  private _isUnassigned(): boolean {
+    return this.state.value === -1;
+  }
+
   private _onChange = (event: any): void => {
     const toSteal: number = Number.parseInt(event.target.value);
     const toReinstate: number = this.state.value;
@@ -68,6 +72,10 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
       userFocuses
     } = this.props;
 
+    const {
+      value
+    } = this.state;
+
     const focusString: string = this.state.student
       ? (this.state.student as User).findFocuses(focuses, userFocuses)
         .map((focus: Focus) => focus.name)
@@ -76,8 +84,12 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
 
     return (
       <>
-        <select className="student-select-form" value={this.state.value} onChange={this._onChange}>
-          <option value={-1}>UNASSIGNED</option>
+        <select
+          className={`student-select-form ${this._isUnassigned() ? `student-select-form--unassigned` : ''}`}
+          value={value}
+          onChange={this._onChange}
+        >
+          <option className="student-select-form__option student-select-form__option--unassigned" value={-1}>UNASSIGNED</option>
           {this._renderOptions()}
         </select>
         {

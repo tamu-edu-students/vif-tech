@@ -28,9 +28,13 @@
     width: 65rem;
 
     & > .heading-secondary {
-      background-color: $color-gray-lightest;
-      color: $color-black;
-      font-size: 1.6rem;
+      background-color: $color-violet-darkest;
+      color: $color-white;
+      font-size: 1.8rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      font-weight: 400;
+      font-style: italic;
       padding: 1rem 2.6rem;
       width: max-content;
     }
@@ -41,6 +45,7 @@
       color: $color-black;
       font-size: 1.2rem;
       padding: 0.5rem 2.6rem;
+      border-top-right-radius: 1rem;
     }
   }
   
@@ -59,12 +64,26 @@
         &--representative-fair { grid-template-columns: 1fr; }
 
         &--assignment {
+          // &:last-child {
+          //   overflow: hidden;
+          //   border-bottom-left-radius: 1rem;
+          //   border-bottom-right-radius: 1rem;
+          // }
+
           .student-select-form {
             font-size: 1.4rem;
             width: 100%;
             border: none;
             padding: 1rem;
             cursor: pointer;
+
+            &--unassigned {
+              font-style: italic;
+            }
+
+            &__option--unassigned {
+              font-style: italic;
+            }
           }
 
           .student-focuses {

@@ -217,7 +217,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
         setReaction: this._setReaction,
       }}>
         <div className="meeting-assignment-sheet">
-          <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2>
+          {/* <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2> */}
 
           <div className="timetables">
             {this._renderVolunteerTables(volunteerAttendees ?? [])}
