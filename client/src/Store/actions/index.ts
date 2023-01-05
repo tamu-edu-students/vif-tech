@@ -237,52 +237,24 @@ export const updateCompanyFocuses = (companyId: number, focusIds: number[]) => a
 export const fetchAllowlist = () => async (dispatch: any) => {
   //TODO: Clean
   dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__REQUEST });
-  let success: boolean = true;
-  let error403 = false;
-  const response_emails: any = await vifTech.get(`/allowlist_emails`)
-  .catch((response) => {
-    success = false;
-    console.error(response);
-    if (response.response?.status !== 403) {
-      dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__FAILURE, payload: {error: 'ERROR: Failed to fetch allowlist data'} });
-    }
-    else {
-      error403 = true;
-    }
-  });
-  if (!success && error403) {
-    dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails: [], allowlist_domains: []} });
+  await Promise.all([
+    vifTech.get(`/allowlist_emails`),
+    vifTech.get(`/allowlist_domains`)
+  ])
+  .then(([response_allowlist_emails, response_allowlist_domains]) => {
+    console.log('response_allowlist_emails:', response_allowlist_emails);
+    console.log('response_allowlist_domains:', response_allowlist_domains);
+
+    const allowlist_emails: AllowlistEmail[] = AllowlistEmail.createAllowlistEmails(response_allowlist_emails.data.allowlist_emails);
+    const allowlist_domains: AllowlistDomain[] = AllowlistDomain.createAllowlistDomains(response_allowlist_domains.data.allowlist_domains);
+
+    dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails, allowlist_domains} });
     dispatch({ type: allowlistActionTypes.SET_ALLOWLIST_STALENESS, payload: false });
-    return;
-  }
-  const response_domains: any = await vifTech.get(`/allowlist_domains`)
+  })
   .catch((response) => {
-    success = false;
-    console.error(response);
-    if (response.response?.status !== 403) {
-      dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__FAILURE, payload: {error: 'ERROR: Failed to fetch allowlist data'} });
-    }
-    else {
-      error403 = true;
-    }
+    console.log('response_allowlist:', response);
+    dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__FAILURE, payload: {error: 'ERROR: Failed to fetch allowlist data'} });
   });
-
-  console.log('fetchAllowlist (emails) response:', response_emails);
-  console.log('fetchAllowlist (domains) response:', response_domains);
-
-  if (!success) {
-    if (error403) {
-      dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails: [], allowlist_domains: []} });
-      dispatch({ type: allowlistActionTypes.SET_ALLOWLIST_STALENESS, payload: false });
-    }
-    return;
-  }
-
-  const allowlist_emails: AllowlistEmail[] = AllowlistEmail.createAllowlistEmails(response_emails.data.allowlist_emails);
-  const allowlist_domains: AllowlistDomain[] = AllowlistDomain.createAllowlistDomains(response_domains.data.allowlist_domains);
-
-  dispatch({ type: allowlistActionTypes.FETCH_ALLOWLIST__SUCCESS, payload: {allowlist_emails, allowlist_domains} });
-  dispatch({ type: allowlistActionTypes.SET_ALLOWLIST_STALENESS, payload: false });
 }
 
 export const createAllowlistEmail = (formValues: any, allowlistTitle: string) => async (dispatch: any, getState: any) => {
