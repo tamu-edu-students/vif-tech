@@ -14,7 +14,7 @@ import FAQPage from 'Views/FAQPage/FAQPage';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
 import UsersPage from 'Views/UsersPage/UsersPage';
-import RegistrationPage from 'Views/RegistrationPage/RegistrationPage';
+import SignupPage from 'Views/SignupPage/SignupPage';
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
 import CompaniesPage from 'Views/CompaniesPage/CompaniesPage';
@@ -137,14 +137,14 @@ class App extends React.Component<Props, {}> {
                 } }
               />
 
-              <Route exact path="/users/new">
+              <Route exact path="/signup">
                 { this.props.user
                   ? <Redirect to="/" />
-                  : <RegistrationPage />
+                  : <SignupPage />
                 }
               </Route>
 
-              <Route exact path="/users/new/success">
+              <Route exact path="/signup/success">
                 <section className="section section--redirector">
                   <RedirectPrompt
                     message={"Almost done. Click the verification link sent to your email to complete your registration."}

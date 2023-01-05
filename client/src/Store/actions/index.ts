@@ -58,7 +58,7 @@ export const createUser = (formValues: any) => async (dispatch: any) => {
   .then((response) => {
     console.log(`createUser response: `, response);
     dispatch({ type: userActionTypes.CREATE_USER__SUCCESS, payload: new User(response.data.user) });
-    history.push('/users/new/success');
+    history.push('/signup/success');
   })
   .catch((response) => {
     console.log(`createUser response: `, response);

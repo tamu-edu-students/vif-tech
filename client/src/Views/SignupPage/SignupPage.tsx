@@ -5,7 +5,7 @@ import { createLoadingSelector, createErrorMessageSelector } from 'Shared/select
 import { userActionTypes } from 'Store/actions/types';
 
 import { createUser } from "Store/actions";
-import UserForm from "Views/RegistrationPage/UserForm/UserForm";
+import UserForm from "Views/SignupPage/UserForm/UserForm";
 
 interface OwnProps {
 }
@@ -21,7 +21,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class RegistrationPage extends React.Component<Props, {}> {
+class SignupPage extends React.Component<Props, {}> {
   private _onSubmit = (formValues: any) => {
     this.props.createUser(formValues);
   }
@@ -39,11 +39,11 @@ class RegistrationPage extends React.Component<Props, {}> {
 
     return (
       <section className="section section--registration">
-        <h1 className="heading-primary">Registration</h1>
+        <h1 className="heading-primary">Sign Up</h1>
         <UserForm form="userCreate" onSubmit={this._onSubmit} />
       </section>
     );
   }
 }
 
-export default connector(RegistrationPage);
+export default connector(SignupPage);

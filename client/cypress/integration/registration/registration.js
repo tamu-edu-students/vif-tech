@@ -55,7 +55,7 @@ Given(`the following companies are in the allowlist:`, (table) => {
 });
 
 Given(`I visit the registration page`, function() {
-  cy.visit('/users/new');
+  cy.visit('/signup');
 });
 
 Given(`I choose the {word} usertype`, (usertype) => {
@@ -114,9 +114,9 @@ Then(`I should see an error`, () => {
 });
 
 Then(`the registration should be successful`, () => {
-  cy.location('pathname').should('eq', '/users/new/success');
+  cy.location('pathname').should('eq', '/signup/success');
 });
 
 Then(`the registration should not be successful`, () => {
-  cy.location('pathname').should('not.eq', '/users/new/success');
+  cy.location('pathname').should('not.eq', '/signup/success');
 });
