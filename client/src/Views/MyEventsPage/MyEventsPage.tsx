@@ -2,8 +2,7 @@ import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
-import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { allowlistActionTypes } from 'Store/actions/types';
+// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { fetchAllowlist } from 'Store/actions';
 
 import { Usertype } from 'Shared/enums';

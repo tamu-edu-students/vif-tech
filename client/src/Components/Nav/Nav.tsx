@@ -5,7 +5,7 @@ import { logOut } from 'Store/actions';
 
 import User from 'Shared/entityClasses/User';
 
-import { VifLogoMark, VifLogoWide } from 'Components/iconComponents';
+import { VifLogoWide } from 'Components/iconComponents';
 
 interface OwnProps {
   user?: User;
@@ -28,12 +28,11 @@ class Nav extends React.Component<Props, OwnState> {
   render(): React.ReactElement<Props> {
     const {
       user,
-      isLoggedIn,
       className,
     } = this.props;
 
     return (
-      <nav className={"nav" + `${className ? ' '+className : ''}`}>
+      <nav className={`nav ${className ? className : ''}`}>
         <ul className="nav__list">
           <li className="nav__item nav__item--logo">
             <Link to="/" className="nav__link nav__link--logo-container">

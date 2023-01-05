@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Router, Route, Switch, Redirect, Link } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { authActionTypes } from 'Store/actions/types';
@@ -21,7 +21,6 @@ import CompaniesPage from 'Views/CompaniesPage/CompaniesPage';
 import StudentsPage from 'Views/StudentsPage/StudentsPage';
 import MyEventsPage from 'Views/MyEventsPage/MyEventsPage';
 
-import { VifLogoMark, VifLogoWide } from 'Components/iconComponents';
 import RedirectPrompt from 'Components/RedirectPrompt';
 import Modal from 'Components/Modal/Modal';
 

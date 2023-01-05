@@ -22,9 +22,6 @@ import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
 
 import MeetingAssignmentSheet from './MeetingAssignmentSheet/MeetingAssignmentSheet';
-import VolunteerTimesheet from './VolunteerTimesheet/VolunteerTimesheet';
-import StudentTimesheet from './StudentTimesheet/StudentTimesheet';
-import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
 
 import FocusList from './FocusList/FocusList';
 
@@ -145,26 +142,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
         ] :
         []
       ),
-      
-      <Route exact path={`${parentPath}/timesheet/portfolio-review-1`} key={`${parentPath}/timesheet/portfolio-review-1`}>
-        <VolunteerTimesheet eventTitle="Portfolio Review 1" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/mock-interview-1`} key={`${parentPath}/timesheet/mock-interview-1`}>
-        <VolunteerTimesheet eventTitle="Mock Interview 1" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/mock-interview-2`} key={`${parentPath}/timesheet/mock-interview-2`}>
-        <VolunteerTimesheet eventTitle="Mock Interview 2" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/portfolio-review-2`} key={`${parentPath}/timesheet/portfolio-review-2`}>
-        <VolunteerTimesheet eventTitle="Portfolio Review 2" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/virtual-fair`} key={`${parentPath}/timesheet/virtual-fair`}>
-        <RepresentativeFairTimesheetVF />
-      </Route>
     ]);
   }
 
@@ -178,82 +155,32 @@ class ProfilePage extends React.Component<Props, OwnState> {
           this.props.amPrimaryContact &&
           <>
             <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
-            <br />
           </>
         }
-        <li><Link to={`${parentPath}/timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-        <li><Link to={`${parentPath}/timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
-        <li><Link to={`${parentPath}/timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
-        <li><Link to={`${parentPath}/timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
-        <li><Link to={`${parentPath}/timesheet/virtual-fair`}>Virtual Fair</Link></li>
       </>
     );
   }
 
   private _renderVolunteerRoutes(): JSX.Element[] {
-    const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/timesheet/portfolio-review-1`} key={`${parentPath}/timesheet/portfolio-review-1`}>
-        <VolunteerTimesheet eventTitle="Portfolio Review 1" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/mock-interview-1`} key={`${parentPath}/timesheet/mock-interview-1`}>
-        <VolunteerTimesheet eventTitle="Mock Interview 1" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/mock-interview-2`} key={`${parentPath}/timesheet/mock-interview-2`}>
-        <VolunteerTimesheet eventTitle="Mock Interview 2" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/portfolio-review-2`} key={`${parentPath}/timesheet/portfolio-review-2`}>
-        <VolunteerTimesheet eventTitle="Portfolio Review 2" />
-      </Route>
     ]);
   }
 
   private _renderVolunteerLinks(): JSX.Element {
-    const { parentPath } = this.props;
     return (
       <>
-        <br />
-        <li><Link to={`${parentPath}/timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-        <li><Link to={`${parentPath}/timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
-        <li><Link to={`${parentPath}/timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
-        <li><Link to={`${parentPath}/timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
       </>
     );
   }
 
   private _renderStudentRoutes(): JSX.Element[] {
-    const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/timesheet/portfolio-review-1`} key={`${parentPath}/timesheet/portfolio-review-1`}>
-        <StudentTimesheet eventTitle="Portfolio Review 1" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/mock-interview-1`} key={`${parentPath}/timesheet/mock-interview-1`}>
-        <StudentTimesheet eventTitle="Mock Interview 1" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/mock-interview-2`} key={`${parentPath}/timesheet/mock-interview-2`}>
-        <StudentTimesheet eventTitle="Mock Interview 2" />
-      </Route>,
-
-      <Route exact path={`${parentPath}/timesheet/portfolio-review-2`} key={`${parentPath}/timesheet/portfolio-review-2`}>
-        <StudentTimesheet eventTitle="Portfolio Review 2" />
-      </Route>
     ]);
   }
 
   private _renderStudentLinks(): JSX.Element {
-    const { parentPath } = this.props;
     return (
       <>
-      <br />
-      <li><Link to={`${parentPath}/timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-      <li><Link to={`${parentPath}/timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
-      <li><Link to={`${parentPath}/timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
-      <li><Link to={`${parentPath}/timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
       </>
     );
   }
