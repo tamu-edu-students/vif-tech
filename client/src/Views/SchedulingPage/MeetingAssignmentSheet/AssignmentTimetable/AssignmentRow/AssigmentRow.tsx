@@ -138,15 +138,9 @@ class AssignmentRow extends React.Component<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     const {
-      start_time,
-      end_time,
-      hadAssignment,
       keyVal: key,
       initialInvitee,
     } = this.props;
-    
-    const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
-    const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
 
     return (
       <div className="assignment-timetable-row table__row table__row--assignment">
