@@ -71,7 +71,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
+class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
   state = {dispatchQueue: {}, isLoading: false};
 
   public componentDidMount(): void {
@@ -160,7 +160,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="Representative-Fair-Timesheet">
+      <div className="representative-fair-timesheet timesheet timesheet--representative-fair">
         <h2 className="heading-secondary">Representative Fair Timesheet</h2>
 
         {
@@ -193,7 +193,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--representative-fair table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                 </div>
 
@@ -212,4 +212,4 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimesheetPR2);
+export default connector(RepresentativeFairTimesheet);

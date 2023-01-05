@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
+// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
+// import {eventActionTypes } from 'Store/actions/types';
 import { createMeeting, deleteMeeting } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
+// import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
-import User from 'Shared/entityClasses/User';
-// import TimesheetRow from 'Components/TimesheetRow/TimesheetRow';
+
 import TimesheetRowButton from "Components/TimesheetRowButton/TimesheetRowButton";
 
 
@@ -25,8 +27,7 @@ interface OwnProps {
   end_time: string;
   event_id: number;
   meeting: Meeting | null;
-  setReaction: (key: string, reaction: any) => void;
-  assignee?: User;
+  setReaction: Function;
   registrationIsOpen: boolean;
 }
 
@@ -38,6 +39,7 @@ interface OwnState {
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
+    hadMeeting: ownProps.meeting !== null,
     owner_id: state.auth.user?.id ?? -1,
   };
 };
@@ -46,7 +48,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
+class RepresentativeFairTimesheetRow extends React.Component<Props, OwnState> {
   state = {
     isChanging: false,
     initialModStatus: ModStatus.PENDING,
@@ -95,6 +97,7 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
     }
   }
 
+  //TODO: Make sure updates cause companies schedule to update
   private _queueCreateMeeting = (): void => {
     const {start_time, end_time, owner_id, event_id} = this.props;
     const reaction: any = () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
@@ -137,16 +140,11 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     const {
-      assignee,
       registrationIsOpen
     } = this.props;
 
-    if (this.state.modStatus === ModStatus.PENDING) {
-      return <div></div>
-    }
-
     return (
-      <div className="volunteer-timesheet-row table__row table__row--volunteer">
+      <div className="representative-fair-timesheet-row table__row table__row--representative-fair">
         <div className="table__cell table__cell--time">
           <TimesheetRowButton
             onClick={this._handleClick}
@@ -156,13 +154,9 @@ class VolunteerTimesheetRow extends React.Component<Props, OwnState> {
             {this._generateTimeString()}
           </TimesheetRowButton>
         </div>
-        <div className="table__cell table__cell--name">{assignee && `${assignee.firstname} ${assignee.lastname}`}</div>
-        {/* TODO: Truncate */}
-        <div className="table__cell table__cell--portfolio">{assignee?.portfolio_link && <a href={assignee.portfolio_link} target="_blank" rel="noreferrer">{assignee.portfolio_link}</a>}</div>
-        <div className="table__cell table__cell--resume">{assignee?.resume_link && <a href={assignee.resume_link} target="_blank" rel="noreferrer">{assignee.resume_link}</a>}</div>
       </div>
     )
   }
 }
 
-export default connector(VolunteerTimesheetRow);
+export default connector(RepresentativeFairTimesheetRow);

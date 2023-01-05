@@ -14,7 +14,7 @@ import SubNav from 'Components/SubNav/SubNav';
 
 import VolunteerTimesheet from './VolunteerTimesheet/VolunteerTimesheet';
 import StudentTimesheet from './StudentTimesheet/StudentTimesheet';
-// import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
+import RepresentativeFairTimesheetVF from './RepresentativeFairTimesheet/RepresentativeFairTimesheetVF';
 
 
 interface OwnProps {
@@ -50,6 +50,15 @@ class MyEventsPage extends React.Component<Props, OwnState> {
     );
   }
 
+  private _renderRepresentativeFairRoute(subPath: string, eventTitle: string): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
+    return (
+      <Route exact path={path} key={path}>
+        <RepresentativeFairTimesheetVF eventTitle={eventTitle} />
+      </Route>
+    );
+  }
+
   private _renderStudentRoute(subPath: string, eventTitle: string): JSX.Element {
     const path: string = this.props.parentPath+subPath;
     return (
@@ -72,10 +81,11 @@ class MyEventsPage extends React.Component<Props, OwnState> {
       this._renderVolunteerRoute(`/timesheet/mock-interview-1`, 'Mock Interview 1'),
       this._renderVolunteerRoute(`/timesheet/mock-interview-2`, 'Mock Interview 2'),
       this._renderVolunteerRoute(`/timesheet/portfolio-review-2`, 'Portfolio Review 2'),
-
-      // <Route exact path={`${parentPath}/virtual-fair`} key={`${parentPath}/virtual-fair`}>
-      //   <RepresentativeFairTimesheetVF />
-      // </Route>
+      ...(
+        this.props.user?.isRepresentative
+        ? [this._renderRepresentativeFairRoute(`/timesheet/virtual-fair`, 'Virtual Fair')]
+        : []
+      )
     ]);
   }
 
@@ -86,7 +96,10 @@ class MyEventsPage extends React.Component<Props, OwnState> {
         {this._renderLink(`/timesheet/mock-interview-1`, 'Mock Interview 1')}
         {this._renderLink(`/timesheet/mock-interview-2`, 'Mock Interview 2')}
         {this._renderLink(`/timesheet/portfolio-review-2`, 'Portfolio Review 2')}
-        {/* <li><Link to={`${parentPath}/timesheet/virtual-fair`}>Virtual Fair</Link></li> */}
+        {
+          this.props.user?.isRepresentative &&
+          this._renderLink(`/timesheet/virtual-fair`, 'Virtual Fair')
+        }
       </>
     );
   }

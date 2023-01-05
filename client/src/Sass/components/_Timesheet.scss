@@ -29,6 +29,7 @@
 
         &--student { grid-template-columns: 16fr repeat(2, 42fr); }
         &--volunteer { grid-template-columns: 16fr repeat(3, 28fr); }
+        &--representative-fair { grid-template-columns: 1fr; }
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
