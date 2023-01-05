@@ -22,7 +22,7 @@ class RedirectPrompt extends React.Component<InternalRedirectPromptProps | IExte
   private _generateLink(): JSX.Element | null {
     if (this.props.pathName) {
       return (
-        <Link to={this.props.pathName} className="btn redirector__link">
+        <Link to={this.props.pathName} className="btn-wire redirector__link">
           <span className="btn__text">{this.props.buttonText}</span>
         </Link>
       )
@@ -30,7 +30,7 @@ class RedirectPrompt extends React.Component<InternalRedirectPromptProps | IExte
 
     if (this.props.href) {
       return (
-        <a href={this.props.href} target="_blank" rel="noreferrer" className="btn redirector__link">
+        <a href={this.props.href} target="_blank" rel="noreferrer" className="btn-wire redirector__link">
           <span className="btn__text">{this.props.buttonText}</span>
         </a>
       )

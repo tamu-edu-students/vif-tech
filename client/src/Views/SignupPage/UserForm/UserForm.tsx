@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Field, reduxForm, InjectedFormProps, change } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
@@ -86,55 +87,63 @@ class UserForm extends CustomForm<Props, {}> {
  
   public render() {
     return (
-      <form data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name="email" id="email" type="email" component={this._renderInput} label="Email" />
-        <Field name="firstname" id="firstname" type="text" component={this._renderInput} label="First name" />
-        <Field name="lastname" id="lastname" type="text" component={this._renderInput} label="Last name" />
-        <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
-        <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
-        <fieldset>
-          <label><p>{`I am a:`}</p></label>
-          <Field name="usertype" id="usertype--student" type="radio" component={this._renderInput} label="Student" value={Usertype.STUDENT} />
-          <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderInput} label="Volunteer" value={Usertype.VOLUNTEER} />
-          <Field name="usertype" id="usertype--representative" type="radio" component={this._renderInput} label="Company Representative" value={Usertype.REPRESENTATIVE} />
-        </fieldset>
-        {
-          this.props.usertype === Usertype.REPRESENTATIVE &&
-          <>
-            <Field name="title" id="title" type="text" component={this._renderInput} label="Job title" />
-              {
-                //TODO: add error
-                this.props.isLoading_fetchCompanies
-                ? <div>Loading company options...</div>
-                : (
-                  <div className="select-container">
-                    <Field name="company_id" id="company_id" component={this._renderSelect} label="Company">
-                      <option />
-                      {this._renderCompanyOptions()}
-                    </Field>
-                  </div>
-                )
-              }
-          </>
-        }
-        {
-          this.props.usertype === Usertype.STUDENT &&
-          <>
-            <div className="select-container">
-              <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
-                <option />
-                {this._renderYearOptions()}
-              </Field>
+      <form className='signup-form' data-testid="user-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
+        <div className="signup-form__fields">
+          <fieldset className="signup-form__usertypes">
+            <legend className='signup-form__usertypes-legend'>{`I am a:`}</legend>
+            <div className="signup-form__radio-buttons">
+              <Field name="usertype" id="usertype--student" type="radio" component={this._renderRadio} label="Student" value={Usertype.STUDENT} />
+              <Field name="usertype" id="usertype--volunteer" type="radio" component={this._renderRadio} label="Volunteer" value={Usertype.VOLUNTEER} />
+              <Field name="usertype" id="usertype--representative" type="radio" component={this._renderRadio} label="Company Representative" value={Usertype.REPRESENTATIVE} />
             </div>
-            <div className="select-container">
-              <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
-                <option />
-                {this._renderSemesterOptions()}
-              </Field>
-            </div>
-          </>
-        }
-        <button type='submit' data-testid="sign-up-form-button">Sign Up</button>
+          </fieldset>
+
+          <Field name="email" id="email" type="email" component={this._renderInput} label="Email" />
+          <Field name="firstname" id="firstname" type="text" component={this._renderInput} label="First name" />
+          <Field name="lastname" id="lastname" type="text" component={this._renderInput} label="Last name" />
+          <Field name="password" id="password" type="password" component={this._renderInput} label="Password" />
+          <Field name="password_confirmation" id="password-confirmation" type="password" component={this._renderInput} label="Confirm password" />
+          
+          {
+            this.props.usertype === Usertype.REPRESENTATIVE &&
+            <>
+              <Field name="title" id="title" type="text" component={this._renderInput} label="Job title" />
+                {
+                  //TODO: add error
+                  this.props.isLoading_fetchCompanies
+                  ? <div>Loading company options...</div>
+                  : (
+                    <div className="select-container">
+                      <Field name="company_id" id="company_id" component={this._renderSelect} label="Company">
+                        <option />
+                        {this._renderCompanyOptions()}
+                      </Field>
+                    </div>
+                  )
+                }
+            </>
+          }
+          {
+            this.props.usertype === Usertype.STUDENT &&
+            <>
+              <div className="select-container">
+                <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
+                  <option />
+                  {this._renderYearOptions()}
+                </Field>
+              </div>
+              <div className="select-container">
+                <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
+                  <option />
+                  {this._renderSemesterOptions()}
+                </Field>
+              </div>
+            </>
+          }
+        </div>
+
+        <button className="btn-wire" type="submit" data-testid="sign-up-form-button">Sign Up</button>
+        <Link to="/login" className="link">Already have an account? Click here!</Link>
       </form>
     );
   }
@@ -149,19 +158,19 @@ const validate = ({
   const errors: any = {};
 
   if (!firstname) {
-    errors.firstname = "You must enter your first name";
+    errors.firstname = "Enter your first name";
   }
 
   if (!lastname) {
-    errors.lastname = "You must enter your last name";
+    errors.lastname = "Enter your last name";
   }
 
   if (!email) {
-    errors.email = "You must enter an email address";
+    errors.email = "Enter your email address";
   }
 
   if (!password) {
-    errors.password = "You must enter a password";
+    errors.password = "Enter a password";
   }
 
   if (password !== password_confirmation) {
@@ -170,19 +179,19 @@ const validate = ({
 
   if (usertype === Usertype.REPRESENTATIVE) {
     if (!company_id) {
-      errors.company_id = "You must select your company";
+      errors.company_id = "Select your company";
     }
     if (!title) {
-      errors.title = "You must enter your job title";
+      errors.title = "Enter your job title";
     }
   }
 
   if (usertype === Usertype.STUDENT) {
     if (!class_year) {
-      errors.class_year = "You must select your expected graduation year";
+      errors.class_year = "Select your expected graduation year";
     }
     if (!class_semester) {
-      errors.class_semester = "You must select your expected graduation term";
+      errors.class_semester = "Select your expected graduation term";
     }
   }
 

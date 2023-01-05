@@ -38,10 +38,10 @@ class SignupPage extends React.Component<Props, {}> {
     }
 
     return (
-      <section className="section section--registration">
+      <div className="signup-page">
         <h1 className="heading-primary">Sign Up</h1>
         <UserForm form="userCreate" onSubmit={this._onSubmit} />
-      </section>
+      </div>
     );
   }
 }
