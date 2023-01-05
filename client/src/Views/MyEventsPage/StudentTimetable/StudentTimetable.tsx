@@ -2,22 +2,21 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { eventActionTypes, meetingActionTypes, eventSignupActionTypes } from 'Store/actions/types';
-import { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, deleteEventSignup } from 'Store/actions';
+import { eventActionTypes, meetingActionTypes, eventSignupActionTypes, userActionTypes } from 'Store/actions/types';
+import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup } from 'Store/actions';
 
 import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
+import User from 'Shared/entityClasses/User';
 
-import RepresentativeFairTimesheetRow from './RepresentativeFairTimesheetRow/RepresentativeFairTimesheetRow';
+import StudentTimetableRow from './StudentTimetableRow/StudentTimetableRow';
 
 
 interface OwnProps {
-
+  eventTitle: string;
 }
 
 interface OwnState {
-  dispatchQueue: any;
-  isLoading: boolean;
 }
 
 type TimeOption = {
@@ -26,7 +25,7 @@ type TimeOption = {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const event: Event | null = Event.findByTitle('Virtual Fair', state.eventData.events);
+  const event: Event | null = Event.findByTitle(ownProps.eventTitle, state.eventData.events);
   const isAttendingEvent: boolean = event ? (state.auth.user?.isAttendingEvent(event, state.eventSignupData.eventSignups) ?? false) : false;
 
   const eventsAreStale: boolean = state.eventData.isStale;
@@ -37,14 +36,18 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
   const eventSignupsAreStale: boolean = state.eventSignupData.isStale;
   const isLoading_fetchEventSignups: boolean = createLoadingSelector([eventSignupActionTypes.FETCH_EVENT_SIGNUPS])(state);
+  
+  const usersAreStale: boolean = state.userData.isStale;
+  const isLoading_fetchUsers: boolean = createLoadingSelector([userActionTypes.FETCH_USERS])(state);
 
   return {
     event,
+    isAttendingEvent,
     registrationIsOpen: event?.registrationIsOpen,
     isPreRegistration: event?.isPreRegistration,
     isPostRegistration: event?.isPostRegistration,
-    isAttendingEvent,
-    meetings: state.auth.user?.findOwnedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
+    users: state.userData.users,
+    meetings: state.auth.user?.findInvitedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
     eventsAreStale,
     isLoading_fetchEvents,
@@ -54,26 +57,29 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
     eventSignupsAreStale,
     isLoading_fetchEventSignups,
+
+    usersAreStale,
+    isLoading_fetchUsers,
     
     isLoading:
       eventsAreStale || isLoading_fetchEvents
       || meetingsAreStale || isLoading_fetchMeetings
-      || eventSignupsAreStale || isLoading_fetchEventSignups,
+      || eventSignupsAreStale || isLoading_fetchEventSignups
+      || (isAttendingEvent ? (usersAreStale || isLoading_fetchUsers) : false),
     errors: createErrorMessageSelector([
       eventActionTypes.FETCH_EVENTS,
       meetingActionTypes.FETCH_MEETINGS,
       eventSignupActionTypes.FETCH_EVENT_SIGNUPS,
+      ...(isAttendingEvent ? [userActionTypes.FETCH_USERS] : []),
     ])(state),
   };
 };
-const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, createEventSignup, deleteEventSignup };
+const mapDispatchToProps = { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventSignup, deleteEventSignup };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
-  state = {dispatchQueue: {}, isLoading: false};
-
+class StudentTimetable extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     if (this.props.eventsAreStale && !this.props.isLoading_fetchEvents) {
       this.props.fetchEvents();
@@ -83,6 +89,9 @@ class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
     }
     if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
       this.props.fetchEventSignups();
+    }
+    if (this.props.isAttendingEvent && this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
+      this.props.fetchUsers();
     }
   }
 
@@ -96,35 +105,24 @@ class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
     if (this.props.eventSignupsAreStale && !this.props.isLoading_fetchEventSignups) {
       this.props.fetchEventSignups();
     }
+    if (this.props.isAttendingEvent && this.props.usersAreStale && !this.props.isLoading_fetchUsers) {
+      this.props.fetchUsers();
+    }
   }
 
-  private _onSaveChanges = (): void => {
-    this.setState({ isLoading: true });
-    console.log(Object.values(this.state.dispatchQueue));
-
-    Promise.allSettled(Object.values(this.state.dispatchQueue).map((func: any) => func()))
-    .then(() => {
-      this.setState({dispatchQueue: {}, isLoading: false});
-    })
-  }
-
-  private _setReaction = (key: string, reaction: any) => {
-    this.setState({ dispatchQueue: {...this.state.dispatchQueue, [key]: reaction} });
-  }
-
-  private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
+  private _renderTimeSlots(timeSlots: any[]): JSX.Element[] {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
-      const meeting: Meeting | null = meetings.find((meeting: Meeting) => meeting.start_time >= start_time && meeting.end_time <= end_time) ?? null;
+      const meeting: Meeting | null = Meeting.findByTime(meetings, start_time, end_time);
+      const assignee: User | undefined = meeting?.findOwner(this.props.users) ?? undefined;
       return (
         <React.Fragment key={start_time}>
-          <RepresentativeFairTimesheetRow
+          <StudentTimetableRow
             start_time={start_time}
             end_time={end_time}
             event_id={event?.id}
             meeting={meeting}
-            setReaction={this._setReaction}
-            registrationIsOpen={this.props.registrationIsOpen}
+            assignee={assignee}
           />
         </React.Fragment>
       );
@@ -140,29 +138,22 @@ class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
       isPostRegistration,
     } = this.props;
 
-    if (this.props.isLoading) {
-      return (
-        <div>Loading Representative Timesheet for Virtual Fair...</div>
-      );
-    }
-
-    if (this.state.isLoading) {
-      return (
-        <div>Saving changes...</div>
-      );
-    }
-
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div>Failed to load timesheet</div>
+        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} Timetable`}</div>
+      );
+    }
+
+    if (this.props.isLoading) {
+      return (
+        <div>{`Loading Student Timetable${event?.title ? ` for ${event.title}` : ''}...`}</div>
       );
     }
 
     return (
-      <div className="representative-fair-timesheet timesheet timesheet--representative-fair">
-        <h2 className="heading-secondary">Representative Fair Timesheet</h2>
-
+      <div className="student-timetable timetable timetable--student">
+        <h2 className="heading-secondary">{`Student ${event?.title} Timetable`}</h2>
         {
           registrationIsOpen &&
             <button
@@ -175,16 +166,16 @@ class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
         }
         {
           isPreRegistration &&
-          <p>Registration is currently not yet open. No registration changes or timeslot modifications can be made at this time.</p>
+          <p>Registration is currently not yet open. No registration changes can be made at this time.</p>
         }
         {
           isPostRegistration &&
-          <p>Registration is currently closed. No registration changes or timeslot modifications can be made at this time.</p>
+          <p>Registration is currently closed. No registration changes can be made at this time.</p>
         }
 
         {
           !isAttendingEvent && isPostRegistration &&
-          <div>{`Timesheet not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
+          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
         }
 
         {
@@ -193,18 +184,16 @@ class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--representative-fair table__row--header">
+                <div className="table__row table__row--student table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
+                  <div className="table__cell table__cell--header">Name</div>
+                  <div className="table__cell table__cell--header">Email</div>
                 </div>
 
-                {event && this._renderTimeOptions(event.createTimeSlots(30, 0))}
+                {event && this._renderTimeSlots(event.createTimeSlots(20, 5))}
 
               </div>
             </div>
-            {
-              registrationIsOpen && 
-              <button onClick={() => this._onSaveChanges()}>Save Changes</button>
-            }
           </>
         }
       </div>
@@ -212,4 +201,4 @@ class RepresentativeFairTimesheet extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(RepresentativeFairTimesheet);
+export default connector(StudentTimetable);

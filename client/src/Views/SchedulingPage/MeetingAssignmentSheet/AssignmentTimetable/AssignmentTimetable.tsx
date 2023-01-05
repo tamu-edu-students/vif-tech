@@ -38,7 +38,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class VolunteerTimetable extends React.Component<Props, OwnState> {
+class AssignmentTimetable extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
   }
 
@@ -72,7 +72,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <div className="assignment-timesheet timesheet timesheet--assignment">
+      <div className="assignment-timetable timetable timetable--assignment">
         <h2 className='heading-secondary'>{volunteer.firstname} {volunteer.lastname}</h2>
         {
           focusString &&
@@ -105,4 +105,4 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(VolunteerTimetable);
+export default connector(AssignmentTimetable);

@@ -8,7 +8,7 @@ import { fetchEvents, fetchMeetings, fetchEventSignups, fetchUsers, createEventS
 import Event from 'Shared/entityClasses/Event';
 import User from 'Shared/entityClasses/User';
 
-import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
+import AssignmentTimetable from './AssignmentTimetable/AssignmentTimetable';
 import { OptionsContext } from './OptionsContext';
 
 
@@ -177,7 +177,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
     return volunteers.map((volunteer: User) => {
       return (
         <React.Fragment key={volunteer.id}>
-            <VolunteerTimetable
+            <AssignmentTimetable
               volunteer={volunteer} event={this.props.event}
             />
         </React.Fragment>
@@ -219,7 +219,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
         <div className="meeting-assignment-sheet">
           <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2>
 
-          <div className="timesheets">
+          <div className="timetables">
             {this._renderVolunteerTables(volunteerAttendees ?? [])}
           </div>
 

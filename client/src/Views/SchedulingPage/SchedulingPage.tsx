@@ -49,10 +49,10 @@ class SchedulingPage extends React.Component<Props, OwnState> {
   private _renderLinks(): JSX.Element | null {
     return (
       <>
-        {this._renderLink(`/timesheet/portfolio-review-1`, 'Portfolio Review 1')}
-        {this._renderLink(`/timesheet/mock-interview-1`, 'Mock Interview 1')}
-        {this._renderLink(`/timesheet/mock-interview-2`, 'Mock Interview 2')}
-        {this._renderLink(`/timesheet/portfolio-review-2`, 'Portfolio Review 2')}
+        {this._renderLink(`/Timetable/portfolio-review-1`, 'Portfolio Review 1')}
+        {this._renderLink(`/Timetable/mock-interview-1`, 'Mock Interview 1')}
+        {this._renderLink(`/Timetable/mock-interview-2`, 'Mock Interview 2')}
+        {this._renderLink(`/Timetable/portfolio-review-2`, 'Portfolio Review 2')}
       </>
     );
   }
@@ -68,10 +68,10 @@ class SchedulingPage extends React.Component<Props, OwnState> {
 
   private _renderRoutes(): JSX.Element[] {
     return ([
-      this._renderRoute(`/timesheet/portfolio-review-1`, 'Portfolio Review 1'),
-      this._renderRoute(`/timesheet/mock-interview-1`, 'Mock Interview 1'),
-      this._renderRoute(`/timesheet/mock-interview-2`, 'Mock Interview 2'),
-      this._renderRoute(`/timesheet/portfolio-review-2`, 'Portfolio Review 2'),
+      this._renderRoute(`/Timetable/portfolio-review-1`, 'Portfolio Review 1'),
+      this._renderRoute(`/Timetable/mock-interview-1`, 'Mock Interview 1'),
+      this._renderRoute(`/Timetable/mock-interview-2`, 'Mock Interview 2'),
+      this._renderRoute(`/Timetable/portfolio-review-2`, 'Portfolio Review 2'),
     ]);
   }
 

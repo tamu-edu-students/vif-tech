@@ -1,15 +1,13 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
-// import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-// import {eventActionTypes } from 'Store/actions/types';
 import { createMeeting, deleteMeeting } from 'Store/actions';
 
 import { msToTimeString } from 'Shared/utils';
-// import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
-
-import TimesheetRowButton from "Components/TimesheetRowButton/TimesheetRowButton";
+import User from 'Shared/entityClasses/User';
+// import TimetableRow from 'Components/TimetableRow/TimetableRow';
+import TimetableRowButton from "Components/TimetableRowButton/TimetableRowButton";
 
 
 enum ModStatus {
@@ -27,7 +25,8 @@ interface OwnProps {
   end_time: string;
   event_id: number;
   meeting: Meeting | null;
-  setReaction: Function;
+  setReaction: (key: string, reaction: any) => void;
+  assignee?: User;
   registrationIsOpen: boolean;
 }
 
@@ -39,7 +38,6 @@ interface OwnState {
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
-    hadMeeting: ownProps.meeting !== null,
     owner_id: state.auth.user?.id ?? -1,
   };
 };
@@ -48,7 +46,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class RepresentativeFairTimesheetRow extends React.Component<Props, OwnState> {
+class VolunteerTimetableRow extends React.Component<Props, OwnState> {
   state = {
     isChanging: false,
     initialModStatus: ModStatus.PENDING,
@@ -97,7 +95,6 @@ class RepresentativeFairTimesheetRow extends React.Component<Props, OwnState> {
     }
   }
 
-  //TODO: Make sure updates cause companies schedule to update
   private _queueCreateMeeting = (): void => {
     const {start_time, end_time, owner_id, event_id} = this.props;
     const reaction: any = () => this.props.createMeeting({start_time, end_time, owner_id, event_id});
@@ -140,23 +137,32 @@ class RepresentativeFairTimesheetRow extends React.Component<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     const {
+      assignee,
       registrationIsOpen
     } = this.props;
 
+    if (this.state.modStatus === ModStatus.PENDING) {
+      return <div></div>
+    }
+
     return (
-      <div className="representative-fair-timesheet-row table__row table__row--representative-fair">
+      <div className="volunteer-timetable-row table__row table__row--volunteer">
         <div className="table__cell table__cell--time">
-          <TimesheetRowButton
+          <TimetableRowButton
             onClick={this._handleClick}
             disabled={!registrationIsOpen}
             modifier={this._generateButtonColor()}
           >
             {this._generateTimeString()}
-          </TimesheetRowButton>
+          </TimetableRowButton>
         </div>
+        <div className="table__cell table__cell--name">{assignee && `${assignee.firstname} ${assignee.lastname}`}</div>
+        {/* TODO: Truncate */}
+        <div className="table__cell table__cell--portfolio">{assignee?.portfolio_link && <a href={assignee.portfolio_link} target="_blank" rel="noreferrer">{assignee.portfolio_link}</a>}</div>
+        <div className="table__cell table__cell--resume">{assignee?.resume_link && <a href={assignee.resume_link} target="_blank" rel="noreferrer">{assignee.resume_link}</a>}</div>
       </div>
     )
   }
 }
 
-export default connector(RepresentativeFairTimesheetRow);
+export default connector(VolunteerTimetableRow);

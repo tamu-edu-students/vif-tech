@@ -10,7 +10,7 @@ import User from 'Shared/entityClasses/User';
 
 import { OptionsContext } from '../../OptionsContext';
 
-import TimesheetRowButton from 'Components/TimesheetRowButton/TimesheetRowButton';
+import TimetableRowButton from 'Components/TimetableRowButton/TimetableRowButton';
 
 enum ModStatus {
   PENDING,
@@ -149,14 +149,14 @@ class AssignmentRow extends React.Component<Props, OwnState> {
     const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
 
     return (
-      <div className="assignment-timesheet-row table__row table__row--assignment">
+      <div className="assignment-timetable-row table__row table__row--assignment">
         <div className="table__cell table__cell--time">
-          <TimesheetRowButton
+          <TimetableRowButton
             modifier={this._generateButtonColor()}
             disabled={true}
           >
             {this._generateTimeString()}
-          </TimesheetRowButton>
+          </TimetableRowButton>
         </div>
         <div className="table__cell table__cell--assignee">
           <StudentSelectForm

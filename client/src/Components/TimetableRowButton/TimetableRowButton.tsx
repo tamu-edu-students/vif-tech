@@ -22,7 +22,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class TimesheetRowButton extends React.Component<Props, OwnState> {
+class TimetableRowButton extends React.Component<Props, OwnState> {
   private _onClick = (): void => {
     if (this.props.disabled) { return; }
     this.props.onClick();
@@ -52,4 +52,4 @@ class TimesheetRowButton extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(TimesheetRowButton);
+export default connector(TimetableRowButton);
