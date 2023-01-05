@@ -146,23 +146,23 @@ class ProfilePage extends React.Component<Props, OwnState> {
         []
       ),
       
-      <Route exact path={`${parentPath}/representative-timesheet/portfolio-review-1`} key={`${parentPath}/representative-timesheet/portfolio-review-1`}>
+      <Route exact path={`${parentPath}/timesheet/portfolio-review-1`} key={`${parentPath}/timesheet/portfolio-review-1`}>
         <VolunteerTimesheet eventTitle="Portfolio Review 1" />
       </Route>,
 
-      <Route exact path={`${parentPath}/representative-timesheet/mock-interview-1`} key={`${parentPath}/representative-timesheet/mock-interview-1`}>
+      <Route exact path={`${parentPath}/timesheet/mock-interview-1`} key={`${parentPath}/timesheet/mock-interview-1`}>
         <VolunteerTimesheet eventTitle="Mock Interview 1" />
       </Route>,
 
-      <Route exact path={`${parentPath}/representative-timesheet/mock-interview-2`} key={`${parentPath}/representative-timesheet/mock-interview-2`}>
+      <Route exact path={`${parentPath}/timesheet/mock-interview-2`} key={`${parentPath}/timesheet/mock-interview-2`}>
         <VolunteerTimesheet eventTitle="Mock Interview 2" />
       </Route>,
 
-      <Route exact path={`${parentPath}/representative-timesheet/portfolio-review-2`} key={`${parentPath}/representative-timesheet/portfolio-review-2`}>
+      <Route exact path={`${parentPath}/timesheet/portfolio-review-2`} key={`${parentPath}/timesheet/portfolio-review-2`}>
         <VolunteerTimesheet eventTitle="Portfolio Review 2" />
       </Route>,
 
-      <Route exact path={`${parentPath}/representative-timesheet/virtual-fair`} key={`${parentPath}/representative-timesheet/virtual-fair`}>
+      <Route exact path={`${parentPath}/timesheet/virtual-fair`} key={`${parentPath}/timesheet/virtual-fair`}>
         <RepresentativeFairTimesheetVF />
       </Route>
     ]);
@@ -181,11 +181,11 @@ class ProfilePage extends React.Component<Props, OwnState> {
             <br />
           </>
         }
-        <li><Link to={`${parentPath}/representative-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-        <li><Link to={`${parentPath}/representative-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
-        <li><Link to={`${parentPath}/representative-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
-        <li><Link to={`${parentPath}/representative-timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
-        <li><Link to={`${parentPath}/representative-timesheet/virtual-fair`}>Virtual Fair</Link></li>
+        <li><Link to={`${parentPath}/timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
+        <li><Link to={`${parentPath}/timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
+        <li><Link to={`${parentPath}/timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
+        <li><Link to={`${parentPath}/timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
+        <li><Link to={`${parentPath}/timesheet/virtual-fair`}>Virtual Fair</Link></li>
       </>
     );
   }
@@ -193,19 +193,19 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderVolunteerRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/volunteer-timesheet/portfolio-review-1`} key={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>
+      <Route exact path={`${parentPath}/timesheet/portfolio-review-1`} key={`${parentPath}/timesheet/portfolio-review-1`}>
         <VolunteerTimesheet eventTitle="Portfolio Review 1" />
       </Route>,
 
-      <Route exact path={`${parentPath}/volunteer-timesheet/mock-interview-1`} key={`${parentPath}/volunteer-timesheet/mock-interview-1`}>
+      <Route exact path={`${parentPath}/timesheet/mock-interview-1`} key={`${parentPath}/timesheet/mock-interview-1`}>
         <VolunteerTimesheet eventTitle="Mock Interview 1" />
       </Route>,
 
-      <Route exact path={`${parentPath}/volunteer-timesheet/mock-interview-2`} key={`${parentPath}/volunteer-timesheet/mock-interview-2`}>
+      <Route exact path={`${parentPath}/timesheet/mock-interview-2`} key={`${parentPath}/timesheet/mock-interview-2`}>
         <VolunteerTimesheet eventTitle="Mock Interview 2" />
       </Route>,
 
-      <Route exact path={`${parentPath}/volunteer-timesheet/portfolio-review-2`} key={`${parentPath}/volunteer-timesheet/portfolio-review-2`}>
+      <Route exact path={`${parentPath}/timesheet/portfolio-review-2`} key={`${parentPath}/timesheet/portfolio-review-2`}>
         <VolunteerTimesheet eventTitle="Portfolio Review 2" />
       </Route>
     ]);
@@ -216,10 +216,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
-        <li><Link to={`${parentPath}/volunteer-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-        <li><Link to={`${parentPath}/volunteer-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
-        <li><Link to={`${parentPath}/volunteer-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
-        <li><Link to={`${parentPath}/volunteer-timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
+        <li><Link to={`${parentPath}/timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
+        <li><Link to={`${parentPath}/timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
+        <li><Link to={`${parentPath}/timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
+        <li><Link to={`${parentPath}/timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
       </>
     );
   }
@@ -227,19 +227,19 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderStudentRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/student-timesheet/portfolio-review-1`} key={`${parentPath}/student-timesheet/portfolio-review-1`}>
+      <Route exact path={`${parentPath}/timesheet/portfolio-review-1`} key={`${parentPath}/timesheet/portfolio-review-1`}>
         <StudentTimesheet eventTitle="Portfolio Review 1" />
       </Route>,
 
-      <Route exact path={`${parentPath}/student-timesheet/mock-interview-1`} key={`${parentPath}/student-timesheet/mock-interview-1`}>
+      <Route exact path={`${parentPath}/timesheet/mock-interview-1`} key={`${parentPath}/timesheet/mock-interview-1`}>
         <StudentTimesheet eventTitle="Mock Interview 1" />
       </Route>,
 
-      <Route exact path={`${parentPath}/student-timesheet/mock-interview-2`} key={`${parentPath}/student-timesheet/mock-interview-2`}>
+      <Route exact path={`${parentPath}/timesheet/mock-interview-2`} key={`${parentPath}/timesheet/mock-interview-2`}>
         <StudentTimesheet eventTitle="Mock Interview 2" />
       </Route>,
 
-      <Route exact path={`${parentPath}/student-timesheet/portfolio-review-2`} key={`${parentPath}/student-timesheet/portfolio-review-2`}>
+      <Route exact path={`${parentPath}/timesheet/portfolio-review-2`} key={`${parentPath}/timesheet/portfolio-review-2`}>
         <StudentTimesheet eventTitle="Portfolio Review 2" />
       </Route>
     ]);
@@ -250,10 +250,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
       <br />
-      <li><Link to={`${parentPath}/student-timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-      <li><Link to={`${parentPath}/student-timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
-      <li><Link to={`${parentPath}/student-timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
-      <li><Link to={`${parentPath}/student-timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
+      <li><Link to={`${parentPath}/timesheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
+      <li><Link to={`${parentPath}/timesheet/mock-interview-1`}>Mock Interview 1</Link></li>
+      <li><Link to={`${parentPath}/timesheet/mock-interview-2`}>Mock Interview 2</Link></li>
+      <li><Link to={`${parentPath}/timesheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
       </>
     );
   }

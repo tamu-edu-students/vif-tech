@@ -1,0 +1,40 @@
+.sub-nav {
+  &__list {
+    list-style: none;
+    width: 15rem;
+    font-family: $font-primary;
+    font-size: 1.8rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__link {
+    width: 100%;
+    padding: 1rem;
+    $background-color: $color-violet-light;
+    display: inline-block;
+    transition: background-color 0.1s;
+
+    &:link,
+    &:visited {
+      color: $color-black;
+      background-color: $background-color;
+
+      &.sub-nav__link--current {
+        background-color: $color-violet;
+        color: $color-white;
+        cursor: unset;
+        pointer-events: none;
+      }
+    }
+
+    &:hover {
+      background-color: darken($background-color, 7%);
+    }
+    &:active {
+      background-color: darken($background-color, 14%);
+    }
+  }
+}

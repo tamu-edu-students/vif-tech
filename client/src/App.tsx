@@ -19,6 +19,7 @@ import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
 import CompaniesPage from 'Views/CompaniesPage/CompaniesPage';
 import StudentsPage from 'Views/StudentsPage/StudentsPage';
+import MyEventsPage from 'Views/MyEventsPage/MyEventsPage';
 
 import { VifLogoMark, VifLogoWide } from 'Components/iconComponents';
 import RedirectPrompt from 'Components/RedirectPrompt';
@@ -113,6 +114,17 @@ class App extends React.Component<Props, {}> {
               <Route exact path="/virtual-fair-schedule">
                 <VirtualFairSchedule />
               </Route>
+
+              <Route
+                path={"/my-events"}
+                render={ (routeProps: any) => {
+                  return (
+                    this.props.user && !this.props.user.isAdmin
+                    ? <MyEventsPage {...routeProps} />
+                    : <Redirect to={'/login'} /> //TODO: Handle My Events path if admin
+                  )
+                } }
+              />
 
               <Route exact path="/users/new">
                 { this.props.user

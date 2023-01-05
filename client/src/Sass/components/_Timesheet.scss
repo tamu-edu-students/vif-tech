@@ -16,9 +16,7 @@
 
 .timesheet {
   //TODO: Remove
-  background-color: $color-violet;
-  padding: 3rem;
-  width: 50%;
+  width:61.2rem;
   
   .table {
     .table__rows {
@@ -131,6 +129,10 @@
           display: flex;
           justify-content: center;
           align-items: center;
+
+          &::selection {
+            text-shadow: none;
+          }
 
           &--disabled {
             cursor: unset;

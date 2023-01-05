@@ -1,0 +1,25 @@
+.my-events-page {
+  // &__split {
+  //   display: flex;
+  // }
+  &__nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    list-style: none;
+    width: min-content;
+    white-space: nowrap;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  &__subpage {
+    position: relative;
+    background-color: $color-violet;
+    padding: 3rem;
+    width: 68.2rem;
+    margin: 0 auto;
+  }
+}

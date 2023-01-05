@@ -69,7 +69,7 @@
   }
 
   &__link {
-    $hover-color: $color-brand-green;
+    $hover-color: $color-brand-green-light;
 
     &:link,
     &:visited {
@@ -101,7 +101,7 @@
 
     &.nav__button--login,
     &.nav__button--profile {
-      @include nav-button($color-brand-green-darker);
+      @include nav-button($color-brand-green-dark);
     }
 
     &.nav__button--logout {
@@ -109,7 +109,7 @@
     }
 
     &.nav__button--register {
-      @include nav-button($color-brand-yellow-darker);
+      @include nav-button($color-brand-yellow-dark);
     }
 
     &::selection {

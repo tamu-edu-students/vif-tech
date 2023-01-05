@@ -14,6 +14,7 @@
 @import "components/Nav";
 @import "components/RedirectPrompt";
 @import "components/RepresentativeFairTimesheet";
+@import "components/SubNav";
 @import "components/Timesheet";
 @import "components/VirtualFairSchedule";
 @import "components/VolunteerTimetable";
@@ -21,5 +22,6 @@
 @import "components/button";
 
 @import "pages/redirector";
+@import "pages/MyEventsPage";
 @import "pages/StudentPage";
 @import "pages/UserDirectory";

@@ -161,7 +161,7 @@ class VolunteerTimesheetPR2 extends React.Component<Props, OwnState> {
 
     return (
       <div className="Representative-Fair-Timesheet">
-        <h2>Representative Fair Timesheet</h2>
+        <h2 className="heading-secondary">Representative Fair Timesheet</h2>
 
         {
           registrationIsOpen &&
