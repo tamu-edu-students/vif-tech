@@ -1,0 +1,9 @@
+@mixin subpage {
+  position: relative;
+  background-color: $color-violet;
+  padding: 3rem;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+}

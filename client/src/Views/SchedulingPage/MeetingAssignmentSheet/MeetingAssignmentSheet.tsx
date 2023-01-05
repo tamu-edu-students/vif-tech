@@ -216,10 +216,12 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
         unassignedStudents: this.state.unassignedStudents,
         setReaction: this._setReaction,
       }}>
-        <div className="Meeting-Assignment-Sheet">
+        <div className="meeting-assignment-sheet">
           <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2>
 
-          {this._renderVolunteerTables(volunteerAttendees ?? [])}
+          <div className="timesheets">
+            {this._renderVolunteerTables(volunteerAttendees ?? [])}
+          </div>
 
           <button onClick={() => this._onSaveChanges()}>Save Changes</button>
         </div>

@@ -72,7 +72,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <div className="Volunteer-Timetable volunteer-timetable">
+      <div className="assignment-timesheet timesheet timesheet--assignment">
         <h2 className='heading-secondary'>{volunteer.firstname} {volunteer.lastname}</h2>
         {
           focusString &&
@@ -89,7 +89,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
             <div className="table">
               <div className="table__rows">
 
-                <div className="table__row table__row--header">
+                <div className="table__row table__row--assignment table__row--header">
                   <div className="table__cell table__cell--header">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                 </div>

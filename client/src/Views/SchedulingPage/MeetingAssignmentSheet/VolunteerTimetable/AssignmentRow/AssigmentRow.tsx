@@ -10,8 +10,13 @@ import User from 'Shared/entityClasses/User';
 
 import { OptionsContext } from '../../OptionsContext';
 
-enum Status {
-  NO_CHANGE,
+import TimesheetRowButton from 'Components/TimesheetRowButton/TimesheetRowButton';
+
+enum ModStatus {
+  PENDING,
+  UNUSED,
+  DISABLED,
+  FILLED,
   DELETING,
   ADDING,
   SWAPPING,
@@ -26,7 +31,9 @@ interface OwnProps {
 }
 
 interface OwnState {
-  status: Status;
+  isChanging: boolean;
+  initialModStatus: ModStatus;
+  modStatus: ModStatus;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -46,39 +53,83 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class AssignmentRow extends React.Component<Props, OwnState> {
-  state = { status: Status.NO_CHANGE };
+  state = {
+    isChanging: false,
+    initialModStatus: ModStatus.PENDING,
+    modStatus: ModStatus.PENDING
+  };
   static contextType = OptionsContext;
   context!: React.ContextType<typeof OptionsContext>;
 
   public componentDidMount(): void {
+    let modStatus: ModStatus = ModStatus.UNUSED;
+
+    // if (!this.props.hadAssignment) { modStatus = ModStatus.UNUSED; }
+    // if (!this.props.registrationIsOpen) { modStatus = ModStatus.DISABLED; }
+    if (this.props.hadAssignment) { modStatus = ModStatus.FILLED; }
+
+    this.setState({ initialModStatus: modStatus, modStatus });
+  }
+
+  private _generateKey(): string {
+    const key: string = `${this.props.start_time} ${this.props.end_time}`;
+    return key;
+  }
+
+  private _generateTimeString(): string {
+    const startTimeShort = msToTimeString(Date.parse(this.props.start_time), 'CST');
+    const endTimeShort = msToTimeString(Date.parse(this.props.end_time), 'CST');
+
+    return `${startTimeShort}—${endTimeShort}`;
+  }
+
+  private _generateButtonColor(): string {
+    switch(this.state.modStatus) {
+      case ModStatus.ADDING:
+      case ModStatus.SWAPPING:
+        return 'yellow';
+      case ModStatus.DELETING:
+        return 'red';
+      case ModStatus.FILLED:
+        return 'green';
+      // case ModStatus.DISABLED:
+      //   return 'disabled';
+      case ModStatus.UNUSED:
+        return 'empty';
+      // case ModStatus.PENDING:
+      //   return 'pending'
+      default:
+        return '';
+    }
   }
 
   private _onSelectionChange = (inviteeId: number): void => {
     const { keyVal: key } = this.props;
     let reaction: any = null;
     const {initialInvitee} = this.props;
+
     if (initialInvitee) {
       if (inviteeId === -1){
         reaction = () => this.props.updateMeeting(this.props.meeting.id, -1);
-        this.setState({ status: Status.DELETING });
+        this.setState({ modStatus: ModStatus.DELETING });
       }
       else if (initialInvitee.id === inviteeId) {
         reaction = () => Promise.resolve();
-        this.setState({ status: Status.NO_CHANGE });
+        this.setState({ modStatus: this.state.initialModStatus });
       }
       else {
         reaction = () => this.props.updateMeeting(this.props.meeting.id, inviteeId);
-        this.setState({ status: Status.SWAPPING });
+        this.setState({ modStatus: ModStatus.SWAPPING });
       }
     }
     else {
       if (inviteeId === -1) {
         reaction = () => Promise.resolve();
-        this.setState({ status: Status.NO_CHANGE });
+        this.setState({ modStatus: this.state.initialModStatus });
       }
       else {
         reaction = () => this.props.updateMeeting(this.props.meeting.id, inviteeId);
-        this.setState({ status: Status.ADDING });
+        this.setState({ modStatus: ModStatus.ADDING });
       }
     }
 
@@ -93,32 +144,21 @@ class AssignmentRow extends React.Component<Props, OwnState> {
       keyVal: key,
       initialInvitee,
     } = this.props;
-
-    const { status } = this.state;
     
     const startTimeShort = msToTimeString(Date.parse(start_time), 'CST');
     const endTimeShort = msToTimeString(Date.parse(end_time), 'CST');
 
     return (
-      <div className="AssignmentRow table__row">
+      <div className="assignment-timesheet-row table__row table__row--assignment">
         <div className="table__cell table__cell--time">
-          <div
-            className={`table__time-block ${
-              hadAssignment
-              ? (
-                  (status === Status.DELETING ? 'table__time-block--deleting' : '')
-                  || (status === Status.SWAPPING ? 'table__time-block--swapping' : '')
-                  || (status === Status.NO_CHANGE ? 'table__time-block--filled' : '')
-                )
-              : (
-                (status === Status.ADDING ? 'table__time-block--adding' : '')
-              )
-            }`}
+          <TimesheetRowButton
+            modifier={this._generateButtonColor()}
+            disabled={true}
           >
-              {`${startTimeShort}—${endTimeShort}`}
-          </div>
+            {this._generateTimeString()}
+          </TimesheetRowButton>
         </div>
-        <div className="table__cell table__cell--name">
+        <div className="table__cell table__cell--assignee">
           <StudentSelectForm
             keyVal={key}
             initialInvitee={initialInvitee}

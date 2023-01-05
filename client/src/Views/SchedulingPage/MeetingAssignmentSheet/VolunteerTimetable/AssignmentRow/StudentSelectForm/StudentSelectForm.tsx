@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import User from 'Shared/entityClasses/User';
 import Focus from 'Shared/entityClasses/Focus';
 
-import { OptionsContext } from 'Views/ProfilePage/MeetingAssignmentSheet/OptionsContext';
+import { OptionsContext } from 'Views/SchedulingPage/MeetingAssignmentSheet/OptionsContext';
 
 
 interface OwnProps {

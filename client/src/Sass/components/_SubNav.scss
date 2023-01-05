@@ -1,4 +1,16 @@
 .sub-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  list-style: none;
+  width: min-content;
+  white-space: nowrap;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
   &__list {
     list-style: none;
     width: 15rem;

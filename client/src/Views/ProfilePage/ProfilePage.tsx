@@ -21,8 +21,6 @@ import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
 import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
 import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
 
-import MeetingAssignmentSheet from './MeetingAssignmentSheet/MeetingAssignmentSheet';
-
 import FocusList from './FocusList/FocusList';
 
 
@@ -84,22 +82,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
         <VolunteerAllowlist />
       </Route>,
 
-      <Route exact path={`${parentPath}/admin-assignment-sheet/portfolio-review-1`} key={`${parentPath}/admin-assignment-sheet/portfolio-review-1`}>
-        <MeetingAssignmentSheet eventTitle="Portfolio Review 1"  />
-      </Route>,
-
-      <Route exact path={`${parentPath}/admin-assignment-sheet/mock-interview-1`} key={`${parentPath}/admin-assignment-sheet/mock-interview-1`}>
-        <MeetingAssignmentSheet eventTitle="Mock Interview 1"  />
-      </Route>,
-
-      <Route exact path={`${parentPath}/admin-assignment-sheet/mock-interview-2`} key={`${parentPath}/admin-assignment-sheet/mock-interview-2`}>
-        <MeetingAssignmentSheet eventTitle="Mock Interview 2"  />
-      </Route>,
-
-      <Route exact path={`${parentPath}/admin-assignment-sheet/portfolio-review-2`} key={`${parentPath}/admin-assignment-sheet/portfolio-review-2`}>
-        <MeetingAssignmentSheet eventTitle="Portfolio Review 2"  />
-      </Route>,
-
       <Route exact path={`${parentPath}/focus-list`} key={`${parentPath}/focus-list`}>
         <FocusList />
       </Route>
@@ -115,11 +97,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
         <li><Link to={`${parentPath}/student-allowlist`}>Student Allowlist</Link></li>
         <li><Link to={`${parentPath}/admin-allowlist`}>Admin Allowlist</Link></li>
         <li><Link to={`${parentPath}/volunteer-allowlist`}>Volunteer Allowlist</Link></li>
-        <br />
-        <li><Link to={`${parentPath}/admin-assignment-sheet/portfolio-review-1`}>Portfolio Review 1</Link></li>
-        <li><Link to={`${parentPath}/admin-assignment-sheet/mock-interview-1`}>Mock Interview 1</Link></li>
-        <li><Link to={`${parentPath}/admin-assignment-sheet/mock-interview-2`}>Mock Interview 2</Link></li>
-        <li><Link to={`${parentPath}/admin-assignment-sheet/portfolio-review-2`}>Portfolio Review 2</Link></li>
         <br />
         <li><Link to={`${parentPath}/focus-list`}>Manage Focus List</Link></li>
       </>
