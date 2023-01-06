@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { Usertype } from 'Shared/enums';
 
-import GenericAllowlistSubview from 'Components/GenericAllowlistSubview/GenericAllowlistSubview';
+import GenericAllowlistSubview from 'Components/AllowlistGroup/AllowlistGroup';
 
 interface OwnProps {
 }

@@ -59,7 +59,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class CompanyAllowlists extends React.Component<Props, OwnState> {
+class CompanyAllowlistGroup extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     const { companiesAreStale, isLoading_fetchCompanies, usersAreStale, isLoading_fetchUsers, allowlistIsStale, isLoading_fetchAllowlist } = this.props;
     if (companiesAreStale && !isLoading_fetchCompanies) { this.props.fetchCompanies(); }
@@ -142,9 +142,9 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
 
     return (
       <div>
-        <h2>CompanyAllowlists</h2>
+        <h2>CompanyAllowlistGroup</h2>
         <br />
-        <div className="allowlists" data-testid="admin-company-allowlists">
+        <div className="allowlist-group" data-testid="admin-company-allowlist-group">
           {
             companies.length > 0
             ? (<>{ this._renderAllowlists() }</>)
@@ -160,4 +160,4 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(CompanyAllowlists);
+export default connector(CompanyAllowlistGroup);

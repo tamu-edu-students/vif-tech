@@ -22,11 +22,11 @@ interface OwnProps {
   showsDomains?: boolean;
 }
 
-type GenericAllowlistsProps = {
+type AllowlistGroupsProps = {
   companies?: never;
 }
 
-type CompanyAllowlistsProps = {
+type CompanyAllowlistGroupProps = {
   entryUsertype: Usertype.REPRESENTATIVE;
   companies: Company[];
 }
@@ -34,7 +34,7 @@ type CompanyAllowlistsProps = {
 interface OwnState {
 }
 
-const mapStateToProps = (state: IRootState, ownProps: OwnProps & (GenericAllowlistsProps | CompanyAllowlistsProps)) => {
+const mapStateToProps = (state: IRootState, ownProps: OwnProps & (AllowlistGroupsProps | CompanyAllowlistGroupProps)) => {
   return {
     allowlist_emails: AllowlistEmail.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_emails),
     allowlist_domains: AllowlistDomain.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_domains),
@@ -49,9 +49,9 @@ const mapDispatchToProps = {
 };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type Props = ConnectedProps<typeof connector> & OwnProps & (GenericAllowlistsProps | CompanyAllowlistsProps);
+type Props = ConnectedProps<typeof connector> & OwnProps & (AllowlistGroupsProps | CompanyAllowlistGroupProps);
 
-class GenericAllowlistSubview extends React.Component<Props, OwnState> {
+class AllowlistGroupSubview extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     if (this.props.allowlistIsStale && !this.props.isLoading_fetchAllowlist) {
       this.props.fetchAllowlist();
@@ -64,7 +64,7 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
     }
   }
 
-  private _renderCompanyAllowlists(companies: Company[]): JSX.Element[] {
+  private _renderCompanyAllowlistGroup(companies: Company[]): JSX.Element[] {
     return companies.map((company: Company) => {
       const { id: company_id, name, } = company;
       const [primaryContact, allowlist_emails, allowlist_domains] = [
@@ -127,10 +127,10 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
     
     return (
       <div>
-        <div className="allowlists">
+        <div className="allowlist-group">
           {
             companies
-            ? this._renderCompanyAllowlists(companies)
+            ? this._renderCompanyAllowlistGroup(companies)
             : (
               <Allowlist
                 title={this._generateTitle()}
@@ -149,4 +149,4 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(GenericAllowlistSubview);
+export default connector(AllowlistGroupSubview);

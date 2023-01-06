@@ -12,8 +12,8 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 import SubNavLink from 'Components/SubNavLink/SubNavLink';
 import SubNav from 'Components/SubNav/SubNav';
 
-import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
-import GenericAllowlistSubview from 'Components/GenericAllowlistSubview/GenericAllowlistSubview';
+import CompanyAllowlistGroup from './CompanyAllowlistGroup/CompanyAllowlistGroup';
+import AllowlistGroup from 'Components/AllowlistGroup/AllowlistGroup';
 
 
 interface OwnProps {
@@ -59,10 +59,14 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
   private _renderLinks(): JSX.Element | null {
     return (
       <>
-      {this._renderLink(`/${this.props.amAdmin ? 'companies' : 'company'}`, 'Company Allowlist')}
+      {
+        this.props.amRepresentative &&
+        this._renderLink(`/company`, `Company Allowlist`)
+      }
       {
         this.props.amAdmin &&
         <>
+        {this._renderLink(`/companies`, `Company Allowlists`)}
         {this._renderLink(`/student`, 'Student Allowlist')}
         {this._renderLink(`/volunteer`, 'Volunteer Allowlist')}
         {this._renderLink(`/admin`, 'Admin Allowlist')}
@@ -74,13 +78,13 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
 
   private _renderRoutes(): JSX.Element[] {
     return [
-      this._renderRoute( `/${this.props.amAdmin ? 'companies' : 'company'}`, (<CompanyAllowlists />) ),
+      this._renderRoute( `/${this.props.amAdmin ? 'companies' : 'company'}`, (<CompanyAllowlistGroup />) ),
       ...(
         this.props.amAdmin
         ? [
-          this._renderRoute( `/student`, (<GenericAllowlistSubview entryUsertype={Usertype.STUDENT} showsDomains />) ),
-          this._renderRoute( `/volunteer`, (<GenericAllowlistSubview entryUsertype={Usertype.VOLUNTEER} showsEmails />) ),
-          this._renderRoute( `/admin`, (<GenericAllowlistSubview entryUsertype={Usertype.ADMIN} showsEmails />) ),
+          this._renderRoute( `/student`, (<AllowlistGroup entryUsertype={Usertype.STUDENT} showsDomains />) ),
+          this._renderRoute( `/volunteer`, (<AllowlistGroup entryUsertype={Usertype.VOLUNTEER} showsEmails />) ),
+          this._renderRoute( `/admin`, (<AllowlistGroup entryUsertype={Usertype.ADMIN} showsEmails />) ),
         ]
         : []
       )

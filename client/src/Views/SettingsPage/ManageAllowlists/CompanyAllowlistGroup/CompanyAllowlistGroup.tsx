@@ -14,7 +14,7 @@ import {
 import { Usertype } from 'Shared/enums';
 import Company from 'Shared/entityClasses/Company';
 
-import GenericAllowlistSubview from 'Components/GenericAllowlistSubview/GenericAllowlistSubview';
+import AllowlistGroup from 'Components/AllowlistGroup/AllowlistGroup';
 import CompanyForm from './CompanyForm/CompanyForm';
 
 interface OwnProps {
@@ -52,7 +52,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class CompanyAllowlists extends React.Component<Props, OwnState> {
+class CompanyAllowlistGroup extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
     const { companiesAreStale, isLoading_fetchCompanies, usersAreStale, isLoading_fetchUsers } = this.props;
     if (companiesAreStale && !isLoading_fetchCompanies) { this.props.fetchCompanies(); }
@@ -77,7 +77,7 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
 
   private _renderAllowlists(): JSX.Element {
     return (
-      <GenericAllowlistSubview
+      <AllowlistGroup
         entryUsertype={Usertype.REPRESENTATIVE}
         companies={
           this.props.companies
@@ -115,14 +115,12 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <div className="company-allowlists">
-        <div className="allowlists">
-          {
-            companies.length > 0
-            ? (<>{ this._renderAllowlists() }</>)
-            : (<p>No companies yet!</p>)
-          }
-        </div>
+      <div className="company-allowlist-group">
+        {
+          companies.length > 0
+          ? (<>{ this._renderAllowlists() }</>)
+          : (<p>No companies yet!</p>)
+        }
         {
           usertype === Usertype.ADMIN &&
           <button className="btn-wire" onClick={this._renderForm}>Add New Company</button>
@@ -132,4 +130,4 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(CompanyAllowlists);
+export default connector(CompanyAllowlistGroup);
