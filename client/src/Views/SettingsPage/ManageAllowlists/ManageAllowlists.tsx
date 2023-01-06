@@ -13,9 +13,7 @@ import SubNavLink from 'Components/SubNavLink/SubNavLink';
 import SubNav from 'Components/SubNav/SubNav';
 
 import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
-import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
-import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
-import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
+import GenericAllowlistSubview from 'Components/GenericAllowlistSubview/GenericAllowlistSubview';
 
 
 interface OwnProps {
@@ -61,20 +59,31 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
   private _renderLinks(): JSX.Element | null {
     return (
       <>
-      {this._renderLink(`/companies`, 'Company Allowlists')}
-      {this._renderLink(`/student`, 'Student Allowlist')}
-      {this._renderLink(`/volunteer`, 'Volunteer Allowlist')}
-      {this._renderLink(`/admin`, 'Admin Allowlist')}
+      {this._renderLink(`/${this.props.amAdmin ? 'companies' : 'company'}`, 'Company Allowlist')}
+      {
+        this.props.amAdmin &&
+        <>
+        {this._renderLink(`/student`, 'Student Allowlist')}
+        {this._renderLink(`/volunteer`, 'Volunteer Allowlist')}
+        {this._renderLink(`/admin`, 'Admin Allowlist')}
+        </>
+      }
       </>
     )
   }
 
   private _renderRoutes(): JSX.Element[] {
     return [
-      this._renderRoute( `/companies`, (<CompanyAllowlists />) ),
-      this._renderRoute( `/student`, (<StudentAllowlist />) ),
-      this._renderRoute( `/volunteer`, (<VolunteerAllowlist />) ),
-      this._renderRoute( `/admin`, (<AdminAllowlist />) ),
+      this._renderRoute( `/${this.props.amAdmin ? 'companies' : 'company'}`, (<CompanyAllowlists />) ),
+      ...(
+        this.props.amAdmin
+        ? [
+          this._renderRoute( `/student`, (<GenericAllowlistSubview entryUsertype={Usertype.STUDENT} showsDomains />) ),
+          this._renderRoute( `/volunteer`, (<GenericAllowlistSubview entryUsertype={Usertype.VOLUNTEER} showsEmails />) ),
+          this._renderRoute( `/admin`, (<GenericAllowlistSubview entryUsertype={Usertype.ADMIN} showsEmails />) ),
+        ]
+        : []
+      )
     ];
   }
 
@@ -98,7 +107,7 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
 
           <Switch>
             <Route exact path={`${parentPath}`}>
-              <Redirect to={`${parentPath}/companies`} />
+              <Redirect to={`${parentPath}/${this.props.amAdmin ? 'companies' : 'company'}`} />
             </Route>
 
             {this._renderRoutes()}

@@ -5,28 +5,36 @@ import { createLoadingSelector, createErrorMessageSelector } from 'Shared/select
 import { allowlistActionTypes } from 'Store/actions/types';
 import {
   fetchAllowlist,
-  showModal,
-  hideModal,
 } from 'Store/actions';
 
 import { Usertype } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
+import Company from 'Shared/entityClasses/Company';
 
 import Allowlist from 'Components/Allowlist/Allowlist';
 
 
 interface OwnProps {
   entryUsertype: Usertype;
+  showsPrimaryContact?: boolean;
   showsEmails?: boolean;
   showsDomains?: boolean;
-  title: string;
+}
+
+type GenericAllowlistsProps = {
+  companies?: never;
+}
+
+type CompanyAllowlistsProps = {
+  entryUsertype: Usertype.REPRESENTATIVE;
+  companies: Company[];
 }
 
 interface OwnState {
 }
 
-const mapStateToProps = (state: IRootState, ownProps: OwnProps) => {
+const mapStateToProps = (state: IRootState, ownProps: OwnProps & (GenericAllowlistsProps | CompanyAllowlistsProps)) => {
   return {
     allowlist_emails: AllowlistEmail.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_emails),
     allowlist_domains: AllowlistDomain.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_domains),
@@ -38,12 +46,10 @@ const mapStateToProps = (state: IRootState, ownProps: OwnProps) => {
 }
 const mapDispatchToProps = {
   fetchAllowlist,
-  showModal,
-  hideModal,
 };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type Props = ConnectedProps<typeof connector> & OwnProps;
+type Props = ConnectedProps<typeof connector> & OwnProps & (GenericAllowlistsProps | CompanyAllowlistsProps);
 
 class GenericAllowlistSubview extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
@@ -58,10 +64,47 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
     }
   }
 
+  private _renderCompanyAllowlists(companies: Company[]): JSX.Element[] {
+    return companies.map((company: Company) => {
+      const { id: company_id, name, } = company;
+      const [primaryContact, allowlist_emails, allowlist_domains] = [
+        company.findPrimaryContact(this.props.allowlist_emails),
+        company.findAllowlistEmails(this.props.allowlist_emails),
+        company.findAllowlistDomains(this.props.allowlist_domains),
+      ];
+      
+      return (
+        <React.Fragment key={company_id}>
+          <Allowlist
+            title={name}
+            entryUsertype={Usertype.REPRESENTATIVE}
+            company_id={company_id}
+            showsPrimaryContact
+            showsEmails
+            showsDomains
+            primaryContact={primaryContact}
+            allowlist_emails={allowlist_emails.filter((allowlist_email: AllowlistEmail) => !allowlist_email.is_primary_contact)}
+            allowlist_domains={allowlist_domains}
+          />
+        </React.Fragment>
+      )
+    });
+  }
+
+  private _generateTitle(): string {
+    switch(this.props.entryUsertype) {
+      case Usertype.STUDENT: return 'Students';
+      case Usertype.VOLUNTEER: return 'Volunteers';
+      case Usertype.ADMIN: return 'Admins';
+      default:
+        throw new Error(`ERROR: Invalid user type "${this.props.entryUsertype}" while generating allowlist title`)
+    }
+  }
+
   public render(): React.ReactElement<Props> {
     if (this.props.allowlistIsStale || this.props.isLoading_fetchAllowlist) {
       return (
-        <div>Loading {this.props.title}Allowlist...</div>
+        <div>Loading Allowlist...</div>
       );
     }
     
@@ -74,26 +117,32 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
 
     const {
       entryUsertype,
+      showsPrimaryContact,
       showsEmails,
       showsDomains,
-      title,
       allowlist_emails,
       allowlist_domains,
+      companies,
     } = this.props;
     
     return (
       <div>
-        {/* <h2>{title}Allowlist</h2> */}
-        <br />
-        <div className="allowlists" data-testid={`admin-${entryUsertype}-allowlists`}>
-          <Allowlist
-            title={title}
-            entryUsertype={entryUsertype}
-            showsEmails={showsEmails}
-            showsDomains={showsDomains}
-            allowlist_emails={allowlist_emails}
-            allowlist_domains={allowlist_domains}
-          />
+        <div className="allowlists">
+          {
+            companies
+            ? this._renderCompanyAllowlists(companies)
+            : (
+              <Allowlist
+                title={this._generateTitle()}
+                entryUsertype={entryUsertype}
+                showsPrimaryContact={showsPrimaryContact}
+                showsEmails={showsEmails}
+                showsDomains={showsDomains}
+                allowlist_emails={allowlist_emails}
+                allowlist_domains={allowlist_domains}
+              />
+            )
+          }
         </div>
       </div>
     )

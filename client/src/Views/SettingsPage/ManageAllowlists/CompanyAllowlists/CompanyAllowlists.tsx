@@ -2,49 +2,43 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
-import { companyActionTypes, allowlistActionTypes, userActionTypes } from 'Store/actions/types';
+import { companyActionTypes, userActionTypes } from 'Store/actions/types';
 import {
   fetchCompanies,
   createCompany,
   showModal,
   hideModal,
-  fetchAllowlist,
   fetchUsers,
 } from 'Store/actions';
 
 import { Usertype } from 'Shared/enums';
 import Company from 'Shared/entityClasses/Company';
-import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 
-import Allowlist from 'Components/Allowlist/Allowlist';
-
+import GenericAllowlistSubview from 'Components/GenericAllowlistSubview/GenericAllowlistSubview';
 import CompanyForm from './CompanyForm/CompanyForm';
 
 interface OwnProps {
-  company_id?: number;
 }
 
 interface OwnState {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  const companiesAreStale = state.companyData.isStale;
-  const usersAreStale = state.userData.isStale;
-  const allowlistIsStale = state.allowlist.isStale;
+  const companiesAreStale: boolean = state.companyData.isStale;
+  const usersAreStale: boolean = state.userData.isStale;
+  const company_id: number | undefined = state.auth.user?.company_id;
   return {
-    companies: ownProps.company_id ? [Company.findById(ownProps.company_id, state.companyData.companies) as Company] : state.companyData.companies,
+    companies: company_id ? [Company.findById(company_id, state.companyData.companies) as Company] : state.companyData.companies,
     usertype: state.auth.user?.usertype,
     allowlist_emails: state.allowlist.allowlist_emails,
     allowlist_domains: state.allowlist.allowlist_domains,
 
     companiesAreStale,
     usersAreStale,
-    allowlistIsStale,
-    dataIsLoaded: !(companiesAreStale || usersAreStale || allowlistIsStale),
+    dataIsLoaded: !(companiesAreStale || usersAreStale),
     isLoading_fetchCompanies: createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state),
     isLoading_fetchUsers: createLoadingSelector([userActionTypes.FETCH_USERS])(state),
-    isLoading_fetchAllowlist: createLoadingSelector([allowlistActionTypes.FETCH_ALLOWLIST])(state),
-    errors_fetch: createErrorMessageSelector([companyActionTypes.FETCH_COMPANIES, userActionTypes.FETCH_USERS, allowlistActionTypes.FETCH_ALLOWLIST])(state),
+    errors_fetch: createErrorMessageSelector([companyActionTypes.FETCH_COMPANIES, userActionTypes.FETCH_USERS])(state),
   };
 }
 const mapDispatchToProps = {
@@ -52,7 +46,6 @@ const mapDispatchToProps = {
   createCompany,
   showModal,
   hideModal,
-  fetchAllowlist,
   fetchUsers
 };
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -61,17 +54,15 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class CompanyAllowlists extends React.Component<Props, OwnState> {
   public componentDidMount(): void {
-    const { companiesAreStale, isLoading_fetchCompanies, usersAreStale, isLoading_fetchUsers, allowlistIsStale, isLoading_fetchAllowlist } = this.props;
+    const { companiesAreStale, isLoading_fetchCompanies, usersAreStale, isLoading_fetchUsers } = this.props;
     if (companiesAreStale && !isLoading_fetchCompanies) { this.props.fetchCompanies(); }
     if (usersAreStale && !isLoading_fetchUsers) { this.props.fetchUsers(); }
-    if (allowlistIsStale && !isLoading_fetchAllowlist) { this.props.fetchAllowlist(); }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<OwnState>, snapshot?: any): void {
-    const { companiesAreStale, isLoading_fetchCompanies, usersAreStale, isLoading_fetchUsers, allowlistIsStale, isLoading_fetchAllowlist } = this.props;
+    const { companiesAreStale, isLoading_fetchCompanies, usersAreStale, isLoading_fetchUsers } = this.props;
     if (companiesAreStale && !isLoading_fetchCompanies) { this.props.fetchCompanies(); }
     if (usersAreStale && !isLoading_fetchUsers) { this.props.fetchUsers(); }
-    if (allowlistIsStale && !isLoading_fetchAllowlist) { this.props.fetchAllowlist(); }
   }
 
   private _renderForm = (): void => {
@@ -84,33 +75,16 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
     ))
   }
 
-  private _renderAllowlists(): JSX.Element[] {
-    return this.props.companies
-    .sort((a: Company, b: Company) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-    .map((company: Company) => {
-      const { id: company_id, name, } = company;
-      const [primaryContact, allowlist_emails, allowlist_domains] = [
-        company.findPrimaryContact(this.props.allowlist_emails),
-        company.findAllowlistEmails(this.props.allowlist_emails),
-        company.findAllowlistDomains(this.props.allowlist_domains),
-      ];
-      
-      return (
-        <React.Fragment key={company_id}>
-          <Allowlist
-            title={name}
-            entryUsertype={Usertype.REPRESENTATIVE}
-            company_id={company_id}
-            showsPrimaryContact
-            showsEmails
-            showsDomains
-            primaryContact={primaryContact}
-            allowlist_emails={allowlist_emails.filter((allowlist_email: AllowlistEmail) => !allowlist_email.is_primary_contact)}
-            allowlist_domains={allowlist_domains}
-          />
-        </React.Fragment>
-      )
-    });
+  private _renderAllowlists(): JSX.Element {
+    return (
+      <GenericAllowlistSubview
+        entryUsertype={Usertype.REPRESENTATIVE}
+        companies={
+          this.props.companies
+          .sort((a: Company, b: Company) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+        }
+      />
+    );
   }
 
   private _onCompanySubmit = (formValues: any) => {
@@ -142,7 +116,7 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
 
     return (
       <div className="company-allowlists">
-        <div className="allowlists" data-testid="admin-company-allowlists">
+        <div className="allowlists">
           {
             companies.length > 0
             ? (<>{ this._renderAllowlists() }</>)
