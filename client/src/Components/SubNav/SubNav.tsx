@@ -32,22 +32,12 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class SubNav extends React.Component<Props, OwnState> {
-  private _renderLinks(): JSX.Element[] {
-    return this.props.children.props.children.map((subNavLink: JSX.Element) => {
-      return (
-        <li key={subNavLink.props.to} className='sub-nav__item'>
-          {subNavLink}
-        </li>
-      )
-    })
-  }
-
   public render(): React.ReactElement<Props> {
     return (
       <PathContext.Provider value={{ fullPath: this.props.location.pathname }}>
         <div className={`sub-nav ${this.props.className}`}>
           <ul className='sub-nav__list'>
-            {this._renderLinks()}
+            {this.props.children}
           </ul>
         </div>
       </PathContext.Provider>
