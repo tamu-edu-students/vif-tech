@@ -5,7 +5,7 @@ import { createLoadingSelector, createErrorMessageSelector } from 'Shared/select
 import { userActionTypes } from 'Store/actions/types';
 
 import { createUser } from "Store/actions";
-import UserForm from "Views/SignupPage/UserForm/UserForm";
+import SignupForm from "Views/SignupPage/SignupForm/SignupForm";
 
 interface OwnProps {
 }
@@ -40,7 +40,7 @@ class SignupPage extends React.Component<Props, {}> {
     return (
       <div className="signup-page page page--signup">
         <h1 className="heading-primary">Sign Up</h1>
-        <UserForm form="userCreate" onSubmit={this._onSubmit} />
+        <SignupForm form="userCreate" onSubmit={this._onSubmit} />
       </div>
     );
   }

@@ -40,7 +40,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class UserForm extends CustomForm<Props, {}> {
+class SignupForm extends CustomForm<Props, {}> {
   public componentDidUpdate(prevProps: Readonly<InjectedFormProps<any, Props, string> & Props>, prevState: Readonly<{}>, snapshot?: any): void {
     if (this.props.usertype !== prevProps.usertype) {
       if (this.props.usertype === Usertype.REPRESENTATIVE) {
@@ -201,6 +201,6 @@ const validate = ({
 const formWrapped = reduxForm<any, Props>({
   initialValues: { usertype: Usertype.STUDENT },
   validate: validate,
-})(UserForm);
+})(SignupForm);
 
 export default connector(formWrapped);
