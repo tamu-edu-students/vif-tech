@@ -5,6 +5,26 @@
   flex-direction: column;
   align-items: center;
 
+  &.form--modal {
+    width: 80rem;
+    padding: 5rem 9rem;
+    border: 0.5rem solid $color-white;
+    background-color: rgba($color-violet-darkest, 50%);
+
+    .form__fields {
+      margin-bottom: 5rem;
+    }
+
+    .form__button-group {
+      display: flex;
+      gap: 7rem;
+    }
+
+    .btn-wire {
+      font-size: 2.1rem;
+    }
+  }
+
   &__fields {
     margin-bottom: 4rem;
     width: 100%;
@@ -60,6 +80,10 @@
       }
     }
 
+    &__select {
+      cursor: pointer;
+    }
+
     &__error-text {
       color: $color-brand-red-light;
       font-size: 1.4rem;
@@ -80,5 +104,15 @@
     &:visited { color: $color; }
     &:hover { color: lighten($color, 10%); }
     &:active { color: lighten($color, 20%); }
+  }
+
+  &__note {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    align-self: flex-start;
+
+    &--warning {
+      color: $color-brand-yellow;
+    }
   }
 }

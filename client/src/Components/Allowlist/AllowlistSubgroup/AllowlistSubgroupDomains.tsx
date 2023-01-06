@@ -59,11 +59,17 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
 
   private _renderConfirmationDialogue = (id: number, entryString: string, parentTitle: string): void => {
     this.props.showModal(
-      <div>
-        <p>Warning: Users registered under {parentTitle} will be deleted if {entryString} was their only tie to the {parentTitle} allowlist. Delete?</p>
-        <button onClick={() => this._onEntryDeletion(id)} type="button">Confirm</button>
-        <button onClick={this._onCancel} type="button">Cancel</button>
-      </div>
+      <form
+        className="allowlist-form form form--modal form--allowlist">
+        <p className="form__note form__note--warning">
+          Warning: Users registered under <em>{parentTitle}</em> will be deleted if <em>{entryString}</em> was
+          their only tie to the <em>{parentTitle}</em> allowlist.
+        </p>
+        <div className="form__button-group">
+          <button className="btn-wire" onClick={() => this._onEntryDeletion(id)} type="button">Confirm</button>
+          <button className="btn-wire" onClick={this._onCancel} type="button">Cancel</button>
+        </div>
+      </form>
     );
   }
 

@@ -21,10 +21,18 @@ class CompanyForm extends CustomForm<Props, {}> {
  
   public render() {
     return (
-      <form data-testid="company-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name="name" id="name" type="text" component={this._renderInput} label="Company name" autoFocus />
-        <button type='submit' data-testid="create-company-form-button">Confirm</button>
-        <button onClick={() => this.props.onCancel()} type='button'>Cancel</button>
+      <form
+        className="allowlist-form form form--modal form--allowlist"
+        onSubmit={this.props.handleSubmit(this._onSubmit)}
+        data-testid="company-create-form"
+      >
+        <div className="form__fields">
+          <Field name="name" id="name" type="text" component={this._renderInput} label="Company name" autoFocus />
+        </div>
+        <div className="form__button-group">
+          <button className="btn-wire" type='submit' data-testid="create-company-form-button">Confirm</button>
+          <button className="btn-wire" onClick={() => this.props.onCancel()} type='button'>Cancel</button>
+        </div>
       </form>
     );
   }
@@ -34,7 +42,7 @@ const validate = ({name}: any) => {
   const errors: any = {};
 
   if (!name) {
-    errors.name = "You must enter a company name";
+    errors.name = "Enter a company name";
   }
 
   return errors;

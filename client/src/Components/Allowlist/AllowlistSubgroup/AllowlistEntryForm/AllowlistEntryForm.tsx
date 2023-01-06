@@ -32,10 +32,18 @@ class AllowlistEntryForm extends CustomForm<Props, {}> {
     } = this.props;
 
     return (
-      <form data-testid="allowlist-entry-create-form" onSubmit={this.props.handleSubmit(this._onSubmit)}>
-        <Field name={name} id={id} type="text" component={this._renderInput} label={label} autoFocus />
-        <button type='submit' data-testid="create-allowlist-entry-form-button">Confirm</button>
-        <button onClick={() => this.props.onCancel()} type='button'>Cancel</button>
+      <form
+        className="allowlist-form form form--modal form--allowlist"
+        data-testid="allowlist-entry-create-form"
+        onSubmit={this.props.handleSubmit(this._onSubmit)}
+      >
+        <div className="form__fields">
+          <Field name={name} id={id} type="text" component={this._renderInput} label={label} autoFocus />
+        </div>
+        <div className="form__button-group">
+          <button className="btn-wire" type='submit' data-testid="create-allowlist-entry-form-button">Confirm</button>
+          <button className="btn-wire" onClick={() => this.props.onCancel()} type='button'>Cancel</button>
+        </div>
       </form>
     );
   }
@@ -47,7 +55,7 @@ const validate = (fields: any, formProps: any) => {
   const fieldVal: string = fields[fieldName];
 
   if (!fieldVal) {
-    errors[fieldName] = `You must enter a${(fieldName).match(/^[aeiou]/i) ? 'n' : ''} ${fieldName}`;
+    errors[fieldName] = `Enter a${(fieldName).match(/^[aeiou]/i) ? 'n' : ''} ${fieldName}`;
   }
 
   return errors;
