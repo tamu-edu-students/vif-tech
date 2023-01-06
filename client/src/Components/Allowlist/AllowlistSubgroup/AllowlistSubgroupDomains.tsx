@@ -24,6 +24,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class AllowlistSubgroupDomains extends React.Component<Props, {}> {
+  //TODO: Warn or prevent against '@' symbol being included in submission
   private _onSubmit = (formValues: any): void => {
     this.props.createAllowlistDomain({
       domain: formValues.domain,

@@ -44,7 +44,6 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 class ManageAllowlists extends React.Component<Props, OwnState> {
   private _renderRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
     const path: string = this.props.parentPath+subPath;
-    console.log(path)
     return (
       <Route exact path={path} key={path}>
         {allowlistElement}
@@ -62,7 +61,7 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
   private _renderLinks(): JSX.Element | null {
     return (
       <>
-      {this._renderLink(`/companies`, 'Company Allowlist')}
+      {this._renderLink(`/companies`, 'Company Allowlists')}
       {this._renderLink(`/student`, 'Student Allowlist')}
       {this._renderLink(`/volunteer`, 'Volunteer Allowlist')}
       {this._renderLink(`/admin`, 'Admin Allowlist')}
@@ -71,7 +70,6 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
   }
 
   private _renderRoutes(): JSX.Element[] {
-    console.log('HERE')
     return [
       this._renderRoute( `/companies`, (<CompanyAllowlists />) ),
       this._renderRoute( `/student`, (<StudentAllowlist />) ),

@@ -83,7 +83,7 @@ class GenericAllowlistSubview extends React.Component<Props, OwnState> {
     
     return (
       <div>
-        <h2>{title}Allowlist</h2>
+        {/* <h2>{title}Allowlist</h2> */}
         <br />
         <div className="allowlists" data-testid={`admin-${entryUsertype}-allowlists`}>
           <Allowlist
