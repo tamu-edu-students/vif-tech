@@ -1,0 +1,130 @@
+
+.allowlists {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.company-allowlists {
+  .btn-wire {
+    font-size: 1.8rem;
+    font-weight: 400;
+    border-width: 0.2rem;
+  }
+}
+
+.allowlist {
+  width: 49rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__header {
+    &:not([open]) {
+      color: green!important;
+
+      .allowlist__summary {
+        &::after {
+          transform: rotateX(180deg);
+        }
+      }
+    }
+  }
+
+  &__summary {
+    position: relative;
+    padding: 0.9rem 1.2rem;
+    color: $color-black;
+    background-color: $color-white;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+
+    &::after {
+      display: inline-block;
+      content: "\0023f6"; /* the new icon */
+      position: absolute;
+      right: 1rem;
+      line-height: 1;
+      font-size: 4rem;
+    }
+  }
+
+  .heading-secondary {
+    display: inline-block;
+    font-size: 1.8rem;
+    font-weight: 400;
+  }
+
+  &__subgroups {
+    padding: 1.5rem 2.4rem;
+    border: 1px solid $color-white;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  &__subgroup {
+    .heading-tertiary {
+      font-size: 1.6rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 0.2rem;
+    }
+
+    .btn-solid {
+      position: relative;
+      border: 0.1rem solid $color-white;
+      font-size: 1.4rem;
+      padding: 0.5rem 1rem;
+      width: 5rem;
+      height: min-content;
+      line-height: 1;
+      word-break: keep-all;
+
+      &.btn-solid--delete {
+        @include btn-solid($color-brand-red-dark);
+      }
+
+      &.btn-solid--add {
+        @include btn-solid($color-brand-green-dark);
+        font-size: 1.8rem;
+      }
+
+      &.btn-solid--transfer {
+        @include btn-solid($color-brand-yellow-dark);
+        font-size: 1.8rem;
+      }
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid white;
+      padding-bottom: 1rem;
+    }
+
+    &-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    & > button {
+      // margin-left: auto;
+      margin-top: 1rem;
+    }
+  }
+
+  &__entry {
+    font-size: 1.4rem;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

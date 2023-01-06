@@ -141,9 +141,7 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <div>
-        <h2>CompanyAllowlists</h2>
-        <br />
+      <div className="company-allowlists">
         <div className="allowlists" data-testid="admin-company-allowlists">
           {
             companies.length > 0
@@ -153,7 +151,7 @@ class CompanyAllowlists extends React.Component<Props, OwnState> {
         </div>
         {
           usertype === Usertype.ADMIN &&
-          <button onClick={this._renderForm}>Add New Company</button>
+          <button className="btn-wire" onClick={this._renderForm}>Add New Company</button>
         }
       </div>
     )

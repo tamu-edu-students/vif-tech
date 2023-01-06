@@ -1,6 +1,7 @@
 .btn-wire {
   font-family: $font-primary;
 
+  //TODO: Remove no-break rules
   &,
   &:link,
   &:visited {
@@ -42,5 +43,24 @@
     background-color: $color-gray;
     color: $color-black;
     cursor: not-allowed;
+  }
+}
+
+.btn-solid {
+  color: $color-white;
+  text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+  text-transform: uppercase;
+  padding: 1rem 1rem;
+  width: 13.4rem;
+  height: 4.3rem;
+  cursor: pointer;
+  transition: all 0.1s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::selection {
+    text-shadow: none;
   }
 }

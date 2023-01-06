@@ -64,8 +64,8 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
         {email}
         {
           this.props.usertype === Usertype.ADMIN &&
-          <button onClick={() => this._renderConfirmationDialogue(id, email, this.props.parentTitle)}>
-            Delete
+          <button className="btn-solid btn-solid--delete" onClick={() => this._renderConfirmationDialogue(id, email, this.props.parentTitle)}>
+            x
           </button>
         }
       </li>
@@ -132,15 +132,15 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
         </ul>
         {
           (!entry && usertype === Usertype.ADMIN) &&
-          <button onClick={() => this._renderEntryForm()}>
-            Add
+          <button className="btn-solid btn-solid--delete" onClick={() => this._renderEntryForm()}>
+            +
           </button>
         }
         
         {
           entry &&
-          <button onClick={() => this._renderTransferForm()}>
-            Transfer
+          <button className="btn-solid btn-solid--transfer" onClick={() => this._renderTransferForm()}>
+            &#x21c6;
           </button>
         }
       </div>

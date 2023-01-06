@@ -1,18 +1,4 @@
 // TODO: Remove garbage styles
-@mixin nav-button($background-color) {
-  color: $color-white;
-  background-color: $background-color;
-
-  &:hover {
-    background-color: darken($background-color, 2.5%);
-    transform: scale(0.99);
-  }
-  &:active {
-    background-color: darken($background-color, 5%);
-    transform: scale(0.98);
-  }
-}
-
 .nav {
   color: white;
   padding: 1.485rem 1.8rem;
@@ -101,16 +87,16 @@
 
     &.nav__button--login,
     &.nav__button--profile {
-      @include nav-button($color-brand-green-dark);
+      @include btn-solid($color-brand-green-dark);
     }
 
     &.nav__button--logout {
-      @include nav-button($color-brand-red-dark);
+      @include btn-solid($color-brand-red-dark);
     }
 
     &.nav__button--register,
     &.nav__button--settings {
-      @include nav-button($color-brand-yellow-dark);
+      @include btn-solid($color-brand-yellow-dark);
     }
 
     &::selection {
