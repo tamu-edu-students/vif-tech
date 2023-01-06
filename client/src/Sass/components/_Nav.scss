@@ -108,7 +108,8 @@
       @include nav-button($color-brand-red-dark);
     }
 
-    &.nav__button--register {
+    &.nav__button--register,
+    &.nav__button--settings {
       @include nav-button($color-brand-yellow-dark);
     }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 // import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
@@ -12,7 +12,10 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 import SubNavLink from 'Components/SubNavLink/SubNavLink';
 import SubNav from 'Components/SubNav/SubNav';
 
-import MeetingAssignmentSheet from './MeetingAssignmentSheet/MeetingAssignmentSheet';
+import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
+import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
+import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
+import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
 
 
 interface OwnProps {
@@ -38,7 +41,17 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
-class SchedulingPage extends React.Component<Props, OwnState> {
+class ManageAllowlists extends React.Component<Props, OwnState> {
+  private _renderRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
+    console.log(path)
+    return (
+      <Route exact path={path} key={path}>
+        {allowlistElement}
+      </Route>
+    );
+  }
+
   private _renderLink(subPath: string, text: string): JSX.Element {
     const path: string = this.props.parentPath+subPath;
     return (
@@ -49,43 +62,35 @@ class SchedulingPage extends React.Component<Props, OwnState> {
   private _renderLinks(): JSX.Element | null {
     return (
       <>
-        {this._renderLink(`/timetable/portfolio-review-1`, 'Portfolio Review 1')}
-        {this._renderLink(`/timetable/mock-interview-1`, 'Mock Interview 1')}
-        {this._renderLink(`/timetable/mock-interview-2`, 'Mock Interview 2')}
-        {this._renderLink(`/timetable/portfolio-review-2`, 'Portfolio Review 2')}
+      {this._renderLink(`/companies`, 'Company Allowlist')}
+      {this._renderLink(`/student`, 'Student Allowlist')}
+      {this._renderLink(`/volunteer`, 'Volunteer Allowlist')}
+      {this._renderLink(`/admin`, 'Admin Allowlist')}
       </>
-    );
-  }
-
-  private _renderRoute(subPath: string, eventTitle: string): JSX.Element {
-    const path: string = this.props.parentPath+subPath;
-    return (
-      <Route exact path={path} key={path}>
-        <MeetingAssignmentSheet eventTitle={eventTitle} />
-      </Route>
-    );
+    )
   }
 
   private _renderRoutes(): JSX.Element[] {
-    return ([
-      this._renderRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
-      this._renderRoute(`/timetable/mock-interview-1`, 'Mock Interview 1'),
-      this._renderRoute(`/timetable/mock-interview-2`, 'Mock Interview 2'),
-      this._renderRoute(`/timetable/portfolio-review-2`, 'Portfolio Review 2'),
-    ]);
+    console.log('HERE')
+    return [
+      this._renderRoute( `/companies`, (<CompanyAllowlists />) ),
+      this._renderRoute( `/student`, (<StudentAllowlist />) ),
+      this._renderRoute( `/volunteer`, (<VolunteerAllowlist />) ),
+      this._renderRoute( `/admin`, (<AdminAllowlist />) ),
+    ];
   }
 
   public render(): React.ReactElement<Props> {
     const { parentPath } = this.props;
 
     return (
-      <div className="my-events-page">
-        <h1 className="heading-primary">Scheduling</h1>
+      <div className="manage-allowlists">
+        {/* <h1 className="heading-primary">My Events</h1> */}
 
-        <div className='my-events-page__subpage'>
+        <div className='manage-allowlists__subpage'>
           <Switch>
             <Route path={parentPath} render={(routeProps: any) => (
-                <SubNav className='my-events-page__nav' {...routeProps}>
+                <SubNav className='manage-allowlists__nav' {...routeProps}>
                   {this._renderLinks()}
                 </SubNav>
               )}
@@ -94,13 +99,8 @@ class SchedulingPage extends React.Component<Props, OwnState> {
           </Switch>
 
           <Switch>
-            {/* <Route exact path={`${parentPath}`}>
-              <Redirect to={`${parentPath}`} />
-            </Route> */}
-
             <Route exact path={`${parentPath}`}>
-              {/* //TODO: Handle parent path for My Events page */}
-              <div>TODO: fill with something</div>
+              <Redirect to={`${parentPath}/companies`} />
             </Route>
 
             {this._renderRoutes()}
@@ -121,4 +121,4 @@ class SchedulingPage extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(SchedulingPage);
+export default connector(ManageAllowlists);

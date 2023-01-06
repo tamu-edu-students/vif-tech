@@ -65,6 +65,7 @@ class Nav extends React.Component<Props, OwnState> {
                   <li className="nav__item"><Link className="nav__link" to="/scheduling" data-testid="scheduling-page-button">Scheduling</Link></li>
                 }
                 <li className="nav__item"><Link className="nav__button nav__button--profile" to="/profile" data-testid="profile-page-button">Profile</Link></li>
+                <li className="nav__item"><Link className="nav__button nav__button--settings" to="/settings" data-testid="settings-page-button">Settings</Link></li>
                 <li className="nav__item"><button className="nav__button nav__button--logout" onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
               </>
             )
