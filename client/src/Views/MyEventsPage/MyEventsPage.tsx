@@ -77,13 +77,13 @@ class MyEventsPage extends React.Component<Props, OwnState> {
 
   private _renderVolunteerRoutes(): JSX.Element[] {
     return ([
-      this._renderVolunteerRoute(`/Timetable/portfolio-review-1`, 'Portfolio Review 1'),
-      this._renderVolunteerRoute(`/Timetable/mock-interview-1`, 'Mock Interview 1'),
-      this._renderVolunteerRoute(`/Timetable/mock-interview-2`, 'Mock Interview 2'),
-      this._renderVolunteerRoute(`/Timetable/portfolio-review-2`, 'Portfolio Review 2'),
+      this._renderVolunteerRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
+      this._renderVolunteerRoute(`/timetable/mock-interview-1`, 'Mock Interview 1'),
+      this._renderVolunteerRoute(`/timetable/mock-interview-2`, 'Mock Interview 2'),
+      this._renderVolunteerRoute(`/timetable/portfolio-review-2`, 'Portfolio Review 2'),
       ...(
         this.props.user?.isRepresentative
-        ? [this._renderRepresentativeFairRoute(`/Timetable/virtual-fair`, 'Virtual Fair')]
+        ? [this._renderRepresentativeFairRoute(`/timetable/virtual-fair`, 'Virtual Fair')]
         : []
       )
     ]);
@@ -92,13 +92,13 @@ class MyEventsPage extends React.Component<Props, OwnState> {
   private _renderVolunteerLinks(): JSX.Element {
     return (
       <>
-        {this._renderLink(`/Timetable/portfolio-review-1`, 'Portfolio Review 1')}
-        {this._renderLink(`/Timetable/mock-interview-1`, 'Mock Interview 1')}
-        {this._renderLink(`/Timetable/mock-interview-2`, 'Mock Interview 2')}
-        {this._renderLink(`/Timetable/portfolio-review-2`, 'Portfolio Review 2')}
+        {this._renderLink(`/timetable/portfolio-review-1`, 'Portfolio Review 1')}
+        {this._renderLink(`/timetable/mock-interview-1`, 'Mock Interview 1')}
+        {this._renderLink(`/timetable/mock-interview-2`, 'Mock Interview 2')}
+        {this._renderLink(`/timetable/portfolio-review-2`, 'Portfolio Review 2')}
         {
           this.props.user?.isRepresentative &&
-          this._renderLink(`/Timetable/virtual-fair`, 'Virtual Fair')
+          this._renderLink(`/timetable/virtual-fair`, 'Virtual Fair')
         }
       </>
     );
@@ -106,20 +106,20 @@ class MyEventsPage extends React.Component<Props, OwnState> {
 
   private _renderStudentRoutes(): JSX.Element[] {
     return ([
-      this._renderStudentRoute(`/Timetable/portfolio-review-1`, 'Portfolio Review 1'),
-      this._renderStudentRoute(`/Timetable/mock-interview-1`, 'Mock Interview 1'),
-      this._renderStudentRoute(`/Timetable/mock-interview-2`, 'Mock Interview 2'),
-      this._renderStudentRoute(`/Timetable/portfolio-review-2`, 'Portfolio Review 2'),
+      this._renderStudentRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
+      this._renderStudentRoute(`/timetable/mock-interview-1`, 'Mock Interview 1'),
+      this._renderStudentRoute(`/timetable/mock-interview-2`, 'Mock Interview 2'),
+      this._renderStudentRoute(`/timetable/portfolio-review-2`, 'Portfolio Review 2'),
     ]);
   }
 
   private _renderStudentLinks(): JSX.Element {
     return (
       <>
-      {this._renderLink(`/Timetable/portfolio-review-1`, 'Portfolio Review 1')}
-      {this._renderLink(`/Timetable/mock-interview-1`, 'Mock Interview 1')}
-      {this._renderLink(`/Timetable/mock-interview-2`, 'Mock Interview 2')}
-      {this._renderLink(`/Timetable/portfolio-review-2`, 'Portfolio Review 2')}
+      {this._renderLink(`/timetable/portfolio-review-1`, 'Portfolio Review 1')}
+      {this._renderLink(`/timetable/mock-interview-1`, 'Mock Interview 1')}
+      {this._renderLink(`/timetable/mock-interview-2`, 'Mock Interview 2')}
+      {this._renderLink(`/timetable/portfolio-review-2`, 'Portfolio Review 2')}
       </>
     );
   }
