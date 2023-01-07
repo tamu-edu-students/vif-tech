@@ -115,4 +115,33 @@
       color: $color-brand-yellow;
     }
   }
+
+  &.form--small {
+    .field {
+      &__label {
+        font-size: 1.8rem;
+      }
+
+      &__input,
+      &__select,
+      &__radio {
+        font-size: 1.4rem;
+        font-family: $font-secondary;
+        font-weight: 500;
+      }
+
+      &__input
+      &__select {
+        height: 3.3rem;
+      }     
+
+      &__error-text {
+        font-size: 1.2rem;
+      } 
+    }
+
+    .btn-wire {
+      font-size: 2.5rem;
+    }
+  }
 }

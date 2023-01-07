@@ -99,7 +99,6 @@
       padding: 0;
       height: 2rem;
       line-height: 1;
-      filter: saturate(70%);
 
       &.btn-solid--delete {
         @include btn-solid($color-brand-red-dark);
