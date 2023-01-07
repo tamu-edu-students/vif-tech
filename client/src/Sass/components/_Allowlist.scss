@@ -16,7 +16,7 @@
 }
 
 .allowlist {
-  $frame-color: $color-white;
+  $frame-color: $color-gray-lightest;
   $body-text-color: $color-white;
   $header-color: $color-black;
 
@@ -28,9 +28,8 @@
 
   &__header {
     &:not([open]) {
-      color: green!important;
-
       .allowlist__summary {
+        border-radius: 1rem;
         &::after {
           transform: rotateX(180deg);
         }
@@ -39,7 +38,6 @@
   }
 
   &__summary {
-    //TODO: handle hover state
     position: relative;
     padding: 0.9rem 1.2rem;
     color: $header-color;
@@ -47,17 +45,23 @@
     cursor: pointer;
     border-top-right-radius: 1rem;
     border-top-left-radius: 1rem;
+    transition: background-color 0.1s;
 
     display: flex;
     align-items: center;
 
+    &:hover { background-color: darken($frame-color, 7%); }
+    &:active { background-color: darken($frame-color, 14%); }
+
     &::after {
+      //TODO: Replace with actual triangle SVG
       display: inline-block;
       content: "\0023f6"; /* the new icon */
       position: absolute;
       right: 1rem;
       line-height: 1;
       font-size: 3rem;
+      transition: all 0.1s;
     }
   }
 
@@ -88,6 +92,7 @@
       margin-bottom: 0.2rem;
     }
 
+    //TODO: Replace icons with actual SVGs
     .btn-solid {
       position: relative;
       border: 0.1rem solid $frame-color;
