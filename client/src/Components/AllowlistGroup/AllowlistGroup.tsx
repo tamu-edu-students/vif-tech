@@ -38,6 +38,8 @@ const mapStateToProps = (state: IRootState, ownProps: OwnProps & (AllowlistGroup
   return {
     allowlist_emails: AllowlistEmail.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_emails),
     allowlist_domains: AllowlistDomain.filterByUsertype(ownProps.entryUsertype, state.allowlist.allowlist_domains),
+    amPrimaryContact: state.auth.user?.isPrimaryContact(state.allowlist.allowlist_emails),
+    amAdmin: state.auth.user?.usertype === Usertype.ADMIN,
 
     allowlistIsStale: state.allowlist.isStale,
     isLoading_fetchAllowlist: createLoadingSelector([allowlistActionTypes.FETCH_ALLOWLIST])(state),
@@ -85,6 +87,7 @@ class AllowlistGroupSubview extends React.Component<Props, OwnState> {
             primaryContact={primaryContact}
             allowlist_emails={allowlist_emails.filter((allowlist_email: AllowlistEmail) => !allowlist_email.is_primary_contact)}
             allowlist_domains={allowlist_domains}
+            disabled={!(this.props.amAdmin || this.props.amPrimaryContact)}
           />
         </React.Fragment>
       )

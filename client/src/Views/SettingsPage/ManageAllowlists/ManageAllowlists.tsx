@@ -78,10 +78,17 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
 
   private _renderRoutes(): JSX.Element[] {
     return [
-      this._renderRoute( `/${this.props.amAdmin ? 'companies' : 'company'}`, (<CompanyAllowlistGroup />) ),
+      ...(
+        this.props.amRepresentative
+        ? [
+          this._renderRoute( `/company`, (<CompanyAllowlistGroup />) ),
+        ]
+        : []
+      ),
       ...(
         this.props.amAdmin
         ? [
+          this._renderRoute( `/companies`, (<CompanyAllowlistGroup />) ),
           this._renderRoute( `/student`, (<AllowlistGroup entryUsertype={Usertype.STUDENT} showsDomains />) ),
           this._renderRoute( `/volunteer`, (<AllowlistGroup entryUsertype={Usertype.VOLUNTEER} showsEmails />) ),
           this._renderRoute( `/admin`, (<AllowlistGroup entryUsertype={Usertype.ADMIN} showsEmails />) ),
@@ -120,7 +127,8 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
               <section className="section section--redirector">
                 <RedirectPrompt
                   message={"404 Page Not Found"}
-                  buttonText={"Return To My Events Page"}
+                  //TODO: Change text here
+                  buttonText={"Return To Manage Allowlists Page"}
                   pathName={parentPath}
                 />
               </section>

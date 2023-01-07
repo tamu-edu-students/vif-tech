@@ -15,6 +15,7 @@ interface OwnProps {
   onDelete: any;
   company_id?: number;
   entries: AllowlistDomain[];
+  disabled?: boolean;
 }
 
 const mapStateToProps = null;
@@ -47,9 +48,12 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
     return (
       <li className="allowlist__entry" key={id}>
         {`@${entryString}`}
-        <button className="btn-solid btn-solid--delete" onClick={() => this._renderConfirmationDialogue(id, entryString, this.props.parentTitle)}>
-          x
-        </button>
+        {
+          !this.props.disabled &&
+          <button className="btn-solid btn-solid--delete" onClick={() => this._renderConfirmationDialogue(id, entryString, this.props.parentTitle)}>
+            x
+          </button>
+        }
       </li>
     )
   }
@@ -81,6 +85,7 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
   public render(): React.ReactElement<Props> {
     const {
       entries,
+      disabled = false
     } = this.props;
 
     const allowlistEntryFormProps = {
@@ -98,9 +103,12 @@ class AllowlistSubgroupDomains extends React.Component<Props, {}> {
         <ul className="allowlist__subgroup-entries">
           {this._renderEntries(entries)}
         </ul>
-        <button className="btn-solid btn-solid--add" onClick={() => this._renderForm(allowlistEntryFormProps)}>
-          &#x2b;
-        </button>
+        {
+          !disabled &&
+          <button className="btn-solid btn-solid--add" onClick={() => this._renderForm(allowlistEntryFormProps)}>
+            &#x2b;
+          </button>
+        }
       </div>
     );
   }

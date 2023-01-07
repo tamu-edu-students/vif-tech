@@ -18,6 +18,7 @@ interface OwnProps {
   onDelete: any;
   company_id?: number;
   entry: AllowlistEmail | null;
+  disabled?: boolean;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -63,7 +64,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
       <li className="allowlist__entry" key={id}>
         {email}
         {
-          this.props.usertype === Usertype.ADMIN &&
+          (!this.props.disabled && this.props.usertype === Usertype.ADMIN) &&
           <button className="btn-solid btn-solid--delete" onClick={() => this._renderConfirmationDialogue(id, email, this.props.parentTitle)}>
             x
           </button>
@@ -119,6 +120,7 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
     const {
       entry,
       usertype,
+      disabled = false
     } = this.props;
 
     return (
@@ -131,14 +133,14 @@ class AllowlistSubgroupPrimaryContacts extends React.Component<Props, {}> {
           }
         </ul>
         {
-          (!entry && usertype === Usertype.ADMIN) &&
+          (!disabled && !entry && usertype === Usertype.ADMIN) &&
           <button className="btn-solid btn-solid--delete" onClick={() => this._renderEntryForm()}>
             +
           </button>
         }
         
         {
-          entry &&
+          (!disabled && entry) &&
           <button className="btn-solid btn-solid--transfer" onClick={() => this._renderTransferForm()}>
             &#x21c6;
           </button>

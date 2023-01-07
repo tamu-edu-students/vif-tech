@@ -132,7 +132,7 @@
 
   &__entry {
     font-size: 1.4rem;
-    border-bottom: 1px dotted $frame-color;
+    border-bottom: 1px dotted $frame-color; //TODO: handle case where non-primary contact is viewing
     padding-bottom: 1rem;
 
     display: flex;

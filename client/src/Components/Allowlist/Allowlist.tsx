@@ -29,6 +29,7 @@ interface OwnProps {
   primaryContact?: AllowlistEmail | null;
   allowlist_emails?: AllowlistEmail[];
   allowlist_domains?: AllowlistDomain[];
+  disabled?: boolean;
 }
 
 interface OwnState {
@@ -69,6 +70,7 @@ class Allowlist extends React.Component<Props, OwnState> {
       primaryContact = null,
       allowlist_emails = [],
       allowlist_domains = [],
+      disabled = false,
     } = this.props;
 
     if (this.props.isLoading) {
@@ -96,6 +98,7 @@ class Allowlist extends React.Component<Props, OwnState> {
                 onSubmit={() => {this.setState({ isLoaded: false })}}
                 onDelete={() => {this.setState({ isLoaded: false })}}
                 company_id={company_id}
+                disabled={disabled}
               />
             }
 
@@ -107,6 +110,7 @@ class Allowlist extends React.Component<Props, OwnState> {
                 onSubmit={() => {this.setState({ isLoaded: false })}}
                 onDelete={() => {this.setState({ isLoaded: false })}}
                 company_id={company_id}
+                disabled={disabled}
               />
             )}
             
@@ -118,6 +122,7 @@ class Allowlist extends React.Component<Props, OwnState> {
                 onSubmit={() => {this.setState({ isLoaded: false })}}
                 onDelete={() => {this.setState({ isLoaded: false })}}
                 company_id={company_id}
+                disabled={disabled}
               />
             )}
           </div>
