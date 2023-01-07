@@ -105,20 +105,20 @@
         &:not(.table__row--header) {
           &:nth-child(even) {
             .table__cell:not(.table__cell--time) {
-              background-color: $color-gray-light;
+              background-color: darken($color-gray-lightest, 15%);
 
               .student-select-form {
-                background-color: $color-gray-light;
+                background-color: darken($color-gray-lightest, 15%);
               }
             }
           }
   
           &:nth-child(odd) {
             .table__cell:not(.table__cell--time) {
-              background-color: $color-white;
+              background-color: $color-gray-lightest;
 
               .student-select-form {
-                background-color: $color-white;
+                background-color: $color-gray-lightest;
               }
             }
           }
