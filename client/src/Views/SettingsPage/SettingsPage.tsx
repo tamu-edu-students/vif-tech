@@ -63,11 +63,7 @@ class MyEventsPage extends React.Component<Props, OwnState> {
     return (
       <>
         {
-          amAdmin
-          && this._renderSettingsLink(`/manage-allowlists`, `Manage Allowlists`)
-        }
-        {
-          amRepresentative
+          (amAdmin || amRepresentative)
           && this._renderSettingsLink(`/manage-allowlist`, `Manage Allowlist`)
         }
       </>
@@ -79,7 +75,7 @@ class MyEventsPage extends React.Component<Props, OwnState> {
     return [
       ...(
         (amAdmin || amRepresentative)
-        ? [this._renderSettingsRoute(`/manage-allowlist${amAdmin ? 's' : ''}`, (<ManageAllowlists />))]
+        ? [this._renderSettingsRoute(`/manage-allowlist`, (<ManageAllowlists />))]
         : []
       ),
     ];

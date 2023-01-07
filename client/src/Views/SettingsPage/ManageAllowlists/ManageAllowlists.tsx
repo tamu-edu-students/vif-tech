@@ -66,7 +66,7 @@ class ManageAllowlists extends React.Component<Props, OwnState> {
       {
         this.props.amAdmin &&
         <>
-        {this._renderLink(`/companies`, `Company Allowlists`)}
+        {this._renderLink(`/companies`, `Company Allowlist`)}
         {this._renderLink(`/student`, 'Student Allowlist')}
         {this._renderLink(`/volunteer`, 'Volunteer Allowlist')}
         {this._renderLink(`/admin`, 'Admin Allowlist')}
