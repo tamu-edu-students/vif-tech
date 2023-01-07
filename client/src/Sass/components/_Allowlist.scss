@@ -94,13 +94,12 @@
 
     //TODO: Replace icons with actual SVGs
     .btn-solid {
-      position: relative;
       border: 0.1rem solid $frame-color;
       font-size: 1.4rem;
       padding: 0;
       height: 2rem;
       line-height: 1;
-      word-break: keep-all;
+      filter: saturate(70%);
 
       &.btn-solid--delete {
         @include btn-solid($color-brand-red-dark);

@@ -1,5 +1,4 @@
 @mixin btn-solid($background-color) {
-  color: $color-white;
   background-color: $background-color;
 
   &:hover {
