@@ -29,7 +29,7 @@
   &__header {
     &:not([open]) {
       .allowlist__summary {
-        border-radius: 1rem;
+        // border-radius: 1rem;
         &::after {
           transform: rotateX(180deg);
         }
@@ -43,8 +43,8 @@
     color: $header-color;
     background-color: $frame-color;
     cursor: pointer;
-    border-top-right-radius: 1rem;
-    border-top-left-radius: 1rem;
+    // border-top-right-radius: 1rem;
+    // border-top-left-radius: 1rem;
     transition: background-color 0.1s;
 
     display: flex;
