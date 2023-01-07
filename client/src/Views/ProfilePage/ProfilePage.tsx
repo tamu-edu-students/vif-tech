@@ -16,11 +16,6 @@ import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVoluntee
 import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
 import MyProfileAdmin from './MyProfile/MyProfileAdmin/MyProfileAdmin';
 
-import CompanyAllowlists from './CompanyAllowlists/CompanyAllowlists';
-import StudentAllowlist from './StudentAllowlist/StudentAllowlist';
-import AdminAllowlist from './AdminAllowlist/AdminAllowlist';
-import VolunteerAllowlist from './VolunteerAllowlist/VolunteerAllowlist';
-
 import FocusList from './FocusList/FocusList';
 
 
@@ -66,22 +61,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
   private _renderAdminRoutes(): JSX.Element[] {
     const { parentPath } = this.props;
     return ([
-      <Route exact path={`${parentPath}/company-allowlists`} key={`${parentPath}/company-allowlists`}>
-        <CompanyAllowlists />
-      </Route>,
-      
-      <Route exact path={`${parentPath}/student-allowlist`} key={`${parentPath}/student-allowlist`}>
-        <StudentAllowlist />
-      </Route>,
-
-      <Route exact path={`${parentPath}/admin-allowlist`} key={`${parentPath}/admin-allowlist`}>
-        <AdminAllowlist />
-      </Route>,
-
-      <Route exact path={`${parentPath}/volunteer-allowlist`} key={`${parentPath}/volunteer-allowlist`}>
-        <VolunteerAllowlist />
-      </Route>,
-
       <Route exact path={`${parentPath}/focus-list`} key={`${parentPath}/focus-list`}>
         <FocusList />
       </Route>
@@ -93,11 +72,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <br />
-        <li><Link to={`${parentPath}/company-allowlists`}>Company Allowlist</Link></li>
-        <li><Link to={`${parentPath}/student-allowlist`}>Student Allowlist</Link></li>
-        <li><Link to={`${parentPath}/admin-allowlist`}>Admin Allowlist</Link></li>
-        <li><Link to={`${parentPath}/volunteer-allowlist`}>Volunteer Allowlist</Link></li>
-        <br />
         <li><Link to={`${parentPath}/focus-list`}>Manage Focus List</Link></li>
       </>
     );
@@ -108,17 +82,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return ([
       <Route exact path={`${parentPath}/company-profile`} key={`${parentPath}/company-profile`}>
         <CompanyProfile />
-      </Route>,
-
-      ...(
-        this.props.amPrimaryContact ?
-        [
-        <Route exact path={`${parentPath}/company-allowlist`} key={`${parentPath}/company-allowlist`}>
-          <CompanyAllowlists company_id={this.props.user?.company_id} />
-        </Route>
-        ] :
-        []
-      ),
+      </Route>
     ]);
   }
 
@@ -127,13 +91,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         <li><Link to={`${parentPath}/company-profile`}>Company Profile</Link></li>
-        <br />
-        {
-          this.props.amPrimaryContact &&
-          <>
-            <li><Link to={`${parentPath}/company-allowlist`}>Company Allowlist</Link></li>
-          </>
-        }
       </>
     );
   }
