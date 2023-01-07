@@ -82,7 +82,7 @@ class Allowlist extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="allowlist">
+      <div className={`allowlist ${disabled ? 'allowlist--disabled' : ''}`}>
         <details className="allowlist__header" open>
           <summary className="allowlist__summary">
             <h2 className="heading-secondary">{title}</h2>

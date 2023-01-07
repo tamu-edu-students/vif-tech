@@ -93,7 +93,7 @@ class AllowlistSubgroup extends React.Component<Props, {}> {
 
   private _renderEntry(entryString: string, id: number): JSX.Element {
     return (
-      <li className="allowlist__entry" key={id}>
+      <li className={`allowlist__entry ${this.props.disabled ? 'allowlist__entry--disabled' : ''}`} key={id}>
         {entryString}
         {
           this.props.shouldRenderDeleteButton &&
