@@ -82,7 +82,7 @@ class AssignmentTimetable extends React.Component<Props, OwnState> {
           </details>
         }
         {
-          title && <div className="title">{title}</div>
+          title && <div className="title">Title: {title}</div>
         }
         {
           //TODO: handle case where volunteer/rep has 0 availabile slots

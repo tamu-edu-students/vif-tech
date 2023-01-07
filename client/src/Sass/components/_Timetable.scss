@@ -33,7 +33,7 @@
       font-size: 1.8rem;
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
-      font-weight: 400;
+      font-weight: 500;
       font-style: italic;
       padding: 1rem 2.6rem;
       width: max-content;
@@ -41,11 +41,12 @@
   
     & > details,
     & > .title {
-      background-color: $color-gray-lightest;
-      color: $color-black;
+      background-color: $color-violet-darkest;
+      color: $color-white;
       font-size: 1.2rem;
       padding: 0.5rem 2.6rem;
       border-top-right-radius: 1rem;
+      border-bottom: 1px dotted $color-gray;
     }
   }
   

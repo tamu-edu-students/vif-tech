@@ -173,7 +173,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
     this.setState({ dispatchQueue: {...this.state.dispatchQueue, [key]: reaction} });
   }
 
-  private _renderVolunteerTables(volunteers: User[]): JSX.Element[] {
+  private _renderTimetables(volunteers: User[]): JSX.Element[] {
     return volunteers.map((volunteer: User) => {
       return (
         <React.Fragment key={volunteer.id}>
@@ -218,10 +218,10 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
       }}>
         <div className="meeting-assignment-sheet">
           {/* //TODO: Improve header 2 names  */}
-          <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2>
+          {/* <h2 className="heading-secondary">{`${event?.title} Meeting Assignment Sheet`}</h2> */}
 
           <div className="timetables">
-            {this._renderVolunteerTables(volunteerAttendees ?? [])}
+            {this._renderTimetables(volunteerAttendees ?? [])}
           </div>
 
           <button onClick={() => this._onSaveChanges()}>Save Changes</button>
