@@ -31,5 +31,11 @@
       width: 20.2rem;
       margin-bottom: 4rem;
     }
+
+    &.form--small {
+      .signup-form__usertypes-legend {
+        font-size: 3rem;
+      }
+    }
   }
 }
