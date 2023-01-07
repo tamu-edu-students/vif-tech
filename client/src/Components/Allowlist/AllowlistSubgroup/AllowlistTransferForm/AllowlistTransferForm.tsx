@@ -1,8 +1,11 @@
 import React from 'react';
 import { Field, reduxForm } from "redux-form";
+import { IRootState } from 'Store/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 
 import User from 'Shared/entityClasses/User';
+import Company from 'Shared/entityClasses/Company';
+import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
 
@@ -14,10 +17,20 @@ interface OwnProps {
   id: string;
   label: string;
   form: string;
-  colleagues: User[];
+  company_id: number;
+  currentAllowlistEmail: AllowlistEmail;
 }
 
-const mapStateToProps = null;
+const mapStateToProps = (state: IRootState, ownProps: OwnProps) => {
+  const transferFromId: number | undefined = ownProps.currentAllowlistEmail.findUser(state.userData.users)?.id ?? undefined;
+  const colleagues: User[] = Company.findById(ownProps.company_id, state.companyData.companies)
+    ?.findRepresentatives(state.userData.users)
+    .filter((rep: User) => rep.id !== transferFromId) ?? [];
+
+  return {
+    colleagues
+  }
+};
 const mapDispatchToProps = { };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -47,7 +60,7 @@ class AllowlistTransferForm extends CustomForm<Props, {}> {
       <form
         className="allowlist-form form form--modal form--allowlist"
         onSubmit={this.props.handleSubmit(this._onSubmit)}
-        data-testid="allowlist-entry-create-form"
+        data-testid="allowlist-entry-transfer-form"
       >
         <p className="form__note">Note: Primary Contact status can only be transferred to <em>existing</em> users.</p>
         <div className="form__fields">
@@ -57,7 +70,7 @@ class AllowlistTransferForm extends CustomForm<Props, {}> {
           </Field>
         </div>
         <div className="form__button-group">
-          <button className="btn-wire" type='submit' data-testid="create-allowlist-entry-form-button">Confirm</button>
+          <button className="btn-wire" type='submit' data-testid="allowlist-entry-transfer-form-button">Confirm</button>
           <button className="btn-wire" onClick={() => this.props.onCancel()} type='button'>Cancel</button>
         </div>
       </form>
