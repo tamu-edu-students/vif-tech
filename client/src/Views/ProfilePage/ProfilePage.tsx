@@ -10,6 +10,8 @@ import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 
+import SubNavLink from 'Components/SubNavLink/SubNavLink';
+import SubNav from 'Components/SubNav/SubNav';
 import CompanyProfile from './CompanyProfile/CompanyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
@@ -33,6 +35,8 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
     user: state.auth.user,
     amRepresentative: state.auth.user?.usertype === Usertype.REPRESENTATIVE,
     amAdmin: state.auth.user?.usertype === Usertype.ADMIN,
+    amStudent: state.auth.user?.usertype === Usertype.STUDENT,
+    amVolunteer: state.auth.user?.usertype === Usertype.VOLUNTEER,
     amPrimaryContact: state.auth.user?.isPrimaryContact(state.allowlist.allowlist_emails),
 
     allowlistIsStale: state.auth.user?.usertype === Usertype.REPRESENTATIVE ? state.allowlist.isStale : false,
@@ -119,34 +123,61 @@ class ProfilePage extends React.Component<Props, OwnState> {
     );
   }
 
+  private _renderRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
+    return (
+      <Route exact path={path} key={path} render={(routeProps: any) => (
+        React.createElement(allowlistElement.type, routeProps)
+      )} />
+    );
+  }
+
+  private _renderLink(subPath: string, text: string): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
+    return (
+      <SubNavLink to={path}>{text}</SubNavLink>
+    );
+  }
+
   private _renderLinks(): JSX.Element | null {
-    switch(this.props.user?.usertype) {
-      case Usertype.ADMIN:
-        return this._renderAdminLinks();
-      case Usertype.REPRESENTATIVE:
-        return this._renderRepresentativeLinks();
-      case Usertype.VOLUNTEER:
-        return this._renderVolunteerLinks();
-      case Usertype.STUDENT:
-        return this._renderStudentLinks();
-      default:
-        return null;
-    }
+    // switch(this.props.user?.usertype) {
+    //   case Usertype.ADMIN:
+    //     return this._renderAdminLinks();
+    //   case Usertype.REPRESENTATIVE:
+    //     return this._renderRepresentativeLinks();
+    //   case Usertype.VOLUNTEER:
+    //     return this._renderVolunteerLinks();
+    //   case Usertype.STUDENT:
+    //     return this._renderStudentLinks();
+    //   default:
+    //     return null;
+    // }
+    return (
+      <>
+      {this.props.amStudent && this._renderLink(`/my-profile`, `My Profile`)}
+      </>
+    )
   }
 
   private _renderRoutes(): JSX.Element[] {
-    switch(this.props.user?.usertype) {
-      case Usertype.ADMIN:
-        return this._renderAdminRoutes();
-      case Usertype.REPRESENTATIVE:
-        return this._renderRepresentativeRoutes();
-      case Usertype.VOLUNTEER:
-        return this._renderVolunteerRoutes();
-      case Usertype.STUDENT:
-        return this._renderStudentRoutes();
-      default:
-        return [];
+    // switch(this.props.user?.usertype) {
+    //   case Usertype.ADMIN:
+    //     return this._renderAdminRoutes();
+    //   case Usertype.REPRESENTATIVE:
+    //     return this._renderRepresentativeRoutes();
+    //   case Usertype.VOLUNTEER:
+    //     return this._renderVolunteerRoutes();
+    //   case Usertype.STUDENT:
+    //     return this._renderStudentRoutes();
+    //   default:
+    //     return [];
+    // }
+    if (!this.props.amStudent) {
+      return [];
     }
+    return [
+      this._renderRoute(`/my-profile`, <MyProfileStudent />),
+    ];
   }
 
   public render(): React.ReactElement<Props> {
@@ -162,40 +193,40 @@ class ProfilePage extends React.Component<Props, OwnState> {
       <div className="profile-page">
         <h1 className="heading-primary">Profile</h1>
 
-        <div className="profile-page__split">
-          <ul className='profile-page__nav'>
-            <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
-            {this._renderLinks()}
-          </ul>
+        <div className='profile-page__subpage'>
+          <Switch>
+            <Route path={parentPath} render={(routeProps: any) => (
+                <SubNav className='profile-page__nav' {...routeProps}>
+                  {this._renderLinks()}
+                </SubNav>
+              )}
+            >
+            </Route>
+          </Switch>
 
-          <div className='profile-page__subpage'>
-            <Switch>
-              <Route exact path={`${parentPath}`}>
-                <Redirect to={`${parentPath}/my-profile`} />
-              </Route>
+          <Switch>
+            <Route exact path={`${parentPath}`}>
+              <Redirect to={`${parentPath}/my-profile`} />
+            </Route>
 
-              <Route exact path={`${parentPath}/my-profile`}>
-                { user?.isAdmin && <MyProfileAdmin />}
-                { user?.isRepresentative && <MyProfileRepresentative />}
-                { user?.isVolunteer && <MyProfileVolunteer />}
-                { user?.isStudent && <MyProfileStudent />}
-              </Route>
+            {/* <Route exact path={`${parentPath}/my-profile`}>
+              <MyProfileStudent />
+            </Route> */}
 
-              {this._renderRoutes()}
+            {this._renderRoutes()}
 
-              <Route path="*"> 
-                <section className="section section--redirector">
-                  <RedirectPrompt
-                    message={"404 Page Not Found"}
-                    buttonText={"Return To Profile Page"}
-                    pathName={parentPath}
-                  />
-                </section>
-              </Route>
-            </Switch>
-          </div>
-          
+            <Route path="*"> 
+              <section className="section section--redirector">
+                <RedirectPrompt
+                  message={"404 Page Not Found"}
+                  buttonText={"Return To Profile Page"}
+                  pathName={parentPath}
+                />
+              </section>
+            </Route>
+          </Switch>
         </div>
+
       </div>
     );
   }

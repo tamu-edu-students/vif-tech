@@ -164,9 +164,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   
   private _renderImg(profileImgSrc: string): JSX.Element {
     return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
-      </div>
+      <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
     );
   }
 
@@ -204,32 +202,29 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
     return (
       <div className="My-Profile my-profile">
-        <h2 className="heading-secondary">{`My Profile (Student)`}</h2>
-        <h3 className="heading-tertiary">{firstname} {lastname}</h3>
+        {/* <h2 className="heading-secondary">{`My Profile (Student)`}</h2> */}
+        {/* <h3 className="heading-tertiary">{firstname} {lastname}</h3> */}
         {
-          profile_img_src && 
-          <>
-            <br />
-            {this._renderImg(profile_img_src)}
-          </>
+          <div className="my-profile__img-container">
+          {profile_img_src && 
+            this._renderImg(profile_img_src)}
+          </div>
         }
-        <br />
-        <div>
-          <MyProfileStudentFormBasic
-            form="updateBasicStudentFields"
-            initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
-            updateBasicFields={this._updateBasicFieldsState}
-          />
-        </div>
 
-        <div>
-          <MyProfileStudentFormFocuses
-            form="updateFocusStudentFields"
-            initialValues={this._computeInitialFocusChecks()}
-            focuses={focuses}
-            updateFocusFields={this._updateFocusFieldsState}
-          />
-        </div>
+        <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
+        
+        <MyProfileStudentFormBasic
+          form="updateBasicStudentFields"
+          initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
+          updateBasicFields={this._updateBasicFieldsState}
+        />
+
+        <MyProfileStudentFormFocuses
+          form="updateFocusStudentFields"
+          initialValues={this._computeInitialFocusChecks()}
+          focuses={focuses}
+          updateFocusFields={this._updateFocusFieldsState}
+        />
 
           <button onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
