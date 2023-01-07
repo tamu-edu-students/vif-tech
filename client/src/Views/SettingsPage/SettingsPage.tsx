@@ -9,9 +9,6 @@ import { allowlistActionTypes } from 'Store/actions/types';
 import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
-
-import SubNavLink from 'Components/SubNavLink/SubNavLink';
-import SubNav from 'Components/SubNav/SubNav';
 import ManageAllowlists from './ManageAllowlists/ManageAllowlists';
 
 interface OwnProps {
