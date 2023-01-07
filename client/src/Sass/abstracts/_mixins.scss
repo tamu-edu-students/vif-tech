@@ -1,3 +1,17 @@
+@mixin btn-solid($background-color) {
+  color: $color-white;
+  background-color: $background-color;
+
+  &:hover {
+    background-color: darken($background-color, 2.5%);
+    transform: scale(0.99);
+  }
+  &:active {
+    background-color: darken($background-color, 5%);
+    transform: scale(0.98);
+  }
+}
+
 @mixin subpage {
   position: relative;
   background-color: $color-violet;

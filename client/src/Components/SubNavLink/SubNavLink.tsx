@@ -38,7 +38,9 @@ class SubNavLink extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <Link className={`sub-nav__link ${this._matchesCurrentPath() ? 'sub-nav__link--current' : ''}`} to={to}>{children}</Link>
+      <li className="sub-nav__item">
+        <Link className={`sub-nav__link ${this._matchesCurrentPath() ? 'sub-nav__link--current' : ''}`} to={to}>{children}</Link>
+      </li>
     );
   }
 }

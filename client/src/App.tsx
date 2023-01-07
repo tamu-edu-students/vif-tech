@@ -14,6 +14,7 @@ import FAQPage from 'Views/FAQPage/FAQPage';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
 import UsersPage from 'Views/UsersPage/UsersPage';
+import SettingsPage from 'Views/SettingsPage/SettingsPage';
 import SignupPage from 'Views/SignupPage/SignupPage';
 import ProfilePage from 'Views/ProfilePage/ProfilePage';
 import VirtualFairSchedule from 'Views/VirtualFairSchedule/VirtualFairSchedule';
@@ -174,6 +175,17 @@ class App extends React.Component<Props, {}> {
                   return (
                     this.props.user
                     ? <ProfilePage {...routeProps} />
+                    : <Redirect to={'/login'} />
+                  )
+                } }
+              />
+
+              <Route
+                path={"/settings"}
+                render={ (routeProps: any) => {
+                  return (
+                    this.props.user
+                    ? <SettingsPage {...routeProps} />
                     : <Redirect to={'/login'} />
                   )
                 } }

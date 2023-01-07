@@ -10,13 +10,11 @@ import {
   deleteAllowlistDomain,
 } from "Store/actions";
 
-import { Usertype } from 'Shared/enums';
+import { Usertype, AllowlistSubgroupType } from 'Shared/enums';
 import AllowlistEmail from 'Shared/entityClasses/AllowlistEmail';
 import AllowlistDomain from 'Shared/entityClasses/AllowlistDomain';
 
-import AllowlistSubgroupPrimaryContact from './AllowlistSubgroup/AllowlistSubgroupPrimaryContact';
-import AllowlistSubgroupEmails from './AllowlistSubgroup/AllowlistSubgroupEmails';
-import AllowlistSubgroupDomains from './AllowlistSubgroup/AllowlistSubgroupDomains';
+import AllowlistSubgroup from './AllowlistSubgroup/AllowlistSubgroup';
 
 
 interface OwnProps {
@@ -29,6 +27,7 @@ interface OwnProps {
   primaryContact?: AllowlistEmail | null;
   allowlist_emails?: AllowlistEmail[];
   allowlist_domains?: AllowlistDomain[];
+  disabled?: boolean;
 }
 
 interface OwnState {
@@ -69,6 +68,7 @@ class Allowlist extends React.Component<Props, OwnState> {
       primaryContact = null,
       allowlist_emails = [],
       allowlist_domains = [],
+      disabled = false,
     } = this.props;
 
     if (this.props.isLoading) {
@@ -82,40 +82,53 @@ class Allowlist extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="allowlist">
-        <h2 className="heading-secondary">Title: {title}</h2>
-        { showsPrimaryContact &&
-          <AllowlistSubgroupPrimaryContact
-            parentTitle={title}
-            entry={primaryContact}
-            entryUsertype={entryUsertype}
-            onSubmit={() => {this.setState({ isLoaded: false })}}
-            onDelete={() => {this.setState({ isLoaded: false })}}
-            company_id={company_id}
-          />
-        }
+      <div className={`allowlist ${disabled ? 'allowlist--disabled' : ''}`}>
+        <details className="allowlist__header" open>
+          <summary className="allowlist__summary">
+            <h2 className="heading-secondary">{title}</h2>
+          </summary>
+          <div className="allowlist__subgroups">
+            { showsPrimaryContact &&
+              <AllowlistSubgroup
+                subgroupType={AllowlistSubgroupType.PRIMARY_CONTACT}
+                parentTitle={title}
+                entryUsertype={entryUsertype}
+                entryIsPrimaryContact
+                entries={primaryContact ? [primaryContact] : []}
+                // onSubmit={this.props.onSubmit}
+                // onDelete={this.props.onDelete}
+                company_id={company_id}
+                disabled={disabled}
+              />
+            }
 
-        { showsEmails && (
-          <AllowlistSubgroupEmails
-            parentTitle={title}
-            entries={allowlist_emails}
-            entryUsertype={entryUsertype}
-            onSubmit={() => {this.setState({ isLoaded: false })}}
-            onDelete={() => {this.setState({ isLoaded: false })}}
-            company_id={company_id}
-          />
-        )}
-        
-        { showsDomains && (
-          <AllowlistSubgroupDomains
-            parentTitle={title}
-            entries={allowlist_domains}
-            entryUsertype={entryUsertype}
-            onSubmit={() => {this.setState({ isLoaded: false })}}
-            onDelete={() => {this.setState({ isLoaded: false })}}
-            company_id={company_id}
-          />
-        )}
+            { showsEmails && (
+              <AllowlistSubgroup
+                subgroupType={AllowlistSubgroupType.PERSONAL_EMAILS}
+                parentTitle={title}
+                entryUsertype={entryUsertype}
+                entries={allowlist_emails}
+                // onSubmit={() => {this.setState({ isLoaded: false })}}
+                // onDelete={() => {this.setState({ isLoaded: false })}}
+                company_id={company_id}
+                disabled={disabled}
+              />
+            )}
+            
+            { showsDomains && (
+              <AllowlistSubgroup
+                subgroupType={AllowlistSubgroupType.DOMAINS}
+                parentTitle={title}
+                entryUsertype={entryUsertype}
+                entries={allowlist_domains}
+                // onSubmit={() => {this.setState({ isLoaded: false })}}
+                // onDelete={() => {this.setState({ isLoaded: false })}}
+                company_id={company_id}
+                disabled={disabled}
+              />
+            )}
+          </div>
+        </details>
       </div>
     );
   }
