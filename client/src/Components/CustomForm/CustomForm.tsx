@@ -42,9 +42,22 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
     const hasError: boolean = meta.error && meta.touched;
     return (
       <div className={`field field--radio ${hasError ? "field--error" : ""}`}>
-        <input className={`field__radio ${hasError ? "field__radio--error" : ""}`} {...input} type={type} id={id} autoComplete="off" {...rest} />
+        <input className={`field__radio ${hasError ? "field__radio--error" : ""}`} {...input} type={type} id={id} {...rest} />
         <label htmlFor={id} className='field__label'>{label}</label>
         {this._renderError(meta)}
+      </div>
+    );
+  }
+
+  protected _renderCheckbox = ({ input, label, meta, id, type, ...rest }: any) => {
+    const hasError: boolean = meta.error;
+    return (
+      <div className={`field field--checkbox ${hasError ? "field--error" : ""}`}>
+        <label htmlFor={id}>
+          <input className={`field__checkbox ${hasError ? "field__checkbox--error" : ""}`} {...input} type={type} id={id} autoComplete="off" {...rest} />
+          <p className='field__label field__label--checkbox'>{label}</p>
+          {this._renderError(meta)}
+        </label>
       </div>
     );
   }

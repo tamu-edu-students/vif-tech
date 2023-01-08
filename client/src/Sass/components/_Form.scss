@@ -25,6 +25,12 @@
     }
   }
 
+  &__legend {
+    font-size: 2.1rem;
+    font-family: $font-primary;
+    margin-bottom: 0.6rem;
+  }
+
   &__fields {
     margin-bottom: 4rem;
     width: 100%;
@@ -51,10 +57,24 @@
       }
     }
 
+    &.field--checkbox {
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+
     &__label {
       font-size: 2.1rem;
       font-family: $font-primary;
       margin-bottom: 0.6rem;
+
+      &.field__label--checkbox {
+        font-size: 1.6rem;
+        font-family: $font-secondary;
+        margin: 0;
+      }
     }
 
     &__input,
@@ -117,9 +137,17 @@
   }
 
   &.form--small {
+    .form__legend {
+      font-size: 1.8rem;
+    }
+
     .field {
       &__label {
         font-size: 1.8rem;
+
+        &.field__label--checkbox {
+          font-size: 1.4rem;
+        }
       }
 
       &__input,

@@ -40,7 +40,7 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
         key={focus.id}
         name={`focus-${focus.id.toString()}`}
         id={`focus-${focus.id.toString()}`}
-        component={this._renderInput}
+        component={this._renderCheckbox}
         type="checkbox" label={focus.name}
       />
     ));
@@ -48,12 +48,13 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     return (
-      <form id="student-profile-form-focuses">
-
-        <fieldset>
-        <label><p>{`Interests`}</p></label>
-          {this._renderCheckboxGroup(this.props.focuses)}
-        </fieldset>
+      <form className="my-profile-form form form--small form--my-profile" id="profile-form-focuses">
+        <div className="form__fields">
+          <fieldset className="form__fieldset">
+            <legend className="form__legend">{`Interests`}</legend>
+            {this._renderCheckboxGroup(this.props.focuses)}
+          </fieldset>
+        </div>
       </form>
     );
   }
