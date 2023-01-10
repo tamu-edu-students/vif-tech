@@ -1,4 +1,4 @@
-import CustomCheckbox from 'Components/Allowlist/CustomCheckbox/CustomCheckbox';
+import CustomCheckbox from 'Components/CustomCheckbox/CustomCheckbox';
 import React from 'react';
 import { InjectedFormProps } from "redux-form";
 

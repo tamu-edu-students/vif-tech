@@ -6,7 +6,7 @@ import { IRootState } from 'Store/reducers';
 import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
-import CustomCheckbox from 'Components/Allowlist/CustomCheckbox/CustomCheckbox';
+import CustomCheckbox from 'Components/CustomCheckbox/CustomCheckbox';
 
 
 interface OwnProps {
