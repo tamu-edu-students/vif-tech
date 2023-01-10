@@ -19,6 +19,7 @@
       background-color: $color-white;
       border: 1.25px solid $color-gray;
       overflow: hidden;
+      transition: background-color 0.1s, border-color 0.1s;
 
       display: inline-block;
 
@@ -33,21 +34,22 @@
         line-height: 1;
         width: 105%;
         height: 105%;
-        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.1s, background-color 0.1s;
 
         display: grid;
         place-content: center;
       }
 
       &:hover {
-        border-color: darken($color-gray, 20%);
+        border-color: darken($color-gray, 10%);
 
         &::after { background-color: darken($color-brand-green-dark, 5%); }
       }
       &:active {
-        border-color: lighten($color-gray, 20%);
+        border-color: darken($color-gray, 20%);
 
-        &::after { background-color: lighten($color-brand-green-dark, 5%); }
+        &::after { background-color: darken($color-brand-green-dark, 10%); }
       }
     }
 
@@ -55,7 +57,7 @@
       & ~ .mark {
         border: none;
 
-        &::after { visibility: visible; }
+        &::after { opacity: 100%; }
       }
     }
 
