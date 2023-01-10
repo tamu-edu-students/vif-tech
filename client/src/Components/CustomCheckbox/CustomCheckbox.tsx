@@ -3,7 +3,6 @@ import React from 'react';
 interface Props {
   className?: string;
   input: any;
-  // label: string;
   meta: any;
   id: string;
   type: string;
@@ -12,13 +11,18 @@ interface Props {
 }
 
 interface OwnState {
-
+  checked: boolean;
 }
 
 class CustomCheckbox extends React.Component<Props, OwnState> {
+  state = {checked: false};
   inputRef = React.createRef<HTMLInputElement>();
   public constructor(props: Props) {
     super(props);
+  }
+
+  public componentDidMount(): void {
+    this.setState({ checked: this.inputRef.current?.checked ?? false });
   }
 
   private _handleClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
@@ -27,23 +31,35 @@ class CustomCheckbox extends React.Component<Props, OwnState> {
   }
 
   private _handleMouseDown = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
-    e.preventDefault();
+    // e.preventDefault();
+  }
+
+  private _handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ checked: this.inputRef.current?.checked ?? false });
   }
   
   public render(): React.ReactElement<Props> {
     const { input, /*label,*/ id, type, rest, className } = this.props;
 
     return (
-      <div className="custom-checkbox">
+      <div
+        className={`
+          custom-checkbox
+          ${className}
+        `}
+        onChange={this._handleChange}
+        onClick={this._handleClick}
+        onMouseDown={this._handleMouseDown}
+      >
         <input
           ref={this.inputRef}
-          className={className}
+          className="custom-checkbox__input"
           {...input}
           type={type}
           id={id}
           {...rest}
         />
-        <span onMouseDown={this._handleMouseDown} onClick={this._handleClick} className={"mark"}></span>
+        <div className="custom-checkbox__box"></div>
       </div>
     );
   }
