@@ -6,6 +6,7 @@ import { IRootState } from 'Store/reducers';
 import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
+import CustomCheckbox from 'Components/Allowlist/CustomCheckbox/CustomCheckbox';
 
 
 interface OwnProps {
@@ -40,7 +41,7 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
         key={focus.id}
         name={`focus-${focus.id.toString()}`}
         id={`focus-${focus.id.toString()}`}
-        component={this._renderCheckbox}
+        component={this._renderCustomCheckbox}
         type="checkbox" label={focus.name}
       />
     ));

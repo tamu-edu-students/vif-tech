@@ -1,0 +1,80 @@
+.custom-checkbox {
+  position: relative;
+  display: grid;
+  width: min-content;
+  height: min-content;
+  font-size: 1.2rem;
+
+  .form__checkbox {
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: inline-block;
+
+    & ~ .mark {
+      position: relative;
+      //TODO: Consider using px
+      width: 1.5rem;
+      height: 1.5rem;
+      background-color: $color-white;
+      border: 1.25px solid $color-gray;
+      overflow: hidden;
+
+      display: inline-block;
+
+      //TODO: Replace with SVG?
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: $color-brand-green-dark;
+        content: "\002714";
+        line-height: 1;
+        width: 105%;
+        height: 105%;
+        visibility: hidden;
+
+        display: grid;
+        place-content: center;
+      }
+
+      &:hover {
+        border-color: darken($color-gray, 20%);
+
+        &::after { background-color: darken($color-brand-green-dark, 5%); }
+      }
+      &:active {
+        border-color: lighten($color-gray, 20%);
+
+        &::after { background-color: lighten($color-brand-green-dark, 5%); }
+      }
+    }
+
+    &:checked {
+      & ~ .mark {
+        border: none;
+
+        &::after { visibility: visible; }
+      }
+    }
+
+    &:disabled {
+      & ~ .mark {
+        background-color: $color-gray-light;
+        border-color: $color-gray;
+        &::after { background-color: $color-gray !important; }
+      }
+    }
+  }
+
+  &:focus-within {
+    .form__checkbox:focus-visible {
+      & ~ .mark {
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
