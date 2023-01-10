@@ -8,6 +8,7 @@ interface Props {
   id: string;
   type: string;
   rest: any;
+  children?: never;
 }
 
 interface OwnState {
