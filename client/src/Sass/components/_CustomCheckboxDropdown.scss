@@ -1,0 +1,52 @@
+.custom-checkbox-dropdown {
+  width: 100%;
+
+  &__field-wrapper {
+    background-color: $color-white;
+    cursor: pointer;
+    transition: background-color 0.1s;
+
+    &:not(:last-child) {
+      border-bottom: 1px dotted $color-black;
+    }
+
+    &:has(:checked) {
+      background-color: lighten($color-brand-green-light, 5%);
+    }
+      
+    &:hover,
+    &:has(:focus-visible) {
+      background-color: lighten($color-brand-green-light, 20%);
+      
+      &:has(:checked) {
+        background-color: $color-brand-green-light;
+      }
+    }
+
+    &:active {
+      background-color: lighten($color-brand-green-light, 10%);
+
+      &:has(:checked) {
+        background-color: darken($color-brand-green-light, 5%);
+      }
+    }
+
+    &:has(:disabled) {
+      cursor: default;
+      background-color: $color-gray-light;
+
+      &:has(:checked) {
+        background-color: $color-gray;
+      }
+    }
+
+    .form__field {
+      cursor: inherit;
+      padding: 0.7rem 0.7rem;
+    }
+
+    .form__field-label {
+      color: $color-black;
+    }
+  }
+}
