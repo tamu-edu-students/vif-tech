@@ -59,7 +59,6 @@ class CustomCheckbox extends React.Component<Props, OwnState> {
           id={id}
           {...rest}
         />
-        <div className="custom-checkbox__box"></div>
       </div>
     );
   }

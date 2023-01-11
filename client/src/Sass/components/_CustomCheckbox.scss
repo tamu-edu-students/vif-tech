@@ -1,48 +1,36 @@
 .custom-checkbox {
   $root: &;
   position: relative;
-  width: min-content;
-  height: min-content;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.2rem;
+  background-color: $color-white;
+  border: 1.25px solid $color-gray;
+  overflow: hidden;
+  transition: background-color 0.1s, border-color 0.1s;
 
   display: grid;
   place-content: center;
 
-  &__input {
-    position: absolute;
-    width: 0;
-    height: 0;
-    display: inline-block;
+  &:has(:focus-visible) {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: 3.1px;
   }
 
-  &__box {
-    position: relative;
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 1.2rem;
-    background-color: $color-white;
-    border: 1.25px solid $color-gray;
-    // overflow: hidden;
-    transition: background-color 0.1s, border-color 0.1s;
-  }
-
-  &__box:hover { border-color: darken($color-gray, 10%); }
-  &__box:active { border-color: darken($color-gray, 20%); }
-  &__input:disabled ~ &__box {
+  &:hover { border-color: darken($color-gray, 10%); }
+  &:active { border-color: darken($color-gray, 20%); }
+  &:has(:disabled) {
     background-color: $color-gray-light;
     border-color: $color-gray;
   }
 
-  &__input:checked ~ &__box {
+  &:has(:checked) {
     background-color: $color-brand-green-dark;
-    border: none;
+    border-color: transparent;
 
     &:hover { background-color: darken($color-brand-green-dark, 5%); }
     &:active { background-color: darken($color-brand-green-dark, 10%); }
-    @at-root {
-      #{$root}__input:checked:disabled ~ #{$root}__box {
-        background-color: $color-gray;
-      }
-    }
+    &:has(:disabled) { background-color: $color-gray; }
 
     &::after {
       position: absolute;
@@ -60,9 +48,11 @@
     }
   }
 
-  &__input:focus-visible ~ &__box {
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: 2px;
+  &__input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: inline-block;
   }
 }
 

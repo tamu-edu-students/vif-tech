@@ -61,9 +61,18 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   protected _renderCustomCheckbox = ({ input, label, meta, id, type, ...rest }: any) => {
     const hasError: boolean = meta.error;
     return (
-      <label className={`form__field form__field--checkbox ${hasError ? "form__field--error" : ""}`} onMouseDown={(e) => e.preventDefault()}>
-        {/* <input className={`form__element form__checkbox ${hasError ? "form__checkbox--error" : ""}`} {...input} type={type} id={id} {...rest} /> */}
-        <CustomCheckbox className={`form__element form__checkbox ${hasError ? "form__checkbox--error" : ""}`} meta={meta} input={input} type={type} id={id} rest={rest} />
+      <label
+        className={`form__field form__field--checkbox ${hasError ? "form__field--error" : ""}`}
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <CustomCheckbox
+          className={`form__element form__checkbox ${hasError ? "form__checkbox--error" : ""}`}
+          meta={meta}
+          input={input}
+          type={type}
+          id={id}
+          rest={rest}
+        />
         <p className='form__field-label form__field-label--checkbox'>{label}</p>
         {/* {this._renderError(meta)} */}
       </label>
