@@ -17,16 +17,19 @@
     display: flex;
 
     //TODO: improve hover style
-    &:hover {
-      background-color: darken($color-gray-lightest, 5%);
-    }
-    &:active {
-      background-color: darken($color-gray-lightest, 10%);
-    }
-
+    &:hover { background-color: darken($color-gray-lightest, 5%); }
+    &:active { background-color: darken($color-gray-lightest, 10%); }
     &:has(:focus-visible),
     &:has(~ .custom-checkbox-dropdown__checkbox-group:focus-within) {
       outline: 5px auto -webkit-focus-ring-color;
+
+      &.custom-checkbox-dropdown__controller--disabled {
+        outline: none;
+      }
+    }
+    &.custom-checkbox-dropdown__controller--disabled {
+      background-color: $color-gray-light;
+      cursor: default;
     }
 
     #{$root}__summary {

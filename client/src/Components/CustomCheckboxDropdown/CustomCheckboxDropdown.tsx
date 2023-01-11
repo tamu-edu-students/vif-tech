@@ -9,7 +9,8 @@ interface CheckboxOption {
 }
 
 interface Props {
-  open?: boolean;
+  startOpened?: boolean;
+  disabled?: boolean;
   checkboxOptions: CheckboxOption[];
   initialValues: any;
   renderCheckbox: Function;
@@ -28,7 +29,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
 
   public componentDidMount(): void {
     this.setState({
-      open: this.props.open ?? false,
+      open: this.props.startOpened ?? false,
       selectedValues: {...this.props.initialValues},
     });
     this._rootRef.current?.addEventListener('focusout', this._handleFocusOut);
@@ -43,6 +44,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   private _openDropdown = (): void => { this.setState({ open: true }); }
 
   private _handleFocusOut = (e: FocusEvent) => {
+    if (this.props.disabled) { return; }
     if (!this._rootRef.current?.contains(e.relatedTarget as Node)) {
       this._closeDropdown();
     }
@@ -63,7 +65,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
             component={this.props.renderCheckbox}
             type="checkbox"
             label={label}
-            // {...(!this.state.open && {disabled: true})}
+            {...(this.props.disabled && {disabled: true})}
           />
         </div>
       )
@@ -79,14 +81,28 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   }
 
   public render(): React.ReactElement<Props> {
+    const {
+      disabled = false,
+      checkboxOptions,
+    } = this.props;
+
+    const {
+      open
+    } = this.state;
+
     return (
       <div ref={this._rootRef} className="custom-checkbox-dropdown">
+
         <div
           ref={this._controllerRef}
-          className={`custom-checkbox-dropdown__controller ${!this.state.open ? 'custom-checkbox-dropdown__controller--closed' : ''}`}
-          onClick={this._handleControllerClick}
-          onKeyDown={this._handleControllerKeyDown}
-          tabIndex={0}
+          className={`
+            custom-checkbox-dropdown__controller
+            ${!open ? 'custom-checkbox-dropdown__controller--closed' : ''}
+            ${disabled ? 'custom-checkbox-dropdown__controller--disabled' : ''}
+          `}
+          onClick={!disabled ? this._handleControllerClick : undefined}
+          onKeyDown={!disabled ? this._handleControllerKeyDown : undefined}
+          tabIndex={!disabled ? 0 : -1}
         >
           <input
             value={this._renderSummary()}
@@ -96,11 +112,13 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
           />
           <div className="custom-checkbox-dropdown__arrow"></div>
         </div>
-        { this.state.open &&
-          <div className={`custom-checkbox-dropdown__checkbox-group ${!this.state.open ? 'custom-checkbox-dropdown__checkbox-group--closed' : ''}`}>
-            {this._renderCheckboxes(this.props.checkboxOptions)}
+        
+        { open &&
+          <div className={`custom-checkbox-dropdown__checkbox-group ${!open ? 'custom-checkbox-dropdown__checkbox-group--closed' : ''}`}>
+            {this._renderCheckboxes(checkboxOptions)}
           </div>
         }
+
       </div>
     );
   }
