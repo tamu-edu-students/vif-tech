@@ -25,7 +25,6 @@ interface OwnState {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
-  console.log(ownProps.initialValues)
   return {
     onChange: ownProps.updateFocusFields
   };
@@ -71,6 +70,7 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
             <CustomCheckboxDropdown
               checkboxOptions={this._generateFocusOptions(this.props.focuses)}
               renderCheckbox={this._renderCustomCheckbox}
+              initialValues={this.props.initialValues}
             />
           </fieldset>
         </div>
