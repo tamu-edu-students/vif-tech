@@ -46,8 +46,8 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
     return focuses.map((focus: Focus) => (
       <Field
         key={focus.id}
-        name={`focus-${focus.id.toString()}`}
-        id={`focus-${focus.id.toString()}`}
+        name={`focus-${focus.id.toString()}__${focus.name}`}
+        id={`focus-${focus.id.toString()}__${focus.name}`}
         component={this._renderCustomCheckbox}
         type="checkbox"
         label={focus.name}
@@ -57,7 +57,7 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
   private _generateFocusOptions(focuses: Focus[]): CheckboxOption[] {
     return focuses.map((focus: Focus): CheckboxOption => {
-      return { label: focus.name, name: `focus-${focus.id.toString()}` }
+      return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
     })
   }
 
