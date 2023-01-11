@@ -2,6 +2,8 @@ import CustomForm from 'Components/CustomForm/CustomForm';
 import React from 'react';
 import { Field } from 'redux-form';
 
+import { DropdownArrow } from 'Components/iconComponents';
+
 
 interface CheckboxOption {
   label: string;
@@ -93,28 +95,35 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
     return (
       <div ref={this._rootRef} className="custom-checkbox-dropdown">
 
+        {/* CONTROLLER */}
         <div
           ref={this._controllerRef}
           className={`
             custom-checkbox-dropdown__controller
-            ${!open ? 'custom-checkbox-dropdown__controller--closed' : ''}
+            ${open ? 'custom-checkbox-dropdown__controller--open' : ''}
             ${disabled ? 'custom-checkbox-dropdown__controller--disabled' : ''}
           `}
           onClick={!disabled ? this._handleControllerClick : undefined}
           onKeyDown={!disabled ? this._handleControllerKeyDown : undefined}
           tabIndex={!disabled ? 0 : -1}
         >
+          {/* summary */}
           <input
             value={this._renderSummary()}
             readOnly
             tabIndex={-1}
             className="custom-checkbox-dropdown__summary form__element form__input"
           />
-          <div className="custom-checkbox-dropdown__arrow"></div>
+
+          {/* marker */}
+          <div className="custom-checkbox-dropdown__arrow-container">
+            <DropdownArrow className={`dropdown-arrow ${open && 'dropdown-arrow--up'}`} />
+          </div>
         </div>
         
+        {/* CHECKBOX GROUP */}
         { open &&
-          <div className={`custom-checkbox-dropdown__checkbox-group ${!open ? 'custom-checkbox-dropdown__checkbox-group--closed' : ''}`}>
+          <div className={`custom-checkbox-dropdown__checkbox-group`}>
             {this._renderCheckboxes(checkboxOptions)}
           </div>
         }

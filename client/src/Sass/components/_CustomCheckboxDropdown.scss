@@ -17,8 +17,8 @@
     display: flex;
 
     //TODO: improve hover style
-    &:hover { background-color: darken($color-gray-lightest, 5%); }
-    &:active { background-color: darken($color-gray-lightest, 10%); }
+    &:hover { background-color: darken($color-gray-lightest, 7%); }
+    &:active { background-color: darken($color-gray-lightest, 14%); }
     &:has(:focus-visible),
     &:has(~ .custom-checkbox-dropdown__checkbox-group:focus-within) {
       outline: 5px auto -webkit-focus-ring-color;
@@ -32,6 +32,10 @@
       cursor: default;
     }
 
+    &.custom-checkbox-dropdown__controller--open {
+      border-bottom: 1px dotted $color-black;
+    }
+
     #{$root}__summary {
       flex: 1;
       background-color: transparent;
@@ -43,51 +47,19 @@
       }
     }
     
-    #{$root}__arrow {
+    #{$root}__arrow-container {
       position: relative;
       width: 4rem;
-      overflow: hidden;
-
-      &::after {
-        //TODO: Replace with actual triangle SVG
-        color: $color-black;
-        content: "\0023f6"; /* the new icon */
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        line-height: 1;
-        font-size: 3rem;
-        transition: all 0.1s;
-        
-        display: grid;
-        place-content: center;
-
-        @at-root {
-          #{$root}__controller#{$root}__controller--closed #{$root}__arrow::after {
-            transform: translate(-50%, -50%) rotateZ(180deg);
-          }
-        }
-      }
+      
+      display: grid;
+      place-content: center;
     }
   }
 
   &__checkbox-group {
     overflow-y: auto;
-    // clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     max-height: 30rem;
     width: 100%;
-    // width: calc(100% - 2rem);
-    // transform: translateY(0);
-    // transition: clip-path .1s, transform .1s;
-
-    &--closed {
-      // clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
-      // height: 0;
-      // transform: translateY(-100%);
-    }
   }
 
   &__field-wrapper {
