@@ -45,7 +45,11 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   private _closeDropdown = (): void => { this.setState({ open: false }); }
   private _openDropdown = (): void => { this.setState({ open: true }); }
 
-  private _handleFocusOut = (e: FocusEvent) => {
+  private _onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({selectedValues: {...this.state.selectedValues, [e.target.name]: e.target.checked }});
+  }
+
+  private _handleFocusOut = (e: FocusEvent): void => {
     if (this.props.disabled) { return; }
     if (!this._rootRef.current?.contains(e.relatedTarget as Node)) {
       this._closeDropdown();
@@ -67,6 +71,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
             component={this.props.renderCheckbox}
             type="checkbox"
             label={label}
+            onChange={this._onChange}
             {...(this.props.disabled && {disabled: true})}
           />
         </div>
