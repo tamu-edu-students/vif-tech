@@ -9,11 +9,6 @@ import CustomForm from 'Components/CustomForm/CustomForm';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
-interface CheckboxOption {
-  name: string;
-  label: string;
-}
-
 interface OwnProps {
   initialValues: any;
   focuses: Focus[];
@@ -41,8 +36,8 @@ class CompanyProfileFormFocuses extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _generateFocusOptions(focuses: Focus[]): CheckboxOption[] {
-    return focuses.map((focus: Focus): CheckboxOption => {
+  private _generateFocusOptions(focuses: Focus[]): CustomCheckboxOption[] {
+    return focuses.map((focus: Focus): CustomCheckboxOption => {
       return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
     });
   }

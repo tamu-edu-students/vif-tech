@@ -9,7 +9,7 @@ import CustomForm from 'Components/CustomForm/CustomForm';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
-interface CheckboxOption {
+interface CustomCheckboxOption {
   label: string;
   name: string;
 }
@@ -40,8 +40,8 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _generateFocusOptions(focuses: Focus[]): CheckboxOption[] {
-    return focuses.map((focus: Focus): CheckboxOption => {
+  private _generateFocusOptions(focuses: Focus[]): CustomCheckboxOption[] {
+    return focuses.map((focus: Focus): CustomCheckboxOption => {
       return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
     });
   }

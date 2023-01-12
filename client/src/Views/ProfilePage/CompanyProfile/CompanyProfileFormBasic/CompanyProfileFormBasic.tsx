@@ -7,11 +7,6 @@ import CustomForm from 'Components/CustomForm/CustomForm';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
-interface CheckboxOption {
-  name: string;
-  label: string;
-}
-
 interface OwnProps {
   initialValues: any;
   updateBasicFields: Function;
@@ -39,8 +34,8 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _generateHiringForOptions(): CheckboxOption[] {
-    return  [
+  private _generateHiringForOptions(): CustomCheckboxOption[] {
+    return [
       { name: 'hiring_for_fulltime', label: 'Full-time' },
       { name: 'hiring_for_parttime', label: 'Part-time' },
       { name: 'hiring_for_intern', label: 'Interns' },
