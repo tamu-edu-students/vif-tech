@@ -82,7 +82,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
         return checkboxOption.label;
       })
       .sort((key1: string, key2: string) => key1.toLowerCase().localeCompare(key2.toLowerCase()))
-      .join('; ');
+      .join(';   ');
   }
 
   public render(): React.ReactElement<Props> {
