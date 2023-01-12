@@ -208,12 +208,9 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
     return (
       <div className="my-profile">
-        {
-          <div className="my-profile__img-container">
-          {profile_img_src && 
-            this._renderImg(profile_img_src)}
-          </div>
-        }
+        <div className="my-profile__img-container">
+          {profile_img_src && this._renderImg(profile_img_src)}
+        </div>
 
         <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
         

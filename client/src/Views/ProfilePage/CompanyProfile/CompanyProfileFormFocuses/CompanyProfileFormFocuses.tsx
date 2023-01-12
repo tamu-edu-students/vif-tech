@@ -1,12 +1,18 @@
 import React from 'react';
-import { Field, reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
 import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
+import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
+
+interface CheckboxOption {
+  name: string;
+  label: string;
+}
 
 interface OwnProps {
   initialValues: any;
@@ -35,25 +41,26 @@ class CompanyProfileFormFocuses extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _renderCheckboxGroup(focuses: Focus[]): JSX.Element[] {
-    return focuses.map((focus: Focus) => (
-      <Field
-        key={focus.id}
-        name={`focus-${focus.id.toString()}`}
-        id={`focus-${focus.id.toString()}`}
-        component={this._renderInput}
-        type="checkbox" label={focus.name}
-      />
-    ));
+  private _generateFocusOptions(focuses: Focus[]): CheckboxOption[] {
+    return focuses.map((focus: Focus): CheckboxOption => {
+      return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
+    });
   }
 
   public render(): React.ReactElement<Props> {
     return (
-      <form id="company-profile-form-focuses">
-        <fieldset disabled={!this.props.isPrimaryContact}>
-          <label><p>{`Focuses`}</p></label>
-          {this._renderCheckboxGroup(this.props.focuses)}
-        </fieldset>
+      <form className="my-profile__form my-profile__form--focuses form form--small form--my-profile" id="profile-form-focuses">
+        <div className="form__fields">
+          <fieldset className="form__fieldset" disabled={!this.props.isPrimaryContact}>
+            <legend className="form__legend">{`Focuses`}</legend>
+            <CustomCheckboxDropdown
+              checkboxOptions={this._generateFocusOptions(this.props.focuses)}
+              renderCheckbox={this._renderCustomCheckbox}
+              initialValues={this.props.initialValues}
+              disabled={!this.props.isPrimaryContact}
+            />
+          </fieldset>
+        </div>
       </form>
     );
   }

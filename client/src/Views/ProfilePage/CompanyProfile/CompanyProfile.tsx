@@ -84,7 +84,7 @@ class CompanyProfile extends React.Component<Props, OwnState> {
   state = { basicFields: {}, focusFields: {}, isLoading: false };
 
   public componentDidMount(): void {
-    const promises: Promise<void>[] = []
+    const promises: Promise<void>[] = [];
 
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
       promises.push(this.props.fetchFocuses());
@@ -100,14 +100,16 @@ class CompanyProfile extends React.Component<Props, OwnState> {
   }
 
   public componentDidUpdate(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.companyFocusesAreStale && !this.props.isLoading_fetchCompanyFocuses) {
-      this.props.fetchCompanyFocuses();
+      promises.push(this.props.fetchCompanyFocuses());
     }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
-      this.props.fetchCompanies();
+      promises.push(this.props.fetchCompanies());
     }
   }
 
@@ -144,22 +146,24 @@ class CompanyProfile extends React.Component<Props, OwnState> {
     }
   }
 
-  // private _getInitialDisabledFields(): any {
-  //   const {
-  //     email,
-  //   } = this.props.user;
+  private _getInitialDisabledFields(): any {
+    // const {
+    //   email,
+    // } = this.props.user;
 
-  //   return {
-  //     email,
-  //   }
-  // }
+    // return {
+    //   email,
+    // }
+
+    return {};
+  }
 
   private _computeInitialFocusChecks(): any {
     const { focuses, focusesOfCompany } = this.props;
     let initialFocusChecks = {};
     focuses.forEach((focus: Focus) => {
       if (focusesOfCompany.some((focusOfCompany: Focus) => focus.id === focusOfCompany.id)) {
-        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}`]: true };
+        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}__${focus.name}`]: true };
       }
     });
 
@@ -186,7 +190,7 @@ class CompanyProfile extends React.Component<Props, OwnState> {
 
     const newFocusIds = Object.entries(this.state.focusFields)
       .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
+      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '').replace(/__.*/, '')));
     promises.push(this.props.updateCompanyFocuses(this.props.company?.id ?? -1, newFocusIds));
     
     Promise.all(promises).then(() => {
@@ -196,9 +200,7 @@ class CompanyProfile extends React.Component<Props, OwnState> {
   
   private _renderImg(logoImgSrc: string): JSX.Element {
     return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={logoImgSrc} alt={`${this.props.company?.name} logo`} />
-      </div>
+      <img className='my-profile__img' src={logoImgSrc} alt={`${this.props.company?.name ?? 'company'} logo`} />
     );
   }
 
@@ -240,40 +242,32 @@ class CompanyProfile extends React.Component<Props, OwnState> {
     } = company;
 
     return (
-      <div className="My-Profile my-profile">
-        <h2 className="heading-secondary">{`Company Profile (${name})`}</h2>
-        {/* <h3 className="heading-tertiary">{firstname} {lastname}</h3> */}
+      <div className="my-profile">
+        <div className="my-profile__img-container">
+          {logo_img_src && this._renderImg(logo_img_src)}
+        </div>
+
+        <div className="my-profile__name">{`${name}`}</div>
+        
+        <CompanyProfileFormBasic
+          form="updateBasicCompanyFields"
+          initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
+          updateBasicFields={this._updateBasicFieldsState}
+          isPrimaryContact={isPrimaryContact}
+        />
+
+        <CompanyProfileFormFocuses
+          form="updateFocusCompanyFields"
+          initialValues={this._computeInitialFocusChecks()}
+          focuses={focuses}
+          updateFocusFields={this._updateFocusFieldsState}
+          isPrimaryContact={isPrimaryContact}
+        />
+
         {
-          logo_img_src && 
-          <>
-            <br />
-            {this._renderImg(logo_img_src)}
-          </>
+          isPrimaryContact &&
+          <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
         }
-        <br />
-        <div>
-          <CompanyProfileFormBasic
-            form="updateBasicCompanyFields"
-            initialValues={ {...this._getInitialBasicFields(), /*...this._getInitialDisabledFields()*/} }
-            updateBasicFields={this._updateBasicFieldsState}
-            isPrimaryContact={isPrimaryContact}
-          />
-        </div>
-
-        <div>
-          <CompanyProfileFormFocuses
-            form="updateFocusCompanyFields"
-            initialValues={this._computeInitialFocusChecks()}
-            focuses={focuses}
-            updateFocusFields={this._updateFocusFieldsState}
-            isPrimaryContact={isPrimaryContact}
-          />
-        </div>
-
-          {
-            isPrimaryContact &&
-            <button onClick={() => this._onSaveChanges()}>Save Changes</button>
-          }
       </div>
     );
   }

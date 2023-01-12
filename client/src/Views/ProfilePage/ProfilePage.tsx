@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
@@ -80,6 +80,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
     return (
       <>
         {this._renderLink(`/my-profile`, `My Profile`)}
+        {
+          this.props.amRepresentative &&
+          this._renderLink('/company-profile', 'Company Profile')
+        }
       </>
     )
   }
@@ -89,7 +93,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
       case Usertype.ADMIN:
         return [ this._renderRoute(`/my-profile`, <MyProfileAdmin />), ];
       case Usertype.REPRESENTATIVE:
-        return [ this._renderRoute(`/my-profile`, <MyProfileRepresentative />), ];
+        return [
+          this._renderRoute(`/my-profile`, <MyProfileRepresentative />),
+          this._renderRoute(`/company-profile`, <CompanyProfile />),
+        ];
       case Usertype.VOLUNTEER:
         return [ this._renderRoute(`/my-profile`, <MyProfileVolunteer />), ];
       case Usertype.STUDENT:
