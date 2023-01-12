@@ -162,22 +162,17 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
 
     return (
       <div className="my-profile">
-        {
-          <div className="my-profile__img-container">
-          {profile_img_src && 
-            this._renderImg(profile_img_src)}
-          </div>
-        }
+        <div className="my-profile__img-container">
+          {profile_img_src &&  this._renderImg(profile_img_src)}
+        </div>
 
         <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
 
-        <div>
-          <MyProfileRepresentativeFormBasic
-            form="updateBasicRepresentativeFields"
-            initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
-            updateBasicFields={this._updateBasicFieldsState}
-          />
-        </div>
+        <MyProfileRepresentativeFormBasic
+          form="updateBasicRepresentativeFields"
+          initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
+          updateBasicFields={this._updateBasicFieldsState}
+        />
 
         <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
