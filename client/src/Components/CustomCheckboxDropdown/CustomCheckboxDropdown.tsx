@@ -77,7 +77,10 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   private _renderSummary(): any {
     return Object.entries(this.state.selectedValues)
       .filter(([_, value]) => value === true)
-      .map(([key, _]) => key.replace(/focus-.*__/, ''))
+      .map(([key, _]) => {
+        const checkboxOption: CheckboxOption = this.props.checkboxOptions.find(checkbox => checkbox.name === key) as CheckboxOption;
+        return checkboxOption.label;
+      })
       .sort((key1: string, key2: string) => key1.toLowerCase().localeCompare(key2.toLowerCase()))
       .join(' | ');
   }
