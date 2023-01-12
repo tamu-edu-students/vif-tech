@@ -6,7 +6,6 @@ import { IRootState } from 'Store/reducers';
 import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
-import CustomCheckbox from 'Components/CustomCheckbox/CustomCheckbox';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
@@ -41,19 +40,6 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _renderCheckboxGroup(focuses: Focus[]): JSX.Element[] {
-    return focuses.map((focus: Focus) => (
-      <Field
-        key={focus.id}
-        name={`focus-${focus.id.toString()}__${focus.name}`}
-        id={`focus-${focus.id.toString()}__${focus.name}`}
-        component={this._renderCustomCheckbox}
-        type="checkbox"
-        label={focus.name}
-      />
-    ));
-  }
-
   private _generateFocusOptions(focuses: Focus[]): CheckboxOption[] {
     return focuses.map((focus: Focus): CheckboxOption => {
       return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
@@ -62,11 +48,10 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     return (
-      <form className="my-profile-form form form--small form--my-profile" id="profile-form-focuses">
+      <form className="my-profile__form my-profile__form--focuses form form--small form--my-profile" id="profile-form-focuses">
         <div className="form__fields">
           <fieldset className="form__fieldset">
             <legend className="form__legend">{`Interests`}</legend>
-            {/* {this._renderCheckboxGroup(this.props.focuses)} */}
             <CustomCheckboxDropdown
               checkboxOptions={this._generateFocusOptions(this.props.focuses)}
               renderCheckbox={this._renderCustomCheckbox}
