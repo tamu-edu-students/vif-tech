@@ -64,7 +64,6 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
             <CustomCheckboxDropdown
               checkboxOptions={this._generateHiringForOptions()}
               renderCheckbox={this._renderCustomCheckbox}
-              initialValues={this.props.initialValues}
               disabled={!isPrimaryContact}
             />
           </fieldset>

@@ -14,7 +14,6 @@ interface Props {
   startOpened?: boolean;
   disabled?: boolean;
   checkboxOptions: CheckboxOption[];
-  initialValues: any;
   renderCheckbox: Function;
 }
 
@@ -25,14 +24,18 @@ interface OwnState {
 
 
 class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
-  _controllerRef = React.createRef<HTMLDivElement>();
   _rootRef = React.createRef<HTMLDivElement>();
+  _controllerRef = React.createRef<HTMLDivElement>();
+  _checkboxGroupRef = React.createRef<HTMLDivElement>();
   state = { open: true, selectedValues: {} };
 
   public componentDidMount(): void {
+    const inputElements: HTMLInputElement[] = Array.from(this._rootRef.current?.querySelectorAll('input') as NodeListOf<HTMLInputElement>);
     this.setState({
       open: this.props.startOpened ?? false,
-      selectedValues: {...this.props.initialValues},
+      selectedValues: {...Object.fromEntries(
+        inputElements.map((input: HTMLInputElement) => [input.name, input.checked])
+      )},
     });
     this._rootRef.current?.addEventListener('focusout', this._handleFocusOut);
   }
@@ -131,7 +134,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
         
         {/* CHECKBOX GROUP */}
         { open &&
-          <div className={`custom-checkbox-dropdown__checkbox-group`}>
+          <div ref={this._checkboxGroupRef} className={`custom-checkbox-dropdown__checkbox-group`}>
             {this._renderCheckboxes(checkboxOptions)}
           </div>
         }
