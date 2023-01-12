@@ -67,22 +67,28 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   state = { basicFields: {}, focusFields: {}, isLoading: false };
 
   public componentDidMount(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
+      promises.push(this.props.fetchUserFocuses());
     }
 
-    this._reloadFieldsState();
+    Promise.allSettled(promises).then(() => {
+      this._reloadFieldsState();
+    });
   }
 
   public componentDidUpdate(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
+      promises.push(this.props.fetchUserFocuses());
     }
   }
 
@@ -127,7 +133,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     let initialFocusChecks = {};
     focuses.forEach((focus: Focus) => {
       if (focusesOfUser.some((focusOfUser: Focus) => focus.id === focusOfUser.id)) {
-        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}`]: true };
+        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}__${focus.name}`]: true };
       }
     });
 
@@ -154,7 +160,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
     const newFocusIds = Object.entries(this.state.focusFields)
       .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
+      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '').replace(/__.*/, '')));
     promises.push(this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds));
     
     Promise.all(promises).then(() => {
@@ -202,8 +208,6 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
     return (
       <div className="My-Profile my-profile">
-        {/* <h2 className="heading-secondary">{`My Profile (Student)`}</h2> */}
-        {/* <h3 className="heading-tertiary">{firstname} {lastname}</h3> */}
         {
           <div className="my-profile__img-container">
           {profile_img_src && 

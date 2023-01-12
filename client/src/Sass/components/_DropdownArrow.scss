@@ -1,0 +1,9 @@
+.dropdown-arrow {
+  fill: $color-black;
+  width: 2rem;
+  transition: all 0.1s;
+
+  &.dropdown-arrow--up {
+    transform: rotateZ(-180deg);
+  }
+}

@@ -40,78 +40,79 @@
     gap: 2.5rem;
   }
 
-  .field {
-    &.field--input,
-    &.field--select {
+  &__field {
+    &--input,
+    &--select {
       width: 100%;
     }
 
-    &.field--radio {
+    &--radio {
       display: flex;
       align-items: center;
+      gap: 0.5rem;
 
-      .field__label {
-        display: inline-block;
+      .form__field-label {
         margin: 0;
-        margin-left: 0.3rem;
       }
     }
 
-    &.field--checkbox {
-      label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
+    &--checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    &__label {
+    &-label {
       font-size: 2.1rem;
       font-family: $font-primary;
       margin-bottom: 0.6rem;
 
-      &.field__label--checkbox {
+      &.form__field-label--checkbox {
         font-size: 1.6rem;
         font-family: $font-secondary;
         margin: 0;
       }
     }
+  }
 
-    &__input,
-    &__select,
-    &__radio {
-      font-size: 1.6rem;
-      font-family: $font-secondary;
-      font-weight: 500;
-    }
+  &__element {
+    font-size: 1.6rem;
+    font-family: $font-secondary;
+    font-weight: 500;
+  }
 
-    &__input,
-    &__select {
-      width: 100%;
-      height: 4rem;
-      padding: 0 0.7rem;
+  &__input,
+  &__select {
+    width: 100%;
+    height: 4rem;
+    padding: 0 0.7rem;
+    border: none; //TODO: Potentially put back
 
-      &--error {
-        background-color: lighten($color-brand-red-light, 15%);
+    &--error {
+      background-color: lighten($color-brand-red-light, 15%);
 
-        option {
-          background-color: $color-white;
-        }
+      option {
+        background-color: $color-white;
       }
     }
 
-    &__select {
-      cursor: pointer;
+    &:disabled {
+      background-color: $color-gray-light;
+      color: $color-black;
     }
+  }
 
-    &__error-text {
-      color: $color-brand-red-light;
-      font-size: 1.4rem;
-      font-weight: 600;
-      font-family: $font-secondary;
-      text-transform: uppercase;
-      margin-top: 0.8rem;
-    }
+  &__select {
+    cursor: pointer;
+  }
+
+  &__field-error-text {
+    color: $color-brand-red-light;
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-family: $font-secondary;
+    text-transform: uppercase;
+    margin-top: 0.8rem;
   }
 
   .link {
@@ -141,35 +142,33 @@
       font-size: 1.8rem;
     }
 
-    .field {
-      &__label {
+    .form__field {
+      &-label {
         font-size: 1.8rem;
 
-        &.field__label--checkbox {
+        &.form__field-label--checkbox {
           font-size: 1.4rem;
         }
       }
-
-      &__input,
-      &__select,
-      &__radio {
-        font-size: 1.4rem;
-        font-family: $font-secondary;
-        font-weight: 500;
-      }
-
-      &__input
-      &__select {
-        height: 3.3rem;
-      }     
-
-      &__error-text {
-        font-size: 1.2rem;
-      } 
     }
 
+    .form__element {
+      font-size: 1.4rem;
+      font-family: $font-secondary;
+      font-weight: 500;
+    }
+
+    .form__input,
+    .form__select {
+      height: 3.3rem;
+    }     
+
+    .form__field-error-text {
+      font-size: 1.2rem;
+    } 
+
     .btn-wire {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
     }
   }
 }

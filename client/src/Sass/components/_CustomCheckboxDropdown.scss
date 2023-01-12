@@ -1,0 +1,113 @@
+.custom-checkbox-dropdown {
+  $root: &;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .custom-checkbox-dropdown__controller {
+    height: auto;
+    position: relative;
+    z-index: 2;
+    background-color: $color-white;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.1s;
+
+    display: flex;
+
+    //TODO: improve hover style
+    &:hover { background-color: darken($color-gray-lightest, 7%); }
+    &:active { background-color: darken($color-gray-lightest, 14%); }
+    &:has(:focus-visible),
+    &:has(~ .custom-checkbox-dropdown__checkbox-group:focus-within) {
+      outline: 5px auto -webkit-focus-ring-color;
+
+      &.custom-checkbox-dropdown__controller--disabled {
+        outline: none;
+      }
+    }
+    &.custom-checkbox-dropdown__controller--disabled {
+      background-color: $color-gray-light;
+      cursor: default;
+    }
+
+    &.custom-checkbox-dropdown__controller--open {
+      border-bottom: 1px dotted $color-black;
+    }
+
+    #{$root}__summary {
+      flex: 1;
+      background-color: transparent;
+      cursor: inherit;
+      border-right: 1px dotted $color-black;
+
+      &:focus {
+        outline: none;
+      }
+    }
+    
+    #{$root}__arrow-container {
+      position: relative;
+      width: 4rem;
+      
+      display: grid;
+      place-content: center;
+    }
+  }
+
+  &__checkbox-group {
+    overflow-y: auto;
+    max-height: 30rem;
+    width: 100%;
+  }
+
+  &__field-wrapper {
+    background-color: $color-white;
+    cursor: pointer;
+    transition: background-color 0.1s;
+
+    &:not(:last-child) {
+      border-bottom: 1px dotted $color-black;
+    }
+
+    &:has(:checked) {
+      background-color: lighten($color-brand-green-light, 5%);
+    }
+      
+    &:hover,
+    &:has(:focus-visible) {
+      background-color: lighten($color-brand-green-light, 20%);
+      
+      &:has(:checked) {
+        background-color: $color-brand-green-light;
+      }
+    }
+
+    &:active {
+      background-color: lighten($color-brand-green-light, 10%);
+
+      &:has(:checked) {
+        background-color: darken($color-brand-green-light, 5%);
+      }
+    }
+
+    &:has(:disabled) {
+      cursor: default;
+      background-color: $color-gray-light;
+
+      &:has(:checked) {
+        background-color: $color-gray;
+      }
+    }
+
+    .form__field {
+      cursor: inherit;
+      padding: 0.7rem 0.7rem;
+    }
+
+    .form__field-label {
+      color: $color-black;
+    }
+  }
+}
