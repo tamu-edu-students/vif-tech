@@ -1,4 +1,3 @@
-import CustomForm from 'Components/CustomForm/CustomForm';
 import React from 'react';
 import { Field } from 'redux-form';
 

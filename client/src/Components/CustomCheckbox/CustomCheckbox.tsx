@@ -1,13 +1,10 @@
 import React from 'react';
+import { WrappedFieldInputProps } from 'redux-form';
 
 interface Props {
   className?: string;
-  input: any;
-  meta: any;
-  id: string;
-  type: string;
-  rest: any;
-  children?: never;
+  input: WrappedFieldInputProps;
+  rest?: any;
 }
 
 interface OwnState {
@@ -39,7 +36,7 @@ class CustomCheckbox extends React.Component<Props, OwnState> {
   }
   
   public render(): React.ReactElement<Props> {
-    const { input, /*label,*/ id, type, rest, className } = this.props;
+    const { input, rest = {}, className='' } = this.props;
 
     return (
       <div
@@ -55,8 +52,6 @@ class CustomCheckbox extends React.Component<Props, OwnState> {
           ref={this.inputRef}
           className="custom-checkbox__input"
           {...input}
-          type={type}
-          id={id}
           {...rest}
         />
       </div>
