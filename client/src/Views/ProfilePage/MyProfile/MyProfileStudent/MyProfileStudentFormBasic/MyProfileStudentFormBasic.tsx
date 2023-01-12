@@ -46,7 +46,7 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     return (
-      <form className='my-profile__form my-profile__form--basic form form--small form--my-profile' id="profile-form-basic">
+      <form className="my-profile__form my-profile__form--basic form form--small form--my-profile" id="profile-form-basic">
         <div className="form__fields">
           <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile picture URL" />
 

@@ -34,10 +34,12 @@ class MyProfileVolunteerFormBasic extends CustomForm<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     return (
-      <form id="volunteer-profile-form-basic">
-        <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile picture URL" />
+      <form className="my-profile__form my-profile__form--basic form form--small form--my-profile" id="profile-form-basic">
+        <div className="form__fields">
+          <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile picture URL" />
 
-        <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
+          <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
+        </div>
       </form>
     );
   }

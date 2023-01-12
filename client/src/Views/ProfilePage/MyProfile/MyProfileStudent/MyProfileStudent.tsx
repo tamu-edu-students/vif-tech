@@ -207,7 +207,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="My-Profile my-profile">
+      <div className="my-profile">
         {
           <div className="my-profile__img-container">
           {profile_img_src && 
@@ -230,7 +230,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
           updateFocusFields={this._updateFocusFieldsState}
         />
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+        <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
     );
   }

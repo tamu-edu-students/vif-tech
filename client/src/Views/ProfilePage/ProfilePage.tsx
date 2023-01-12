@@ -18,8 +18,6 @@ import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVoluntee
 import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
 import MyProfileAdmin from './MyProfile/MyProfileAdmin/MyProfileAdmin';
 
-import FocusList from './FocusList/FocusList';
-
 
 interface OwnProps {
   match: Match;
@@ -62,67 +60,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
     }
   }
 
-  private _renderAdminRoutes(): JSX.Element[] {
-    const { parentPath } = this.props;
-    return ([
-      <Route exact path={`${parentPath}/focus-list`} key={`${parentPath}/focus-list`}>
-        <FocusList />
-      </Route>
-    ]);
-  }
-
-  private _renderAdminLinks(): JSX.Element {
-    const { parentPath } = this.props;
-    return (
-      <>
-        <br />
-        <li><Link to={`${parentPath}/focus-list`}>Manage Focus List</Link></li>
-      </>
-    );
-  }
-
-  private _renderRepresentativeRoutes(): JSX.Element[] {
-    const { parentPath } = this.props;
-    return ([
-      <Route exact path={`${parentPath}/company-profile`} key={`${parentPath}/company-profile`}>
-        <CompanyProfile />
-      </Route>
-    ]);
-  }
-
-  private _renderRepresentativeLinks(): JSX.Element {
-    const { parentPath } = this.props;
-    return (
-      <>
-        <li><Link to={`${parentPath}/company-profile`}>Company Profile</Link></li>
-      </>
-    );
-  }
-
-  private _renderVolunteerRoutes(): JSX.Element[] {
-    return ([
-    ]);
-  }
-
-  private _renderVolunteerLinks(): JSX.Element {
-    return (
-      <>
-      </>
-    );
-  }
-
-  private _renderStudentRoutes(): JSX.Element[] {
-    return ([
-    ]);
-  }
-
-  private _renderStudentLinks(): JSX.Element {
-    return (
-      <>
-      </>
-    );
-  }
-
   private _renderRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
     const path: string = this.props.parentPath+subPath;
     return (
@@ -140,48 +77,30 @@ class ProfilePage extends React.Component<Props, OwnState> {
   }
 
   private _renderLinks(): JSX.Element | null {
-    // switch(this.props.user?.usertype) {
-    //   case Usertype.ADMIN:
-    //     return this._renderAdminLinks();
-    //   case Usertype.REPRESENTATIVE:
-    //     return this._renderRepresentativeLinks();
-    //   case Usertype.VOLUNTEER:
-    //     return this._renderVolunteerLinks();
-    //   case Usertype.STUDENT:
-    //     return this._renderStudentLinks();
-    //   default:
-    //     return null;
-    // }
     return (
       <>
-      {this.props.amStudent && this._renderLink(`/my-profile`, `My Profile`)}
+        {this._renderLink(`/my-profile`, `My Profile`)}
       </>
     )
   }
 
   private _renderRoutes(): JSX.Element[] {
-    // switch(this.props.user?.usertype) {
-    //   case Usertype.ADMIN:
-    //     return this._renderAdminRoutes();
-    //   case Usertype.REPRESENTATIVE:
-    //     return this._renderRepresentativeRoutes();
-    //   case Usertype.VOLUNTEER:
-    //     return this._renderVolunteerRoutes();
-    //   case Usertype.STUDENT:
-    //     return this._renderStudentRoutes();
-    //   default:
-    //     return [];
-    // }
-    if (!this.props.amStudent) {
-      return [];
+    switch(this.props.user?.usertype) {
+      case Usertype.ADMIN:
+        return [ this._renderRoute(`/my-profile`, <MyProfileAdmin />), ];
+      case Usertype.REPRESENTATIVE:
+        return [ this._renderRoute(`/my-profile`, <MyProfileRepresentative />), ];
+      case Usertype.VOLUNTEER:
+        return [ this._renderRoute(`/my-profile`, <MyProfileVolunteer />), ];
+      case Usertype.STUDENT:
+        return [ this._renderRoute(`/my-profile`, <MyProfileStudent />), ];
+      default:
+        return [];
     }
-    return [
-      this._renderRoute(`/my-profile`, <MyProfileStudent />),
-    ];
   }
 
   public render(): React.ReactElement<Props> {
-    const { parentPath, user } = this.props;
+    const { parentPath } = this.props;
 
     if (this.props.isLoading_fetchAllowlist || this.props.allowlistIsStale) {
       return (
@@ -208,10 +127,6 @@ class ProfilePage extends React.Component<Props, OwnState> {
             <Route exact path={`${parentPath}`}>
               <Redirect to={`${parentPath}/my-profile`} />
             </Route>
-
-            {/* <Route exact path={`${parentPath}/my-profile`}>
-              <MyProfileStudent />
-            </Route> */}
 
             {this._renderRoutes()}
 

@@ -67,22 +67,28 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
   state = { basicFields: {}, focusFields: {}, isLoading: false };
 
   public componentDidMount(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
+      promises.push(this.props.fetchUserFocuses());
     }
 
-    this._reloadFieldsState();
+    Promise.allSettled(promises).then(() => {
+      this._reloadFieldsState();
+    });
   }
 
   public componentDidUpdate(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
+      promises.push(this.props.fetchUserFocuses());
     }
   }
 
@@ -119,7 +125,7 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
     let initialFocusChecks = {};
     focuses.forEach((focus: Focus) => {
       if (focusesOfUser.some((focusOfUser: Focus) => focus.id === focusOfUser.id)) {
-        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}`]: true };
+        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}__${focus.name}`]: true };
       }
     });
 
@@ -146,7 +152,7 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
 
     const newFocusIds = Object.entries(this.state.focusFields)
       .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
+      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '').replace(/__.*/, '')));
     promises.push(this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds));
     
     Promise.all(promises).then(() => {
@@ -156,9 +162,7 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
   
   private _renderImg(profileImgSrc: string): JSX.Element {
     return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
-      </div>
+      <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
     );
   }
 
@@ -195,17 +199,16 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="My-Profile my-profile">
-        <h2 className="heading-secondary">{`My Profile (Volunteer)`}</h2>
-        <h3 className="heading-tertiary">{firstname} {lastname}</h3>
+      <div className="my-profile">
         {
-          profile_img_src && 
-          <>
-            <br />
-            {this._renderImg(profile_img_src)}
-          </>
+          <div className="my-profile__img-container">
+          {profile_img_src && 
+            this._renderImg(profile_img_src)}
+          </div>
         }
-        <br />
+
+        <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
+
         <div>
           <MyProfileVolunteerFormBasic
             form="updateBasicVolunteerFields"
@@ -223,7 +226,7 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
           />
         </div>
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+        <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
     );
   }

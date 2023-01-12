@@ -24,16 +24,7 @@ const mapStateToProps = (state: IRootState) => {
   const isLoading_updateUser: boolean = createLoadingSelector([userActionTypes.UPDATE_USER])(state);
   const errors_updateUser: string[] = createErrorMessageSelector([userActionTypes.UPDATE_USER])(state);
 
-  // const focusesAreStale = state.focusData.isStale;
-  // const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
-  // const errors_fetchFocuses: string[] = createErrorMessageSelector([focusActionTypes.FETCH_FOCUSES])(state);
-
-  // const userFocusesAreStale = state.userFocusData.isStale;
-  // const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
-  // const errors_fetchUserFocuses: string[] = createErrorMessageSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
-
-  const isLoading: boolean = /*isLoading_fetchFocuses || focusesAreStale || isLoading_fetchUserFocuses || userFocusesAreStale*/ false;
-  // const errors_breaking: string[] = [/*...errors_fetchFocuses, ...errors_fetchUserFocuses*/];
+  const isLoading: boolean = false;
 
   return {
     user,
@@ -41,14 +32,7 @@ const mapStateToProps = (state: IRootState) => {
     isLoading_updateUser,
     errors_updateUser,
 
-    // focusesAreStale,
-    // isLoading_fetchFocuses,
-    // errors_fetchFocuses,
-
-    // userFocusesAreStale,
-
     isLoading,
-    // errors_breaking,
   };
 };
 const mapDispatchToProps = { updateUser, fetchFocuses, fetchUserFocuses, updateUserFocuses };
@@ -60,18 +44,10 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
   state = { basicFields: {}, isLoading: false };
 
   public componentDidMount(): void {
-    // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-    //   this.props.fetchFocuses();
-    // }
-    // if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-    //   this.props.fetchUserFocuses();
-    // }
-
     this._reloadFieldsState();
   }
 
   public componentDidUpdate(): void {
-    // console.log(this.state.focusFields);
   }
   
   private _reloadFieldsState = (): void => {
@@ -117,9 +93,7 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
   
   private _renderImg(profileImgSrc: string): JSX.Element {
     return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
-      </div>
+      <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
     );
   }
 
@@ -137,11 +111,6 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
       this.props.errors_updateUser.forEach((error: string) => console.error(error));
     }
 
-    // if (this.props.errors_breaking.length > 0) {
-    //   this.props.errors_breaking.forEach((error: string) => console.error(error));
-    //   return <div className="error">{this.props.errors_breaking}</div>
-    // }
-
     if (this.state.isLoading) {
       return (
         <div>Saving changes...</div>
@@ -155,17 +124,16 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="My-Profile my-profile">
-        <h2 className="heading-secondary">{`My Profile (Admin)`}</h2>
-        <h3 className="heading-tertiary">{firstname} {lastname}</h3>
+      <div className="my-profile">
         {
-          profile_img_src && 
-          <>
-            <br />
-            {this._renderImg(profile_img_src)}
-          </>
+          <div className="my-profile__img-container">
+          {profile_img_src && 
+            this._renderImg(profile_img_src)}
+          </div>
         }
-        <br />
+
+        <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
+        
         <div>
           <MyProfileAdminFormBasic
             form="updateBasicAdminFields"
@@ -174,7 +142,7 @@ class MyProfileAdmin extends React.Component<Props, OwnState> {
           />
         </div>
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+        <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
     );
   }
