@@ -54,14 +54,13 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
 
           <Field name="website_link" id="website_link" type="text" component={this._renderInput} label="Website URL" disabled={!isPrimaryContact} />
 
-          <fieldset className="form__fieldset" disabled={!isPrimaryContact}>
-            <legend className="form__legend">{`Hiring for...`}</legend>
-            <CustomCheckboxDropdown
-              checkboxOptions={this._generateHiringForOptions()}
-              renderCheckbox={this._renderCustomCheckbox}
-              disabled={!isPrimaryContact}
-            />
-          </fieldset>
+          <Field
+            name="_"
+            legend="Hiring for..."
+            checkboxOptions={this._generateHiringForOptions()}
+            component={this._renderCustomCheckboxDropdown}
+            disabled={!this.props.isPrimaryContact}
+          />
         </div>
       </form>
     );

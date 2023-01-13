@@ -1,18 +1,12 @@
 import React from 'react';
-import { FieldArray, FormSection, reduxForm, Field } from "redux-form";
+import { reduxForm, Field } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
 import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
-import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
-
-interface CustomCheckboxOption {
-  label: string;
-  name: string;
-}
 
 interface OwnProps {
   initialValues: any;
@@ -50,21 +44,40 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
     return (
       <form className="my-profile__form my-profile__form--focuses form form--small form--my-profile" id="profile-form-focuses">
         <div className="form__fields">
-          <fieldset className="form__fieldset">
-            <legend className="form__legend">{`Interests`}</legend>
-            <CustomCheckboxDropdown
-              checkboxOptions={this._generateFocusOptions(this.props.focuses)}
-              renderCheckbox={this._renderCustomCheckbox}
-            />
-          </fieldset>
+          <Field
+            name="focuses"
+            legend="Interests"
+            checkboxOptions={this._generateFocusOptions(this.props.focuses)}
+            component={this._renderCustomCheckboxDropdown}
+          />
         </div>
       </form>
     );
   }
 }
 
+// const validate = ({ focuses }: any) => {
+//   const errors: any = {focuses: {}};
+
+//   if(!focuses) {
+//     return {};
+//   }
+  
+//   if (!Object.values(focuses).some(value => value)) {
+//     Object.keys(focuses).forEach(key => {
+//       errors.focuses[key] = undefined;
+//     });
+//     errors.focuses.focuses = "Select something, please"
+//     return errors;
+//   }
+
+//   return {};
+// }
+
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
+  // validate: validate,
+  touchOnChange: false,
 })(MyProfileStudentFormFocuses);
 
 export default connector(formWrapped);

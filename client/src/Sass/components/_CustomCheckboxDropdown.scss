@@ -16,9 +16,7 @@
 
     display: flex;
 
-    //TODO: improve hover style
-    &:hover { background-color: darken($color-gray-lightest, 7%); }
-    &:active { background-color: darken($color-gray-lightest, 14%); }
+    &:focus,
     &:has(:focus-visible),
     &:has(~ .custom-checkbox-dropdown__checkbox-group:focus-within) {
       outline: 5px auto -webkit-focus-ring-color;
@@ -27,13 +25,14 @@
         outline: none;
       }
     }
-    &.custom-checkbox-dropdown__controller--disabled {
-      background-color: $color-gray-light;
-      cursor: default;
-    }
-
-    &.custom-checkbox-dropdown__controller--open {
-      border-bottom: 1px dotted $color-black;
+    
+    &.custom-checkbox-dropdown__controller {
+      &--disabled { 
+        background-color: $color-gray-light;
+        cursor: default;
+      }
+      &--error { background-color: lighten($color-brand-red-light, 15%); }
+      &--open { border-bottom: 1px dotted $color-black; }
     }
 
     #{$root}__summary {

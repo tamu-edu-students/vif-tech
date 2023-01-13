@@ -1,12 +1,11 @@
 import React from 'react';
-import { reduxForm } from "redux-form";
+import { reduxForm, Field } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
 import Focus from 'Shared/entityClasses/Focus';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
-import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
 interface OwnProps {
@@ -37,7 +36,7 @@ class MyProfileVolunteerFormFocuses extends CustomForm<Props, OwnState> {
 
   private _generateFocusOptions(focuses: Focus[]): CustomCheckboxOption[] {
     return focuses.map((focus: Focus): CustomCheckboxOption => {
-      return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
+      return { label: focus.name, name: `focuses.${focus.id}` }
     });
   }
 
@@ -45,13 +44,12 @@ class MyProfileVolunteerFormFocuses extends CustomForm<Props, OwnState> {
     return (
       <form className="my-profile__form my-profile__form--focuses form form--small form--my-profile" id="profile-form-focuses">
         <div className="form__fields">
-          <fieldset className="form__fieldset">
-            <legend className="form__legend">{`Interests`}</legend>
-            <CustomCheckboxDropdown
-              checkboxOptions={this._generateFocusOptions(this.props.focuses)}
-              renderCheckbox={this._renderCustomCheckbox}
-            />
-          </fieldset>
+          <Field
+            name="focuses"
+            legend="Specialties"
+            checkboxOptions={this._generateFocusOptions(this.props.focuses)}
+            component={this._renderCustomCheckboxDropdown}
+          />
         </div>
       </form>
     );

@@ -9,6 +9,8 @@ interface Props {
   disabled?: boolean;
   checkboxOptions: CustomCheckboxOption[];
   renderCheckbox: Function;
+  onBlur?: Function;
+  hasError?: boolean;
 }
 
 interface OwnState {
@@ -51,10 +53,13 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
     if (!this._rootRef.current?.contains(e.relatedTarget as Node)) {
       this._closeDropdown();
     }
+    this.props.onBlur?.();
   }
 
   private _handleControllerClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    if (e.button === 0) { this._toggleOpenState(); }
+    if (e.button === 0) {
+      this._toggleOpenState();
+    }
   }
   private _handleControllerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => { if (e.key === " ") { this._toggleOpenState(); } }
 
@@ -91,6 +96,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
     const {
       disabled = false,
       checkboxOptions,
+      hasError = false,
     } = this.props;
 
     const {
@@ -98,7 +104,10 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
     } = this.state;
 
     return (
-      <div ref={this._rootRef} className="custom-checkbox-dropdown">
+      <div
+        ref={this._rootRef} className="custom-checkbox-dropdown"
+        onMouseDown={() => document.getSelection()?.empty()}
+      >
 
         {/* CONTROLLER */}
         <div
@@ -107,6 +116,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
             custom-checkbox-dropdown__controller
             ${open ? 'custom-checkbox-dropdown__controller--open' : ''}
             ${disabled ? 'custom-checkbox-dropdown__controller--disabled' : ''}
+            ${hasError ? 'custom-checkbox-dropdown__controller--error' : ''}
           `}
           onClick={!disabled ? this._handleControllerClick : undefined}
           onKeyDown={!disabled ? this._handleControllerKeyDown : undefined}
