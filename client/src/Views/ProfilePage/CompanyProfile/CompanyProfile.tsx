@@ -19,7 +19,7 @@ interface OwnProps {
 
 interface OwnState {
   basicFields: any;
-  focusFields: any;
+  focusFields: {focuses: any};
   isLoading: boolean;
 }
 
@@ -81,7 +81,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class CompanyProfile extends React.Component<Props, OwnState> {
-  state = { basicFields: {}, focusFields: {}, isLoading: false };
+  state = { basicFields: {}, focusFields: {focuses: {}}, isLoading: false };
 
   public componentDidMount(): void {
     const promises: Promise<void>[] = [];
@@ -160,10 +160,10 @@ class CompanyProfile extends React.Component<Props, OwnState> {
 
   private _computeInitialFocusChecks(): any {
     const { focuses, focusesOfCompany } = this.props;
-    let initialFocusChecks = {};
+    const initialFocusChecks: {focuses: any} = {focuses: {}};
     focuses.forEach((focus: Focus) => {
       if (focusesOfCompany.some((focusOfCompany: Focus) => focus.id === focusOfCompany.id)) {
-        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}__${focus.name}`]: true };
+        initialFocusChecks.focuses[`${focus.id}`] = true;
       }
     });
 
@@ -179,7 +179,7 @@ class CompanyProfile extends React.Component<Props, OwnState> {
   }
 
   private _updateFocusFieldsState = (newFocusFields: any): void => {
-    this.setState({focusFields: {...newFocusFields}});
+    this.setState({focusFields: {focuses: newFocusFields.focuses}});
   }
 
   private _onSaveChanges = (): void => {
@@ -187,10 +187,10 @@ class CompanyProfile extends React.Component<Props, OwnState> {
 
     const promises: Promise<void>[] = [];
     promises.push(this.props.updateCompany(this.props.company?.id ?? -1, this.state.basicFields));
-
-    const newFocusIds = Object.entries(this.state.focusFields)
+    
+    const newFocusIds: number[] = Object.entries(this.state.focusFields.focuses)
       .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '').replace(/__.*/, '')));
+      .map(([id, _]): number => Number.parseInt(id));
     promises.push(this.props.updateCompanyFocuses(this.props.company?.id ?? -1, newFocusIds));
     
     Promise.all(promises).then(() => {

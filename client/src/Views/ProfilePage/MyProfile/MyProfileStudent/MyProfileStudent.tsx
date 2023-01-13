@@ -17,7 +17,7 @@ interface OwnProps {
 
 interface OwnState {
   basicFields: any;
-  focusFields: any;
+  focusFields: {focuses: any};
   isLoading: boolean;
 }
 
@@ -134,9 +134,6 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     focuses.forEach((focus: Focus) => {
       if (focusesOfUser.some((focusOfUser: Focus) => focus.id === focusOfUser.id)) {
         initialFocusChecks.focuses[`${focus.id}`] = true;
-      }
-      else {
-        initialFocusChecks.focuses[`${focus.id}`] = false;
       }
     });
 
