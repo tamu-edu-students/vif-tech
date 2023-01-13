@@ -50,21 +50,47 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
     return (
       <form className="my-profile__form my-profile__form--focuses form form--small form--my-profile" id="profile-form-focuses">
         <div className="form__fields">
-          <fieldset className="form__fieldset">
+          <Field
+            name="focuses"
+            legend="Interests"
+            checkboxOptions={this._generateFocusOptions(this.props.focuses)}
+            component={this._renderCustomCheckboxDropdown}
+          />
+          {/* <fieldset className="form__fieldset">
             <legend className="form__legend">{`Interests`}</legend>
             <CustomCheckboxDropdown
               checkboxOptions={this._generateFocusOptions(this.props.focuses)}
               renderCheckbox={this._renderCustomCheckbox}
             />
-          </fieldset>
+          </fieldset> */}
         </div>
       </form>
     );
   }
 }
 
+// const validate = ({ focuses }: any) => {
+//   const errors: any = {focuses: {}};
+
+//   if(!focuses) {
+//     return {};
+//   }
+  
+//   if (!Object.values(focuses).some(value => value)) {
+//     Object.keys(focuses).forEach(key => {
+//       errors.focuses[key] = undefined;
+//     });
+//     errors.focuses.focuses = "Select something, please"
+//     return errors;
+//   }
+
+//   return {};
+// }
+
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
+  // validate: validate,
+  touchOnChange: false,
 })(MyProfileStudentFormFocuses);
 
 export default connector(formWrapped);
