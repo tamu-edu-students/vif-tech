@@ -74,12 +74,12 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   protected _renderCustomCheckboxDropdown = ({ input, legend, checkboxOptions, meta, ...rest }: Props) => {
     const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
     return (
-      <fieldset className="form__fieldset">
+      <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
         <legend
           className="form__legend form__legend--label"
           onClick={(e) => {(e.currentTarget.nextElementSibling?.querySelector('.custom-checkbox-dropdown__controller') as HTMLDivElement)?.focus();}}
         >
-          {`Interests`}
+          {legend}
         </legend>
         <CustomCheckboxDropdown
           checkboxOptions={checkboxOptions}
