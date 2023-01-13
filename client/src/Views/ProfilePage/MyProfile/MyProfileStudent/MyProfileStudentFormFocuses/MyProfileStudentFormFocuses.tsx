@@ -1,5 +1,5 @@
 import React from 'react';
-import { reduxForm } from "redux-form";
+import { FieldArray, FormSection, reduxForm, Field } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
@@ -42,7 +42,7 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
   private _generateFocusOptions(focuses: Focus[]): CustomCheckboxOption[] {
     return focuses.map((focus: Focus): CustomCheckboxOption => {
-      return { label: focus.name, name: `focus-${focus.id.toString()}__${focus.name}` }
+      return { label: focus.name, name: `focuses.${focus.id}` }
     });
   }
 

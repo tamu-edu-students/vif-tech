@@ -64,7 +64,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MyProfileStudent extends React.Component<Props, OwnState> {
-  state = { basicFields: {}, focusFields: {}, isLoading: false };
+  state = { basicFields: {}, focusFields: {focuses: {}}, isLoading: false };
 
   public componentDidMount(): void {
     const promises: Promise<void>[] = [];
@@ -130,10 +130,13 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
   private _computeInitialFocusChecks(): any {
     const { focuses, focusesOfUser } = this.props;
-    let initialFocusChecks = {};
+    const initialFocusChecks: {focuses: any} = {focuses: {}};
     focuses.forEach((focus: Focus) => {
       if (focusesOfUser.some((focusOfUser: Focus) => focus.id === focusOfUser.id)) {
-        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}__${focus.name}`]: true };
+        initialFocusChecks.focuses[`${focus.id}`] = true;
+      }
+      else {
+        initialFocusChecks.focuses[`${focus.id}`] = false;
       }
     });
 
@@ -149,7 +152,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   }
 
   private _updateFocusFieldsState = (newFocusFields: any): void => {
-    this.setState({focusFields: {...newFocusFields}});
+    this.setState({focusFields: {focuses: newFocusFields.focuses}});
   }
 
   private _onSaveChanges = (): void => {
@@ -157,10 +160,10 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
     const promises: Promise<void>[] = [];
     promises.push(this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields));
-
-    const newFocusIds = Object.entries(this.state.focusFields)
+    
+    const newFocusIds: number[] = Object.entries(this.state.focusFields.focuses)
       .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '').replace(/__.*/, '')));
+      .map(([id, _]): number => Number.parseInt(id));
     promises.push(this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds));
     
     Promise.all(promises).then(() => {
