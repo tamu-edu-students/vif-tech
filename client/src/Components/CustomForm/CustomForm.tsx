@@ -1,5 +1,6 @@
 import CustomCheckbox from 'Components/CustomCheckbox/CustomCheckbox';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
+import CustomSelect from 'Components/CustomSelect/CustomSelect';
 import React from 'react';
 import { InjectedFormProps, WrappedFieldProps } from "redux-form";
 
@@ -82,7 +83,6 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
           {legend}
         </legend>
         <CustomCheckboxDropdown
-          mode="checkbox"
           checkboxOptions={checkboxOptions}
           renderCheckbox={this._renderCustomCheckbox}
           onBlur={input.onBlur}
@@ -97,7 +97,12 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   protected _renderCustomSelectBox = ({ input, label, meta, ...rest }: Props) => {
     const hasError: boolean = !rest?.disabled && meta.error && meta.touched;
     return (
-      <label className={`form__field form__field--radio ${hasError ? "form__field--error" : ""}`} onMouseDown={(e) => e.preventDefault()}>
+      <label
+        className={`form__field form__field--radio ${hasError ? "form__field--error" : ""}`}
+        onMouseDown={(e) => e.preventDefault()}
+        onMouseEnter={(e) => e.currentTarget.querySelector('span')?.focus()}
+      >
+        <span onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.parentElement?.click()} style={{all: 'unset'}} tabIndex={0}></span>
         <input style={{display: 'none'}} className={`form__element form__radio ${hasError ? "form__radio--error" : ""}`} {...input} {...rest} tabIndex={-1} />
         <p className='form__field-label form__field-label--checkbox'>{label}</p>
         {/* {this._renderError(meta)} */}
@@ -115,8 +120,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
         >
           {legend}
         </legend>
-        <CustomCheckboxDropdown
-          mode="select"
+        <CustomSelect
           name={input.name}
           initialValue={input.value}
           selectOptions={selectOptions}
