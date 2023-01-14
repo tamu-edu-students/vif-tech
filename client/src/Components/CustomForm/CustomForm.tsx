@@ -1,7 +1,7 @@
 import CustomCheckbox from 'Components/CustomCheckbox/CustomCheckbox';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 import React from 'react';
-import { InjectedFormProps, WrappedFieldInputProps, WrappedFieldMetaProps, WrappedFieldProps } from "redux-form";
+import { InjectedFormProps, WrappedFieldProps } from "redux-form";
 
 interface OwnProps {
 }
@@ -82,8 +82,46 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
           {legend}
         </legend>
         <CustomCheckboxDropdown
+          mode="checkbox"
           checkboxOptions={checkboxOptions}
           renderCheckbox={this._renderCustomCheckbox}
+          onBlur={input.onBlur}
+          hasError={hasError}
+          {...rest}
+        />
+        {hasError && this._renderError(meta, 'focuses')}
+      </fieldset>
+    )
+  }
+
+  protected _renderCustomSelectBox = ({ input, label, meta, ...rest }: Props) => {
+    const hasError: boolean = !rest?.disabled && meta.error && meta.touched;
+    return (
+      <label className={`form__field form__field--radio ${hasError ? "form__field--error" : ""}`} onMouseDown={(e) => e.preventDefault()}>
+        <input style={{display: 'none'}} className={`form__element form__radio ${hasError ? "form__radio--error" : ""}`} {...input} {...rest} tabIndex={-1} />
+        <p className='form__field-label form__field-label--checkbox'>{label}</p>
+        {/* {this._renderError(meta)} */}
+      </label>
+    );
+  }
+
+  protected _renderCustomSelectDropdown = ({ input, legend, selectOptions, meta, ...rest }: Props) => {
+    const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
+    return (
+      <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
+        <legend
+          className="form__legend form__legend--label"
+          onClick={(e) => {(e.currentTarget.nextElementSibling?.querySelector('.custom-checkbox-dropdown__controller') as HTMLDivElement)?.focus();}}
+        >
+          {legend}
+        </legend>
+        <CustomCheckboxDropdown
+          mode="select"
+          name={input.name}
+          initialValue={input.value}
+          selectOptions={selectOptions}
+          emptyValue={""}
+          renderCheckbox={this._renderCustomSelectBox}
           onBlur={input.onBlur}
           hasError={hasError}
           {...rest}

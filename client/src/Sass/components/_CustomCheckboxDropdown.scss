@@ -59,6 +59,12 @@
     overflow-y: auto;
     max-height: 30rem;
     width: 100%;
+
+    &.custom-checkbox-dropdown__checkbox-group {
+      &--closed {
+        display: none;
+      }
+    }
   }
 
   &__field-wrapper {

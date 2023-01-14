@@ -39,9 +39,9 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
     ));
   }
 
-  private _renderSemesterOptions(): JSX.Element[] {
-    return ['spring', 'summer', 'fall'].map((semester: string) => (
-      <option key={semester} value={semester}>{semester[0].toUpperCase() + semester.slice(1)}</option>
+  private _renderSemesterOptions(): CustomSelectOption[] {
+    return ['spring', 'summer', 'fall'].map((semester: string): CustomSelectOption => (
+      {label: semester[0].toUpperCase() + semester.slice(1), value: semester}
     ));
   }
 
@@ -57,9 +57,19 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
             {this._renderYearOptions()}
           </Field>
 
-          <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
+          {/* <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
             {this._renderSemesterOptions()}
-          </Field>
+          </Field> */}
+
+          <Field
+            name="class_semester"
+            // value={this.props.initialValues.class_semester}
+            legend="Expected graduation term"
+            selectOptions={this._renderSemesterOptions()}
+            component={this._renderCustomSelectDropdown}
+          />
+            {/* {this._renderSemesterOptions()}
+          </Field> */}
           
           <Field name="resume_link" id="resume_link" type="text" component={this._renderInput} label="Resume URL" />
 
