@@ -33,6 +33,8 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
       open: this.props.startOpened ?? false,
       checkedOptions: this._computeChecked()
     });
+    
+    this._rootRef.current?.addEventListener('focusout', this._handleFocusOut);
   }
 
   public componentWillUnmount(): void {
@@ -62,7 +64,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
 
   private _handleFocusOut = (e: FocusEvent): void => {
     if (this.props.disabled) { return; }
-    const props: Props = this.props;
+    
     if (!this._rootRef.current?.contains(e.relatedTarget as Node)) {
       this._closeDropdown();
     }
