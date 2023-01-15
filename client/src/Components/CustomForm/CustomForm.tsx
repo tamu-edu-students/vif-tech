@@ -12,7 +12,7 @@ interface OwnState {
 }
 
 interface CustomFormProps {
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
   [key: string]: any;
 }
 
@@ -115,21 +115,28 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
     );
   }
 
-  protected _renderCustomSelectDropdown = ({ input, legend, selectOptions, meta, ...rest }: Props) => {
-    // console.log(input, meta)
+  protected _renderCustomSelectDropdown = ({ input, label, meta, children, ...rest }: Props) => {
     const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
+
+    const parsedOptionElements = children ?
+      [children].flat(2).map((option: JSX.Element) => ({
+        label: option.props.children ?? '',
+        value: option.props.value ?? ''
+      }))
+      : [];
+      
     return (
       <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
         <legend
           className="form__legend form__legend--label"
           onClick={(e) => {(e.currentTarget.nextElementSibling?.querySelector('.custom-checkbox-dropdown__controller') as HTMLDivElement)?.focus();}}
         >
-          {legend}
+          {label}
         </legend>
         <CustomSelect
           name={input.name}
           initialValue={`${meta.initial ?? ''}`}
-          selectOptions={selectOptions}
+          selectOptions={parsedOptionElements}
           emptyValue={""}
           renderCheckbox={this._renderCustomSelectBox}
           onBlur={input.onBlur}

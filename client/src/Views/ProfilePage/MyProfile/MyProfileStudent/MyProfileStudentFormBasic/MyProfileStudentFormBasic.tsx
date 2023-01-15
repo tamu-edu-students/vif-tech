@@ -33,15 +33,15 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _renderYearOptions(): CustomSelectOption[] {
-    return [2022, 2023, 2024, 2025, 2026, 2027].map((year: number): CustomSelectOption => (
-      {label: `${year}`, value: year}
+  private _renderYearOptions(): JSX.Element[] {
+    return [2022, 2023, 2024, 2025, 2026, 2027].map((year: number) => (
+      <option key={year} value={year}>{year}</option>
     ));
   }
 
-  private _renderSemesterOptions(): CustomSelectOption[] {
-    return ['spring', 'summer', 'fall'].map((semester: string): CustomSelectOption => (
-      {label: semester[0].toUpperCase() + semester.slice(1), value: semester}
+  private _renderSemesterOptions(): JSX.Element[] {
+    return ['spring', 'summer', 'fall'].map((semester: string) => (
+      <option key={semester} value={semester}>{semester[0].toUpperCase() + semester.slice(1)}</option>
     ));
   }
 
@@ -55,17 +55,19 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
 
           <Field
             name="class_year"
-            legend="Expected graduation year"
-            selectOptions={this._renderYearOptions()}
+            label="Expected graduation year"
             component={this._renderCustomSelectDropdown}
-          />
+          >
+            {this._renderYearOptions()}
+          </Field>
 
           <Field
             name="class_semester"
-            legend="Expected graduation term"
-            selectOptions={this._renderSemesterOptions()}
+            label="Expected graduation term"
             component={this._renderCustomSelectDropdown}
-          />
+          >
+            {this._renderSemesterOptions()}
+          </Field>
           
           <Field name="resume_link" id="resume_link" type="text" component={this._renderInput} label="Resume URL" />
 
