@@ -3,6 +3,7 @@ interface CustomCheckboxOption {
   name: string;
 }
 
-// interface CustomSelectOption {
-
-// }
+interface CustomSelectOption {
+  label: string;
+  value: string | number;
+}
