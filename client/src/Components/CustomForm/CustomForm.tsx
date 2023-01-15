@@ -109,7 +109,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
       >
         <span
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape') {
+            if (e.key === 'Enter' || e.key === 'Tab') {
               e.preventDefault();
               e.currentTarget.parentElement?.click()
             }

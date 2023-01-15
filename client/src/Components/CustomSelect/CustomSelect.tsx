@@ -34,7 +34,7 @@ class CustomSelect extends React.Component<Props, OwnState> {
   _rootRef = React.createRef<HTMLDivElement>();
   _controllerRef = React.createRef<HTMLDivElement>();
   _checkboxGroupRef = React.createRef<HTMLDivElement>();
-  _shortcutList = 'ArrowUp, ArrowDown, Esc, End, PageDown, Home, PageUp'.split(', ');
+  _shortcutList = 'ArrowUp, ArrowDown, End, PageDown, Home, PageUp, Escape'.split(', ');
   state = {
     open: false,
     checkedOptions: [],
@@ -154,10 +154,15 @@ class CustomSelect extends React.Component<Props, OwnState> {
         pendingButton: nextButton,
       });
     }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      this._controllerRef.current?.focus()
+    }
   }
 
   private _handleControllerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
     if (e.key === ' ' && !this.state.open) {
+      e.preventDefault();
       this._openDropdown();
       return;
     }
