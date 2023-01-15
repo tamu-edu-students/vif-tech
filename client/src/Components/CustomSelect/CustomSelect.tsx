@@ -33,6 +33,7 @@ class CustomSelect extends React.Component<Props, OwnState> {
   _rootRef = React.createRef<HTMLDivElement>();
   _controllerRef = React.createRef<HTMLDivElement>();
   _checkboxGroupRef = React.createRef<HTMLDivElement>();
+  _shortcutList = 'ArrowUp, ArrowDown, Esc, End, PageDown, Home, PageUp'.split(', ');
   state = {
     open: false,
     checkedOptions: [],
@@ -149,11 +150,15 @@ class CustomSelect extends React.Component<Props, OwnState> {
 
   private _handleControllerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
     if ((e.key === ' ' || e.key === 'Enter') && !this.state.open) { this._openDropdown(); return; }
-    this._handleKeyboardShortcut(e, this._getSelectedWrapper());
+    if (this._shortcutList.includes(e.key) && this.state.open) {
+      this._handleKeyboardShortcut(e, this._getSelectedWrapper());
+    }
   }
 
   private _handleSelectGroupKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    this._handleKeyboardShortcut(e, this._getFocusedWrapper());
+    if (this._shortcutList.includes(e.key) && this.state.open) {
+      this._handleKeyboardShortcut(e, this._getFocusedWrapper());
+    }
   }
 
   private _renderSelectBoxes(selectOptions: CustomSelectOption[], name: string): JSX.Element[] {
