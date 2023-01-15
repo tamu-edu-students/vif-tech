@@ -98,7 +98,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   private _renderCheckboxes(checkboxOptions: CustomCheckboxOption[]): JSX.Element[] {
     return checkboxOptions.map(({ label, name }: CustomCheckboxOption) => {
       return (
-        <div key={name} className="custom-checkbox-dropdown__field-wrapper">
+        <div key={name} className="custom-checkbox-dropdown__field-wrapper custom-checkbox-dropdown__field-wrapper--checkbox">
           <Field
             name={name}
             id={name}

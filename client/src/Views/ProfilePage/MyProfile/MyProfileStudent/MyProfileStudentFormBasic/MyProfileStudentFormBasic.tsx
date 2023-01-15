@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
-import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
 interface OwnProps {

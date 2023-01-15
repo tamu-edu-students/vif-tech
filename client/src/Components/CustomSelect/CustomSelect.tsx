@@ -5,6 +5,7 @@ import { DropdownArrow } from 'Components/iconComponents';
 
 
 //TODO: Add separate styling to handle :focus on hover (and maybe --selected)
+//TODO: Fix bug where controller isn't focused after selecting a value
 interface BaseProps {
   startOpened?: boolean;
   disabled?: boolean;
@@ -61,8 +62,13 @@ class CustomSelect extends React.Component<Props, OwnState> {
   }
 
   private _toggleOpenState = (): void => { this.setState({ open: !this.state.open }); }
-  private _closeDropdown = (): void => { this.setState({ open: false }); }
-  private _openDropdown = (): void => { this.setState({ open: true }); this.props.onFocus?.(); }
+  private _closeDropdown = (): void => {
+    this.setState({ open: false, intermediateOption: null });
+  }
+  private _openDropdown = (): void => { 
+    this.setState({ open: true });
+    this.props.onFocus?.();
+  }
 
   private _onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (this.props.disabled) {
@@ -71,7 +77,9 @@ class CustomSelect extends React.Component<Props, OwnState> {
       return;
     }
 
-    this.setState({ selectedOption: this.props.selectOptions.find(option => `${option.value}` === e.target.value) as CustomSelectOption });
+    this.setState({
+      selectedOption: this.props.selectOptions.find(option => `${option.value}` === e.target.value) as CustomSelectOption,
+    });
     this._closeDropdown();
   }
 
@@ -104,7 +112,7 @@ class CustomSelect extends React.Component<Props, OwnState> {
         }
       }
 
-      this.setState({ intermediateOption: null});
+      // this.setState({ intermediateOption: null});
       this._closeDropdown();
     }
     
@@ -127,7 +135,7 @@ class CustomSelect extends React.Component<Props, OwnState> {
       const nextInput = nextWrapper.querySelector('input') as HTMLInputElement;
       nextButton.focus();
       this.setState({
-        intermediateOption: this.props.selectOptions.find(option => `${option.value}` === nextInput.value) as CustomSelectOption,
+        selectedOption: this.props.selectOptions.find(option => `${option.value}` === nextInput.value) as CustomSelectOption,
         pendingButton: nextButton,
       });
     }
@@ -142,16 +150,28 @@ class CustomSelect extends React.Component<Props, OwnState> {
       const nextInput = nextWrapper.querySelector('input') as HTMLInputElement;
       nextButton.focus();
       this.setState({
-        intermediateOption: this.props.selectOptions.find(option => `${option.value}` === nextInput.value) as CustomSelectOption,
+        selectedOption: this.props.selectOptions.find(option => `${option.value}` === nextInput.value) as CustomSelectOption,
         pendingButton: nextButton,
       });
     }
   }
 
   private _handleControllerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if ((e.key === ' ' || e.key === 'Enter') && !this.state.open) { this._openDropdown(); return; }
+    if (e.key === ' ' && !this.state.open) {
+      this._openDropdown();
+      return;
+    }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this._toggleOpenState();
+    }
+    if ((e.key === 'Tab' && this.state.open)) {
+      e.preventDefault();
+      this._closeDropdown();
+    }
     if (this._shortcutList.includes(e.key) && this.state.open) {
       this._handleKeyboardShortcut(e, this._getSelectedWrapper());
+      return;
     }
   }
 
@@ -168,6 +188,7 @@ class CustomSelect extends React.Component<Props, OwnState> {
           key={`${name}__${value}`}
           className={`
             custom-checkbox-dropdown__field-wrapper
+            custom-checkbox-dropdown__field-wrapper--select
             ${value === this.state.selectedOption.value ? 'custom-checkbox-dropdown__field-wrapper--selected' : ''}
           `}
         >
@@ -250,9 +271,12 @@ class CustomSelect extends React.Component<Props, OwnState> {
           <div
             ref={this._checkboxGroupRef}
             className={`custom-checkbox-dropdown__checkbox-group ${!this.state.open ? 'custom-checkbox-dropdown__checkbox-group--closed' : ''}`}
-            // onClick={(e) => {
-            //   this._closeDropdown();
-            // }}
+            onClick={(e) => {
+              if ((e.target as HTMLInputElement)?.value === `${this.state.selectedOption.value}`) {
+                this._closeDropdown();
+                this._controllerRef.current?.focus();
+              }
+            }}
             onKeyDown={this._handleSelectGroupKeyDown}
           >
             {this._renderBoxes()}

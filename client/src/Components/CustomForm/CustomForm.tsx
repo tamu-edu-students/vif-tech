@@ -107,8 +107,19 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
         onMouseDown={(e) => e.preventDefault()}
         onMouseEnter={(e) => e.currentTarget.querySelector('span')?.focus()}
       >
-        <span onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.parentElement?.click()} style={{all: 'unset'}} tabIndex={0}></span>
-        <input style={{display: 'none'}} className={`form__element form__radio ${hasError ? "form__radio--error" : ""}`} {...input} {...rest} tabIndex={-1} />
+        <span
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape') {
+              e.preventDefault();
+              e.currentTarget.parentElement?.click()
+            }
+          }
+        }
+          style={{all: 'unset'}} tabIndex={-1}>
+        </span>
+        <input style={{display: 'none'}} className={`form__element form__radio ${hasError ? "form__radio--error" : ""}`} {...input} {...rest} tabIndex={-1}
+          onChange={(e: any) => {input.onChange(e); ((e as React.ChangeEvent<HTMLInputElement>).currentTarget.closest('.custom-checkbox-dropdown')?.querySelector('.custom-checkbox-dropdown__controller') as HTMLDivElement)?.focus()}}
+        />
         <p className='form__field-label form__field-label--checkbox'>{label}</p>
         {/* {this._renderError(meta)} */}
       </label>
