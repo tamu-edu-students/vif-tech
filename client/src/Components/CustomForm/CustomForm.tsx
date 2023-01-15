@@ -32,6 +32,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   }
 
   protected _renderSelect = ({ input, label, meta, children, ...rest }: Props) => {
+    // console.log(input, meta)
     const hasError: boolean = !rest.disabled && meta.error && meta.touched;
     return (
       <label className={`form__field form__field--select ${hasError ? "form__field--error" : ""}`}>
@@ -73,6 +74,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   }
 
   protected _renderCustomCheckboxDropdown = ({ input, legend, checkboxOptions, meta, ...rest }: Props) => {
+    // console.log(meta);
     const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
     return (
       <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
@@ -83,6 +85,8 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
           {legend}
         </legend>
         <CustomCheckboxDropdown
+          name={input.name}
+          initial={meta.initial}
           checkboxOptions={checkboxOptions}
           renderCheckbox={this._renderCustomCheckbox}
           onBlur={input.onBlur}
@@ -96,6 +100,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
 
   protected _renderCustomSelectBox = ({ input, label, meta, ...rest }: Props) => {
     const hasError: boolean = !rest?.disabled && meta.error && meta.touched;
+    // console.log(input, meta)
     return (
       <label
         className={`form__field form__field--radio ${hasError ? "form__field--error" : ""}`}
@@ -111,6 +116,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   }
 
   protected _renderCustomSelectDropdown = ({ input, legend, selectOptions, meta, ...rest }: Props) => {
+    // console.log(input, meta)
     const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
     return (
       <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
@@ -122,11 +128,12 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
         </legend>
         <CustomSelect
           name={input.name}
-          initialValue={input.value}
+          initialValue={`${meta.initial}`}
           selectOptions={selectOptions}
           emptyValue={""}
           renderCheckbox={this._renderCustomSelectBox}
           onBlur={input.onBlur}
+          onFocus={input.onFocus}
           hasError={hasError}
           {...rest}
         />

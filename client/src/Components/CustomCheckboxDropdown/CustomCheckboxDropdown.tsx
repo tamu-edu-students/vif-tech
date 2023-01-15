@@ -11,6 +11,8 @@ interface BaseProps {
   onBlur?: Function;
   hasError?: boolean;
 
+  name: string;
+  initial: any;
   checkboxOptions: CustomCheckboxOption[];
 }
 
@@ -42,8 +44,13 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   }
 
   private _computeChecked(): CustomCheckboxOption[] {
-    const inputElements: HTMLInputElement[] = Array.from(this._rootRef.current?.querySelectorAll('input') as NodeListOf<HTMLInputElement>);
-    return this.props.checkboxOptions.filter((option: CustomCheckboxOption) => inputElements.find(input => input.name === option.name)?.checked);
+    if (this.props.initial) {
+      return this.props.checkboxOptions.filter((option: CustomCheckboxOption) => {
+        return Object.entries(this.props.initial)
+          .some(([key, value]) => `${this.props.name}.${key}` === option.name && value === true)
+      });
+    }
+    return [];
   }
 
   private _toggleOpenState = (): void => { this.setState({ open: !this.state.open }); }
@@ -81,7 +88,12 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
       }
     }
   }
-  private _handleControllerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => { if (e.key === " ") { this._toggleOpenState(); } }
+  private _handleControllerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      this._toggleOpenState();
+      e.preventDefault();
+    }
+  }
 
   private _renderCheckboxes(checkboxOptions: CustomCheckboxOption[]): JSX.Element[] {
     return checkboxOptions.map(({ label, name }: CustomCheckboxOption) => {
@@ -157,7 +169,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
         
         {/* CHECKBOX GROUP */}
         {
-          // this.state.open &&
+          this.state.open &&
           <div
             ref={this._checkboxGroupRef}
             className={`custom-checkbox-dropdown__checkbox-group ${!this.state.open ? 'custom-checkbox-dropdown__checkbox-group--closed' : ''}`}

@@ -76,7 +76,8 @@
       border-bottom: 1px dotted $color-black;
     }
 
-    &:has(:checked) {
+    &:has(:checked),
+    &.custom-checkbox-dropdown__field-wrapper--selected {
       background-color: lighten($color-brand-green-light, 5%);
     }
       
@@ -84,7 +85,8 @@
     &:has(:focus-visible) {
       background-color: lighten($color-brand-green-light, 20%);
       
-      &:has(:checked) {
+      &:has(:checked),
+      &.custom-checkbox-dropdown__field-wrapper--selected {
         background-color: $color-brand-green-light;
       }
     }
@@ -92,7 +94,8 @@
     &:active {
       background-color: lighten($color-brand-green-light, 10%);
 
-      &:has(:checked) {
+      &:has(:checked),
+      &.custom-checkbox-dropdown__field-wrapper--selected {
         background-color: darken($color-brand-green-light, 5%);
       }
     }
@@ -101,7 +104,8 @@
       cursor: default;
       background-color: $color-gray-light;
 
-      &:has(:checked) {
+      &:has(:checked),
+      &.custom-checkbox-dropdown__field-wrapper--selected {
         background-color: $color-gray;
       }
     }

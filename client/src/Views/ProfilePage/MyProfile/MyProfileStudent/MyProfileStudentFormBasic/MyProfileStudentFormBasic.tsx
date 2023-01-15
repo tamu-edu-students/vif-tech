@@ -33,9 +33,9 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
     });
   }
 
-  private _renderYearOptions(): JSX.Element[] {
-    return [2022, 2023, 2024, 2025, 2026, 2027].map((year: number) => (
-      <option key={year} value={year}>{year}</option>
+  private _renderYearOptions(): CustomSelectOption[] {
+    return [2022, 2023, 2024, 2025, 2026, 2027].map((year: number): CustomSelectOption => (
+      {label: `${year}`, value: year}
     ));
   }
 
@@ -53,23 +53,19 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
 
           <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
 
-          <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
-            {this._renderYearOptions()}
-          </Field>
-
-          {/* <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
-            {this._renderSemesterOptions()}
-          </Field> */}
+          <Field
+            name="class_year"
+            legend="Expected graduation year"
+            selectOptions={this._renderYearOptions()}
+            component={this._renderCustomSelectDropdown}
+          />
 
           <Field
             name="class_semester"
-            // value={this.props.initialValues.class_semester}
             legend="Expected graduation term"
             selectOptions={this._renderSemesterOptions()}
             component={this._renderCustomSelectDropdown}
           />
-            {/* {this._renderSemesterOptions()}
-          </Field> */}
           
           <Field name="resume_link" id="resume_link" type="text" component={this._renderInput} label="Resume URL" />
 

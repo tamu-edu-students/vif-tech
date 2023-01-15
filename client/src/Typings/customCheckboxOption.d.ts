@@ -5,5 +5,5 @@ interface CustomCheckboxOption {
 
 interface CustomSelectOption {
   label: string;
-  value: string;
+  value: string | number;
 }
