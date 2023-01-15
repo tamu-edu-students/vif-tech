@@ -128,7 +128,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
         </legend>
         <CustomSelect
           name={input.name}
-          initialValue={`${meta.initial}`}
+          initialValue={`${meta.initial ?? ''}`}
           selectOptions={selectOptions}
           emptyValue={""}
           renderCheckbox={this._renderCustomSelectBox}
