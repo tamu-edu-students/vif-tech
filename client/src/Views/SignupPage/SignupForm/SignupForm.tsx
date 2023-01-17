@@ -177,8 +177,6 @@ const validate = ({
     errors.password_confirmation = "Passwords do not match";
   }
 
-  console.log('HELLO', company_id)
-
   if (usertype === Usertype.REPRESENTATIVE) {
     if (!company_id) {
       errors.company_id = "Select your company";
