@@ -20,7 +20,7 @@ interface BaseProps {
   emptyValue: string;
 }
 
-type Props = BaseProps
+type Props = BaseProps;
 
 interface OwnState {
   selectedOption: CustomSelectOption;

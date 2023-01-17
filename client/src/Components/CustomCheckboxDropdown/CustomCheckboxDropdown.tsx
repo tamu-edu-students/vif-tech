@@ -14,9 +14,10 @@ interface BaseProps {
   name: string;
   initial: any;
   checkboxOptions: CustomCheckboxOption[];
+  shouldSortSummary?: boolean;
 }
 
-type Props = BaseProps
+type Props = BaseProps;
 
 interface OwnState {
   checkedOptions: CustomCheckboxOption[];
@@ -28,7 +29,7 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   _rootRef = React.createRef<HTMLDivElement>();
   _controllerRef = React.createRef<HTMLDivElement>();
   _checkboxGroupRef = React.createRef<HTMLDivElement>();
-  state = { open: true, checkedOptions: [], selectedOption: {label: '', value: ''} };
+  state = { open: false, checkedOptions: [], selectedOption: {label: '', value: ''} };
 
   public componentDidMount(): void {
     this.setState({
@@ -118,10 +119,17 @@ class CustomCheckboxDropdown extends React.Component<Props, OwnState> {
   }
 
   private _renderSummary(): string {
-    return this.state.checkedOptions
-      .map(({label}: CustomCheckboxOption) => label)
-      .sort((label1: string, label2: string) => label1.toLowerCase().localeCompare(label2.toLowerCase()))
-      .join(';   ');
+    if (this.props.shouldSortSummary) {
+      return this.state.checkedOptions
+        .map(({label}: CustomCheckboxOption) => label)
+        .sort((label1: string, label2: string) => label1.toLowerCase().localeCompare(label2.toLowerCase()))
+        .join(';   ');
+    }
+    else {
+      return this.state.checkedOptions
+        .map(({label}: CustomCheckboxOption) => label)
+        .join(';   ');
+    }
   }
 
   public render(): React.ReactElement<Props> {
