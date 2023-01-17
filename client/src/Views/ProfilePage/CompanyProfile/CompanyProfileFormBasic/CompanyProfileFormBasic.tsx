@@ -35,9 +35,9 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
 
   private _generateHiringForOptions(): CustomCheckboxOption[] {
     return [
-      { name: 'hiring_for_fulltime', label: 'Full-time' },
-      { name: 'hiring_for_parttime', label: 'Part-time' },
-      { name: 'hiring_for_intern', label: 'Interns' },
+      { name: 'hiring_for.fulltime', label: 'Full-time' },
+      { name: 'hiring_for.parttime', label: 'Part-time' },
+      { name: 'hiring_for.intern', label: 'Interns' },
     ];
   }
 
@@ -54,7 +54,7 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
           <Field name="website_link" id="website_link" type="text" component={this._renderInput} label="Website URL" disabled={!isPrimaryContact} />
 
           <Field
-            name="_"
+            name="hiring_for"
             legend="Hiring for..."
             checkboxOptions={this._generateHiringForOptions()}
             component={this._renderCustomCheckboxDropdown}

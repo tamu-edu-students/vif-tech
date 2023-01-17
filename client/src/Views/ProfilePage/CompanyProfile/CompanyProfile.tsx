@@ -136,9 +136,11 @@ class CompanyProfile extends React.Component<Props, OwnState> {
         location,
         logo_img_src,
         website_link,
-        hiring_for_fulltime,
-        hiring_for_parttime,
-        hiring_for_intern,
+        hiring_for: {
+          fulltime: hiring_for_fulltime,
+          parttime: hiring_for_parttime,
+          intern: hiring_for_intern,
+        },
       }
     }
     else {
@@ -173,8 +175,11 @@ class CompanyProfile extends React.Component<Props, OwnState> {
   private _updateBasicFieldsState = (newBasicFields: any): void => {
     const modifiedObj: any = {};
     Object.entries(this.state.basicFields).forEach(([key, _]) => {
-      modifiedObj[key] = newBasicFields[key] ?? ''
+      if (key !== 'hiring_for') {
+        modifiedObj[key] = newBasicFields[key] ?? '';
+      }
     });
+    modifiedObj.hiring_for = newBasicFields.hiring_for;
     this.setState({basicFields: {...modifiedObj}});
   }
 
@@ -186,7 +191,18 @@ class CompanyProfile extends React.Component<Props, OwnState> {
     this.setState({ isLoading: true });
 
     const promises: Promise<void>[] = [];
-    promises.push(this.props.updateCompany(this.props.company?.id ?? -1, this.state.basicFields));
+    const parsedBasicFields: any = {};
+    Object.entries(this.state.basicFields).forEach(([key, value]) => {
+      if (key !== 'hiring_for') {
+        parsedBasicFields[key] = value;
+      }
+      else {
+        Object.entries((this.state.basicFields as any)[key]).forEach(([nestedKey, value]) => {
+          parsedBasicFields[`hiring_for_${nestedKey}`] = value;
+        });
+      }
+    });
+    promises.push(this.props.updateCompany(this.props.company?.id ?? -1, parsedBasicFields));
     
     const newFocusIds: number[] = Object.entries(this.state.focusFields.focuses)
       .filter(([_, isChecked]) => isChecked)
