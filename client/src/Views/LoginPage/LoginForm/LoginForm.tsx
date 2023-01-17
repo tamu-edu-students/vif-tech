@@ -39,11 +39,11 @@ const validate = ({email, password}: any) => {
   const errors: any = {};
 
   if (!email) {
-    errors.email = "You must enter an email address";
+    errors.email = "Enter your email address";
   }
 
   if (!password) {
-    errors.password = "You must enter a password";
+    errors.password = "Enter your password";
   }
 
   return errors;
