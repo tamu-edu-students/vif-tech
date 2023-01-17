@@ -188,6 +188,7 @@ class CompanyProfile extends React.Component<Props, OwnState> {
   }
 
   private _onSaveChanges = (): void => {
+    if (!this.props.isPrimaryContact) { return; }
     this.setState({ isLoading: true });
 
     const promises: Promise<void>[] = [];
