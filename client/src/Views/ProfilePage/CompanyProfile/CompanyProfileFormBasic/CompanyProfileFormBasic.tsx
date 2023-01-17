@@ -33,43 +33,34 @@ class CompanyProfileFormBasic extends CustomForm<Props, OwnState> {
     });
   }
 
-  // private _renderYearOptions(): JSX.Element[] {
-  //   return [2022, 2023, 2024, 2025, 2026, 2027].map((year: number) => (
-  //     <option key={year} value={year}>{year}</option>
-  //   ));
-  // }
-
-  // private _renderSemesterOptions(): JSX.Element[] {
-  //   return ['spring', 'summer', 'fall'].map((semester: string) => (
-  //     <option key={semester} value={semester}>{semester[0].toUpperCase() + semester.slice(1)}</option>
-  //   ));
-  // }
+  private _generateHiringForOptions(): CustomCheckboxOption[] {
+    return [
+      { name: 'hiring_for.fulltime', label: 'Full-time' },
+      { name: 'hiring_for.parttime', label: 'Part-time' },
+      { name: 'hiring_for.intern', label: 'Interns' },
+    ];
+  }
 
   public render(): React.ReactElement<Props> {
     const { isPrimaryContact } = this.props;
 
     return (
-      <form id="company-profile-form-basic">
-        <Field name="logo_img_src" id="logo_img_src" type="text" component={this._renderInput} label="Logo image URL" disabled={!isPrimaryContact} />
+      <form className="my-profile__form my-profile__form--basic form form--small form--my-profile" id="profile-form-basic">
+        <div className="form__fields">
+          <Field name="logo_img_src" id="logo_img_src" type="text" component={this._renderInput} label="Logo image URL" disabled={!isPrimaryContact} />
 
-        <Field name="location" id="location" type="text" component={this._renderInput} label="Location" disabled={!isPrimaryContact} />
+          <Field name="location" id="location" type="text" component={this._renderInput} label="Location" disabled={!isPrimaryContact} />
 
-        <Field name="website_link" id="website_link" type="text" component={this._renderInput} label="Website URL" disabled={!isPrimaryContact} />
+          <Field name="website_link" id="website_link" type="text" component={this._renderInput} label="Website URL" disabled={!isPrimaryContact} />
 
-        <fieldset disabled={!isPrimaryContact}>
-          <label><p>{`Hiring for...`}</p></label>
-          <Field name="hiring_for_fulltime" id="hiring_for_fulltime" type="checkbox" component={this._renderInput} label="Full-time" />
-          <Field name="hiring_for_parttime" id="hiring_for_parttime" type="checkbox" component={this._renderInput} label="Part-time" />
-          <Field name="hiring_for_intern" id="hiring_for_intern" type="checkbox" component={this._renderInput} label="Interns" />
-        </fieldset>
-
-        {/* <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
-          {this._renderYearOptions()}
-        </Field>
-
-        <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
-          {this._renderSemesterOptions()}
-        </Field> */}
+          <Field
+            name="hiring_for"
+            legend="Hiring for..."
+            checkboxOptions={this._generateHiringForOptions()}
+            component={this._renderCustomCheckboxDropdown}
+            disabled={!this.props.isPrimaryContact}
+          />
+        </div>
       </form>
     );
   }

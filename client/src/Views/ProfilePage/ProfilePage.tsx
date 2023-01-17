@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
@@ -10,13 +10,13 @@ import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
 
+import SubNavLink from 'Components/SubNavLink/SubNavLink';
+import SubNav from 'Components/SubNav/SubNav';
 import CompanyProfile from './CompanyProfile/CompanyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
 import MyProfileRepresentative from './MyProfile/MyProfileRepresentative/MyProfileRepresentative';
 import MyProfileAdmin from './MyProfile/MyProfileAdmin/MyProfileAdmin';
-
-import FocusList from './FocusList/FocusList';
 
 
 interface OwnProps {
@@ -33,6 +33,8 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
     user: state.auth.user,
     amRepresentative: state.auth.user?.usertype === Usertype.REPRESENTATIVE,
     amAdmin: state.auth.user?.usertype === Usertype.ADMIN,
+    amStudent: state.auth.user?.usertype === Usertype.STUDENT,
+    amVolunteer: state.auth.user?.usertype === Usertype.VOLUNTEER,
     amPrimaryContact: state.auth.user?.isPrimaryContact(state.allowlist.allowlist_emails),
 
     allowlistIsStale: state.auth.user?.usertype === Usertype.REPRESENTATIVE ? state.allowlist.isStale : false,
@@ -58,99 +60,54 @@ class ProfilePage extends React.Component<Props, OwnState> {
     }
   }
 
-  private _renderAdminRoutes(): JSX.Element[] {
-    const { parentPath } = this.props;
-    return ([
-      <Route exact path={`${parentPath}/focus-list`} key={`${parentPath}/focus-list`}>
-        <FocusList />
-      </Route>
-    ]);
-  }
-
-  private _renderAdminLinks(): JSX.Element {
-    const { parentPath } = this.props;
+  private _renderRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
     return (
-      <>
-        <br />
-        <li><Link to={`${parentPath}/focus-list`}>Manage Focus List</Link></li>
-      </>
+      <Route exact path={path} key={path} render={(routeProps: any) => (
+        React.createElement(allowlistElement.type, routeProps)
+      )} />
     );
   }
 
-  private _renderRepresentativeRoutes(): JSX.Element[] {
-    const { parentPath } = this.props;
-    return ([
-      <Route exact path={`${parentPath}/company-profile`} key={`${parentPath}/company-profile`}>
-        <CompanyProfile />
-      </Route>
-    ]);
-  }
-
-  private _renderRepresentativeLinks(): JSX.Element {
-    const { parentPath } = this.props;
+  private _renderLink(subPath: string, text: string): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
     return (
-      <>
-        <li><Link to={`${parentPath}/company-profile`}>Company Profile</Link></li>
-      </>
-    );
-  }
-
-  private _renderVolunteerRoutes(): JSX.Element[] {
-    return ([
-    ]);
-  }
-
-  private _renderVolunteerLinks(): JSX.Element {
-    return (
-      <>
-      </>
-    );
-  }
-
-  private _renderStudentRoutes(): JSX.Element[] {
-    return ([
-    ]);
-  }
-
-  private _renderStudentLinks(): JSX.Element {
-    return (
-      <>
-      </>
+      <SubNavLink to={path}>{text}</SubNavLink>
     );
   }
 
   private _renderLinks(): JSX.Element | null {
-    switch(this.props.user?.usertype) {
-      case Usertype.ADMIN:
-        return this._renderAdminLinks();
-      case Usertype.REPRESENTATIVE:
-        return this._renderRepresentativeLinks();
-      case Usertype.VOLUNTEER:
-        return this._renderVolunteerLinks();
-      case Usertype.STUDENT:
-        return this._renderStudentLinks();
-      default:
-        return null;
-    }
+    return (
+      <>
+        {this._renderLink(`/my-profile`, `My Profile`)}
+        {
+          this.props.amRepresentative &&
+          this._renderLink('/company-profile', 'Company Profile')
+        }
+      </>
+    )
   }
 
   private _renderRoutes(): JSX.Element[] {
     switch(this.props.user?.usertype) {
       case Usertype.ADMIN:
-        return this._renderAdminRoutes();
+        return [ this._renderRoute(`/my-profile`, <MyProfileAdmin />), ];
       case Usertype.REPRESENTATIVE:
-        return this._renderRepresentativeRoutes();
+        return [
+          this._renderRoute(`/my-profile`, <MyProfileRepresentative />),
+          this._renderRoute(`/company-profile`, <CompanyProfile />),
+        ];
       case Usertype.VOLUNTEER:
-        return this._renderVolunteerRoutes();
+        return [ this._renderRoute(`/my-profile`, <MyProfileVolunteer />), ];
       case Usertype.STUDENT:
-        return this._renderStudentRoutes();
+        return [ this._renderRoute(`/my-profile`, <MyProfileStudent />), ];
       default:
         return [];
     }
   }
 
   public render(): React.ReactElement<Props> {
-    const { parentPath, user } = this.props;
+    const { parentPath } = this.props;
 
     if (this.props.isLoading_fetchAllowlist || this.props.allowlistIsStale) {
       return (
@@ -162,40 +119,36 @@ class ProfilePage extends React.Component<Props, OwnState> {
       <div className="profile-page">
         <h1 className="heading-primary">Profile</h1>
 
-        <div className="profile-page__split">
-          <ul className='profile-page__nav'>
-            <li><Link to={`${parentPath}/my-profile`}>My Profile</Link></li>
-            {this._renderLinks()}
-          </ul>
+        <div className='profile-page__subpage'>
+          <Switch>
+            <Route path={parentPath} render={(routeProps: any) => (
+                <SubNav className='profile-page__nav' {...routeProps}>
+                  {this._renderLinks()}
+                </SubNav>
+              )}
+            >
+            </Route>
+          </Switch>
 
-          <div className='profile-page__subpage'>
-            <Switch>
-              <Route exact path={`${parentPath}`}>
-                <Redirect to={`${parentPath}/my-profile`} />
-              </Route>
+          <Switch>
+            <Route exact path={`${parentPath}`}>
+              <Redirect to={`${parentPath}/my-profile`} />
+            </Route>
 
-              <Route exact path={`${parentPath}/my-profile`}>
-                { user?.isAdmin && <MyProfileAdmin />}
-                { user?.isRepresentative && <MyProfileRepresentative />}
-                { user?.isVolunteer && <MyProfileVolunteer />}
-                { user?.isStudent && <MyProfileStudent />}
-              </Route>
+            {this._renderRoutes()}
 
-              {this._renderRoutes()}
-
-              <Route path="*"> 
-                <section className="section section--redirector">
-                  <RedirectPrompt
-                    message={"404 Page Not Found"}
-                    buttonText={"Return To Profile Page"}
-                    pathName={parentPath}
-                  />
-                </section>
-              </Route>
-            </Switch>
-          </div>
-          
+            <Route path="*"> 
+              <section className="section section--redirector">
+                <RedirectPrompt
+                  message={"404 Page Not Found"}
+                  buttonText={"Return To Profile Page"}
+                  pathName={parentPath}
+                />
+              </section>
+            </Route>
+          </Switch>
         </div>
+
       </div>
     );
   }

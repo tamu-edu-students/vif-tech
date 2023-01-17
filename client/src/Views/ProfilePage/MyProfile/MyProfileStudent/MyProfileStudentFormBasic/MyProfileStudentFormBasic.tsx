@@ -46,22 +46,32 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     return (
-      <form id="student-profile-form-basic">
-        <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile picture URL" />
+      <form className="my-profile__form my-profile__form--basic form form--small form--my-profile" id="profile-form-basic">
+        <div className="form__fields">
+          <Field name="profile_img_src" id="profile_img_src" type="text" component={this._renderInput} label="Profile picture URL" />
 
-        <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
+          <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
 
-        <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
-          {this._renderYearOptions()}
-        </Field>
+          <Field
+            name="class_year"
+            label="Expected graduation year"
+            component={this._renderCustomSelectDropdown}
+          >
+            {this._renderYearOptions()}
+          </Field>
 
-        <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
-          {this._renderSemesterOptions()}
-        </Field>
-        
-        <Field name="resume_link" id="resume_link" type="text" component={this._renderInput} label="Resume URL" />
+          <Field
+            name="class_semester"
+            label="Expected graduation term"
+            component={this._renderCustomSelectDropdown}
+          >
+            {this._renderSemesterOptions()}
+          </Field>
+          
+          <Field name="resume_link" id="resume_link" type="text" component={this._renderInput} label="Resume URL" />
 
-        <Field name="portfolio_link" id="portfolio_link" type="text" component={this._renderInput} label="Portfolio URL" />
+          <Field name="portfolio_link" id="portfolio_link" type="text" component={this._renderInput} label="Portfolio URL" />
+        </div>
       </form>
     );
   }

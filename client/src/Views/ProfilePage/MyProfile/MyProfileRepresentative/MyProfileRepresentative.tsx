@@ -26,40 +26,19 @@ const mapStateToProps = (state: IRootState) => {
   const isLoading_updateUser: boolean = createLoadingSelector([userActionTypes.UPDATE_USER])(state);
   const errors_updateUser: string[] = createErrorMessageSelector([userActionTypes.UPDATE_USER])(state);
 
-  // const focusesAreStale = state.focusData.isStale;
-  // const isLoading_fetchFocuses: boolean = createLoadingSelector([focusActionTypes.FETCH_FOCUSES])(state);
-  // const errors_fetchFocuses: string[] = createErrorMessageSelector([focusActionTypes.FETCH_FOCUSES])(state);
-
-  // const userFocusesAreStale = state.userFocusData.isStale;
-  // const isLoading_fetchUserFocuses: boolean = createLoadingSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
-  // const errors_fetchUserFocuses: string[] = createErrorMessageSelector([userFocusActionTypes.FETCH_USER_FOCUSES])(state);
-
   const companiesAreStale = state.companyData.isStale;
   const isLoading_fetchCompanies: boolean = createLoadingSelector([companyActionTypes.FETCH_COMPANIES])(state);
   const errors_fetchCompanies: string[] = createErrorMessageSelector([companyActionTypes.FETCH_COMPANIES])(state);
 
-  const isLoading: boolean =
-    // isLoading_fetchFocuses || focusesAreStale ||
-    // isLoading_fetchUserFocuses || userFocusesAreStale ||
-    isLoading_fetchCompanies || companiesAreStale;
-  const errors_breaking: string[] = [/*...errors_fetchFocuses, ...errors_fetchUserFocuses,*/ ...errors_fetchCompanies];
+  const isLoading: boolean = isLoading_fetchCompanies || companiesAreStale;
+  const errors_breaking: string[] = [...errors_fetchCompanies];
 
   return {
     user,
     company,
-    // focuses: state.focusData.focuses,
-    // focusesOfUser: user.findFocuses(state.focusData.focuses, state.userFocusData.userFocuses),
 
     isLoading_updateUser,
     errors_updateUser,
-
-    // focusesAreStale,
-    // isLoading_fetchFocuses,
-    // errors_fetchFocuses,
-
-    // userFocusesAreStale,
-    // isLoading_fetchUserFocuses,
-    // errors_fetchUserFocuses,
 
     companiesAreStale,
     isLoading_fetchCompanies,
@@ -78,26 +57,17 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
   state = { basicFields: {}, isLoading: false };
 
   public componentDidMount(): void {
-    // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-    //   this.props.fetchFocuses();
-    // }
-    // if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-    //   this.props.fetchUserFocuses();
-    // }
+    const promises: Promise<void>[] = []
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
-      this.props.fetchCompanies();
+      promises.push(this.props.fetchCompanies());
     }
 
-    this._reloadFieldsState();
+    Promise.allSettled(promises).then(() => {
+      this._reloadFieldsState();
+    });
   }
 
   public componentDidUpdate(): void {
-    // if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-    //   this.props.fetchFocuses();
-    // }
-    // if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-    //   this.props.fetchUserFocuses();
-    // }
     if (this.props.companiesAreStale && !this.props.isLoading_fetchCompanies) {
       this.props.fetchCompanies();
     }
@@ -155,9 +125,7 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
   
   private _renderImg(profileImgSrc: string): JSX.Element {
     return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
-      </div>
+      <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
     );
   }
 
@@ -193,26 +161,20 @@ class MyProfileVolunteer extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="My-Profile my-profile">
-        <h2 className="heading-secondary">{`My Profile (Representative)`}</h2>
-        <h3 className="heading-tertiary">{firstname} {lastname}</h3>
-        {
-          profile_img_src && 
-          <>
-            <br />
-            {this._renderImg(profile_img_src)}
-          </>
-        }
-        <br />
-        <div>
-          <MyProfileRepresentativeFormBasic
-            form="updateBasicRepresentativeFields"
-            initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
-            updateBasicFields={this._updateBasicFieldsState}
-          />
+      <div className="my-profile">
+        <div className="my-profile__img-container">
+          {profile_img_src &&  this._renderImg(profile_img_src)}
         </div>
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+        <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
+
+        <MyProfileRepresentativeFormBasic
+          form="updateBasicRepresentativeFields"
+          initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
+          updateBasicFields={this._updateBasicFieldsState}
+        />
+
+        <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
     );
   }

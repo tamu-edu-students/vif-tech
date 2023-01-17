@@ -21,6 +21,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &.btn-wire--small {
+      font-size: 2rem;
+    }
   }
 
   &:hover,

@@ -17,7 +17,7 @@ interface OwnProps {
 
 interface OwnState {
   basicFields: any;
-  focusFields: any;
+  focusFields: {focuses: any};
   isLoading: boolean;
 }
 
@@ -64,25 +64,31 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class MyProfileStudent extends React.Component<Props, OwnState> {
-  state = { basicFields: {}, focusFields: {}, isLoading: false };
+  state = { basicFields: {}, focusFields: {focuses: {}}, isLoading: false };
 
   public componentDidMount(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
+      promises.push(this.props.fetchUserFocuses());
     }
 
-    this._reloadFieldsState();
+    Promise.allSettled(promises).then(() => {
+      this._reloadFieldsState();
+    });
   }
 
   public componentDidUpdate(): void {
+    const promises: Promise<void>[] = [];
+
     if (this.props.focusesAreStale && !this.props.isLoading_fetchFocuses) {
-      this.props.fetchFocuses();
+      promises.push(this.props.fetchFocuses());
     }
     if (this.props.userFocusesAreStale && !this.props.isLoading_fetchUserFocuses) {
-      this.props.fetchUserFocuses();
+      promises.push(this.props.fetchUserFocuses());
     }
   }
 
@@ -124,10 +130,10 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
   private _computeInitialFocusChecks(): any {
     const { focuses, focusesOfUser } = this.props;
-    let initialFocusChecks = {};
+    const initialFocusChecks: {focuses: any} = {focuses: {}};
     focuses.forEach((focus: Focus) => {
       if (focusesOfUser.some((focusOfUser: Focus) => focus.id === focusOfUser.id)) {
-        initialFocusChecks = { ...initialFocusChecks, [`focus-${focus.id.toString()}`]: true };
+        initialFocusChecks.focuses[`${focus.id}`] = true;
       }
     });
 
@@ -143,7 +149,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   }
 
   private _updateFocusFieldsState = (newFocusFields: any): void => {
-    this.setState({focusFields: {...newFocusFields}});
+    this.setState({focusFields: {focuses: newFocusFields.focuses}});
   }
 
   private _onSaveChanges = (): void => {
@@ -151,10 +157,10 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
 
     const promises: Promise<void>[] = [];
     promises.push(this.props.updateUser(this.props.user?.id ?? -1, this.state.basicFields));
-
-    const newFocusIds = Object.entries(this.state.focusFields)
+    
+    const newFocusIds: number[] = Object.entries(this.state.focusFields.focuses)
       .filter(([_, isChecked]) => isChecked)
-      .map(([id, _]): number => Number.parseInt(id.replace(/focus-/, '')));
+      .map(([id, _]): number => Number.parseInt(id));
     promises.push(this.props.updateUserFocuses(this.props.user?.id ?? -1, newFocusIds));
     
     Promise.all(promises).then(() => {
@@ -164,9 +170,7 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
   
   private _renderImg(profileImgSrc: string): JSX.Element {
     return (
-      <div className="my-profile__img-container">
-        <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
-      </div>
+      <img className='my-profile__img' src={profileImgSrc} alt={`${this.props.user.firstname} ${this.props.user.lastname}`} />
     );
   }
 
@@ -203,35 +207,27 @@ class MyProfileStudent extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="My-Profile my-profile">
-        <h2 className="heading-secondary">{`My Profile (Student)`}</h2>
-        <h3 className="heading-tertiary">{firstname} {lastname}</h3>
-        {
-          profile_img_src && 
-          <>
-            <br />
-            {this._renderImg(profile_img_src)}
-          </>
-        }
-        <br />
-        <div>
-          <MyProfileStudentFormBasic
-            form="updateBasicStudentFields"
-            initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
-            updateBasicFields={this._updateBasicFieldsState}
-          />
+      <div className="my-profile">
+        <div className="my-profile__img-container">
+          {profile_img_src && this._renderImg(profile_img_src)}
         </div>
 
-        <div>
-          <MyProfileStudentFormFocuses
-            form="updateFocusStudentFields"
-            initialValues={this._computeInitialFocusChecks()}
-            focuses={focuses}
-            updateFocusFields={this._updateFocusFieldsState}
-          />
-        </div>
+        <div className="my-profile__name">{`${firstname} ${lastname}`}</div>
+        
+        <MyProfileStudentFormBasic
+          form="updateBasicStudentFields"
+          initialValues={ {...this._getInitialBasicFields(), ...this._getInitialDisabledFields()} }
+          updateBasicFields={this._updateBasicFieldsState}
+        />
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+        <MyProfileStudentFormFocuses
+          form="updateFocusStudentFields"
+          initialValues={this._computeInitialFocusChecks()}
+          focuses={focuses}
+          updateFocusFields={this._updateFocusFieldsState}
+        />
+
+        <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
       </div>
     );
   }

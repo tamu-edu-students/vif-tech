@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm } from "redux-form";
+import { reduxForm, Field } from "redux-form";
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
@@ -27,33 +27,30 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
-class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
+class MyProfileVolunteerFormFocuses extends CustomForm<Props, OwnState> {
   public componentDidMount(): void {
     this.setState({
       ...this.props.initialValues
     });
   }
 
-  private _renderCheckboxGroup(focuses: Focus[]): JSX.Element[] {
-    return focuses.map((focus: Focus) => (
-      <Field
-        key={focus.id}
-        name={`focus-${focus.id.toString()}`}
-        id={`focus-${focus.id.toString()}`}
-        component={this._renderInput}
-        type="checkbox" label={focus.name}
-      />
-    ));
+  private _generateFocusOptions(focuses: Focus[]): CustomCheckboxOption[] {
+    return focuses.map((focus: Focus): CustomCheckboxOption => {
+      return { label: focus.name, name: `focuses.${focus.id}` }
+    });
   }
 
   public render(): React.ReactElement<Props> {
     return (
-      <form id="volunteer-profile-form-focuses">
-
-        <fieldset>
-        <label><p>{`Specialties`}</p></label>
-          {this._renderCheckboxGroup(this.props.focuses)}
-        </fieldset>
+      <form className="my-profile__form my-profile__form--focuses form form--small form--my-profile" id="profile-form-focuses">
+        <div className="form__fields">
+          <Field
+            name="focuses"
+            legend="Specialties"
+            checkboxOptions={this._generateFocusOptions(this.props.focuses)}
+            component={this._renderCustomCheckboxDropdown}
+          />
+        </div>
       </form>
     );
   }
@@ -61,6 +58,6 @@ class MyProfileStudentFormFocuses extends CustomForm<Props, OwnState> {
 
 const formWrapped = reduxForm<any, Props>({
   enableReinitialize: true,
-})(MyProfileStudentFormFocuses);
+})(MyProfileVolunteerFormFocuses);
 
 export default connector(formWrapped);

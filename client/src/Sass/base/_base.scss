@@ -83,24 +83,6 @@ a {
     color: #99ffff;
   }
 }
-.profile-page {
-  &__split {
-    display: flex;
-    gap: 2rem;
-  }
-  &__nav {
-    list-style: none;
-    width: min-content;
-    white-space: nowrap;
-
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  &__subpage {
-    flex: 1;
-  }
-}
 .FAQs {
   display: flex;
   flex-direction: column;
