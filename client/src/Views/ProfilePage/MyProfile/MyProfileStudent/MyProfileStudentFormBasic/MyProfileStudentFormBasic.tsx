@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
 import CustomForm from 'Components/CustomForm/CustomForm';
-import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
 
 
 interface OwnProps {
@@ -53,11 +52,19 @@ class MyProfileStudentFormBasic extends CustomForm<Props, OwnState> {
 
           <Field name="email" id="email" type="text" component={this._renderInput} label="Email" disabled />
 
-          <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
+          <Field
+            name="class_year"
+            label="Expected graduation year"
+            component={this._renderCustomSelectDropdown}
+          >
             {this._renderYearOptions()}
           </Field>
 
-          <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
+          <Field
+            name="class_semester"
+            label="Expected graduation term"
+            component={this._renderCustomSelectDropdown}
+          >
             {this._renderSemesterOptions()}
           </Field>
           

@@ -59,6 +59,12 @@
     overflow-y: auto;
     max-height: 30rem;
     width: 100%;
+
+    &.custom-checkbox-dropdown__checkbox-group {
+      &--closed {
+        display: none;
+      }
+    }
   }
 
   &__field-wrapper {
@@ -70,34 +76,13 @@
       border-bottom: 1px dotted $color-black;
     }
 
-    &:has(:checked) {
-      background-color: lighten($color-brand-green-light, 5%);
-    }
-      
-    &:hover,
-    &:has(:focus-visible) {
-      background-color: lighten($color-brand-green-light, 20%);
-      
-      &:has(:checked) {
-        background-color: $color-brand-green-light;
-      }
-    }
-
     &:active {
       background-color: lighten($color-brand-green-light, 10%);
-
-      &:has(:checked) {
-        background-color: darken($color-brand-green-light, 5%);
-      }
     }
 
     &:has(:disabled) {
       cursor: default;
       background-color: $color-gray-light;
-
-      &:has(:checked) {
-        background-color: $color-gray;
-      }
     }
 
     .form__field {
@@ -107,6 +92,59 @@
 
     .form__field-label {
       color: $color-black;
+    }
+
+    &--checkbox {
+      &:has(:checked) {
+        background-color: lighten($color-brand-green-light, 5%);
+      }
+
+      &:hover,
+      &:has(:focus-visible) {
+        background-color: lighten($color-brand-green-light, 20%);
+        
+        &:has(:checked) {
+          background-color: $color-brand-green-light;
+        }
+      }
+
+      &:active {
+        &:has(:checked) {
+          background-color: darken($color-brand-green-light, 5%);
+        }
+      }
+
+      &:has(:disabled) {
+        &:has(:checked) {
+          background-color: $color-gray;
+        }
+      }
+    }
+
+    &--select {
+      &.custom-checkbox-dropdown__field-wrapper--selected {
+        background-color: lighten($color-brand-green-light, 5%);
+      }
+
+      &:has(:focus) {
+        background-color: lighten($color-brand-green-light, 20%);
+        
+        &.custom-checkbox-dropdown__field-wrapper--selected {
+          background-color: $color-brand-green-light;
+        }
+      }
+
+      &:active {
+        &.custom-checkbox-dropdown__field-wrapper--selected {
+          background-color: darken($color-brand-green-light, 5%);
+        }
+      }
+
+      &:has(:disabled) {
+        &.custom-checkbox-dropdown__field-wrapper--selected {
+          background-color: $color-gray;
+        }
+      }
     }
   }
 }

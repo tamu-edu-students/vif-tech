@@ -1,7 +1,8 @@
 import CustomCheckbox from 'Components/CustomCheckbox/CustomCheckbox';
 import CustomCheckboxDropdown from 'Components/CustomCheckboxDropdown/CustomCheckboxDropdown';
+import CustomSelect from 'Components/CustomSelect/CustomSelect';
 import React from 'react';
-import { InjectedFormProps, WrappedFieldInputProps, WrappedFieldMetaProps, WrappedFieldProps } from "redux-form";
+import { InjectedFormProps, WrappedFieldProps } from "redux-form";
 
 interface OwnProps {
 }
@@ -11,7 +12,7 @@ interface OwnState {
 }
 
 interface CustomFormProps {
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
   [key: string]: any;
 }
 
@@ -31,6 +32,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   }
 
   protected _renderSelect = ({ input, label, meta, children, ...rest }: Props) => {
+    // console.log(input, meta)
     const hasError: boolean = !rest.disabled && meta.error && meta.touched;
     return (
       <label className={`form__field form__field--select ${hasError ? "form__field--error" : ""}`}>
@@ -72,6 +74,7 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
   }
 
   protected _renderCustomCheckboxDropdown = ({ input, legend, checkboxOptions, meta, ...rest }: Props) => {
+    // console.log(meta);
     const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
     return (
       <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
@@ -82,9 +85,73 @@ class CustomForm<T, U> extends React.Component<InjectedFormProps<any, OwnProps &
           {legend}
         </legend>
         <CustomCheckboxDropdown
+          name={input.name}
+          initial={meta.initial}
           checkboxOptions={checkboxOptions}
           renderCheckbox={this._renderCustomCheckbox}
           onBlur={input.onBlur}
+          hasError={hasError}
+          {...rest}
+        />
+        {hasError && this._renderError(meta, 'focuses')}
+      </fieldset>
+    )
+  }
+
+  protected _renderCustomSelectBox = ({ input, label, meta, ...rest }: Props) => {
+    const hasError: boolean = !rest?.disabled && meta.error && meta.touched;
+    // console.log(input, meta)
+    return (
+      <label
+        className={`form__field form__field--radio ${hasError ? "form__field--error" : ""}`}
+        onMouseDown={(e) => e.preventDefault()}
+        onMouseEnter={(e) => e.currentTarget.querySelector('span')?.focus()}
+      >
+        <span
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === 'Tab') {
+              e.preventDefault();
+              e.currentTarget.parentElement?.click()
+            }
+          }
+        }
+          style={{all: 'unset'}} tabIndex={-1}>
+        </span>
+        <input style={{display: 'none'}} className={`form__element form__radio ${hasError ? "form__radio--error" : ""}`} {...input} {...rest} tabIndex={-1}
+          onChange={(e: any) => {input.onChange(e); ((e as React.ChangeEvent<HTMLInputElement>).currentTarget.closest('.custom-checkbox-dropdown')?.querySelector('.custom-checkbox-dropdown__controller') as HTMLDivElement)?.focus()}}
+        />
+        <p className='form__field-label form__field-label--checkbox'>{label}</p>
+        {/* {this._renderError(meta)} */}
+      </label>
+    );
+  }
+
+  protected _renderCustomSelectDropdown = ({ input, label, meta, children, ...rest }: Props) => {
+    const hasError: boolean = meta?.error && meta?.touched && !rest.disabled;
+
+    const parsedOptionElements = children ?
+      [children].flat(2).map((option: JSX.Element) => ({
+        label: option.props.children ?? '',
+        value: option.props.value ?? ''
+      }))
+      : [];
+      
+    return (
+      <fieldset className="form__fieldset" {...(rest.disabled ? {disabled: true} : {})}>
+        <legend
+          className="form__legend form__legend--label"
+          onClick={(e) => {(e.currentTarget.nextElementSibling?.querySelector('.custom-checkbox-dropdown__controller') as HTMLDivElement)?.focus();}}
+        >
+          {label}
+        </legend>
+        <CustomSelect
+          name={input.name}
+          initialValue={`${meta.initial ?? ''}`}
+          selectOptions={parsedOptionElements}
+          emptyValue={""}
+          renderCheckbox={this._renderCustomSelectBox}
+          onBlur={input.onBlur}
+          onFocus={input.onFocus}
           hasError={hasError}
           {...rest}
         />
