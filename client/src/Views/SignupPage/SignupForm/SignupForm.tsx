@@ -60,7 +60,9 @@ class SignupForm extends CustomForm<Props, {}> {
   }
 
   private _renderCompanyOptions(): JSX.Element[] {
-    return this.props.companies.map(({id: company_id, name}: Company) => (
+    return this.props.companies
+    .sort((company1, company2) => company1.name.toLowerCase().localeCompare(company2.name.toLowerCase()))
+    .map(({id: company_id, name}: Company) => (
       <option key={company_id} value={company_id}>{name}</option>
     ));
   }
@@ -107,33 +109,31 @@ class SignupForm extends CustomForm<Props, {}> {
           {
             this.props.usertype === Usertype.REPRESENTATIVE &&
             <>
-              <Field name="title" id="title" type="text" component={this._renderInput} label="Job title" />
-                {
-                  //TODO: add error
-                  this.props.isLoading_fetchCompanies
-                  ? <div>Loading company options...</div>
-                  : (
-                    <div className="select-container">
-                      <Field name="company_id" id="company_id" component={this._renderSelect} label="Company">
-                        <option />
-                        {this._renderCompanyOptions()}
-                      </Field>
-                    </div>
-                  )
-                }
+              <Field name="title" type="text" component={this._renderInput} label="Job title" />
+              {/*//TODO: add error*/}
+              <div className="select-container">
+                <Field
+                  name="company_id"
+                  component={this._renderCustomSelectDropdown}
+                  label="Company"
+                >
+                  <option>{`${this.props.isLoading_fetchCompanies ? 'Loading company options...' : ''}`}</option>
+                  {this._renderCompanyOptions()}
+                </Field>
+              </div>
             </>
           }
           {
             this.props.usertype === Usertype.STUDENT &&
             <>
               <div className="select-container">
-                <Field name="class_year" id="class_year" component={this._renderSelect} label="Expected graduation year">
+                <Field name="class_year" component={this._renderCustomSelectDropdown} label="Expected graduation year">
                   <option />
                   {this._renderYearOptions()}
                 </Field>
               </div>
               <div className="select-container">
-                <Field name="class_semester" id="class_semester" component={this._renderSelect} label="Expected graduation term">
+                <Field name="class_semester" id="class_semester" component={this._renderCustomSelectDropdown} label="Expected graduation term">
                   <option />
                   {this._renderSemesterOptions()}
                 </Field>
@@ -176,6 +176,8 @@ const validate = ({
   if (password !== password_confirmation) {
     errors.password_confirmation = "Passwords do not match";
   }
+
+  console.log('HELLO', company_id)
 
   if (usertype === Usertype.REPRESENTATIVE) {
     if (!company_id) {
