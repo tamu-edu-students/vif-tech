@@ -203,7 +203,7 @@ class CustomSelect extends React.Component<Props, OwnState> {
             id={`${name}__${value}`}
             component={this.props.renderCheckbox}
             type="radio"
-            label={label}
+            label={label || '\u00a0'}
             // checked={value === this.state.selected`${option.value}`}
             onChange={this._onChange}
             {...(this.props.disabled && {disabled: true})}
