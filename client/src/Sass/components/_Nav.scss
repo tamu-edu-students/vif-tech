@@ -26,7 +26,11 @@
     align-items: center;
 
     &--logo {
-      margin-right: auto;
+      // margin-right: auto;
+    }
+
+    &--push-left {
+      margin-left: auto;
     }
   }
 
@@ -38,13 +42,11 @@
   
   &__link--logo-container {
     height: 100%;
-    margin-right: auto;
     display: inline-block;
   }
 
   &__logo {
     height: 100%;
-    margin-right: auto;
   }
 
   &__link,
@@ -93,6 +95,7 @@
     &.nav__button--login,
     &.nav__button--profile {
       @include btn-solid($color-brand-green-dark);
+      margin-left: auto;
     }
 
     &.nav__button--logout {

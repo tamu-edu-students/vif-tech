@@ -39,6 +39,8 @@ class Nav extends React.Component<Props, OwnState> {
               <VifLogoWide className="nav__logo" />
             </Link>
           </li>
+          
+          
           <li className="nav__item"><Link className="nav__link" to="/companies" data-testid="companies-page-button">Companies</Link></li>
           <li className="nav__item"><Link className="nav__link" to="/faq" data-testid="faq-page-button">FAQ</Link></li>
           <li className="nav__item"><Link className="nav__link" to="/virtual-fair-schedule" data-testid="virtual-fair-schedule-page-button">Virtual Fair Schedule</Link></li>
@@ -64,14 +66,14 @@ class Nav extends React.Component<Props, OwnState> {
                   user.isAdmin &&
                   <li className="nav__item"><Link className="nav__link" to="/scheduling" data-testid="scheduling-page-button">Scheduling</Link></li>
                 }
-                <li className="nav__item"><Link className="nav__button nav__button--profile" to="/profile" data-testid="profile-page-button">Profile</Link></li>
+                <li className="nav__item nav__item--push-left"><Link className="nav__button nav__button--profile" to="/profile" data-testid="profile-page-button">Profile</Link></li>
                 <li className="nav__item"><Link className="nav__button nav__button--settings" to="/settings" data-testid="settings-page-button">Settings</Link></li>
                 <li className="nav__item"><button className="nav__button nav__button--logout" onClick={this.props.logOut} data-testid="log-out-button">Log Out</button></li>
               </>
             )
             : (
               <>
-                <li className="nav__item"><Link className="nav__button nav__button--login" to="/login" data-testid="log-in-page-button">Log In</Link></li>
+                <li className="nav__item nav__item--push-left"><Link className="nav__button nav__button--login" to="/login" data-testid="log-in-page-button">Log In</Link></li>
                 <li className="nav__item"><Link className="nav__button nav__button--register" to="/signup" data-testid="sign-up-page-button">Sign Up</Link></li>
               </>
             )
