@@ -22,7 +22,7 @@
 
 .timetable {
   //TODO: Remove
-  width:61.2rem;
+  width: 61.2rem;
 
   &--assignment {
     width: 65rem;
@@ -51,29 +51,30 @@
   }
   
   .table {
+    // width: 40rem;
+    overflow-x: auto;
+
     .table__rows {
+      // width: 61.2rem;
       color: $color-black;
       border: 2px solid $color-violet-darkest;
-      border-top: none;
+      border-left: none;
+      // border-top: none;
 
       display: flex;
       flex-direction: column;
 
       .table__row {
+        position: relative;
+
         display: grid;
 
         &--student { grid-template-columns: 16fr repeat(2, 42fr); }
-        &--volunteer{ grid-template-columns: 16fr repeat(3, 28fr); }
+        &--volunteer{ grid-template-columns: 9.8rem repeat(3, 28fr); }
         &--assignment { grid-template-columns: 16fr 84fr; }
         &--representative-fair { grid-template-columns: 1fr; }
 
         &--assignment {
-          // &:last-child {
-          //   overflow: hidden;
-          //   border-bottom-left-radius: 1rem;
-          //   border-bottom-right-radius: 1rem;
-          // }
-
           .student-select-form {
             font-size: 1.4rem;
             width: 100%;
@@ -113,6 +114,10 @@
                 background-color: darken($color-gray-lightest, 15%);
               }
             }
+
+            .table__cell--time {
+              box-shadow: 2px 0 2px darken($color-gray, 5%);
+            }
           }
   
           &:nth-child(odd) {
@@ -124,6 +129,10 @@
               }
             }
           }
+
+          .table__cell--time {
+            box-shadow: 2px 0 2px $color-gray;
+          }
         }
 
         &--header {
@@ -133,12 +142,26 @@
           padding: 1rem;
           font-family: $font-secondary;
           font-size: 1.2rem;
+          // height: 4.4rem;
           //TODO: test on Safari
           word-break: break-all;
           hyphens: auto;
 
           display: flex;
           align-items: center;
+
+          &:first-child {
+            position: sticky;
+            z-index: 1;
+            left: 0;
+            // box-shadow: 2px 0 2px darken($color-gray, 5%);
+            // border-right: 2px double $color-violet-darkest !important;
+            &.table__cell--header {
+              box-shadow: 2px 0 2px darken($color-violet-darkest, 5%);
+              background-color: $color-violet-darkest;
+              color: $color-white;
+            }
+          }
 
           &:not(:last-child):not(.table__cell--time) {
             border-right: 1px solid $color-violet-darkest;
@@ -166,6 +189,7 @@
           &--header  {
             font-size: 1.8rem;
             font-weight: 700;
+            // background-color: lighten($color-violet-darkest, 15%);
             background-color: $color-violet-darkest;
             color: $color-white;
 
