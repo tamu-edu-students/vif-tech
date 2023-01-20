@@ -91,7 +91,7 @@ class AssignmentTimetable extends React.Component<Props, OwnState> {
               <div className="table__rows">
 
                 <div className="table__row table__row--assignment table__row--header">
-                  <div className="table__cell table__cell--header">Time</div>
+                  <div className="table__cell table__cell--header table__cell--time">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                 </div>
 

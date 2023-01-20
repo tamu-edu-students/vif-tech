@@ -10,6 +10,7 @@ import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
 import StudentTimetableRow from './StudentTimetableRow/StudentTimetableRow';
+import RegistrationControls from '../RegistrationControls/RegistrationControls';
 
 
 interface OwnProps {
@@ -43,9 +44,6 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   return {
     event,
     isAttendingEvent,
-    registrationIsOpen: event?.registrationIsOpen,
-    isPreRegistration: event?.isPreRegistration,
-    isPostRegistration: event?.isPostRegistration,
     users: state.userData.users,
     meetings: state.auth.user?.findInvitedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
@@ -133,9 +131,6 @@ class StudentTimetable extends React.Component<Props, OwnState> {
     const {
       event,
       isAttendingEvent,
-      registrationIsOpen,
-      isPreRegistration,
-      isPostRegistration,
     } = this.props;
 
     if (this.props.errors.length > 0) {
@@ -153,30 +148,12 @@ class StudentTimetable extends React.Component<Props, OwnState> {
 
     return (
       <div className="student-timetable timetable timetable--student">
-        <h2 className="heading-secondary">{`Student ${event?.title} Timetable`}</h2>
-        {
-          registrationIsOpen &&
-            <button
-              onClick={() => isAttendingEvent
-                ? this.props.deleteEventSignup(event?.id ?? -1)
-                : this.props.createEventSignup(event?.id ?? -1)}
-            >
-              {`${isAttendingEvent ? 'Unr' : 'R'}egister for ${event?.title}`}
-            </button>
-        }
-        {
-          isPreRegistration &&
-          <p>Registration is currently not yet open. No registration changes can be made at this time.</p>
-        }
-        {
-          isPostRegistration &&
-          <p>Registration is currently closed. No registration changes can be made at this time.</p>
-        }
+        {/* <h2 className="heading-secondary">{`Student ${event?.title} Timetable`}</h2> */}
+        <RegistrationControls
+          event={event as Event}
+          isAttendingEvent={isAttendingEvent}
 
-        {
-          !isAttendingEvent && isPostRegistration &&
-          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
-        }
+        />
 
         {
           isAttendingEvent &&
@@ -185,7 +162,7 @@ class StudentTimetable extends React.Component<Props, OwnState> {
               <div className="table__rows">
 
                 <div className="table__row table__row--student table__row--header">
-                  <div className="table__cell table__cell--header">Time</div>
+                  <div className="table__cell table__cell--header table__cell--time">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                   <div className="table__cell table__cell--header">Email</div>
                 </div>
