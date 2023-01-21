@@ -27,7 +27,8 @@ body {
   background-color: $color-brand-green;
   color: $color-black;
 }
-// TODO: Remove temporary stylings
+//TODO: Remove temporary stylings
+//TODO: Add error styling
 // .error {
 //   color: $color-brand-red-light;
 // }
@@ -37,52 +38,8 @@ button {
 fieldset {
   border: none;
 }
-form {
-  // width: 30rem;
-  // display: flex;
-  // flex-direction: column;
-  // gap: 1.5rem;
-  // align-items: flex-start;
-  // .field {
-  //   width: 100%;
-  //   label {
-  //     width: 100%;
-  //   }
-  // }
-  // input:not([type="radio"]) {
-  //   width: 100%;
-  // }
-  
-  // // .select-container {
-  // //   width: 100%;
-  // // }
-  // select {
-  //   width: 100%;
-  // }
-  // fieldset {
-  //   display: flex;
-  //   flex-direction: column;
-  //   gap: 0.5rem;
-  //   label {
-  //     display: flex;
-  //     flex-direction: row-reverse;
-  //     justify-content: flex-end;
-  //     gap: 0.5rem;
-  //   }
-  // }
-  // label {
-  //   p {
-  //     font-size: 1.1rem;
-  //     margin-right: 1rem;
-  //   }
-  // }
-}
 a {
-  &:visited,
-  &:link {
-    text-decoration: none;
-    color: #99ffff;
-  }
+  text-decoration: none;
 }
 .FAQs {
   display: flex;
