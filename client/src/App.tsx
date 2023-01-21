@@ -9,7 +9,6 @@ import history from 'History/history';
 
 import { waitThen } from 'Shared/utils';
 
-import Nav from 'Components/Nav/Nav';
 import FAQPage from 'Views/FAQPage/FAQPage';
 import HomePage from 'Views/HomePage/HomePage';
 import LoginPage from 'Views/LoginPage/LoginPage';
@@ -28,6 +27,7 @@ import Modal from 'Components/Modal/Modal';
 
 import './Sass/main.scss';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import Masthead from 'Components/Masthead/Masthead';
 
 
 interface OwnProps {
@@ -76,9 +76,8 @@ class App extends React.Component<Props, {}> {
     return (
       <div className="app">
         <Router history={history}>
-          <Nav
+          <Masthead
             {...(this.props.user ? {user: this.props.user} : {})}
-            isLoggedIn={this.props.isLoggedIn}
           />
 
           <main className="main">
