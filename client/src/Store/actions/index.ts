@@ -471,7 +471,7 @@ export const updateMeeting = (meetingId: number, newInviteeId: number) => async 
     dispatch({ type: meetingActionTypes.UPDATE_MEETING__SUCCESS, payload: { id: meetingId, newInviteeId } });
   })
   .catch((response) => {
-    console.log('response_fetchMeetings:', response);
+    console.log('response_updateMeeting:', response);
     dispatch({ type: meetingActionTypes.UPDATE_MEETING__FAILURE, payload: {error: 'ERROR: Failed to save meeting assignment'} });
   });
 }

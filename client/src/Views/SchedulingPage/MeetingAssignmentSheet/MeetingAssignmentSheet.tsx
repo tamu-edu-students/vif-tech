@@ -81,6 +81,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
     errors: createErrorMessageSelector([
       eventActionTypes.FETCH_EVENTS,
       meetingActionTypes.FETCH_MEETINGS,
+      meetingActionTypes.UPDATE_MEETING, //TODO: Handle special case of update failures
       eventSignupActionTypes.FETCH_EVENT_SIGNUPS,
       userActionTypes.FETCH_USERS,
       focusActionTypes.FETCH_FOCUSES,
@@ -194,19 +195,21 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
     if (this.props.errors.length > 0) {
       this.props.errors.forEach((error: string) => console.error(error));
       return (
-        <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} assignment sheet`}</div>
+        <div className="meeting-assignment-sheet">
+          <div className="error">{`Failed to load${event?.title ? ` ${event.title}` : ''} assignment sheet`}</div>
+        </div>
       );
     }
 
     if (this.props.isLoading) {
       return (
-        <div>{`Loading Meeting Assignment Sheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
+        <div className="meeting-assignment-sheet">{`Loading Meeting Assignment Sheet${event?.title ? ` for ${event.title}` : ''}...`}</div>
       );
     }
 
     if (this.state.isLoading) {
       return (
-        <div>Saving changes...</div>
+        <div className="meeting-assignment-sheet">Saving changes...</div>
       );
     }
 
@@ -224,7 +227,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
             {this._renderTimetables(volunteerAttendees ?? [])}
           </div>
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+          <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
         </div>
       </OptionsContext.Provider>
     )

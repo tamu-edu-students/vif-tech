@@ -14,89 +14,60 @@
   }
 }
 
-.timetables {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
 .timetable {
   //TODO: Remove
-  width:61.2rem;
+  width: 60rem;
 
-  &--assignment {
-    width: 65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 
-    & > .heading-secondary {
+  &__registration-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__message {
+    text-align: center;
+    line-height: 1.4;
+
+    &.timetable__message--dark {
       background-color: $color-violet-darkest;
-      color: $color-white;
-      font-size: 1.8rem;
-      // border-top-left-radius: 1rem;
-      // border-top-right-radius: 1rem;
-      font-weight: 500;
-      font-style: italic;
-      padding: 1rem 2.6rem;
-      width: max-content;
-    }
-  
-    & > details,
-    & > .title {
-      background-color: $color-violet-darkest;
-      color: $color-white;
-      font-size: 1.2rem;
-      padding: 0.5rem 2.6rem;
-      // border-top-right-radius: 1rem;
-      border-bottom: 1px dotted $color-gray;
+      padding: 0.5rem 1rem;
     }
   }
   
   .table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &.table--representative-fair {
+      width: min-content;
+    }
+
     .table__rows {
       color: $color-black;
       border: 2px solid $color-violet-darkest;
-      border-top: none;
+      width: 100%;
+      overflow-x: auto;
 
       display: flex;
       flex-direction: column;
 
       .table__row {
+        position: relative;
+
         display: grid;
 
-        &--student { grid-template-columns: 16fr repeat(2, 42fr); }
-        &--volunteer{ grid-template-columns: 16fr repeat(3, 28fr); }
-        &--assignment { grid-template-columns: 16fr 84fr; }
+        &--student { grid-template-columns: 9.8rem repeat(2, 42fr); }
+        &--volunteer{ grid-template-columns: 9.8rem repeat(3, 28fr); }
+        &--assignment { grid-template-columns: 9.8rem 84fr; }
         &--representative-fair { grid-template-columns: 1fr; }
-
-        &--assignment {
-          // &:last-child {
-          //   overflow: hidden;
-          //   border-bottom-left-radius: 1rem;
-          //   border-bottom-right-radius: 1rem;
-          // }
-
-          .student-select-form {
-            font-size: 1.4rem;
-            width: 100%;
-            border: none;
-            padding: 1rem;
-            cursor: pointer;
-
-            &--unassigned {
-              font-style: italic;
-
-              //TODO: Prevent this select style from impacting option style
-            }
-
-            &__option--unassigned {
-              font-style: italic;
-            }
-          }
-
-          .student-focuses {
-            padding: 0 1rem 1rem 1.4rem;
-            font-size: 1.2rem
-          }
-        }
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
@@ -113,6 +84,10 @@
                 background-color: darken($color-gray-lightest, 15%);
               }
             }
+
+            .table__cell--time {
+              box-shadow: 2px 0 2px darken($color-gray, 5%);
+            }
           }
   
           &:nth-child(odd) {
@@ -124,6 +99,10 @@
               }
             }
           }
+
+          .table__cell--time {
+            box-shadow: 2px 0 2px $color-gray;
+          }
         }
 
         &--header {
@@ -132,10 +111,10 @@
         .table__cell {
           padding: 1rem;
           font-family: $font-secondary;
-          font-size: 1.2rem;
+          // height: 4.4rem;
+          min-width: 17rem;
           //TODO: test on Safari
-          word-break: break-all;
-          hyphens: auto;
+          @include word-break;
 
           display: flex;
           align-items: center;
@@ -146,9 +125,22 @@
 
           &--time {
             padding: 0;
-            // display: flex;
-            // justify-content: center;
-            // align-items: center;
+            position: sticky;
+            z-index: 1;
+            left: 0;
+            min-width: unset;
+            width: 9.8rem;
+            // box-shadow: 2px 0 2px darken($color-gray, 5%);
+            // border-right: 2px double $color-violet-darkest !important;
+            &.table__cell--header {
+              box-shadow: 2px 0 2px darken($color-violet-darkest, 5%);
+              background-color: $color-violet-darkest;
+              color: $color-white;
+            }
+          }
+
+          &--stretch {
+            width: 100%;
           }
 
           &--name {
@@ -166,6 +158,7 @@
           &--header  {
             font-size: 1.8rem;
             font-weight: 700;
+            // background-color: lighten($color-violet-darkest, 15%);
             background-color: $color-violet-darkest;
             color: $color-white;
 

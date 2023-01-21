@@ -1,9 +1,8 @@
-.my-events-page {
+.scheduling-page {
   &__nav {
   }
 
   &__subpage {
     @include subpage;
-    width: 75rem;
   }
 }

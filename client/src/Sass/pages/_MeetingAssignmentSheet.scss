@@ -1,0 +1,85 @@
+.meeting-assignment-sheet {
+  width: 60rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .timetables {
+    margin-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+
+    .assignment-timetable {
+      &__heading {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+
+        .assignment-timetable__name {
+          color: $color-white;
+          font-size: 3.6rem;
+          font-weight: 700;
+        }
+
+        .assignment-timetable__job-title {
+          font-size: 2.4rem;
+        }
+
+        .assignment-timetable__focuses {
+          width: 100%;
+          color: $color-white;
+          
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          &-heading {
+            font-size: 2rem;
+            border-bottom: 1px solid currentColor;
+            padding-bottom: 0.2rem;
+            list-style: none;
+          }
+
+          p {
+            text-align: center;
+            margin-top: 0.5rem;
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
+
+    .table__row {
+      .student-select-form {
+        font-size: 1.4rem;
+        width: 100%;
+        border: none;
+        padding: 1rem;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 500;
+
+        &--unassigned {
+          font-style: italic;
+
+          //TODO: Prevent this select style from impacting option style
+        }
+
+        &__option--unassigned {
+          font-style: italic;
+        }
+      }
+
+      .student-focuses {
+        padding: 0 1rem 1rem 1.4rem;
+        font-size: 1.3rem;
+        white-space: pre-wrap;
+      }
+    }
+  }
+}

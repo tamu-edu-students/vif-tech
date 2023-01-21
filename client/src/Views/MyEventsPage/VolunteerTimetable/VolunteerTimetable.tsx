@@ -10,6 +10,7 @@ import Meeting from 'Shared/entityClasses/Meeting';
 import User from 'Shared/entityClasses/User';
 
 import VolunteerTimetableRow from './VolunteerTimetableRow/VolunteerTimetableRow';
+import RegistrationControls from '../RegistrationControls/RegistrationControls';
 
 
 interface OwnProps {
@@ -44,9 +45,6 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
   return {
     event,
-    registrationIsOpen: event?.registrationIsOpen,
-    isPreRegistration: event?.isPreRegistration,
-    isPostRegistration: event?.isPostRegistration,
     isAttendingEvent,
     users: state.userData.users,
     meetings: state.auth.user?.findOwnedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
@@ -142,7 +140,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
             meeting={meeting}
             assignee={assignee}
             setReaction={this._setReaction}
-            registrationIsOpen={this.props.registrationIsOpen}
+            registrationIsOpen={this.props.event?.registrationIsOpen}
           />
         </React.Fragment>
       );
@@ -153,9 +151,6 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
     const {
       event,
       isAttendingEvent,
-      registrationIsOpen,
-      isPreRegistration,
-      isPostRegistration,
     } = this.props;
 
     if (this.props.errors.length > 0) {
@@ -179,31 +174,12 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
 
     return (
       <div className="volunteer-timetable timetable timetable--volunteer">
-        <h2 className="heading-secondary">{`Volunteer ${event?.title} Timetable`}</h2>
+        {/* <h2 className="heading-secondary">{`Volunteer ${event?.title} Timetable`}</h2> */}
 
-        {
-          registrationIsOpen &&
-            <button
-              onClick={() => isAttendingEvent
-                ? this.props.deleteEventSignup(event?.id ?? -1)
-                : this.props.createEventSignup(event?.id ?? -1)}
-            >
-              {`${isAttendingEvent ? 'Unr' : 'R'}egister for ${event?.title}`}
-            </button>
-        }
-        {
-          isPreRegistration &&
-          <p>Registration is currently not yet open. No registration changes or timeslot modifications can be made at this time.</p>
-        }
-        {
-          isPostRegistration &&
-          <p>Registration is currently closed. No registration changes or timeslot modifications can be made at this time.</p>
-        }
-
-        {
-          !isAttendingEvent && isPostRegistration &&
-          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
-        }
+        <RegistrationControls
+          event={event as Event}
+          isAttendingEvent={isAttendingEvent}
+        />
 
         {
           isAttendingEvent &&
@@ -212,7 +188,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
               <div className="table__rows">
 
                 <div className="table__row table__row--volunteer table__row--header">
-                  <div className="table__cell table__cell--header">Time</div>
+                  <div className="table__cell table__cell--header table__cell--time">Time</div>
                   <div className="table__cell table__cell--header">Name</div>
                   <div className="table__cell table__cell--header">Portfolio</div>
                   <div className="table__cell table__cell--header">Resume</div>
@@ -223,8 +199,8 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
               </div>
             </div>
             {
-              registrationIsOpen && 
-              <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+              event?.registrationIsOpen && 
+              <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
             }
           </>
         }

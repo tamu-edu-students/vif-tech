@@ -79,13 +79,13 @@ class SchedulingPage extends React.Component<Props, OwnState> {
     const { parentPath } = this.props;
 
     return (
-      <div className="my-events-page">
+      <div className="scheduling-page">
         <h1 className="heading-primary">Scheduling</h1>
 
-        <div className='my-events-page__subpage'>
+        <div className='scheduling-page__subpage'>
           <Switch>
             <Route path={parentPath} render={(routeProps: any) => (
-                <SubNav className='my-events-page__nav' {...routeProps}>
+                <SubNav className='scheduling-page__nav' {...routeProps}>
                   {this._renderLinks()}
                 </SubNav>
               )}
