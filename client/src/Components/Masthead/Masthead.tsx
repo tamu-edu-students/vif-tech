@@ -16,7 +16,7 @@ interface OwnState {
 }
 
 class Masthead extends React.Component<Props, OwnState> {
-  state = { isSmallWidth: window.matchMedia('(min-width: 1240px)').matches };
+  state = { isSmallWidth: window.matchMedia('(max-width: 1240px)').matches };
 
   public componentDidMount(): void {
     window.matchMedia('(max-width: 1240px)').addEventListener('change', this._setMediaState);
