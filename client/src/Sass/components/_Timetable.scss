@@ -46,6 +46,10 @@
     flex-direction: column;
     align-items: flex-start;
 
+    &.table--representative-fair {
+      width: min-content;
+    }
+
     .table__rows {
       color: $color-black;
       border: 2px solid $color-violet-darkest;
@@ -133,6 +137,10 @@
               background-color: $color-violet-darkest;
               color: $color-white;
             }
+          }
+
+          &--stretch {
+            width: 100%;
           }
 
           &--name {

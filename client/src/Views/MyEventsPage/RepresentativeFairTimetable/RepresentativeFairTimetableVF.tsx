@@ -9,6 +9,7 @@ import Event from 'Shared/entityClasses/Event';
 import Meeting from 'Shared/entityClasses/Meeting';
 
 import RepresentativeFairTimetableRow from './RepresentativeFairTimetableRow/RepresentativeFairTimetableRow';
+import RegistrationControls from '../RegistrationControls/RegistrationControls';
 
 
 interface OwnProps {
@@ -40,9 +41,6 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
   return {
     event,
-    registrationIsOpen: event?.registrationIsOpen,
-    isPreRegistration: event?.isPreRegistration,
-    isPostRegistration: event?.isPostRegistration,
     isAttendingEvent,
     meetings: state.auth.user?.findOwnedMeetings(event?.findMeetings(state.meetingData.meetings) ?? []) ?? [],
 
@@ -124,7 +122,7 @@ class RepresentativeFairTimetable extends React.Component<Props, OwnState> {
             event_id={event?.id}
             meeting={meeting}
             setReaction={this._setReaction}
-            registrationIsOpen={this.props.registrationIsOpen}
+            registrationIsOpen={event?.registrationIsOpen}
           />
         </React.Fragment>
       );
@@ -135,9 +133,6 @@ class RepresentativeFairTimetable extends React.Component<Props, OwnState> {
     const {
       event,
       isAttendingEvent,
-      registrationIsOpen,
-      isPreRegistration,
-      isPostRegistration,
     } = this.props;
 
     if (this.props.isLoading) {
@@ -161,36 +156,17 @@ class RepresentativeFairTimetable extends React.Component<Props, OwnState> {
 
     return (
       <div className="representative-fair-timetable timetable timetable--representative-fair">
-        <h2 className="heading-secondary">Representative Fair Timetable</h2>
+        {/* <h2 className="heading-secondary">Representative Fair Timetable</h2> */}
 
-        {
-          registrationIsOpen &&
-            <button
-              onClick={() => isAttendingEvent
-                ? this.props.deleteEventSignup(event?.id ?? -1)
-                : this.props.createEventSignup(event?.id ?? -1)}
-            >
-              {`${isAttendingEvent ? 'Unr' : 'R'}egister for ${event?.title}`}
-            </button>
-        }
-        {
-          isPreRegistration &&
-          <p>Registration is currently not yet open. No registration changes or timeslot modifications can be made at this time.</p>
-        }
-        {
-          isPostRegistration &&
-          <p>Registration is currently closed. No registration changes or timeslot modifications can be made at this time.</p>
-        }
-
-        {
-          !isAttendingEvent && isPostRegistration &&
-          <div>{`Timetable not available. ${registrationIsOpen ? 'Please register for this event!' : 'You did not register for this event!'}`}</div>
-        }
+        <RegistrationControls
+          event={event as Event}
+          isAttendingEvent={isAttendingEvent}
+        />
 
         {
           isAttendingEvent &&
           <>
-            <div className="table">
+            <div className="table table--representative-fair">
               <div className="table__rows">
 
                 <div className="table__row table__row--representative-fair table__row--header">
@@ -202,8 +178,8 @@ class RepresentativeFairTimetable extends React.Component<Props, OwnState> {
               </div>
             </div>
             {
-              registrationIsOpen && 
-              <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+              event?.registrationIsOpen && 
+              <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
             }
           </>
         }

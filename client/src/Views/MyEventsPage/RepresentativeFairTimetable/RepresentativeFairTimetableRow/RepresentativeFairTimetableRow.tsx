@@ -145,7 +145,7 @@ class RepresentativeFairTimetableRow extends React.Component<Props, OwnState> {
 
     return (
       <div className="representative-fair-timetable-row table__row table__row--representative-fair">
-        <div className="table__cell table__cell--time">
+        <div className="table__cell table__cell--time table__cell--stretch">
           <TimetableRowButton
             onClick={this._handleClick}
             disabled={!registrationIsOpen}
