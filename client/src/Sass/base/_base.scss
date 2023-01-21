@@ -5,6 +5,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
   font-size: 62.5%;
   transition: 0.05s;
@@ -12,7 +13,9 @@ html {
     font-size: 55%;
   }
 }
+
 body {
+  position: relative;
   background-color: $color-violet-darkest;
   font-family: $font-secondary;
   color: $color-white;
@@ -23,6 +26,7 @@ body {
     overflow-y: hidden;
   }
 }
+
 ::selection {
   background-color: $color-brand-green;
   color: $color-black;
@@ -34,13 +38,17 @@ body {
 // }
 button {
   border: none;
+  background-color: unset;
 }
+
 fieldset {
   border: none;
 }
+
 a {
   text-decoration: none;
 }
+
 .FAQs {
   display: flex;
   flex-direction: column;
@@ -99,6 +107,7 @@ a {
     margin-right: 1rem;
   } 
 }
+
 .editor-wrapper {
   border: 1px solid white;
 }

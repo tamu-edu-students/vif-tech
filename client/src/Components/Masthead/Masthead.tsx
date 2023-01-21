@@ -6,6 +6,7 @@ import User from 'Shared/entityClasses/User';
 import { VifLogoWide } from 'Components/iconComponents';
 import { VifLogoMark } from 'Components/iconComponents';
 import Nav from 'Components/Nav/Nav';
+import Hamburger from './Hamburger/Hamburger';
 
 interface Props {
   user?: User;
@@ -35,7 +36,7 @@ class Masthead extends React.Component<Props, OwnState> {
 
     return (
       <header className="masthead">
-        <Link to="/" className="masthead__logo-container masthead__logo-container">
+        <Link to="/" className={`masthead__logo-container ${ isSmallWidth ? 'masthead__logo-container--push-right' : ''}`}>
           {!isSmallWidth && <VifLogoWide className="masthead__logo masthead__logo-wide" /> }
           {isSmallWidth && <VifLogoMark className="masthead__logo masthead__logo-mark" /> }
         </Link>
@@ -43,6 +44,11 @@ class Masthead extends React.Component<Props, OwnState> {
         {
           !isSmallWidth &&
           <Nav user={this.props.user} />
+        }
+
+        {
+          isSmallWidth &&
+          <Hamburger />
         }
       </header>
     );

@@ -1,0 +1,19 @@
+.hamburger {
+  &__button {
+    height: 3rem;
+    width: 4rem;
+    cursor: pointer;
+    color: inherit;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__bar {
+    width: 100%;
+    height: 4px;
+    background-color: currentColor;
+    margin-left: auto;
+  }
+}
