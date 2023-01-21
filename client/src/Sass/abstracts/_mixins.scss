@@ -20,3 +20,11 @@
   display: flex;
   justify-content: center;
 }
+
+@mixin word-break {
+  word-break: break-all;
+  @supports(hyphens: auto) {
+    hyphens: auto;
+    word-break: unset;
+  }
+}
