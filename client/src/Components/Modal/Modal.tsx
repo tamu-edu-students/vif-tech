@@ -11,6 +11,7 @@ interface OwnProps {
 const mapStateToProps = (state: IRootState) => {
   return {
     children: state.modal.children,
+    ...(state.modal.handlers),
   };
 }
 const mapDispatchToProps = { hideModal };
@@ -22,6 +23,7 @@ class Modal extends React.Component<Props, {}> {
   public componentDidMount(): void {
     window.addEventListener('keydown', this._handleEscape);
     document.querySelector('body')?.classList.add('body--modal-open');
+    this.props.onShow?.();
   }
 
   public componentWillUnmount(): void {
@@ -29,17 +31,18 @@ class Modal extends React.Component<Props, {}> {
     document.querySelector('body')?.classList.remove('body--modal-open');
   }
 
+  private _onDismiss(): void {
+    this.props.hideModal();
+    this.props.onDismiss?.();
+  }
+
   private _handleEscape = (ev: KeyboardEvent): void => {
     if (ev.key === "Escape") { this._onDismiss() }
   }
 
-  private _onDismiss(): void {
-    this.props.hideModal();
-  }
-
   public render(): React.ReactElement<Props> {
     return ReactDOM.createPortal(
-      <div className="Modal">
+      <div className="modal">
         {this.props.children}
       </div>,
       document.querySelector('#modal') as Element | DocumentFragment
