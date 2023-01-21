@@ -26,7 +26,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
   const focusString: string = volunteer
     .findFocuses(state.focusData.focuses, state.userFocusData.userFocuses)
     .map((focus: Focus) => focus.name)
-    .join(' | ');
+    .join(',   ');
 
   return {
     meetings,
@@ -45,7 +45,7 @@ class AssignmentTimetable extends React.Component<Props, OwnState> {
   public componentDidUpdate(): void {
   }
 
-  private _renderTimeOptions(timeSlots: any[]): JSX.Element[] {
+  private _renderTimeOptions(): JSX.Element[] {
     const { meetings, event } = this.props;
     return meetings
     .sort((a: Meeting, b: Meeting) => a.start_time.toLowerCase().localeCompare(b.start_time.toLowerCase()))
@@ -73,17 +73,20 @@ class AssignmentTimetable extends React.Component<Props, OwnState> {
 
     return (
       <div className="assignment-timetable timetable timetable--assignment">
-        <h2 className='heading-secondary'>{volunteer.firstname} {volunteer.lastname}</h2>
-        {
-          focusString &&
-          <details className="focuses" open>
-            <summary>Specialties</summary>
-            {focusString}
-          </details>
-        }
-        {
-          title && <div className="title">Title: {title}</div>
-        }
+        <div className="assignment-timetable__heading">
+          <h2 className='assignment-timetable__name'>{volunteer.firstname} {volunteer.lastname}</h2>
+          {
+            focusString &&
+            <div className="assignment-timetable__focuses">
+              <div className="assignment-timetable__focuses-heading">Specialties</div>
+              <p>{focusString}</p>
+            </div>
+          }
+          {
+            title && <div className="assignment-timetable__job-title">{title}</div>
+          }
+        </div>
+
         {
           //TODO: handle case where volunteer/rep has 0 availabile slots
           <>
@@ -95,7 +98,7 @@ class AssignmentTimetable extends React.Component<Props, OwnState> {
                   <div className="table__cell table__cell--header">Name</div>
                 </div>
 
-                {event && this._renderTimeOptions(event.createTimeSlots(20, 5))}
+                {event && this._renderTimeOptions()}
 
               </div>
             </div>

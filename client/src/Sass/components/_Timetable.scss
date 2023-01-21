@@ -14,46 +14,14 @@
   }
 }
 
-.timetables {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
 .timetable {
   //TODO: Remove
-  width: 61.2rem;
+  width: 60rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-
-  &--assignment {
-    width: 65rem;
-
-    & > .heading-secondary {
-      background-color: $color-violet-darkest;
-      color: $color-white;
-      font-size: 1.8rem;
-      // border-top-left-radius: 1rem;
-      // border-top-right-radius: 1rem;
-      font-weight: 500;
-      font-style: italic;
-      padding: 1rem 2.6rem;
-      width: max-content;
-    }
-  
-    & > details,
-    & > .title {
-      background-color: $color-violet-darkest;
-      color: $color-white;
-      font-size: 1.2rem;
-      padding: 0.5rem 2.6rem;
-      // border-top-right-radius: 1rem;
-      border-bottom: 1px dotted $color-gray;
-    }
-  }
 
   &__registration-controls {
     display: flex;
@@ -73,20 +41,16 @@
   }
   
   .table {
-    width: 60rem;
-    // overflow-x: auto;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 
     .table__rows {
-      // width: 61.2rem;
       color: $color-black;
       border: 2px solid $color-violet-darkest;
-      // border-left: none;
       width: 100%;
       overflow-x: auto;
-      // border-top: none;
 
       display: flex;
       flex-direction: column;
@@ -100,31 +64,6 @@
         &--volunteer{ grid-template-columns: 9.8rem repeat(3, 28fr); }
         &--assignment { grid-template-columns: 9.8rem 84fr; }
         &--representative-fair { grid-template-columns: 1fr; }
-
-        &--assignment {
-          .student-select-form {
-            font-size: 1.4rem;
-            width: 100%;
-            border: none;
-            padding: 1rem;
-            cursor: pointer;
-
-            &--unassigned {
-              font-style: italic;
-
-              //TODO: Prevent this select style from impacting option style
-            }
-
-            &__option--unassigned {
-              font-style: italic;
-            }
-          }
-
-          .student-focuses {
-            padding: 0 1rem 1rem 1.4rem;
-            font-size: 1.2rem
-          }
-        }
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
@@ -168,12 +107,10 @@
         .table__cell {
           padding: 1rem;
           font-family: $font-secondary;
-          font-size: 1.2rem;
           // height: 4.4rem;
           min-width: 17rem;
           //TODO: test on Safari
-          word-break: break-all;
-          hyphens: auto;
+          @include word-break;
 
           display: flex;
           align-items: center;

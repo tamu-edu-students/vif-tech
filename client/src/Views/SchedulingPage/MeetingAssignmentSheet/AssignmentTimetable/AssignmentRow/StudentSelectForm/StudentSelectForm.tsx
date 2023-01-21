@@ -79,7 +79,7 @@ class StudentSelectForm extends React.Component<Props, OwnState> {
     const focusString: string = this.state.student
       ? (this.state.student as User).findFocuses(focuses, userFocuses)
         .map((focus: Focus) => focus.name)
-        .join(' | ')
+        .join(',   ')
       : '';
 
     return (

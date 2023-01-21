@@ -224,7 +224,7 @@ class MeetingAssignmentSheet extends React.Component<Props, OwnState> {
             {this._renderTimetables(volunteerAttendees ?? [])}
           </div>
 
-          <button onClick={() => this._onSaveChanges()}>Save Changes</button>
+          <button className="btn-wire btn-wire--small" onClick={() => this._onSaveChanges()}>Save Changes</button>
         </div>
       </OptionsContext.Provider>
     )
