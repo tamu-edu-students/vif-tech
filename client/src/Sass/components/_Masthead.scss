@@ -1,5 +1,10 @@
 .masthead {
-  padding: 1.485rem 1.8rem;
+  position: sticky;
+  z-index: 1000;
+  background-color: rgba($color-violet-darkest, .97);
+  box-shadow: 0 0.2rem 1rem rgba($color-black, 0.7);
+  top: 0;
+  padding: 1.485rem 2rem;
 
   display: flex;
   align-items: center;

@@ -3,14 +3,13 @@
   color: white;
   height: 100%;
   flex: 1;
-  overflow-y: auto;
 
   display: flex;
   align-items: center;
 
   @media screen and (max-width: 1240px) {
     align-items: unset;
-    padding: 4rem;
+    // padding: 4rem;
   }
 
   &__list {
@@ -60,20 +59,12 @@
   }
 
   &__link {
-    $hover-color: $color-brand-green-light;
-
     &:link,
     &:visited {
       color: $color-white;
     }
 
-    &:hover {
-      color: lighten($hover-color, 10%);
-    }
-
-    &:active {
-      color: darken($hover-color, 5%);
-    }
+    @include nav-item-hover($color-brand-green-light);
   }
 
   &__button {

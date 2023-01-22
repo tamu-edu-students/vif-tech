@@ -29,3 +29,13 @@
     word-break: unset;
   }
 }
+
+@mixin nav-item-hover($hover-color) {
+  &:hover {
+    color: lighten($hover-color, 10%);
+  }
+
+  &:active {
+    color: darken($hover-color, 5%);
+  }
+}
