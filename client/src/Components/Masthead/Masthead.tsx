@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
+import { IRootState } from 'Store/reducers';
 import { showModal, hideModal } from 'Store/actions';
 
 import User from 'Shared/entityClasses/User';
@@ -19,7 +20,9 @@ interface OwnState {
   modalNavIsOpen: boolean;
 }
 
-const mapStateToProps = null;
+const mapStateToProps = (state: IRootState) => {
+  return { modalIsShowing: state.modal.shouldRender };
+};
 const mapDispatchToProps = { showModal, hideModal };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -75,7 +78,7 @@ class Masthead extends React.Component<Props, OwnState> {
         }
 
         {
-          isSmallWidth &&
+          (isSmallWidth && !this.props.modalIsShowing) &&
           <Hamburger
             onClick={this._renderModalNav}
           />
