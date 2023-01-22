@@ -12,6 +12,7 @@ html {
   @media only screen and (max-width: 525px) {
     font-size: 55%;
   }
+  // background-color: black;
 }
 
 body {
@@ -19,12 +20,14 @@ body {
   background-color: $color-violet-darkest;
   font-family: $font-secondary;
   color: $color-white;
-  width: 100%;
   font-size: 1.4rem;
+  overflow-x: hidden;
   &.body--modal-open {
     height: 100vh;
-    overflow-y: hidden;
+    overflow: hidden;
   }
+  // max-width: 1366px;
+  // margin: 0 auto;
 }
 
 ::selection {
