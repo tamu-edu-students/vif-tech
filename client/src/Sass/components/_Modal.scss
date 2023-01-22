@@ -1,13 +1,41 @@
-.Modal {
+.modal {
   position: fixed;
   top: 0;
+  right: 0;
   left: 0;
-  min-height: 100vh;
-  width: 100%;
-  background-color: rgba($color-black, 0.6);
-  backdrop-filter: blur(2px);
+  bottom: 0;
+  z-index: 2000;
+  background-color: rgba($color-black, 0.7);
+  backdrop-filter: blur(3px);
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__close-button {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    height: 2rem;
+    width: 2rem;
+    $color: $color-brand-red-light;
+    color: $color;
+    cursor: pointer;
+    transition: color 0.1s;
+
+    display: grid;
+    place-content: center;
+
+    &:hover {
+      color: $color-brand-red;
+    }
+    &:active {
+      color: darken($color-brand-red, 10%);
+    }
+  }
+
+  &__close-button-icon {
+    fill: currentColor;
+    width: 100%;
+  }
 }

@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect, ConnectedProps } from 'react-redux';
-
-import { hideModal } from 'Store/actions'
 import { IRootState } from 'Store/reducers';
+import { hideModal } from 'Store/actions'
+import FocusTrap from 'focus-trap-react';
+
+import { XSign } from 'Components/iconComponents';
 
 interface OwnProps {
 }
@@ -11,6 +13,8 @@ interface OwnProps {
 const mapStateToProps = (state: IRootState) => {
   return {
     children: state.modal.children,
+    shouldRender: state.modal.shouldRender,
+    ...(state.modal.handlers),
   };
 }
 const mapDispatchToProps = { hideModal };
@@ -22,6 +26,7 @@ class Modal extends React.Component<Props, {}> {
   public componentDidMount(): void {
     window.addEventListener('keydown', this._handleEscape);
     document.querySelector('body')?.classList.add('body--modal-open');
+    this.props.onShow?.();
   }
 
   public componentWillUnmount(): void {
@@ -29,19 +34,25 @@ class Modal extends React.Component<Props, {}> {
     document.querySelector('body')?.classList.remove('body--modal-open');
   }
 
+  private _onDismiss = (): void => {
+    this.props.hideModal();
+    this.props.onDismiss?.();
+  }
+
   private _handleEscape = (ev: KeyboardEvent): void => {
     if (ev.key === "Escape") { this._onDismiss() }
   }
 
-  private _onDismiss(): void {
-    this.props.hideModal();
-  }
-
   public render(): React.ReactElement<Props> {
     return ReactDOM.createPortal(
-      <div className="Modal">
-        {this.props.children}
-      </div>,
+        <FocusTrap active={this.props.shouldRender}>
+          <div className="modal">
+              <button onClick={this._onDismiss} className="modal__close-button">
+                <XSign className="modal__close-button-icon" />
+              </button>
+              {this.props.children}
+          </div>
+        </FocusTrap>,
       document.querySelector('#modal') as Element | DocumentFragment
     );
   }

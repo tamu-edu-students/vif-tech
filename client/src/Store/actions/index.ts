@@ -647,8 +647,8 @@ export const deleteFAQ = (id: number) => async (dispatch: any) => {
 /********************************************************************************************* */
 /**************************************************************************         MODAL */
 /********************************************************************************************* */
-export const showModal = (children: any) => {
-  return { type: SHOW_MODAL, payload: children }
+export const showModal = (children: any, handlers?: {onDismiss?: Function, onShow?: Function}) => {
+  return { type: SHOW_MODAL, payload: {children, handlers} };
 }
 
 export const hideModal = () => {
