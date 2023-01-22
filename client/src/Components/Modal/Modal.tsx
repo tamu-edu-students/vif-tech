@@ -47,10 +47,12 @@ class Modal extends React.Component<Props, {}> {
     return ReactDOM.createPortal(
         <FocusTrap active={this.props.shouldRender}>
           <div className="modal">
-              <button onClick={this._onDismiss} className="modal__close-button">
-                <XSign className="modal__close-button-icon" />
-              </button>
+            <button onClick={this._onDismiss} className="modal__close-button">
+              <XSign className="modal__close-button-icon" />
+            </button>
+            <div className="modal__content">
               {this.props.children}
+            </div>
           </div>
         </FocusTrap>,
       document.querySelector('#modal') as Element | DocumentFragment
