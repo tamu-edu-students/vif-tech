@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 import { hideModal } from 'Store/actions'
+import FocusTrap from 'focus-trap-react';
 
 import { XSign } from 'Components/iconComponents';
 
@@ -12,6 +13,7 @@ interface OwnProps {
 const mapStateToProps = (state: IRootState) => {
   return {
     children: state.modal.children,
+    shouldRender: state.modal.shouldRender,
     ...(state.modal.handlers),
   };
 }
@@ -43,12 +45,14 @@ class Modal extends React.Component<Props, {}> {
 
   public render(): React.ReactElement<Props> {
     return ReactDOM.createPortal(
-      <div className="modal">
-          <button onClick={this._onDismiss} className="modal__close-button">
-            <XSign className="modal__close-button-icon" />
-          </button>
-        {this.props.children}
-      </div>,
+        <FocusTrap active={this.props.shouldRender}>
+          <div className="modal">
+              <button onClick={this._onDismiss} className="modal__close-button">
+                <XSign className="modal__close-button-icon" />
+              </button>
+              {this.props.children}
+          </div>
+        </FocusTrap>,
       document.querySelector('#modal') as Element | DocumentFragment
     );
   }
