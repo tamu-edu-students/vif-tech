@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect, ConnectedProps } from 'react-redux';
+import { showModal, hideModal } from 'Store/actions';
 
 import User from 'Shared/entityClasses/User';
 
@@ -8,19 +10,35 @@ import { VifLogoMark } from 'Components/iconComponents';
 import Nav from 'Components/Nav/Nav';
 import Hamburger from './Hamburger/Hamburger';
 
-interface Props {
+interface OwnProps {
   user?: User;
 }
 
 interface OwnState {
   isSmallWidth: boolean;
+  modalNavIsOpen: boolean;
 }
 
+const mapStateToProps = null;
+const mapDispatchToProps = { showModal, hideModal };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & OwnProps;
+
 class Masthead extends React.Component<Props, OwnState> {
-  state = { isSmallWidth: window.matchMedia('(max-width: 1240px)').matches };
+  state = {
+    isSmallWidth: window.matchMedia('(max-width: 1240px)').matches,
+    modalNavIsOpen: false
+  };
 
   public componentDidMount(): void {
     window.matchMedia('(max-width: 1240px)').addEventListener('change', this._setMediaState);
+  }
+
+  public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<OwnState>, snapshot?: any): void {
+    if (!this.state.isSmallWidth && this.state.modalNavIsOpen)  {
+      this.props.hideModal();
+    }
   }
 
   public componentWillUnmount(): void {
@@ -29,6 +47,16 @@ class Masthead extends React.Component<Props, OwnState> {
 
   private _setMediaState = (e: MediaQueryListEvent) => {
     this.setState({ isSmallWidth: e.matches });
+  }
+
+  private _renderModalNav = (): void => {
+    this.props.showModal(
+      <Nav modifier="--modal" />,
+      {
+        onDismiss: () => this.setState({modalNavIsOpen: false}),
+        onShow: () => this.setState({modalNavIsOpen: true}),
+      }
+    )
   }
 
   public render(): React.ReactElement<Props> {
@@ -43,16 +71,18 @@ class Masthead extends React.Component<Props, OwnState> {
 
         {
           !isSmallWidth &&
-          <Nav user={this.props.user} />
+          <Nav />
         }
 
         {
           isSmallWidth &&
-          <Hamburger />
+          <Hamburger
+            onClick={this._renderModalNav}
+          />
         }
       </header>
     );
   }
 }
 
-export default Masthead
+export default connector(Masthead);

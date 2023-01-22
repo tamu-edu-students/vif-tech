@@ -12,6 +12,10 @@
     &--push-right {
       margin-right: auto;
     }
+
+    @media only screen and (max-width: 1240px) {
+      height: 3rem;
+    }
   }
 
   &__logo {

@@ -1,27 +1,23 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from 'Store/reducers';
-import { showModal } from 'Store/actions';
 
-interface OwnProps {
-
+interface Props {
+  onClick: Function
 }
 
 interface OwnState {
 
 }
 
-const mapStateToProps = (state: IRootState) => {return {};}
-const mapDispatchToProps = { showModal };
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class Hamburger extends React.Component<Props, OwnState> {
+  private _handleClick = (): void => {
+    this.props.onClick()
+  }
+
   public render(): React.ReactElement<Props> {
     return (
       <div className="hamburger">
-        <button className="hamburger__button" type="button">
+        <button onClick={this._handleClick} className="hamburger__button" type="button">
           <div className="hamburger__bar"></div>
           <div className="hamburger__bar"></div>
           <div className="hamburger__bar"></div>
@@ -31,4 +27,4 @@ class Hamburger extends React.Component<Props, OwnState> {
   }
 }
 
-export default connector(Hamburger);
+export default Hamburger;

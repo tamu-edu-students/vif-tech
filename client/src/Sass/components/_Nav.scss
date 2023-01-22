@@ -17,6 +17,7 @@
 
     @media screen and (max-width: 1240px) {
       flex-direction: column;
+      gap: 4rem;
     }
   }
 
@@ -26,6 +27,10 @@
 
     &--push-left {
       margin-left: auto;
+
+      @media screen and (max-width: 1240px) {
+        margin-left: unset;
+      }
     }
   }
 
@@ -42,6 +47,10 @@
     transition: color 0.15s;
     word-break: keep-all;
     white-space: nowrap;
+
+    @media screen and (max-width: 1240px) {
+      font-size: 3rem;
+    }
   }
 
   &__link {
