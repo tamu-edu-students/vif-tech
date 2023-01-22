@@ -4,21 +4,18 @@
 // TODO: Remove temporary stylings
 .heading-primary {
   position: relative;
-  left: -2rem;
 
   font-family: $font-primary;
   font-weight: 400;
   font-size: 7rem;
   background-color: $color-violet;
   margin-bottom: 4.5rem;
-  width: calc(100% + 4rem);
   height: 18.3rem;
-  padding: 1rem 0;
-  // margin-top: -1rem;;
+  padding: 1rem 2rem;
+  @include full-width-bleed;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-content: center;
 }
 
 .heading-secondary {
