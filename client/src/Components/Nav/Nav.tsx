@@ -42,7 +42,7 @@ class Nav extends React.Component<Props, OwnState> {
     } = this.props;
 
     return (
-      <nav className={`nav ${modifier ? modifier : ''}`}>
+      <nav className={`nav ${modifier ? `nav--${modifier}` : ''}`}>
         <ul onClick={this._handleClick} className="nav__list">
           <NavLinks
             logoutFunc={this.props.logOut}

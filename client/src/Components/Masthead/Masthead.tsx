@@ -51,7 +51,7 @@ class Masthead extends React.Component<Props, OwnState> {
 
   private _renderModalNav = (): void => {
     this.props.showModal(
-      <Nav modifier="--modal" />,
+      <Nav modifier="modal" />,
       {
         onDismiss: () => this.setState({modalNavIsOpen: false}),
         onShow: () => this.setState({modalNavIsOpen: true}),
