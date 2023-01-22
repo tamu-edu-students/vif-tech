@@ -2,8 +2,6 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'Store/reducers';
 
-import image from './welcome-banner.png'
-
 interface OwnProps {
 }
 
@@ -22,9 +20,8 @@ class HomePage extends React.Component<Props, {}> {
     // const { user } = this.props;
       return (
         <div className="home-page">
-          {/* <h1 className="heading-primary">Home Page</h1> */}
           <div className='banner-container'>
-            <img src={image} alt="Home Banner" />
+            {/* <img src={'/images/happy-crowd-01.png'} alt="Home Banner" /> */}
           </div>
         </div>
       );
