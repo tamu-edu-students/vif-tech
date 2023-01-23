@@ -15,6 +15,9 @@ import SubNav from 'Components/SubNav/SubNav';
 import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
 import StudentTimetable from './StudentTimetable/StudentTimetable';
 import RepresentativeFairTimetableVF from './RepresentativeFairTimetable/RepresentativeFairTimetableVF';
+import PageHeading from 'Components/PageHeading/PageHeading';
+
+//TODO: Add modal for confirming registration/withdrawal
 
 
 interface OwnProps {
@@ -22,6 +25,7 @@ interface OwnProps {
 }
 
 interface OwnState {
+  subTitle: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -30,7 +34,7 @@ const mapStateToProps = (state: IRootState, ownProps: any) => {
 
     user: state.auth.user,
     amRepresentative: state.auth.user?.usertype === Usertype.REPRESENTATIVE,
-    amAdmin: state.auth.user?.usertype === Usertype.ADMIN,
+    amStudent: state.auth.user?.usertype === Usertype.STUDENT,
     amPrimaryContact: state.auth.user?.isPrimaryContact(state.allowlist.allowlist_emails),
   }
 }
@@ -41,30 +45,32 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
 class MyEventsPage extends React.Component<Props, OwnState> {
-  private _renderVolunteerRoute(subPath: string, eventTitle: string): JSX.Element {
-    const path: string = this.props.parentPath+subPath;
-    return (
-      <Route exact path={path} key={path}>
-        <VolunteerTimetable eventTitle={eventTitle} />
-      </Route>
-    );
-  }
+  state = {subTitle: ''};
 
-  private _renderRepresentativeFairRoute(subPath: string, eventTitle: string): JSX.Element {
+  private _renderRoute(subPath: string, eventTitle: string, isFairRoute: boolean = false): JSX.Element {
     const path: string = this.props.parentPath+subPath;
-    return (
-      <Route exact path={path} key={path}>
-        <RepresentativeFairTimetableVF eventTitle={eventTitle} />
-      </Route>
-    );
-  }
+    const setEventTitleState = () => this.setState({ subTitle: eventTitle });
 
-  private _renderStudentRoute(subPath: string, eventTitle: string): JSX.Element {
-    const path: string = this.props.parentPath+subPath;
     return (
-      <Route exact path={path} key={path}>
-        <StudentTimetable eventTitle={eventTitle} />
-      </Route>
+      <Route exact path={path} key={path} render={(routeProps: any) => {
+        if (this.state.subTitle !== eventTitle) { setEventTitleState() };
+        return (
+          <>
+            {
+              this.props.amRepresentative &&
+              (
+                isFairRoute
+                ? <RepresentativeFairTimetableVF eventTitle={eventTitle} />
+                : <VolunteerTimetable eventTitle={eventTitle} />
+              )
+            }
+            {
+              this.props.amStudent &&
+              <StudentTimetable eventTitle={eventTitle} />
+            }
+          </>
+        )
+      }} />
     );
   }
 
@@ -75,85 +81,45 @@ class MyEventsPage extends React.Component<Props, OwnState> {
     );
   }
 
-  private _renderVolunteerRoutes(): JSX.Element[] {
-    return ([
-      this._renderVolunteerRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
-      this._renderVolunteerRoute(`/timetable/mock-interview-1`, 'Mock Interview 1'),
-      this._renderVolunteerRoute(`/timetable/mock-interview-2`, 'Mock Interview 2'),
-      this._renderVolunteerRoute(`/timetable/portfolio-review-2`, 'Portfolio Review 2'),
-      ...(
-        this.props.user?.isRepresentative
-        ? [this._renderRepresentativeFairRoute(`/timetable/virtual-fair`, 'Virtual Fair')]
-        : []
-      )
-    ]);
-  }
-
-  private _renderVolunteerLinks(): JSX.Element {
-    return (
-      <>
-        {this._renderLink(`/timetable/portfolio-review-1`, 'Portfolio Review 1')}
-        {this._renderLink(`/timetable/mock-interview-1`, 'Mock Interview 1')}
-        {this._renderLink(`/timetable/mock-interview-2`, 'Mock Interview 2')}
-        {this._renderLink(`/timetable/portfolio-review-2`, 'Portfolio Review 2')}
-        {
-          this.props.user?.isRepresentative &&
-          this._renderLink(`/timetable/virtual-fair`, 'Virtual Fair')
-        }
-      </>
-    );
-  }
-
-  private _renderStudentRoutes(): JSX.Element[] {
-    return ([
-      this._renderStudentRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
-      this._renderStudentRoute(`/timetable/mock-interview-1`, 'Mock Interview 1'),
-      this._renderStudentRoute(`/timetable/mock-interview-2`, 'Mock Interview 2'),
-      this._renderStudentRoute(`/timetable/portfolio-review-2`, 'Portfolio Review 2'),
-    ]);
-  }
-
-  private _renderStudentLinks(): JSX.Element {
+  private _renderLinks(): JSX.Element {
     return (
       <>
       {this._renderLink(`/timetable/portfolio-review-1`, 'Portfolio Review 1')}
       {this._renderLink(`/timetable/mock-interview-1`, 'Mock Interview 1')}
       {this._renderLink(`/timetable/mock-interview-2`, 'Mock Interview 2')}
       {this._renderLink(`/timetable/portfolio-review-2`, 'Portfolio Review 2')}
+      {
+        this.props.user?.isRepresentative &&
+        this._renderLink(`/timetable/virtual-fair`, 'Virtual Fair')
+      }
       </>
     );
   }
 
-  private _renderLinks(): JSX.Element | null {
-    switch(this.props.user?.usertype) {
-      case Usertype.REPRESENTATIVE:
-      case Usertype.VOLUNTEER:
-        return this._renderVolunteerLinks();
-      case Usertype.STUDENT:
-        return this._renderStudentLinks();
-      default:
-        return null;
-    }
-  }
-
   private _renderRoutes(): JSX.Element[] {
-    switch(this.props.user?.usertype) {
-      case Usertype.REPRESENTATIVE:
-      case Usertype.VOLUNTEER:
-        return this._renderVolunteerRoutes();
-      case Usertype.STUDENT:
-        return this._renderStudentRoutes();
-      default:
-        return [];
-    }
+    return ([
+      this._renderRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
+      this._renderRoute(`/timetable/mock-interview-1`, 'Mock Interview 1'),
+      this._renderRoute(`/timetable/mock-interview-2`, 'Mock Interview 2'),
+      this._renderRoute(`/timetable/portfolio-review-2`, 'Portfolio Review 2'),
+      ...(
+        this.props.user?.isRepresentative
+        ? [this._renderRoute(`/timetable/virtual-fair`, 'Virtual Fair', true)]
+        : []
+      )
+    ]);
   }
 
   public render(): React.ReactElement<Props> {
     const { parentPath } = this.props;
+    const setEventTitleState = () => this.setState({ subTitle: '' });
 
     return (
       <div className="my-events-page">
-        <h1 className="heading-primary">My Events</h1>
+        <PageHeading
+          h1Text="My Events"
+          subheading={this.state.subTitle}
+        />
 
         <div className='my-events-page__subpage'>
           <Switch>
@@ -171,10 +137,13 @@ class MyEventsPage extends React.Component<Props, OwnState> {
               <Redirect to={`${parentPath}`} />
             </Route> */}
 
-            <Route exact path={`${parentPath}`}>
-              {/* //TODO: Handle parent path for My Events page */}
-              <div>TODO: fill with something</div>
-            </Route>
+            <Route exact path={`${parentPath}`} render={(routeProps: any) => {
+              if (this.state.subTitle !== '') { setEventTitleState(); }
+              //TODO: Handle parent path for My Events page
+              return (
+                <div>TODO: fill with something</div>
+              )
+            }} />
 
             {this._renderRoutes()}
 
