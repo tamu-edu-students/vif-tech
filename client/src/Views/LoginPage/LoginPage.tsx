@@ -6,6 +6,7 @@ import { authActionTypes } from 'Store/actions/types';
 import { logIn } from "Store/actions";
 
 import LoginForm from "./LoginForm/LoginForm";
+import PageHeading from 'Components/PageHeading/PageHeading';
 
 
 interface OwnProps {
@@ -43,7 +44,8 @@ class LoginPage extends React.Component<Props, OwnState> {
 
     return (
       <div className="login-page page page--login">
-        <h1 className="heading-primary">Log In</h1>
+        <PageHeading heading="Log In" />
+
         <LoginForm onSubmit={this._onSubmit} form="login" />
         {
           errors_logIn.map((error: string) => (

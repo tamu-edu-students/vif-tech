@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-
 import { IRootState } from 'Store/reducers';
+import { fetchFAQs, createFAQ, showModal, hideModal } from 'Store/actions';
+
 import { Usertype } from 'Shared/enums';
+import FAQ from 'Shared/entityClasses/FAQ';
 
 import FAQBlock from './FAQBlock/FAQBlock';
 import FAQForm from './FAQForm/FAQForm';
 
-import { fetchFAQs, createFAQ, showModal, hideModal } from 'Store/actions';
-import FAQ from 'Shared/entityClasses/FAQ';
+import PageHeading from 'Components/PageHeading/PageHeading';
 
 interface OwnProps {
 }
@@ -79,7 +80,8 @@ class FAQPage extends React.Component<Props, OwnState> {
 
     return (
       <div>
-        <h1 className="heading-primary">FAQ Page</h1>
+        <PageHeading heading="FAQ"/>
+
         <div className="FAQs">
           {
             faqs.length > 0

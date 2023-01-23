@@ -8,6 +8,8 @@ import { fetchUsers, fetchFocuses, fetchUserFocuses } from "Store/actions";
 import User from 'Shared/entityClasses/User';
 import Focus from 'Shared/entityClasses/Focus';
 
+import PageHeading from 'Components/PageHeading/PageHeading';
+
 
 interface OwnProps {
 }
@@ -77,7 +79,7 @@ class StudentsPage extends React.Component<Props, OwnState> {
 
     return (
       <div>
-        <h1 className="heading-primary">Users</h1>
+        <PageHeading heading="Students" />
 
         <ul className="user-directory__list">
           {this.props.students

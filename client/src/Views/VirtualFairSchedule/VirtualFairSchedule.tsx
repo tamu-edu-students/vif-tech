@@ -8,6 +8,8 @@ import { fetchEvents, fetchCompanies, fetchVirtualFairAttendance } from 'Store/a
 import Event from 'Shared/entityClasses/Event';
 import Company from 'Shared/entityClasses/Company';
 
+import PageHeading from 'Components/PageHeading/PageHeading';
+
 import VirtualFairScheduleRow from './VirtualFairScheduleRow/VirtualFairScheduleRow';
 
 

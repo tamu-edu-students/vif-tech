@@ -9,6 +9,8 @@ import { allowlistActionTypes } from 'Store/actions/types';
 import { Usertype } from 'Shared/enums';
 
 import RedirectPrompt from 'Components/RedirectPrompt';
+import PageHeading from 'Components/PageHeading/PageHeading';
+
 import ManageAllowlists from './ManageAllowlists/ManageAllowlists';
 
 interface OwnProps {
@@ -16,6 +18,7 @@ interface OwnProps {
 }
 
 interface OwnState {
+  subheading: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -39,6 +42,8 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
 class MyEventsPage extends React.Component<Props, OwnState> {
+  state = {subheading: ''};
+
   private _renderSettingsLink(subPath: string, text: string): JSX.Element {
     const path: string = this.props.parentPath+subPath;
     return (
@@ -48,10 +53,16 @@ class MyEventsPage extends React.Component<Props, OwnState> {
 
   private _renderSettingsRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
     const path: string = this.props.parentPath+subPath;
+    const newSubtitle: string = subPath.slice(1).split('-').map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join(' ');
+
     return (
-      <Route path={path} key={path} render={(routeProps: any) => (
-        React.createElement(allowlistElement.type, routeProps)
-      )} />
+      <Route path={path} key={path} render={(routeProps: any) => {
+        if (newSubtitle !== this.state.subheading) {
+          this.setState({ subheading: newSubtitle });
+        }
+
+        return React.createElement(allowlistElement.type, routeProps);
+      }} />
     );
   }
 
@@ -83,14 +94,20 @@ class MyEventsPage extends React.Component<Props, OwnState> {
 
     return (
       <div className="settings-page page page--settings">
-        <h1 className="heading-primary">Settings</h1>
+        <PageHeading
+          heading="Settings"
+          subheading={this.state.subheading}
+        />
+
         <Switch>
-          <Route exact path={parentPath} render={(routeProps: any) => (
-            <div className="settings-page__links">
-              {this._renderSettingsLinks()}
-            </div>
-            )}
-          />
+          <Route exact path={parentPath} render={(routeProps: any) => {
+            if (this.state.subheading !== '') { this.setState({ subheading: '' }); }
+            return (
+              <div className="settings-page__links">
+                {this._renderSettingsLinks()}
+              </div>
+            );
+          }}/>
           
           {this._renderSettingsRoutes()}
 

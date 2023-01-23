@@ -3,8 +3,9 @@ import { connect, ConnectedProps } from "react-redux";
 import { IRootState } from 'Store/reducers';
 import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 import { userActionTypes } from 'Store/actions/types';
-
 import { createUser } from "Store/actions";
+
+import PageHeading from 'Components/PageHeading/PageHeading';
 import SignupForm from "Views/SignupPage/SignupForm/SignupForm";
 
 interface OwnProps {
@@ -39,7 +40,7 @@ class SignupPage extends React.Component<Props, {}> {
 
     return (
       <div className="signup-page page page--signup">
-        <h1 className="heading-primary">Sign Up</h1>
+        <PageHeading heading="Sign Up" />
         <SignupForm form="userCreate" onSubmit={this._onSubmit} />
       </div>
     );

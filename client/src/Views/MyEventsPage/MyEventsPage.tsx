@@ -11,11 +11,11 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 
 import SubNavLink from 'Components/SubNavLink/SubNavLink';
 import SubNav from 'Components/SubNav/SubNav';
+import PageHeading from 'Components/PageHeading/PageHeading';
 
 import VolunteerTimetable from './VolunteerTimetable/VolunteerTimetable';
 import StudentTimetable from './StudentTimetable/StudentTimetable';
 import RepresentativeFairTimetableVF from './RepresentativeFairTimetable/RepresentativeFairTimetableVF';
-import PageHeading from 'Components/PageHeading/PageHeading';
 
 //TODO: Add modal for confirming registration/withdrawal
 
@@ -25,7 +25,7 @@ interface OwnProps {
 }
 
 interface OwnState {
-  subTitle: string;
+  subheading: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -45,34 +45,7 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
 class MyEventsPage extends React.Component<Props, OwnState> {
-  state = {subTitle: ''};
-
-  private _renderRoute(subPath: string, eventTitle: string, isFairRoute: boolean = false): JSX.Element {
-    const path: string = this.props.parentPath+subPath;
-    const setEventTitleState = () => this.setState({ subTitle: eventTitle });
-
-    return (
-      <Route exact path={path} key={path} render={(routeProps: any) => {
-        if (this.state.subTitle !== eventTitle) { setEventTitleState() };
-        return (
-          <>
-            {
-              this.props.amRepresentative &&
-              (
-                isFairRoute
-                ? <RepresentativeFairTimetableVF eventTitle={eventTitle} />
-                : <VolunteerTimetable eventTitle={eventTitle} />
-              )
-            }
-            {
-              this.props.amStudent &&
-              <StudentTimetable eventTitle={eventTitle} />
-            }
-          </>
-        )
-      }} />
-    );
-  }
+  state = {subheading: ''};
 
   private _renderLink(subPath: string, text: string): JSX.Element {
     const path: string = this.props.parentPath+subPath;
@@ -96,6 +69,32 @@ class MyEventsPage extends React.Component<Props, OwnState> {
     );
   }
 
+  private _renderRoute(subPath: string, eventTitle: string, isFairRoute: boolean = false): JSX.Element {
+    const path: string = this.props.parentPath+subPath;
+
+    return (
+      <Route exact path={path} key={path} render={(routeProps: any) => {
+        if (this.state.subheading !== eventTitle) { this.setState({ subheading: eventTitle}) };
+        return (
+          <>
+            {
+              this.props.amRepresentative &&
+              (
+                isFairRoute
+                ? <RepresentativeFairTimetableVF eventTitle={eventTitle} />
+                : <VolunteerTimetable eventTitle={eventTitle} />
+              )
+            }
+            {
+              this.props.amStudent &&
+              <StudentTimetable eventTitle={eventTitle} />
+            }
+          </>
+        )
+      }} />
+    );
+  }
+
   private _renderRoutes(): JSX.Element[] {
     return ([
       this._renderRoute(`/timetable/portfolio-review-1`, 'Portfolio Review 1'),
@@ -112,13 +111,12 @@ class MyEventsPage extends React.Component<Props, OwnState> {
 
   public render(): React.ReactElement<Props> {
     const { parentPath } = this.props;
-    const setEventTitleState = () => this.setState({ subTitle: '' });
 
     return (
       <div className="my-events-page">
         <PageHeading
           heading="My Events"
-          subheading={this.state.subTitle}
+          subheading={this.state.subheading}
         />
 
         <div className='my-events-page__subpage'>
@@ -138,7 +136,7 @@ class MyEventsPage extends React.Component<Props, OwnState> {
             </Route> */}
 
             <Route exact path={`${parentPath}`} render={(routeProps: any) => {
-              if (this.state.subTitle !== '') { setEventTitleState(); }
+              if (this.state.subheading !== '') { this.setState({ subheading: '' }) }
               //TODO: Handle parent path for My Events page
               return (
                 <div>TODO: fill with something</div>
