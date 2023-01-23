@@ -117,7 +117,7 @@ class MyEventsPage extends React.Component<Props, OwnState> {
     return (
       <div className="my-events-page">
         <PageHeading
-          h1Text="My Events"
+          heading="My Events"
           subheading={this.state.subTitle}
         />
 
