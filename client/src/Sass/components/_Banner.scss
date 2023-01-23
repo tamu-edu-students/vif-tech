@@ -3,4 +3,8 @@
   
   display: grid;
   place-content: center;
+
+  &.banner--header {
+    margin-bottom: 7.6rem;
+  }
 }

@@ -9,6 +9,9 @@ import Event from 'Shared/entityClasses/Event';
 import Company from 'Shared/entityClasses/Company';
 import Focus from 'Shared/entityClasses/Focus';
 
+import PageHeading from 'Components/PageHeading/PageHeading';
+import Banner from 'Components/Banner/Banner';
+
 interface OwnProps {
 }
 
@@ -166,8 +169,11 @@ class CompaniesPage extends React.Component<Props, OwnState> {
     }
 
     return (
-      <div className="student-page">
-        <h1 className="heading-primary">Students</h1>
+      <div className="companies-page">
+        <Banner isHeader modifier='companies-page'>
+          <h1 className="heading-primary">Companies</h1>
+        </Banner>
+        
         <section className="section section--attending-companies">
           <h2 className="heading-secondary">Attending Companies</h2>
           {
