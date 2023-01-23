@@ -1,11 +1,7 @@
 .home-page {
-  .banner-container {
-    @include full-width-bleed;
+  .banner--hero {
     height: 40rem;
     background-position: 50% 75%;
-    background-size: cover;
-
-    background-image: linear-gradient(rgba($color-brand-green-dark, 0.75), rgba($color-brand-green-dark, 0.75)),
-      url('/Images/happy-crowd-01.png');
+    @include banner-background-image('/Images/happy-crowd-01.png', $color-brand-green-dark);
   }
 }
