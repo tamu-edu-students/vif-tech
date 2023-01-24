@@ -6,6 +6,10 @@
 
   &.banner--header {
     margin-bottom: 7.6rem;
+
+    .heading-primary {
+      text-shadow: $text-shadow;
+    }
   }
 
   &__content {

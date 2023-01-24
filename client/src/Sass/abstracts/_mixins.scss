@@ -30,8 +30,7 @@
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 2rem;
 }
 
 @mixin banner-background-image($url, $color) {
