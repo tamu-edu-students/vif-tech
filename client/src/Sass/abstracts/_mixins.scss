@@ -1,3 +1,9 @@
+@mixin media-max($width) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}
+
 @mixin subpage {
   position: relative;
   background-color: $color-violet;
