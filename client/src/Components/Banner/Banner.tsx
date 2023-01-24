@@ -23,10 +23,14 @@ class Banner extends React.Component<Props, OwnState> {
     return (
       this.props.isHeader
       ? <header className={`banner banner--header ${this._generateModifiers()}`}>
+        <div className="banner__content">
           {this.props.children}
+        </div>
         </header>
       : <div className={`banner ${this._generateModifiers()}`}>
-          {this.props.children}
+          <div className="banner__content">
+            {this.props.children}
+          </div>
         </div>
     )
   }
