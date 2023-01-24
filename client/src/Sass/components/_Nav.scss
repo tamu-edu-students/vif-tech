@@ -100,10 +100,6 @@
     &.nav__button--settings {
       @include btn-solid($color-brand-yellow-dark);
     }
-
-    &::selection {
-      text-shadow: none;
-    }
   }
 }
 

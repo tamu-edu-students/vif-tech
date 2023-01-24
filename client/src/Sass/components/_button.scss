@@ -66,8 +66,4 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &::selection {
-    text-shadow: none;
-  }
 }
