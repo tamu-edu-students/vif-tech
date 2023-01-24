@@ -10,7 +10,7 @@
   text-align: center;
   transition: font-size 0.05s;
 
-  @include media-max(1000px) {
+  @include media-max(860px) {
     font-size: 6rem;
   }
 }

@@ -40,6 +40,10 @@
                     url($url);
 }
 
+@mixin text-shadow {
+  text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+}
+
 @mixin btn-solid($background-color) {
   background-color: $background-color;
 

@@ -68,7 +68,7 @@
   }
 
   &__button {
-    text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+    @include text-shadow;
     padding: 0.5rem 1rem;
     min-width: max-content;
     width: 9rem;
