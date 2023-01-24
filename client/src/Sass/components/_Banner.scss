@@ -1,8 +1,8 @@
 .banner {
   @include full-width-bleed;
   
-  display: grid;
-  place-content: center;
+  display: flex;
+  align-items: center;
 
   &.banner--header {
     margin-bottom: 7.6rem;
@@ -11,6 +11,11 @@
   &__content {
     position: relative;
     z-index: 2;
+    margin: 0 auto;
+    backdrop-filter: blur(4.5px);
+
+    display: grid;
+    place-content: center;
   }
 
   &::before {
