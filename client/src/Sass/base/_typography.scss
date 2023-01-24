@@ -3,19 +3,16 @@
 
 // TODO: Remove temporary stylings
 .heading-primary {
-  position: relative;
-
   font-family: $font-primary;
   font-weight: 400;
   font-size: 7rem;
-  background-color: $color-violet;
-  margin-bottom: 4.5rem;
-  height: 18.3rem;
-  padding: 1rem 2rem;
-  @include full-width-bleed;
+  line-height: 1.2;
+  text-align: center;
+  transition: font-size 0.05s;
 
-  display: grid;
-  place-content: center;
+  @include media-max(860px) {
+    font-size: 6rem;
+  }
 }
 
 .heading-secondary {

@@ -8,6 +8,8 @@ import { fetchUsers, fetchFocuses, fetchUserFocuses } from "Store/actions";
 import User from 'Shared/entityClasses/User';
 import Focus from 'Shared/entityClasses/Focus';
 
+import Banner from 'Components/Banner/Banner';
+
 
 interface OwnProps {
 }
@@ -76,8 +78,10 @@ class StudentsPage extends React.Component<Props, OwnState> {
     if (this.props.students.length === 0) { return <div>No students to show yet!</div>; }
 
     return (
-      <div>
-        <h1 className="heading-primary">Users</h1>
+      <div className="students-page">
+        <Banner isHeader>
+          <h1 className="heading-primary">Students</h1>
+        </Banner>
 
         <ul className="user-directory__list">
           {this.props.students

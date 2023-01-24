@@ -68,7 +68,7 @@
   }
 
   &__button {
-    text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+    text-shadow: $text-shadow;
     padding: 0.5rem 1rem;
     min-width: max-content;
     width: 9rem;
@@ -99,10 +99,6 @@
     &.nav__button--register,
     &.nav__button--settings {
       @include btn-solid($color-brand-yellow-dark);
-    }
-
-    &::selection {
-      text-shadow: none;
     }
   }
 }

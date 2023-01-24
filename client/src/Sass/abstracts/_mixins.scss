@@ -1,3 +1,9 @@
+@mixin media-max($width) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}
+
 @mixin subpage {
   position: relative;
   background-color: $color-violet;
@@ -18,12 +24,13 @@
 }
 
 @mixin full-width-bleed {
-  width: 100vw;
   position: relative;
+  width: 100vw;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
+  padding: 2rem;
 }
 
 @mixin banner-background-image($url, $color) {

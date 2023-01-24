@@ -12,6 +12,8 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 
 import SubNavLink from 'Components/SubNavLink/SubNavLink';
 import SubNav from 'Components/SubNav/SubNav';
+import PageHeading from 'Components/PageHeading/PageHeading';
+
 import CompanyProfile from './CompanyProfile/CompanyProfile';
 import MyProfileStudent from './MyProfile/MyProfileStudent/MyProfileStudent';
 import MyProfileVolunteer from './MyProfile/MyProfileVolunteer/MyProfileVolunteer';
@@ -24,6 +26,7 @@ interface OwnProps {
 }
 
 interface OwnState {
+  subheading: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -48,6 +51,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type Props = ConnectedProps<typeof connector> & OwnProps;
 
 class ProfilePage extends React.Component<Props, OwnState> {
+  state = { subheading: '' };
+
   public componentDidMount(): void {
     if (this.props.allowlistIsStale && !this.props.isLoading_fetchAllowlist) {
       this.props.fetchAllowlist();
@@ -62,10 +67,15 @@ class ProfilePage extends React.Component<Props, OwnState> {
 
   private _renderRoute(subPath: string, allowlistElement: JSX.Element): JSX.Element {
     const path: string = this.props.parentPath+subPath;
+    const newSubtitle: string = subPath.slice(1).split('-').map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join(' ');
+
     return (
-      <Route exact path={path} key={path} render={(routeProps: any) => (
-        React.createElement(allowlistElement.type, routeProps)
-      )} />
+      <Route exact path={path} key={path} render={(routeProps: any) => {
+        if (newSubtitle !== this.state.subheading) {
+          this.setState({ subheading: newSubtitle });
+        }
+        return React.createElement(allowlistElement.type, routeProps)
+      }} />
     );
   }
 
@@ -117,7 +127,10 @@ class ProfilePage extends React.Component<Props, OwnState> {
 
     return (
       <div className="profile-page">
-        <h1 className="heading-primary">Profile</h1>
+        <PageHeading
+          heading="Profile"
+          subheading={this.state.subheading}
+        />
 
         <div className='profile-page__subpage'>
           <Switch>
@@ -125,9 +138,7 @@ class ProfilePage extends React.Component<Props, OwnState> {
                 <SubNav className='profile-page__nav' {...routeProps}>
                   {this._renderLinks()}
                 </SubNav>
-              )}
-            >
-            </Route>
+              )} />
           </Switch>
 
           <Switch>

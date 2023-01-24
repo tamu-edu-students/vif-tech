@@ -1,7 +1,25 @@
 .home-page {
   .banner--hero {
-    height: 40rem;
+    min-height: 40rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     background-position: 50% 75%;
     @include banner-background-image('/Images/happy-crowd-01.png', $color-brand-green-dark);
+
+    .heading-primary {
+      margin-bottom: 2rem;
+
+      span {
+        display: inline-block;
+      }
+    }
+
+    .intro-text {
+      max-width: 100rem;
+      font-size: max(1.8rem, 16px);
+      line-height: 1.3;
+      text-align: center;
+      text-shadow: $text-shadow-thin;
+    }
   }
 }

@@ -3,8 +3,10 @@ import { connect, ConnectedProps } from "react-redux";
 import { IRootState } from 'Store/reducers';
 // import { createLoadingSelector, createErrorMessageSelector } from 'Shared/selectors';
 // import { companyActionTypes, allowlistActionTypes, userActionTypes } from 'Store/actions/types';
-
 import { fetchUsers } from "Store/actions";
+
+import PageHeading from 'Components/PageHeading/PageHeading';
+
 
 interface OwnProps {
 }
@@ -32,7 +34,7 @@ class UsersPage extends React.Component<Props, OwnState> {
 
     return (
       <div>
-        <h1 className="heading-primary">Users</h1>
+        <PageHeading heading="Users" />
 
         <ul className="user-directory__list">
           {this.props.users.map((user: any) => {

@@ -20,6 +20,7 @@
 @import "components/Modal";
 @import "components/MyProfile";
 @import "components/Nav";
+@import "components/PageHeading";
 @import "components/RedirectPrompt";
 @import "components/SubNav";
 @import "components/Timetable";
@@ -28,14 +29,15 @@
 @import "components/button";
 
 @import "pages/redirector";
+@import "pages/CompaniesPage";
 @import "pages/HomePage";
 @import "pages/LoginPage";
 @import "pages/ManageAllowlistsPage";
 @import "pages/MeetingAssignmentSheet";
 @import "pages/MyEventsPage";
 @import "pages/ProfilePage";
+@import "pages/SchedulingPage";
 @import "pages/SettingsPage";
 @import "pages/SignupPage";
-@import "pages/SchedulingPage";
-@import "pages/StudentPage";
+@import "pages/StudentsPage";
 @import "pages/UserDirectory";

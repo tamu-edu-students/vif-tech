@@ -1,6 +1,6 @@
 @mixin time-button-hover($background-color, $lighten: false) {
   background-color: $background-color;
-  text-shadow: -0.1rem 0.1rem 0.1rem #303030;
+  text-shadow: $text-shadow;
 
   &:not(.table__time-button--disabled):hover {
     @if $lighten == false {
@@ -204,10 +204,6 @@
           display: flex;
           justify-content: center;
           align-items: center;
-
-          &::selection {
-            text-shadow: none;
-          }
 
           &--disabled {
             cursor: unset;

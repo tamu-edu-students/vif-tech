@@ -1,0 +1,16 @@
+.page-heading {
+  background-color: $color-violet;
+  margin-bottom: 4.5rem;
+  min-height: 18.3rem;
+  padding: 1rem 2rem;
+  text-align: center;
+  @include full-width-bleed;
+
+  display: grid;
+  place-content: center;
+
+  &__subheading {
+    font-size: 2.4rem;
+    font-family: $font-primary;
+  }
+}

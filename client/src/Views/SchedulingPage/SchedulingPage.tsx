@@ -11,6 +11,7 @@ import RedirectPrompt from 'Components/RedirectPrompt';
 
 import SubNavLink from 'Components/SubNavLink/SubNavLink';
 import SubNav from 'Components/SubNav/SubNav';
+import PageHeading from 'Components/PageHeading/PageHeading';
 
 import MeetingAssignmentSheet from './MeetingAssignmentSheet/MeetingAssignmentSheet';
 
@@ -20,6 +21,7 @@ interface OwnProps {
 }
 
 interface OwnState {
+  subheading: string;
 }
 
 const mapStateToProps = (state: IRootState, ownProps: any) => {
@@ -39,6 +41,8 @@ type Props = ConnectedProps<typeof connector> & OwnProps;
 
 
 class SchedulingPage extends React.Component<Props, OwnState> {
+  state = { subheading: '' };
+
   private _renderLink(subPath: string, text: string): JSX.Element {
     const path: string = this.props.parentPath+subPath;
     return (
@@ -60,9 +64,10 @@ class SchedulingPage extends React.Component<Props, OwnState> {
   private _renderRoute(subPath: string, eventTitle: string): JSX.Element {
     const path: string = this.props.parentPath+subPath;
     return (
-      <Route exact path={path} key={path}>
-        <MeetingAssignmentSheet eventTitle={eventTitle} />
-      </Route>
+      <Route exact path={path} key={path} render={(routeProps: any) => {
+        if (this.state.subheading !== eventTitle) { this.setState({ subheading: eventTitle }); }
+        return <MeetingAssignmentSheet eventTitle={eventTitle} />
+      }} />
     );
   }
 
@@ -80,7 +85,10 @@ class SchedulingPage extends React.Component<Props, OwnState> {
 
     return (
       <div className="scheduling-page">
-        <h1 className="heading-primary">Scheduling</h1>
+        <PageHeading
+          heading="Scheduling"
+          subheading={this.state.subheading}
+        />
 
         <div className='scheduling-page__subpage'>
           <Switch>
@@ -98,10 +106,13 @@ class SchedulingPage extends React.Component<Props, OwnState> {
               <Redirect to={`${parentPath}`} />
             </Route> */}
 
-            <Route exact path={`${parentPath}`}>
-              {/* //TODO: Handle parent path for My Events page */}
-              <div>TODO: fill with something</div>
-            </Route>
+            <Route exact path={`${parentPath}`} render={(routeProps: any) => {
+              if (this.state.subheading !== '') { this.setState({ subheading: '' }) }
+              //TODO: Handle parent path for Scheduling Page
+              return (
+                <div>TODO: fill with something</div>
+              )
+            }} />
 
             {this._renderRoutes()}
 
