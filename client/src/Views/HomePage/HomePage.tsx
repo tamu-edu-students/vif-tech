@@ -22,7 +22,10 @@ class HomePage extends React.Component<Props, {}> {
       return (
         <div className="home-page">
           <Banner modifiers={['home-page', 'hero']}>
-            <h1 className="heading-primary">Welcome to the 2023 VIZ Industry Fair!</h1>
+            <h1 className="heading-primary">
+              <span>Welcome to the 2023</span>
+              <span>VIZ Industry Fair!</span>
+            </h1>
             <p className="intro-text">
               The Visualization Industry Fair is an opportunity for students interested in animation,
               gaming, graphics, and interaction design to connect with prospective employers and
