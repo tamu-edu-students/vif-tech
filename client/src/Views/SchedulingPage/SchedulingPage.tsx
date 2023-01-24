@@ -89,7 +89,6 @@ class SchedulingPage extends React.Component<Props, OwnState> {
           heading="Scheduling"
           subheading={this.state.subheading}
         />
-        <h1 className="heading-primary">Scheduling</h1>
 
         <div className='scheduling-page__subpage'>
           <Switch>
