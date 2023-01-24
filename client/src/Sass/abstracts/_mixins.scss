@@ -24,8 +24,8 @@
 }
 
 @mixin full-width-bleed {
-  width: 100vw;
   position: relative;
+  width: 100vw;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
@@ -38,14 +38,6 @@
   background-size: cover;
   background-image: linear-gradient(rgba($color, 0.75), rgba($color, 0.75)),
                     url($url);
-}
-
-@mixin text-shadow {
-  text-shadow: -0.1rem 0.1rem 0.1rem #303030;
-}
-
-@mixin text-shadow-thin {
-  text-shadow: -0.05rem 0.05rem 0.1rem #303030;
 }
 
 @mixin btn-solid($background-color) {

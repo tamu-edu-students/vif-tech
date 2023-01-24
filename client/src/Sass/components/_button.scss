@@ -57,7 +57,7 @@
 
 .btn-solid {
   color: $color-white;
-  @include text-shadow;
+  text-shadow: $text-shadow;
   text-transform: uppercase;
   padding: 1rem 1rem;
   cursor: pointer;

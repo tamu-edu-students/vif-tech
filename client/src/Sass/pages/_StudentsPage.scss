@@ -1,0 +1,8 @@
+.students-page {
+  .banner--header {
+    // @include banner-background-image('/Images/happy-crowd-01.png', $color-brand-green-dark);
+    //TODO: Replace with proper image
+    background-color: $color-brand-green-dark;
+    height: $page-banner-height;
+  }
+}
