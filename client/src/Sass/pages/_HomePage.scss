@@ -21,10 +21,10 @@
 
     .intro-text {
       max-width: 100rem;
-      font-size: 1.8rem;
+      font-size: max(1.8rem, 16px);
       line-height: 1.3;
       text-align: center;
-      @include text-shadow;
+      @include text-shadow-thin;
     }
   }
 }
