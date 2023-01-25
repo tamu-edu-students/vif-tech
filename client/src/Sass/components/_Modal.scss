@@ -14,7 +14,13 @@
   // align-items: center;
 
   &__content {
+    margin-top: -2rem; // counters the 2rem eaten by close-button
     padding: 4rem;
+    width: 100%;
+    min-height: 100%;
+
+    display: grid;
+    place-content: center;
   }
 
   &__close-button {
