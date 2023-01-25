@@ -13,9 +13,10 @@
   
   &__list {
     list-style: none;
-    width: 15rem;
     font-family: $font-primary;
     font-size: 1.8rem;
+    width: min-content;
+    min-width: 15rem;
 
     display: flex;
     flex-direction: column;

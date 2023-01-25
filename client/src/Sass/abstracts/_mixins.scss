@@ -7,7 +7,8 @@
 @mixin subpage {
   position: relative;
   background-color: $color-violet;
-  width: fit-content;
+  max-width: 68.2rem;
+  // width: fit-content;
   padding: 4rem;
   margin: 0 auto;
 
