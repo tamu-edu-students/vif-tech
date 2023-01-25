@@ -108,6 +108,10 @@ class StudentTimetable extends React.Component<Props, OwnState> {
     }
   }
 
+  private _moveTimeColumn = (e: React.UIEvent<HTMLDivElement, UIEvent>): void => {
+    e.currentTarget.style.setProperty('--scrollPos', `${e.currentTarget.scrollLeft}px`);
+  }
+
   private _renderTimeSlots(timeSlots: any[]): JSX.Element[] {
     const { meetings, event } = this.props;
     return timeSlots.map(({start_time, end_time}: TimeOption) => {
@@ -159,7 +163,7 @@ class StudentTimetable extends React.Component<Props, OwnState> {
           isAttendingEvent &&
           <>
             <div className="table">
-              <div className="table__rows">
+              <div className="table__rows" onScroll={this._moveTimeColumn}>
 
                 <div className="table__row table__row--student table__row--header">
                   <div className="table__cell table__cell--header table__cell--time">Time</div>

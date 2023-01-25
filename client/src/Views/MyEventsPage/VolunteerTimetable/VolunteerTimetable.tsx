@@ -111,6 +111,10 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
       this.props.fetchUsers();
     }
   }
+  
+  private _moveTimeColumn = (e: React.UIEvent<HTMLDivElement, UIEvent>): void => {
+    e.currentTarget.style.setProperty('--scrollPos', `${e.currentTarget.scrollLeft}px`);
+  }
 
   private _onSaveChanges = (): void => {
     this.setState({ isLoading: true });
@@ -185,7 +189,7 @@ class VolunteerTimetable extends React.Component<Props, OwnState> {
           isAttendingEvent &&
           <>
             <div className="table">
-              <div className="table__rows">
+              <div className="table__rows" onScroll={this._moveTimeColumn}>
 
                 <div className="table__row table__row--volunteer table__row--header">
                   <div className="table__cell table__cell--header table__cell--time">Time</div>

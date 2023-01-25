@@ -15,8 +15,7 @@
 }
 
 .timetable {
-  //TODO: Remove
-  width: 60rem;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -42,6 +41,8 @@
   
   .table {
     width: 100%;
+    border: 2px solid $color-violet-darkest;
+    
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -52,7 +53,6 @@
 
     .table__rows {
       color: $color-black;
-      border: 2px solid $color-violet-darkest;
       width: 100%;
       overflow-x: auto;
 
@@ -60,14 +60,12 @@
       flex-direction: column;
 
       .table__row {
-        position: relative;
+        display: flex;
 
-        display: grid;
-
-        &--student { grid-template-columns: 9.8rem repeat(2, 42fr); }
-        &--volunteer{ grid-template-columns: 9.8rem repeat(3, 28fr); }
-        &--assignment { grid-template-columns: 9.8rem 84fr; }
-        &--representative-fair { grid-template-columns: 1fr; }
+        // &--student { grid-template-columns: 9.8rem repeat(2, 42fr); }
+        // &--volunteer{ grid-template-columns: 9.8rem repeat(3, 28fr); }
+        // &--assignment { grid-template-columns: 9.8rem 84fr; }
+        // &--representative-fair { grid-template-columns: 1fr; }
 
         &:not(:last-child):not(.table__row--header) {
           .table__cell {
@@ -109,6 +107,7 @@
         }
 
         .table__cell {
+          flex: 1;
           padding: 1rem;
           font-family: $font-secondary;
           // height: 4.4rem;
@@ -119,17 +118,19 @@
           display: flex;
           align-items: center;
 
-          &:not(:last-child):not(.table__cell--time) {
-            border-right: 1px solid $color-violet-darkest;
+          &:not(.table__cell--time) {
+            &:not(:last-child) {
+              border-right: 1px solid $color-violet-darkest;
+            }
           }
 
           &--time {
             padding: 0;
-            position: sticky;
+            position: relative;
             z-index: 1;
-            left: 0;
-            min-width: unset;
-            width: 9.8rem;
+            left: var(--scrollPos);
+            flex: unset;
+            min-width: 9.8rem;
             // box-shadow: 2px 0 2px darken($color-gray, 5%);
             // border-right: 2px double $color-violet-darkest !important;
             &.table__cell--header {
