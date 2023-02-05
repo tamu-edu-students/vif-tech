@@ -22,7 +22,7 @@ class App extends React.Component {
               <section className="section section--redirector">
                 <RedirectPrompt
                   message={"is under construction"}
-                  buttonText={"Portfolio Review Signup"}
+                  buttonText={"Event Registration Forms"}
                   href={"https://linktr.ee/vizindustryfair"}
                 />
               </section>
